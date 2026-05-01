@@ -1,0 +1,107 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+
+  --color-bone: #F7F7F5;
+  --color-bone-cream: #FAFAF8;
+  --color-bone-deep: #EFEEEA;
+  --color-paper: #FCFBF7;
+
+  --color-onyx: #0F0F0F;
+  --color-ink: #1C1A18;
+  --color-smoke: #232120;
+  --color-char: #2A2725;
+  --color-coal: #3A3633;
+
+  --color-stone-dark: #4B4842;
+  --color-stone: #787774;
+  --color-stone-light: #9A9792;
+  --color-stone-faint: #6B6863;
+  --color-border-ink: #3A3633;
+
+  --color-rust: #C8351F;
+  --color-rust-bright: #E8553F;
+  --color-rust-glow: #F26B4D;
+  --color-rust-soft: #FCE4DF;
+  --color-rust-wash: #FBEFEB;
+  --color-rust-deep: #7A1A0A;
+
+  --color-sage: #5C8A55;
+  --color-sage-soft: #DFEAD9;
+  --color-sage-wash: #EEF5E9;
+
+  --color-amber: #D89538;
+  --color-amber-soft: #F8E4C2;
+  --color-amber-wash: #FBEFD8;
+
+  --color-crimson: #C73838;
+  --color-crimson-soft: #FEEBEB;
+
+  --color-border: #E7E5E1;
+  --color-border-soft: #EFEEEA;
+
+  --color-background: #F7F7F5;
+  --color-foreground: #0F0F0F;
+}
+
+:root {
+  --background: #F7F7F5;
+  --foreground: #0F0F0F;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: #F7F7F5;
+    color: #0F0F0F;
+    font-feature-settings: 'ss01', 'ss02', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background: #C8351F;
+    color: #F7F7F5;
+  }
+}
+
+@keyframes inkos-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+@media (max-width: 768px) {
+  .inkos-nav-desktop { display: none !important; }
+  .inkos-nav-signin { display: none !important; }
+  .inkos-nav-burger { display: flex !important; }
+  .inkos-nav-mobile { display: block !important; }
+}
+
+@media (max-width: 1024px) {
+  .v4-modules-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .v4-pricing-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .v4-stories-grid { grid-template-columns: 1fr !important; }
+  .v4-moat-grid { grid-template-columns: 1fr !important; }
+  .v4-polaroid-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .v6-photo-band { grid-template-columns: 1fr 1fr !important; }
+  .v6-photo-band > div:first-child { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
+  .v4-modules-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .v4-pricing-grid { grid-template-columns: 1fr !important; }
+  .v4-hero-trust { grid-template-columns: repeat(2, 1fr) !important; gap: 24px !important; }
+  .v6-photo-band { grid-template-columns: 1fr !important; }
+}
