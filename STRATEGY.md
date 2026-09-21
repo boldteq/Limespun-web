@@ -1,4 +1,4 @@
-# InkOS Marketing Site — Full-Site Build Strategy
+# Limespun Marketing Site — Full-Site Build Strategy
 
 > **Source of truth for all remaining pages.** Every page agent reads this. Brand voice, design DNA, sprint plan, quality bar.
 > Last updated: 2026-04-28.
@@ -7,7 +7,7 @@
 
 ## 1. Context
 
-InkOS = the studio OS for tattoo. Real shipped product. 644 files, 140 routes, 13 sprints, live at `inkos.up.railway.app`.
+Limespun = the studio OS for tattoo. Real shipped product. 644 files, 140 routes, 13 sprints, live at `app.limespun.com`.
 
 **App routes (what we sell):**
 dashboard, calendar, appointments, clients (+8 sub-pages), projects, inbox, messages, artists, guest-artists, ai-design, forms (+kiosk/templates), flash-events, inventory, payments, payroll, commissions, marketing, portfolio, reports, waitlist, locations, settings.
@@ -63,7 +63,7 @@ dashboard, calendar, appointments, clients (+8 sub-pages), projects, inbox, mess
 - Stock-photo language ("Our team works tirelessly...")
 - Generic SaaS template copy
 
-**Reference:** every line in `InkOSLandingV6.jsx` is the gold standard. Copy that voice exactly.
+**Reference:** every line in `LimespunLandingV6.jsx` is the gold standard. Copy that voice exactly.
 
 ### 2.4 Layout DNA
 - **Max-width:** 1280px main containers. 760px text columns. 720-920px content cards.
@@ -129,7 +129,7 @@ NEVER:
 | `/migrate/daysmart` | DaySmart-specific. 9-day migration. Pain → relief. |
 | `/migrate/fresha` | Anti-platform-fee angle. "Keep your bookings, leave the take." |
 | `/migrate/mangomint` | Salon-vs-tattoo angle. Native concepts. |
-| `/reach-compliance` | EU REACH 2022 explainer + InkOS implementation |
+| `/reach-compliance` | EU REACH 2022 explainer + Limespun implementation |
 
 ### Tier 4 — Resources (Sprint 4) — 6 pages
 
@@ -241,11 +241,11 @@ Default structure for any page. Customise sections per page goal.
 **Each page MUST export:**
 ```ts
 export const metadata: Metadata = {
-  title: "<Page-specific> | InkOS",
+  title: "<Page-specific> | Limespun",
   description: "<155 chars max, with primary keyword + benefit + CTA>",
   openGraph: { title, description, images: [og-image-url], type: 'website' },
   twitter: { card: 'summary_large_image', title, description },
-  alternates: { canonical: `https://inkos.studio${route}` },
+  alternates: { canonical: `https://limespun.com${route}` },
 };
 ```
 
@@ -286,7 +286,7 @@ These get built ONCE in Sprint 1 and reused across every later sprint:
 1. `<HeroSection>` — props: eyebrow, heading (with optional italicWord), subhead, primaryCTA, secondaryCTA, accent, blobs?, visual?
 2. `<FAQAccordion>` — props: items[] of {q, a}, accent
 3. `<CTASection>` — props: heading, subhead, primaryCTA, secondaryCTA (lift Close section)
-4. `<ComparisonTable>` — props: rows[] with feature + competitor flags + InkOS tick
+4. `<ComparisonTable>` — props: rows[] with feature + competitor flags + Limespun tick
 5. `<TestimonialCard>` — props: name, role, city, chairs, quote, stats[], gradient
 6. `<StatStrip>` — props: stats[] with stat + label
 7. `<PageBreadcrumbs>` — auto-generates from route
@@ -298,11 +298,11 @@ These get built ONCE in Sprint 1 and reused across every later sprint:
 - 4-tier grid (lift from homepage)
 - Comparison table vs DaySmart, Mangomint, Fresha, TattooGenda (16-row feature matrix from Dossier)
 - Plan FAQ (8 questions: cancellation, downgrades, refunds, overages, team seats, currencies, taxes, trial)
-- ROI strip: "Studios save 12 hr/wk on average. At $50/hr that's $2,400/mo. InkOS Studio is $59/mo."
+- ROI strip: "Studios save 12 hr/wk on average. At $50/hr that's $2,400/mo. Limespun Studio is $59/mo."
 - Closing CTA
 
 **`/customers`**
-- Hero: "How studios run on InkOS."
+- Hero: "How studios run on Limespun."
 - Filter chips (size: solo / small / multi-chair / chain)
 - 3 hero stories (Miles/Kaia/Rafael) with dedicated detail pages later (`/customers/[slug]`)
 - Stat strip: "1,200+ artists. 47 countries. $0 in transaction fees."
@@ -330,7 +330,7 @@ These get built ONCE in Sprint 1 and reused across every later sprint:
 After every sprint dispatch:
 
 ```bash
-cd "/Users/yashbaldha/Desktop/Boldteq App/Marketing Site/InkOS"
+cd "/Users/yashbaldha/Desktop/Boldteq App/Marketing Site/Limespun"
 pnpm run type-check          # zero errors
 pnpm run build               # all routes compile static
 # Smoke test
@@ -370,4 +370,4 @@ If a page doesn't pass that test in 90 seconds, it gets cut.
 
 ---
 
-*Strategy authored 2026-04-28. Built on InkOSLandingV6.jsx + InkOSDossierV3.jsx + 13-sprint InkOS web app build at `/Users/yashbaldha/Desktop/Boldteq App/InkOS/`.*
+*Strategy authored 2026-04-28. Built on LimespunLandingV6.jsx + LimespunDossierV3.jsx + 13-sprint Limespun web app build at `/Users/yashbaldha/Desktop/Boldteq App/Limespun/`.*

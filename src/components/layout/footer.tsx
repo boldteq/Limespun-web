@@ -1,273 +1,112 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { BRAND, FONT, GRADIENT } from "@/lib/brand";
+import React from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { LimespunMark } from "@/components/brand/limespun-mark";
-
-// ─── LiveClock ────────────────────────────────────────────────────────────────
-
-function LiveClock() {
-  const [time, setTime] = useState<string>("—");
-
-  useEffect(() => {
-    const fmt = () => {
-      const d = new Date();
-      const hh = d.getHours();
-      const mm = d.getMinutes().toString().padStart(2, "0");
-      const ampm = hh >= 12 ? "pm" : "am";
-      const h12 = hh % 12 || 12;
-      setTime(`${h12}:${mm}${ampm}`);
-    };
-    fmt();
-    const id = setInterval(fmt, 30000);
-    return () => clearInterval(id);
-  }, []);
-
-  return <span>{time}</span>;
-}
-
-// ─── Footer link columns ──────────────────────────────────────────────────────
-
-interface FooterLink {
-  label: string;
-  href: string;
-}
 
 interface FooterColumn {
   heading: string;
-  links: FooterLink[];
+  links: { label: string; href: string }[];
 }
 
 const columns: FooterColumn[] = [
   {
     heading: "Product",
     links: [
-      { label: "Today",      href: "/product/today" },
-      { label: "Inbox",      href: "/product/inbox" },
-      { label: "Calendar",   href: "/product/calendar" },
-      { label: "Messages",   href: "/product/messages" },
-      { label: "Projects",   href: "/product/projects" },
-      { label: "Clients",    href: "/product/clients" },
-      { label: "Payments",   href: "/product/payments" },
-      { label: "Inventory",  href: "/product/inventory" },
-      { label: "AI",         href: "/product/ai-design" },
+      { label: "Calendar", href: "/product/calendar" },
+      { label: "Projects", href: "/product/projects" },
+      { label: "Clients", href: "/product/clients" },
+      { label: "Consent forms", href: "/product/forms" },
+      { label: "Payments", href: "/product/payments" },
+      { label: "Inventory", href: "/product/inventory" },
+      { label: "Pricing", href: "/pricing" },
+    ],
+  },
+  {
+    heading: "For studios",
+    links: [
+      { label: "Solo artists", href: "/for/solo-artists" },
+      { label: "Small studios", href: "/for/small-studios" },
+      { label: "Multi-chair shops", href: "/for/multi-chair" },
+      { label: "Multi-location", href: "/for/multi-location" },
+      { label: "Switching tools", href: "/migrate" },
+      { label: "EU REACH", href: "/reach-compliance" },
     ],
   },
   {
     heading: "Company",
     links: [
-      { label: "About",      href: "/about" },
-      { label: "Customers",  href: "/customers" },
-      { label: "Changelog",  href: "/changelog" },
-      { label: "Roadmap",    href: "/roadmap" },
-      { label: "Press",      href: "/press" },
-      { label: "Careers",    href: "/careers" },
-    ],
-  },
-  {
-    heading: "Resources",
-    links: [
-      { label: "Help center",            href: "#" },
-      { label: "API documentation",      href: "#" },
-      { label: "REACH compliance hub",   href: "/reach-compliance" },
-      { label: "Migration guide",        href: "/migrate" },
-      { label: "System status",          href: "#" },
-    ],
-  },
-  {
-    heading: "Legal",
-    links: [
-      { label: "Privacy",       href: "/legal/privacy" },
-      { label: "Terms",         href: "/legal/terms" },
-      { label: "Security",      href: "/legal/security" },
-      { label: "GDPR",          href: "/legal/gdpr" },
-      { label: "Cookie policy", href: "/legal/cookies" },
+      { label: "About", href: "/about" },
+      { label: "Changelog", href: "/changelog" },
+      { label: "Roadmap", href: "/roadmap" },
+      { label: "Blog", href: "/blog" },
+      { label: "Careers", href: "/careers" },
+      { label: "Contact", href: "/contact" },
     ],
   },
 ];
 
-// ─── Footer ───────────────────────────────────────────────────────────────────
+const legal = [
+  { label: "Privacy", href: "/legal/privacy" },
+  { label: "Terms", href: "/legal/terms" },
+  { label: "Security", href: "/legal/security" },
+  { label: "GDPR", href: "/legal/gdpr" },
+  { label: "Cookies", href: "/legal/cookies" },
+];
 
 export function Footer() {
   return (
-    <footer style={{
-      background: BRAND.boneCream,
-      borderTop: `1px solid ${BRAND.border}`,
-      position: "relative",
-      overflow: "hidden",
-    } as React.CSSProperties}>
-      {/* Corner rust glow */}
-      <div style={{
-        position: "absolute",
-        bottom: 0,
-        right: 0,
-        width: 400,
-        height: 400,
-        background: GRADIENT.cornerRust,
-        pointerEvents: "none",
-        zIndex: 0,
-      } as React.CSSProperties} />
+    <footer className="border-t border-hair bg-white">
+      <div className="mx-auto max-w-[1200px] px-5 pt-16 pb-10 sm:px-8">
+        <Link href="/" className="inline-flex items-center gap-2.5" aria-label="Limespun home">
+          <LimespunMark size={30} />
+          <span className="text-[22px] font-semibold tracking-[-0.02em] text-graphite">Limespun</span>
+        </Link>
 
-      {/* Main footer body */}
-      <div style={{
-        position: "relative",
-        zIndex: 1,
-        maxWidth: 1200,
-        margin: "0 auto",
-        padding: "64px 40px 0",
-      } as React.CSSProperties}>
-        {/* Top row: logo + columns */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "220px 1fr",
-          gap: 48,
-          marginBottom: 56,
-        } as React.CSSProperties}>
-          {/* Brand column */}
-          <div>
-            {/* Logo mark */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 } as React.CSSProperties}>
-              <LimespunMark size={36} />
-              <span style={{
-                fontFamily: FONT.sans,
-                fontSize: 16,
-                fontWeight: 600,
-                color: BRAND.onyx,
-                letterSpacing: "-0.01em",
-              } as React.CSSProperties}>Limespun</span>
-            </div>
-
-            <p style={{
-              fontFamily: FONT.sans,
-              fontSize: 13,
-              color: BRAND.stone,
-              lineHeight: 1.7,
-              marginBottom: 20,
-            } as React.CSSProperties}>
-              The studio OS for tattoo. Bookings, deposits, projects, portfolio, consent, payments — one quiet system.
-            </p>
-
-            {/* Live clock */}
-            <div style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 7,
-              padding: "6px 12px",
-              borderRadius: 8,
-              background: BRAND.boneDeep,
-              border: `1px solid ${BRAND.border}`,
-            } as React.CSSProperties}>
-              <span style={{
-                width: 6,
-                height: 6,
-                borderRadius: 100,
-                background: BRAND.sage,
-                display: "inline-block",
-                animation: "limespun-pulse 2s ease-in-out infinite",
-              } as React.CSSProperties} />
-              <span style={{
-                fontFamily: FONT.mono,
-                fontSize: 12,
-                color: BRAND.stoneDark,
-                letterSpacing: "0.04em",
-              } as React.CSSProperties}>
-                <LiveClock />
-              </span>
-              <span style={{
-                fontFamily: FONT.sans,
-                fontSize: 11,
-                color: BRAND.stoneLight,
-              } as React.CSSProperties}>local</span>
-            </div>
-          </div>
-
-          {/* Link columns */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 24,
-          } as React.CSSProperties}>
+        <div className="mt-6 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
+          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3">
             {columns.map((col) => (
               <div key={col.heading}>
-                <div style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 11,
-                  fontWeight: 600,
-                  color: BRAND.stoneDark,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  marginBottom: 14,
-                } as React.CSSProperties}>{col.heading}</div>
-                <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 9 } as React.CSSProperties}>
-                  {col.links.map((link) => (
-                    <li key={link.label}>
-                      <a
-                        href={link.href}
-                        style={{
-                          fontFamily: FONT.sans,
-                          fontSize: 13,
-                          color: BRAND.stone,
-                          textDecoration: "none",
-                          lineHeight: 1.4,
-                          transition: "color 0.12s",
-                        } as React.CSSProperties}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLAnchorElement).style.color = BRAND.ink;
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLAnchorElement).style.color = BRAND.stone;
-                        }}
+                <h2 className="text-[14px] font-medium text-mute">{col.heading}</h2>
+                <ul className="mt-4 flex flex-col">
+                  {col.links.map((l) => (
+                    <li key={l.href}>
+                      <Link
+                        href={l.href}
+                        className="inline-flex min-h-10 items-center text-[16px] text-graphite transition-colors hover:text-ember-deep"
                       >
-                        {link.label}
-                      </a>
+                        {l.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
+          </nav>
+
+          <div className="flex flex-col gap-5 lg:order-first lg:pr-8">
+            <p className="max-w-[320px] text-[17px] leading-[1.55] text-mute">
+              Bookings, deposits, consent forms and artist payouts for tattoo studios.
+            </p>
+            <Link
+              href="/migrate"
+              className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full bg-canvas px-5 text-[15px] font-semibold text-graphite ring-1 ring-hair transition-colors hover:bg-canvas-deep"
+            >
+              Switching tools? We move you <ArrowRight size={15} strokeWidth={2.2} aria-hidden="true" />
+            </Link>
           </div>
         </div>
-      </div>
 
-      {/* Copyright bar */}
-      <div style={{
-        position: "relative",
-        zIndex: 1,
-        borderTop: `1px solid ${BRAND.border}`,
-        maxWidth: "100%",
-      } as React.CSSProperties}>
-        <div style={{
-          maxWidth: 1200,
-          margin: "0 auto",
-          padding: "18px 40px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 16,
-        } as React.CSSProperties}>
-          <span style={{
-            fontFamily: FONT.sans,
-            fontSize: 12,
-            color: BRAND.stoneLight,
-          } as React.CSSProperties}>
-            &copy; {new Date().getFullYear()} Limespun Technologies, Inc. All rights reserved.
-          </span>
-
-          <div style={{ display: "flex", alignItems: "center", gap: 6 } as React.CSSProperties}>
-            {/* Status dot */}
-            <span style={{
-              width: 6,
-              height: 6,
-              borderRadius: 100,
-              background: BRAND.sage,
-              display: "inline-block",
-            } as React.CSSProperties} />
-            <span style={{
-              fontFamily: FONT.sans,
-              fontSize: 12,
-              color: BRAND.stoneLight,
-            } as React.CSSProperties}>All systems operational</span>
-          </div>
+        <div className="mt-14 flex flex-col gap-4 border-t border-hair pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <ul className="flex flex-wrap gap-x-6 gap-y-2">
+            {legal.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="text-[14px] text-graphite-soft transition-colors hover:text-graphite">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="text-[14px] text-mute">© {new Date().getFullYear()} Limespun · Built by Boldteq</p>
         </div>
       </div>
     </footer>

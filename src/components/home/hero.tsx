@@ -1,258 +1,165 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, PlayCircle } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, stagger } from "@/lib/brand";
-import { MangomintBlobs } from "@/components/brand/mangomint-blobs";
-import { LimespunMark } from "@/components/brand/limespun-mark";
-import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
+import { AlertTriangle, HandCoins } from "lucide-react";
+import { CTA } from "@/lib/brand";
+import { AppWindow, CheckRow, Chip, Display, SampleTag, StripedFrame, Toast, Underlined } from "./ui";
 
-const trustStats = [
-  { stat: "1,200+",          label: "artists on the waitlist" },
-  { stat: "US · UK · CA · AU", label: "global from day one" },
-  { stat: "EU REACH",        label: "compliant ink registry" },
-  { stat: "14 days",         label: "free white-glove migration" },
+interface ChairRow {
+  time: string;
+  end: string;
+  client: string;
+  piece: string;
+  artist: string;
+  status: React.ReactNode;
+  flagged?: boolean;
+  live?: boolean;
+}
+
+const rows: ChairRow[] = [
+  {
+    time: "10:00",
+    end: "1:00",
+    client: "Asha M.",
+    piece: "Koi sleeve · session 4 of 5",
+    artist: "Dev",
+    status: <Chip tone="ink">In the chair</Chip>,
+    live: true,
+  },
+  {
+    time: "1:30",
+    end: "4:00",
+    client: "Elena R.",
+    piece: "Back piece · session 2 of 3",
+    artist: "Dev",
+    status: <Chip tone="flag">Red-ink allergy</Chip>,
+    flagged: true,
+  },
+  {
+    time: "2:00",
+    end: "3:00",
+    client: "Jo K.",
+    piece: "Consult · fine-line florals",
+    artist: "Mara",
+    status: <Chip tone="paid">$100 deposit paid</Chip>,
+  },
+  {
+    time: "4:30",
+    end: "5:00",
+    client: "Sam T.",
+    piece: "Touch-up · forearm script",
+    artist: "Mara",
+    status: <Chip tone="quiet">Consent signed</Chip>,
+  },
 ];
+
+function TodayPanel() {
+  return (
+    <AppWindow active="Today">
+      <div className="flex items-center justify-between gap-3 border-b border-hair px-5 py-4">
+        <div>
+          <p className="text-[15px] font-semibold text-graphite">Today</p>
+          <p className="text-[12px] text-mute">4 sessions · $1,840 booked</p>
+        </div>
+        <SampleTag />
+      </div>
+      <ul>
+        {rows.map((r) => (
+          <li
+            key={r.client}
+            className={`grid grid-cols-[52px_1fr] items-center gap-3 border-b border-hair px-5 py-3 last:border-b-0 sm:grid-cols-[60px_1fr_auto] ${
+              r.flagged ? "bg-flag-soft/60" : ""
+            }`}
+          >
+            <div className="text-[12px] leading-tight tabular-nums">
+              <p className="font-semibold text-graphite">{r.time}</p>
+              <p className="text-mute">to {r.end}</p>
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-[13px] font-semibold text-graphite">
+                {r.client} <span className="font-normal text-mute">· {r.artist}</span>
+              </p>
+              <p className="truncate text-[12px] text-graphite-soft">{r.piece}</p>
+              <div className="mt-1 sm:hidden">{r.status}</div>
+            </div>
+            <div className="hidden sm:block">{r.status}</div>
+          </li>
+        ))}
+      </ul>
+    </AppWindow>
+  );
+}
 
 export function Hero() {
   return (
-    <section
-      style={{
-        background: BRAND.bone,
-        position: "relative",
-        overflow: "hidden",
-        paddingTop: 100,
-        paddingBottom: 80,
-      } as React.CSSProperties}
-    >
-      {/* Mangomint-style organic blobs */}
-      <MangomintBlobs variant="hero" />
+    <section className="relative bg-canvas pt-10 pb-20 sm:pt-16 lg:pb-28">
+      <div className="mx-auto max-w-[1280px] px-5 sm:px-8">
+        {/* Copy — centered, stacked above the product */}
+        <div className="mx-auto flex max-w-[920px] flex-col items-center text-center">
+          <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-hair bg-white/70 px-4 py-1.5 text-[14px] font-medium text-graphite-soft">
+            <span className="h-2 w-2 rounded-full bg-ember" aria-hidden="true" />
+            Tattoo studio software · now in private beta
+          </p>
+          <Display as="h1">
+            Book the whole sleeve.
+            <br className="hidden sm:block" /> Keep <Underlined>every deposit.</Underlined>
+          </Display>
+          <p className="mt-7 max-w-[600px] text-[18px] leading-[1.6] text-graphite-soft sm:text-[19px]">
+            Limespun runs bookings, deposits, consent forms and artist payouts for tattoo studios. It is built
+            around sessions that span months, not one-off salon appointments.
+          </p>
 
-      {/* Hero bloom gradient overlay */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: GRADIENT.heroBloom,
-          pointerEvents: "none",
-        } as React.CSSProperties}
-      />
-
-      {/* Subtle grid texture */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          opacity: 0.25,
-          backgroundImage: `linear-gradient(${BRAND.border} 1px, transparent 1px), linear-gradient(90deg, ${BRAND.border} 1px, transparent 1px)`,
-          backgroundSize: "64px 64px",
-          maskImage: "radial-gradient(ellipse at 50% 30%, black 30%, transparent 70%)",
-          WebkitMaskImage: "radial-gradient(ellipse at 50% 30%, black 30%, transparent 70%)",
-          pointerEvents: "none",
-        } as React.CSSProperties}
-      />
-
-      <div
-        style={{
-          maxWidth: 1280,
-          margin: "0 auto",
-          padding: "0 32px",
-          position: "relative",
-          zIndex: 2,
-        } as React.CSSProperties}
-      >
-        {/* Status pill */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 10,
-            padding: "7px 14px 7px 7px",
-            borderRadius: 100,
-            background: BRAND.white,
-            border: `1px solid ${BRAND.border}`,
-            fontFamily: FONT.sans,
-            fontSize: 12,
-            fontWeight: 500,
-            color: BRAND.stoneDark,
-            marginBottom: 32,
-            boxShadow: SHADOW.soft,
-          } as React.CSSProperties}
-        >
-          <LimespunMark size={20} />
-          The studio OS for tattoo &middot; v1 in private beta
-        </motion.div>
-
-        {/* Serif headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            fontFamily: FONT.serif,
-            fontSize: "clamp(48px, 7vw, 96px)",
-            lineHeight: 1.0,
-            letterSpacing: "-0.03em",
-            color: BRAND.onyx,
-            fontWeight: 400,
-            maxWidth: 920,
-            marginBottom: 24,
-          } as React.CSSProperties}
-        >
-          The studio OS built like a{" "}
-          <em style={{ fontStyle: "italic", color: BRAND.rust } as React.CSSProperties}>
-            tattoo
-          </em>
-          , not a spreadsheet.
-        </motion.h1>
-
-        {/* Subhead */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 19,
-            fontWeight: 400,
-            lineHeight: 1.55,
-            color: BRAND.stoneDark,
-            maxWidth: 620,
-            marginBottom: 36,
-          } as React.CSSProperties}
-        >
-          Bookings, deposits, projects, portfolio, consent, payments, messages &mdash;
-          one quiet system that understands multi-session work, red-ink allergies,
-          and deposits split across five visits.
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            flexWrap: "wrap",
-            marginBottom: 56,
-          } as React.CSSProperties}
-        >
-          <a
-            href="https://app.limespun.com/signup"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              background: BRAND.onyx,
-              color: BRAND.bone,
-              fontFamily: FONT.sans,
-              fontSize: 15,
-              fontWeight: 500,
-              padding: "14px 26px",
-              borderRadius: 100,
-              textDecoration: "none",
-              boxShadow: SHADOW.soft,
-            } as React.CSSProperties}
+          <form
+            action={CTA.primaryHref}
+            method="get"
+            className="mt-9 flex w-full max-w-[520px] flex-col gap-2 rounded-[22px] border border-hair bg-canvas-deep p-2 sm:flex-row sm:items-center sm:rounded-full"
           >
-            Start a 14-day trial <ArrowRight size={15} />
-          </a>
-          <a
-            href="/book-a-demo"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              color: BRAND.stoneDark,
-              fontFamily: FONT.sans,
-              fontSize: 15,
-              fontWeight: 500,
-              textDecoration: "none",
-              padding: "14px 20px",
-              borderRadius: 100,
-              border: `1px solid ${BRAND.border}`,
-              background: BRAND.white,
-              boxShadow: SHADOW.soft,
-            } as React.CSSProperties}
-          >
-            <PlayCircle size={15} /> Watch a 90-second tour
-          </a>
-        </motion.div>
+            <label htmlFor="hero-email" className="sr-only">
+              Your studio email
+            </label>
+            <input
+              id="hero-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              placeholder="Your studio email"
+              className="min-h-12 flex-1 rounded-full bg-transparent px-5 text-[16px] text-graphite placeholder:text-mute focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="min-h-12 rounded-full bg-graphite px-6 text-[16px] font-semibold text-white transition-colors duration-200 hover:bg-graphite-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite"
+            >
+              {CTA.primaryLabel}
+            </button>
+          </form>
 
-        {/* Dashboard preview */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          style={{ position: "relative" } as React.CSSProperties}
-        >
-          {/* Decorative blob behind dashboard */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              inset: "-40px -20px",
-              background: `radial-gradient(ellipse at 30% 40%, ${BRAND.rustWash} 0%, transparent 60%), radial-gradient(ellipse at 70% 60%, ${BRAND.amberWash} 0%, transparent 60%)`,
-              filter: "blur(40px)",
-              opacity: 0.8,
-              pointerEvents: "none",
-            } as React.CSSProperties}
+          <CheckRow
+            className="mt-5 justify-center"
+            items={["No card to apply", "Migration done for you", "No per-booking fees"]}
           />
-          <div style={{ position: "relative" } as React.CSSProperties}>
-            <DashboardMockup hero={true} />
-          </div>
-        </motion.div>
+        </div>
 
-        {/* Trust row */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.6 }}
-          variants={stagger}
-          style={{
-            marginTop: 64,
-            paddingTop: 28,
-            borderTop: `1px solid ${BRAND.border}`,
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 32,
-          } as React.CSSProperties}
-          className="v4-hero-trust"
-        >
-          {trustStats.map((s, i) => (
-            <div key={i}>
-              <div
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 18,
-                  fontWeight: 600,
-                  color: BRAND.onyx,
-                  letterSpacing: "-0.01em",
-                  marginBottom: 4,
-                } as React.CSSProperties}
-              >
-                {s.stat}
-              </div>
-              <div
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 13,
-                  fontWeight: 400,
-                  color: BRAND.stone,
-                } as React.CSSProperties}
-              >
-                {s.label}
-              </div>
+        {/* Product — wide, with the app's own notifications either side */}
+        <div className="relative mt-16 lg:mt-20">
+          <StripedFrame className="px-4 pt-10 pb-10 sm:px-10 sm:pt-14 lg:px-24 lg:pt-16 lg:pb-0">
+            <div className="mx-auto max-w-[720px]">
+              <TodayPanel />
             </div>
-          ))}
-        </motion.div>
+            <Toast
+              tone="flag"
+              icon={<AlertTriangle size={16} strokeWidth={2.2} />}
+              title="Flagged before 1:30"
+              body="Elena reacted to red ink in session 1. Patch test booked for Dev."
+              className="mx-auto mt-5 lg:absolute lg:right-5 lg:bottom-10 lg:mt-0 lg:max-w-[250px]"
+            />
+          </StripedFrame>
+          <Toast
+            tone="paid"
+            icon={<HandCoins size={16} strokeWidth={2.2} />}
+            title="Deposit carried to S4"
+            body="$240 of Asha's $300 still held on the project."
+            className="absolute top-28 left-5 hidden max-w-[250px] lg:flex"
+          />
+        </div>
       </div>
     </section>
   );

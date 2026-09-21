@@ -48,6 +48,27 @@
 
   --color-background: #F7F7F5;
   --color-foreground: #0F0F0F;
+
+  /* Homepage system — one ember orange (the logo colour), warm canvas, graphite ink */
+  --color-canvas: #FAF6F1;
+  --color-canvas-deep: #F3ECE3;
+  --color-graphite: #1D1E1C;
+  --color-graphite-soft: #4A4845;
+  --color-mute: #6B6762;
+  --color-hair: #E7DFD5;
+  --color-hair-strong: #CFC6BB;
+  --color-ember: #EC5C2D;
+  --color-ember-deep: #B8431C;
+  --color-ember-mid: #F48A63;
+  --color-ember-light: #F7A585;
+  --color-ember-soft: #FDE8DD;
+  --color-flag: #C7382E;
+  --color-flag-soft: #FCE7E4;
+  --color-paid: #2E7650;
+  --color-paid-soft: #E3F1E8;
+
+  --shadow-lift: 0 1px 2px rgba(29, 30, 28, 0.06), 0 8px 24px -8px rgba(29, 30, 28, 0.14);
+  --shadow-warm: 6px 4px 24px 0 rgba(236, 92, 45, 0.18);
 }
 
 :root {
@@ -82,13 +103,48 @@
   50% { opacity: 0.55; transform: scale(0.85); }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .limespun-nav-desktop { display: none !important; }
-  .limespun-nav-signin { display: none !important; }
+  .limespun-nav-secondary { display: none !important; }
   .limespun-nav-burger { display: flex !important; }
   .limespun-nav-mobile { display: block !important; }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Tour panel swap */
+@keyframes ls-panel-in {
+  from { opacity: 0.001; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.ls-panel-in { animation: ls-panel-in 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Hand-drawn underline that draws in once on load */
+@keyframes ls-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+.ls-underline path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: ls-draw 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+
+/* Slow cursor nudge in product frames */
+@keyframes ls-nudge {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-6px, -4px); }
+}
+.ls-nudge { animation: ls-nudge 3.2s ease-in-out infinite; }
+
+/* Responsive grids used by inner pages */
 @media (max-width: 1024px) {
   .v4-modules-grid { grid-template-columns: repeat(3, 1fr) !important; }
   .v4-pricing-grid { grid-template-columns: repeat(2, 1fr) !important; }

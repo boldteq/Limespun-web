@@ -41,6 +41,35 @@ export const BRAND = {
   dangerBorder: '#FCA5A5',
 } as const;
 
+/** Homepage system (mirrors the --color-* tokens in globals.css). One ember orange = the logo colour. */
+export const HOME = {
+  canvas:       '#FAF6F1',
+  canvasDeep:   '#F3ECE3',
+  white:        '#FFFFFF',
+  graphite:     '#1D1E1C',
+  graphiteSoft: '#4A4845',
+  mute:         '#6B6762',
+  hair:         '#E7DFD5',
+  hairStrong:   '#CFC6BB',
+  ember:        '#EC5C2D',
+  emberDeep:    '#B8431C',
+  emberMid:     '#F48A63',
+  emberLight:   '#F7A585',
+  emberSoft:    '#FDE8DD',
+  flag:         '#C7382E',
+  flagSoft:     '#FCE7E4',
+  paid:         '#2E7650',
+  paidSoft:     '#E3F1E8',
+} as const;
+
+/** Where every "get started" action goes until the app host is live. */
+export const CTA = {
+  primaryLabel: 'Get early access',
+  primaryHref:  '/book-a-demo',
+  demoLabel:    'Book a demo',
+  demoHref:     '/book-a-demo',
+} as const;
+
 export const FONT = {
   serif: "'Instrument Serif', Georgia, serif",
   sans:  "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",

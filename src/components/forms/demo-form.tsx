@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useActionState, useState } from "react";
+import React, { useActionState, useEffect, useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { BRAND, FONT, SHADOW } from "@/lib/brand";
 import { submitDemoRequest, type DemoFormState } from "@/app/book-a-demo/actions";
@@ -209,6 +209,13 @@ const TIME_OPTIONS: FormSelectOption[] = [
 // ─── DemoForm ─────────────────────────────────────────────────────────────────
 export function DemoForm() {
   const [state, formAction, isPending] = useActionState(submitDemoRequest, initialState);
+
+  // Carry the email typed into the homepage hero (/book-a-demo?email=…) into the form.
+  useEffect(() => {
+    const email = new URLSearchParams(window.location.search).get("email");
+    const input = document.getElementById("email");
+    if (email && input instanceof HTMLInputElement && !input.value) input.value = email.slice(0, 254);
+  }, []);
 
   const cardStyle: React.CSSProperties = {
     background: BRAND.white,

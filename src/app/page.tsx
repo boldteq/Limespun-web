@@ -1,35 +1,34 @@
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { Hero } from "@/components/home/hero";
-import { Truth } from "@/components/home/truth";
-import { Shift } from "@/components/home/shift";
-import { Work } from "@/components/home/work";
-import { Studio } from "@/components/home/studio";
-import { Proof } from "@/components/home/proof";
-import { Migration } from "@/components/home/migration";
+import { Pillars } from "@/components/home/pillars";
+import { Tour } from "@/components/home/tour";
+import { Connected } from "@/components/home/connected";
+import { Promises } from "@/components/home/promises";
 import { Pricing } from "@/components/home/pricing";
-import { Close } from "@/components/home/close";
-import { BRAND } from "@/lib/brand";
+import { Faq, faqs } from "@/components/home/faq";
+import { FinalCta } from "@/components/home/final-cta";
 import { JsonLd } from "@/components/seo/json-ld";
+import { SITE_URL } from "@/lib/brand";
 
 export default function HomePage() {
   return (
-    <div style={{ minHeight: "100vh", background: BRAND.bone, overflow: "hidden" }}>
+    <div className="min-h-screen bg-canvas text-graphite">
+      <a
+        href="#main"
+        className="sr-only z-[1000] rounded-full bg-graphite px-4 py-2 text-white focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+      >
+        Skip to content
+      </a>
       <JsonLd
         data={{
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "Limespun",
-          legalName: "Boldteq Holdings Ltd",
-          url: "https://limespun.com",
-          logo: "https://limespun.com/icon.png",
+          url: SITE_URL,
+          logo: `${SITE_URL}/icon.svg`,
           description:
-            "The studio operating system for tattoo. Multi-session projects, deposit pools, allergy intelligence, EU REACH compliance.",
-          foundingDate: "2024",
-          sameAs: [
-            "https://twitter.com/limespun",
-            "https://www.instagram.com/limespun",
-          ],
+            "Tattoo studio software for bookings, multi-session projects, deposits, consent forms and artist payouts.",
           contactPoint: {
             "@type": "ContactPoint",
             contactType: "customer service",
@@ -52,24 +51,29 @@ export default function HomePage() {
             highPrice: "199",
             offerCount: "4",
           },
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: "4.9",
-            reviewCount: "47",
-          },
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
         }}
       />
       <Nav />
-      <main>
+      <main id="main">
         <Hero />
-        <Truth />
-        <Shift />
-        <Work />
-        <Studio />
-        <Proof />
-        <Migration />
+        <Pillars />
+        <Tour />
+        <Connected />
+        <Promises />
         <Pricing />
-        <Close />
+        <Faq />
+        <FinalCta />
       </main>
       <Footer />
     </div>

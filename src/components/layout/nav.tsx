@@ -10,7 +10,7 @@ import {
   ArrowUpRight, Shield, MapPin, Database, CheckCircle2,
   Bell, Heart, TrendingUp, Menu, X, ChevronDown,
 } from "lucide-react";
-import { BRAND, FONT } from "@/lib/brand";
+import { BRAND, FONT, CTA } from "@/lib/brand";
 import type { NavItem, NavColumn, NavColumnItem, NavFooter } from "@/types";
 
 // ─── Nav data ────────────────────────────────────────────────────────────────
@@ -94,7 +94,6 @@ const navItems: NavItem[] = [
     } satisfies NavFooter,
   },
   { label: "Pricing",   href: "/pricing",  type: "link" },
-  { label: "Customers", href: "/customers",  type: "link" },
   {
     label: "Resources",
     type: "mega",
@@ -452,53 +451,31 @@ export function Nav() {
     setMobileExpanded((prev) => (prev === label ? null : label));
   };
 
-  // Pill shape + backdrop when scrolled
-  const wrapperStyle: React.CSSProperties = scrolled
-    ? {
-        position: "fixed",
-        top: 12,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "calc(100% - 48px)",
-        maxWidth: 1200,
-        zIndex: 900,
-        transition: "all 0.3s ease",
-      }
-    : {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 900,
-        transition: "all 0.3s ease",
-      };
+  // Always a floating white bar; only the shadow deepens once the page scrolls
+  const wrapperStyle: React.CSSProperties = {
+    position: "fixed",
+    top: 14,
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "calc(100% - 28px)",
+    maxWidth: 1296,
+    zIndex: 900,
+  };
 
-  const barStyle: React.CSSProperties = scrolled
-    ? {
-        background: "rgba(252,251,247,0.92)",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-        borderRadius: 100,
-        border: `1px solid ${BRAND.border}`,
-        boxShadow: "0 4px 24px -4px rgba(15,15,15,0.10), 0 1px 4px -1px rgba(15,15,15,0.06)",
-        padding: "0 20px",
-        height: 52,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }
-    : {
-        background: "rgba(252,251,247,0.80)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        borderBottom: `1px solid ${BRAND.border}`,
-        padding: "0 40px",
-        height: 64,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        maxWidth: "100%",
-      };
+  const barStyle: React.CSSProperties = {
+    background: BRAND.white,
+    borderRadius: 20,
+    border: `1px solid ${scrolled ? BRAND.border : "rgba(231,229,225,0.6)"}`,
+    boxShadow: scrolled
+      ? "0 10px 30px -12px rgba(29,30,28,0.18), 0 2px 6px -2px rgba(29,30,28,0.08)"
+      : "0 4px 18px -10px rgba(29,30,28,0.14)",
+    padding: "0 10px 0 20px",
+    height: 64,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    transition: "box-shadow 0.25s ease, border-color 0.25s ease",
+  };
 
   return (
     <>
@@ -620,40 +597,42 @@ export function Nav() {
           {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 } as React.CSSProperties}>
             <a
-              href="https://app.limespun.com/login"
-              className="limespun-nav-signin"
-              style={{
-                fontFamily: FONT.sans,
-                fontSize: 14,
-                fontWeight: 450,
-                color: BRAND.stoneDark,
-                textDecoration: "none",
-                padding: "6px 12px",
-                borderRadius: 8,
-                transition: "color 0.12s",
-              } as React.CSSProperties}
-            >
-              Sign in
-            </a>
-            <a
-              href="https://app.limespun.com/signup"
+              href={CTA.demoHref}
+              className="limespun-nav-secondary"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 6,
-                padding: "8px 18px",
+                minHeight: 44,
+                padding: "0 14px",
                 borderRadius: 100,
-                background: BRAND.onyx,
-                color: BRAND.bone,
+                color: BRAND.onyx,
                 fontFamily: FONT.sans,
-                fontSize: 13,
-                fontWeight: 500,
+                fontSize: 15,
+                fontWeight: 600,
                 textDecoration: "none",
                 whiteSpace: "nowrap",
-                transition: "background 0.15s",
               } as React.CSSProperties}
             >
-              Start free
+              {CTA.demoLabel}
+            </a>
+            <a
+              href={CTA.primaryHref}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                minHeight: 44,
+                padding: "0 18px",
+                borderRadius: 100,
+                background: BRAND.onyx,
+                color: BRAND.white,
+                fontFamily: FONT.sans,
+                fontSize: 15,
+                fontWeight: 600,
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+              } as React.CSSProperties}
+            >
+              {CTA.primaryLabel}<span className="limespun-nav-secondary" aria-hidden="true">&nbsp;&nbsp;→</span>
             </a>
 
             {/* Mobile burger */}
@@ -705,38 +684,38 @@ export function Nav() {
             ))}
             <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 } as React.CSSProperties}>
               <a
-                href="https://app.limespun.com/login"
+                href={CTA.demoHref}
                 style={{
                   display: "block",
                   textAlign: "center",
-                  padding: "12px",
-                  borderRadius: 10,
-                  border: `1px solid ${BRAND.border}`,
+                  padding: "13px",
+                  borderRadius: 100,
+                  border: `1px solid ${BRAND.onyx}`,
                   fontFamily: FONT.sans,
                   fontSize: 15,
-                  fontWeight: 500,
-                  color: BRAND.ink,
+                  fontWeight: 600,
+                  color: BRAND.onyx,
                   textDecoration: "none",
                 } as React.CSSProperties}
               >
-                Sign in
+                {CTA.demoLabel}
               </a>
               <a
-                href="https://app.limespun.com/signup"
+                href={CTA.primaryHref}
                 style={{
                   display: "block",
                   textAlign: "center",
-                  padding: "12px",
-                  borderRadius: 10,
+                  padding: "13px",
+                  borderRadius: 100,
                   background: BRAND.onyx,
                   fontFamily: FONT.sans,
                   fontSize: 15,
-                  fontWeight: 500,
-                  color: BRAND.bone,
+                  fontWeight: 600,
+                  color: BRAND.white,
                   textDecoration: "none",
                 } as React.CSSProperties}
               >
-                Start free
+                {CTA.primaryLabel}
               </a>
             </div>
           </div>
@@ -744,7 +723,7 @@ export function Nav() {
       </div>
 
       {/* Spacer so content doesn't sit under fixed nav */}
-      <div style={{ height: scrolled ? 0 : 64 } as React.CSSProperties} aria-hidden="true" />
+      <div style={{ height: 92 } as React.CSSProperties} aria-hidden="true" />
     </>
   );
 }

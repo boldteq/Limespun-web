@@ -1,433 +1,127 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, Check } from "lucide-react";
-import { BRAND, FONT, fadeUp, stagger } from "@/lib/brand";
-import { SectionEyebrow } from "@/components/shared/section-eyebrow";
+import { Check } from "lucide-react";
+import { CTA } from "@/lib/brand";
+import { Display, PrimaryButton, SecondaryButton } from "./ui";
 
-interface PricingTierData {
+interface Tier {
   name: string;
-  desc: string;
+  fit: string;
   price: string;
   period: string;
-  cta: string;
-  featured?: boolean;
-  featuredLabel?: string;
   lines: string[];
+  recommended?: boolean;
+  cta: { label: string; href: string };
 }
 
-const tiers: PricingTierData[] = [
+const tiers: Tier[] = [
   {
     name: "Solo",
-    desc: "For one chair, one artist",
+    fit: "One artist, one chair",
     price: "$29",
     period: "/mo",
-    cta: "Start free trial",
+    cta: { label: CTA.primaryLabel, href: CTA.primaryHref },
     lines: [
-      "Today, Inbox, Calendar, Messages",
-      "Unlimited bookings, deposits, consents",
-      "Multi-session projects · 1 active artist",
-      "Stripe Connect · standard fees",
+      "Calendar, messages and client files",
+      "Unlimited bookings, deposits and consent forms",
+      "Multi-session projects",
       "Email support",
     ],
   },
   {
     name: "Studio",
-    desc: "For 2–5 chairs, mixed roster",
+    fit: "2–5 chairs",
     price: "$59",
     period: "/mo",
-    cta: "Start free trial",
-    featured: true,
-    featuredLabel: "Most studios",
+    recommended: true,
+    cta: { label: CTA.primaryLabel, href: CTA.primaryHref },
     lines: [
-      "Everything in Solo, plus:",
-      "Up to 5 active artists",
-      "Commission auto-splits · payroll-ready",
-      "Guest residency band",
-      "Free white-glove migration",
-      "Chat support · 24h response",
+      "Everything in Solo",
+      "Up to 5 artists",
+      "Commission and booth-rent payouts",
+      "Guest artist dates and splits",
+      "Migration done for you",
     ],
   },
   {
     name: "Pro",
-    desc: "For 6+ chairs and guest-heavy shops",
+    fit: "6+ chairs and guest-heavy shops",
     price: "$99",
     period: "/mo",
-    cta: "Start free trial",
+    cta: { label: CTA.primaryLabel, href: CTA.primaryHref },
     lines: [
-      "Everything in Studio, plus:",
-      "Unlimited active artists",
-      "AI design assistant · brief generator",
-      "EU REACH inventory module",
+      "Everything in Studio",
+      "Unlimited artists",
+      "EU REACH ink inventory",
       "Public guest booking pages",
-      "Priority chat · 4h response",
+      "Priority support",
     ],
   },
   {
-    name: "Enterprise",
-    desc: "For chains and franchises",
+    name: "Multi-location",
+    fit: "Shops with more than one address",
     price: "$199",
     period: "/mo per location",
-    cta: "Talk to us",
+    cta: { label: "Talk to us", href: CTA.demoHref },
     lines: [
-      "Everything in Pro, plus:",
-      "Multi-location dashboard",
-      "Per-location P&L, payroll, tax",
-      "SSO · SCIM · audit log",
-      "Dedicated migration team",
-      "Dedicated account manager",
+      "Everything in Pro",
+      "Reporting across locations",
+      "Per-location payouts and tax",
+      "A dedicated migration lead",
     ],
   },
 ];
 
-interface PricingTierProps {
-  tier: PricingTierData;
-}
-
-function PricingTier({ tier }: PricingTierProps) {
-  return (
-    <motion.div
-      variants={fadeUp}
-      style={{
-        position: "relative",
-        borderRadius: 18,
-        overflow: "visible",
-        display: "flex",
-        flexDirection: "column",
-      } as React.CSSProperties}
-    >
-      {/* Featured badge */}
-      {tier.featured && tier.featuredLabel && (
-        <div
-          style={{
-            position: "absolute",
-            top: -10,
-            left: "50%",
-            transform: "translateX(-50%)",
-            padding: "4px 14px",
-            borderRadius: 100,
-            background: `linear-gradient(135deg, ${BRAND.rust} 0%, ${BRAND.rustBright} 100%)`,
-            fontFamily: FONT.sans,
-            fontSize: 11,
-            fontWeight: 700,
-            color: BRAND.bone,
-            letterSpacing: "0.02em",
-            whiteSpace: "nowrap",
-            zIndex: 10,
-          } as React.CSSProperties}
-        >
-          {tier.featuredLabel}
-        </div>
-      )}
-
-      <div
-        style={{
-          flex: 1,
-          background: tier.featured
-            ? BRAND.smoke
-            : "rgba(247,247,245,0.03)",
-          border: tier.featured
-            ? `1.5px solid ${BRAND.rustBright}`
-            : `1px solid ${BRAND.borderInk}`,
-          borderRadius: 18,
-          padding: "28px 24px",
-          display: "flex",
-          flexDirection: "column",
-          boxShadow: tier.featured
-            ? `0 0 0 1px rgba(200,53,31,0.20), 0 20px 48px -12px rgba(200,53,31,0.30)`
-            : "none",
-        } as React.CSSProperties}
-      >
-        {/* Tier name + desc */}
-        <div style={{ marginBottom: 20 } as React.CSSProperties}>
-          <div
-            style={{
-              fontFamily: FONT.sans,
-              fontSize: 16,
-              fontWeight: 700,
-              color: BRAND.bone,
-              letterSpacing: "-0.01em",
-              marginBottom: 4,
-            } as React.CSSProperties}
-          >
-            {tier.name}
-          </div>
-          <div
-            style={{
-              fontFamily: FONT.sans,
-              fontSize: 13,
-              color: BRAND.stoneLight,
-              lineHeight: 1.4,
-            } as React.CSSProperties}
-          >
-            {tier.desc}
-          </div>
-        </div>
-
-        {/* Price */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "baseline",
-            gap: 4,
-            marginBottom: 24,
-          } as React.CSSProperties}
-        >
-          <span
-            style={{
-              fontFamily: FONT.sans,
-              fontSize: 48,
-              fontWeight: 700,
-              color: BRAND.bone,
-              letterSpacing: "-0.03em",
-              lineHeight: 1,
-            } as React.CSSProperties}
-          >
-            {tier.price}
-          </span>
-          <span
-            style={{
-              fontFamily: FONT.sans,
-              fontSize: 13,
-              color: BRAND.stoneLight,
-            } as React.CSSProperties}
-          >
-            {tier.period}
-          </span>
-        </div>
-
-        {/* CTA */}
-        <a
-          href="https://app.limespun.com/signup"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            padding: "11px 20px",
-            borderRadius: 100,
-            background: tier.featured ? BRAND.bone : "transparent",
-            color: tier.featured ? BRAND.onyx : BRAND.bone,
-            fontFamily: FONT.sans,
-            fontSize: 14,
-            fontWeight: 600,
-            border: tier.featured ? "none" : `1.5px solid ${BRAND.borderInk}`,
-            letterSpacing: "-0.005em",
-            marginBottom: 24,
-            width: "100%",
-            textDecoration: "none",
-          } as React.CSSProperties}
-        >
-          {tier.cta}
-          <ArrowRight size={14} strokeWidth={2} />
-        </a>
-
-        {/* Divider */}
-        <div
-          aria-hidden="true"
-          style={{
-            height: 1,
-            background: BRAND.borderInk,
-            marginBottom: 20,
-          } as React.CSSProperties}
-        />
-
-        {/* Feature lines */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 10,
-            flex: 1,
-          } as React.CSSProperties}
-        >
-          {tier.lines.map((line, i) => {
-            const isContinuation = line.startsWith("Everything in");
-            return (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 10,
-                } as React.CSSProperties}
-              >
-                {isContinuation ? (
-                  <span
-                    style={{
-                      fontFamily: FONT.mono,
-                      fontSize: 12,
-                      color: BRAND.bone,
-                      flexShrink: 0,
-                      marginTop: 1,
-                    } as React.CSSProperties}
-                  >
-                    ↳
-                  </span>
-                ) : (
-                  <Check
-                    size={14}
-                    color={BRAND.sage}
-                    strokeWidth={2.2}
-                    style={{ flexShrink: 0, marginTop: 2 } as React.CSSProperties}
-                  />
-                )}
-                <span
-                  style={{
-                    fontFamily: FONT.sans,
-                    fontSize: 13,
-                    color: isContinuation ? BRAND.bone : BRAND.stoneLight,
-                    fontWeight: isContinuation ? 600 : 400,
-                    lineHeight: 1.4,
-                  } as React.CSSProperties}
-                >
-                  {line}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 export function Pricing() {
   return (
-    <section
-      id="pricing"
-      style={{
-        position: "relative",
-        background: BRAND.onyx,
-        paddingTop: 100,
-        paddingBottom: 100,
-        overflow: "hidden",
-      } as React.CSSProperties}
-    >
-      {/* Background atmospheres */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: "10%",
-          left: "15%",
-          width: 500,
-          height: 500,
-          background: `radial-gradient(circle, rgba(200,53,31,0.18) 0%, transparent 65%)`,
-          filter: "blur(60px)",
-          pointerEvents: "none",
-        } as React.CSSProperties}
-      />
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          bottom: "10%",
-          right: "15%",
-          width: 500,
-          height: 500,
-          background: `radial-gradient(circle, rgba(216,149,56,0.14) 0%, transparent 65%)`,
-          filter: "blur(60px)",
-          pointerEvents: "none",
-        } as React.CSSProperties}
-      />
+    <section id="pricing" className="bg-white py-24 sm:py-28">
+      <div className="mx-auto max-w-[1280px] px-5 sm:px-8">
+        <div className="flex flex-col items-center text-center">
+          <Display className="max-w-[820px]">Priced per shop, never per booking</Display>
+          <p className="mt-5 max-w-[560px] text-[18px] leading-[1.6] text-mute">
+            One monthly price. No cut of your bookings or deposits. Card processing is charged at the provider&apos;s
+            standard rate.
+          </p>
+        </div>
 
-      <div
-        style={{
-          position: "relative",
-          maxWidth: 1120,
-          margin: "0 auto",
-          padding: "0 24px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        } as React.CSSProperties}
-      >
-        {/* Section header */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-        >
-          <SectionEyebrow label="The line in the sand" dark accent="rust" />
-        </motion.div>
-
-        <motion.h2
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: "clamp(30px, 4vw, 50px)",
-            lineHeight: 1.08,
-            letterSpacing: "-0.025em",
-            color: BRAND.bone,
-            fontWeight: 600,
-            marginBottom: 16,
-            maxWidth: 640,
-            textAlign: "center",
-          } as React.CSSProperties}
-        >
-          Priced like a tool, quietly fair.
-        </motion.h2>
-
-        <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 17,
-            lineHeight: 1.6,
-            color: BRAND.stoneLight,
-            maxWidth: 540,
-            textAlign: "center",
-            marginBottom: 56,
-          } as React.CSSProperties}
-        >
-          No per-booking fees. No transaction take. No upsells in the chair. One number, every month, no surprises.
-        </motion.p>
-
-        {/* Tier grid */}
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 20,
-            width: "100%",
-            marginBottom: 36,
-            alignItems: "start",
-          } as React.CSSProperties}
-          className="v4-pricing-grid"
-        >
-          {tiers.map((tier) => (
-            <PricingTier key={tier.name} tier={tier} />
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {tiers.map((t) => (
+            <article
+              key={t.name}
+              className={`relative flex flex-col rounded-[20px] p-7 ${
+                t.recommended ? "bg-white shadow-[var(--shadow-warm)] ring-2 ring-ember" : "bg-canvas"
+              }`}
+            >
+              {t.recommended && (
+                <span className="absolute -top-3 left-7 rounded-full bg-ember px-3 py-1 text-[12px] font-semibold text-white">
+                  Best for 2–5 chairs
+                </span>
+              )}
+              <h3 className="text-[22px] font-semibold text-graphite">{t.name}</h3>
+              <p className="mt-1 min-h-[44px] text-[15px] leading-snug text-mute">{t.fit}</p>
+              <p className="mt-6 flex items-baseline gap-1">
+                <span className="text-[44px] font-medium tracking-[-0.02em] text-graphite tabular-nums">{t.price}</span>
+                <span className="text-[15px] text-mute">{t.period}</span>
+              </p>
+              {t.recommended ? (
+                <PrimaryButton href={t.cta.href} className="mt-6 w-full">
+                  {t.cta.label}
+                </PrimaryButton>
+              ) : (
+                <SecondaryButton href={t.cta.href} className="mt-6 w-full">
+                  {t.cta.label}
+                </SecondaryButton>
+              )}
+              <ul className="mt-7 flex flex-col gap-3 border-t border-hair pt-6">
+                {t.lines.map((l) => (
+                  <li key={l} className="flex gap-2.5 text-[15px] leading-snug text-graphite-soft">
+                    <Check size={16} strokeWidth={2.6} className="mt-0.5 shrink-0 text-ember" aria-hidden="true" />
+                    {l}
+                  </li>
+                ))}
+              </ul>
+            </article>
           ))}
-        </motion.div>
-
-        {/* Bottom note */}
-        <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 13,
-            color: BRAND.stoneLight,
-            textAlign: "center",
-          } as React.CSSProperties}
-        >
-          14-day trial on every plan. No card required.
-        </motion.p>
+        </div>
       </div>
     </section>
   );
