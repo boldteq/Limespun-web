@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { BRAND, FONT, GRADIENT } from "@/lib/brand";
-import { TriCircleMarkV2 } from "@/components/brand/tri-circle-mark";
+import { LimespunMark } from "@/components/brand/limespun-mark";
 
 // ─── LiveClock ────────────────────────────────────────────────────────────────
 
@@ -127,14 +127,14 @@ export function Footer() {
           <div>
             {/* Logo mark */}
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 } as React.CSSProperties}>
-              <TriCircleMarkV2 size={36} />
+              <LimespunMark size={36} />
               <span style={{
                 fontFamily: FONT.sans,
                 fontSize: 16,
                 fontWeight: 600,
                 color: BRAND.onyx,
                 letterSpacing: "-0.01em",
-              } as React.CSSProperties}>InkOS</span>
+              } as React.CSSProperties}>Limespun</span>
             </div>
 
             <p style={{
@@ -163,7 +163,7 @@ export function Footer() {
                 borderRadius: 100,
                 background: BRAND.sage,
                 display: "inline-block",
-                animation: "inkos-pulse 2s ease-in-out infinite",
+                animation: "limespun-pulse 2s ease-in-out infinite",
               } as React.CSSProperties} />
               <span style={{
                 fontFamily: FONT.mono,
@@ -250,7 +250,7 @@ export function Footer() {
             fontSize: 12,
             color: BRAND.stoneLight,
           } as React.CSSProperties}>
-            &copy; {new Date().getFullYear()} InkOS Technologies, Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Limespun Technologies, Inc. All rights reserved.
           </span>
 
           <div style={{ display: "flex", alignItems: "center", gap: 6 } as React.CSSProperties}>

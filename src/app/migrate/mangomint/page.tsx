@@ -297,12 +297,12 @@ const timelineSteps = [
   {
     day: "Day 5",
     label: "Preview run + sign-off",
-    desc: "Your data in InkOS, nothing live yet. You review three clients end-to-end, confirm everything looks right. We fix anything on the spot.",
+    desc: "Your data in Limespun, nothing live yet. You review three clients end-to-end, confirm everything looks right. We fix anything on the spot.",
   },
   {
     day: "Day 6",
     label: "Cutover + cancel Mangomint",
-    desc: "InkOS goes live. Stripe Connect re-attached. We stay on call for the first business day. When you're settled, cancel Mangomint.",
+    desc: "Limespun goes live. Stripe Connect re-attached. We stay on call for the first business day. When you're settled, cancel Mangomint.",
   },
 ];
 
@@ -311,7 +311,7 @@ const whatWeCarryCards: MoatCardBrightProps[] = [
     accent: "rust",
     icon: LayoutGrid,
     title: "Every client",
-    body: "Names, contacts, notes, custom fields. Mangomint custom fields become InkOS Notes or get promoted to first-class fields.",
+    body: "Names, contacts, notes, custom fields. Mangomint custom fields become Limespun Notes or get promoted to first-class fields.",
     detail: [
       ["Custom fields", "Mapped or promoted"],
       ["Contacts", "De-duplicated"],
@@ -322,7 +322,7 @@ const whatWeCarryCards: MoatCardBrightProps[] = [
     accent: "amber",
     icon: AlertCircle,
     title: "Every booking",
-    body: "Future appointments, recurring bookings, blocked time. The Mangomint calendar = the InkOS calendar at cutover.",
+    body: "Future appointments, recurring bookings, blocked time. The Mangomint calendar = the Limespun calendar at cutover.",
     detail: [
       ["Future appts", "All carried"],
       ["Blocked time", "Preserved"],
@@ -355,7 +355,7 @@ export default function MangomintMigrationPage() {
           italicWord="tattoo"
           subhead="Mangomint is the best salon SaaS. We respect them. But a sleeve isn't a haircut. A deposit pool isn't a tip jar. An allergy isn't a hair-colour preference. 6-day migration. White-glove."
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
-          secondaryCTA={{ label: "Start the trial", href: "https://inkos.up.railway.app/signup" }}
+          secondaryCTA={{ label: "Start the trial", href: "https://app.limespun.com/signup" }}
         />
 
         {/* ── Architectural difference ──────────────────────────────────── */}
@@ -414,10 +414,10 @@ export default function MangomintMigrationPage() {
                 accent="rust"
                 icon={LayoutGrid}
                 title="Multi-session projects, native"
-                body="Mangomint treats every booking as a transaction. InkOS groups them: a sleeve is one project, four sessions, one deposit pool. The whole work, in one place."
+                body="Mangomint treats every booking as a transaction. Limespun groups them: a sleeve is one project, four sessions, one deposit pool. The whole work, in one place."
                 detail={[
                   ["Mangomint", "Per-booking"],
-                  ["InkOS", "Per-project"],
+                  ["Limespun", "Per-project"],
                   ["Built for", "Tattoo workflow"],
                 ]}
               />
@@ -425,10 +425,10 @@ export default function MangomintMigrationPage() {
                 accent="amber"
                 icon={AlertCircle}
                 title="Allergy intelligence, surfaces"
-                body="Mangomint stores notes. InkOS surfaces the red ink allergy on Today, on the schedule card, in the artist's brief — three places, one source."
+                body="Mangomint stores notes. Limespun surfaces the red ink allergy on Today, on the schedule card, in the artist's brief — three places, one source."
                 detail={[
                   ["Mangomint", "Notes field"],
-                  ["InkOS", "4-place surface"],
+                  ["Limespun", "4-place surface"],
                   ["Risk", "Managed"],
                 ]}
               />
@@ -436,10 +436,10 @@ export default function MangomintMigrationPage() {
                 accent="sage"
                 icon={DollarSign}
                 title="Deposit pool accounting"
-                body="Mangomint deposits attach to bookings. Reschedule and the deposit floats. InkOS pools deposits to projects — they travel with the client, not the slot."
+                body="Mangomint deposits attach to bookings. Reschedule and the deposit floats. Limespun pools deposits to projects — they travel with the client, not the slot."
                 detail={[
                   ["Mangomint", "Per-booking"],
-                  ["InkOS", "Per-project pool"],
+                  ["Limespun", "Per-project pool"],
                   ["Refund logic", "Re-balances"],
                 ]}
               />
@@ -471,22 +471,22 @@ export default function MangomintMigrationPage() {
               <ComparisonTable
                 competitors={[
                   { key: "mangomint", label: "Mangomint" },
-                  { key: "inkos", label: "InkOS", highlighted: true },
+                  { key: "limespun", label: "Limespun", highlighted: true },
                 ]}
                 rows={[
-                  { feature: "Multi-session projects (sleeves)", values: { mangomint: false, inkos: true } },
-                  { feature: "Deposit pool across visits", values: { mangomint: false, inkos: true } },
-                  { feature: "Allergy intelligence (4-place surface)", values: { mangomint: "Notes only", inkos: true } },
-                  { feature: "Photo timeline (REF → HEALED)", values: { mangomint: "Basic", inkos: true } },
-                  { feature: "EU REACH ink registry", values: { mangomint: false, inkos: true } },
-                  { feature: "AI design assistant", values: { mangomint: false, inkos: true } },
-                  { feature: "Commission auto-splits", values: { mangomint: "Team Pay add-on", inkos: true } },
-                  { feature: "Guest artist residency band", values: { mangomint: false, inkos: true } },
-                  { feature: "Tattoo-specific by design", values: { mangomint: false, inkos: true } },
-                  { feature: "Per-booking transaction fee", values: { mangomint: "No", inkos: "No" } },
-                  { feature: "White-glove migration", values: { mangomint: false, inkos: true } },
+                  { feature: "Multi-session projects (sleeves)", values: { mangomint: false, limespun: true } },
+                  { feature: "Deposit pool across visits", values: { mangomint: false, limespun: true } },
+                  { feature: "Allergy intelligence (4-place surface)", values: { mangomint: "Notes only", limespun: true } },
+                  { feature: "Photo timeline (REF → HEALED)", values: { mangomint: "Basic", limespun: true } },
+                  { feature: "EU REACH ink registry", values: { mangomint: false, limespun: true } },
+                  { feature: "AI design assistant", values: { mangomint: false, limespun: true } },
+                  { feature: "Commission auto-splits", values: { mangomint: "Team Pay add-on", limespun: true } },
+                  { feature: "Guest artist residency band", values: { mangomint: false, limespun: true } },
+                  { feature: "Tattoo-specific by design", values: { mangomint: false, limespun: true } },
+                  { feature: "Per-booking transaction fee", values: { mangomint: "No", limespun: "No" } },
+                  { feature: "White-glove migration", values: { mangomint: false, limespun: true } },
                 ]}
-                caption="Mangomint feature set: mangomint.com docs, April 2026. InkOS: shipped product."
+                caption="Mangomint feature set: mangomint.com docs, April 2026. Limespun: shipped product."
               />
             </motion.div>
           </div>
@@ -697,19 +697,19 @@ export default function MangomintMigrationPage() {
                 accent="amber"
                 items={[
                   {
-                    q: "Mangomint's customer support is great. Does InkOS match?",
+                    q: "Mangomint's customer support is great. Does Limespun match?",
                     a: "Different model. Mangomint has a big support org for a wide audience. We have engineers + a small team for tattoo studios specifically. Email response under 24h on every plan, chat under 4h on Pro.",
                   },
                   {
-                    q: "Will my packages convert to InkOS projects?",
-                    a: "Yes. Mangomint packages map to InkOS multi-session projects. Discounts, scheduled sessions, prepaid deposits — all carry.",
+                    q: "Will my packages convert to Limespun projects?",
+                    a: "Yes. Mangomint packages map to Limespun multi-session projects. Discounts, scheduled sessions, prepaid deposits — all carry.",
                   },
                   {
-                    q: "Does InkOS support tip jars?",
+                    q: "Does Limespun support tip jars?",
                     a: "Yes — though we treat them as a tip line on the invoice rather than a separate jar. Tips route to artists via Stripe Connect.",
                   },
                   {
-                    q: "Can I run InkOS alongside Mangomint during migration?",
+                    q: "Can I run Limespun alongside Mangomint during migration?",
                     a: "Yes. Standard parallel run for 14 days. We don't bill until you cancel Mangomint.",
                   },
                   {
@@ -729,7 +729,7 @@ export default function MangomintMigrationPage() {
           italicWord="work"
           subhead="6-day migration. Free. We don't bill until you cancel Mangomint."
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
-          secondaryCTA={{ label: "Or start the trial", href: "https://inkos.up.railway.app/signup", icon: "play" }}
+          secondaryCTA={{ label: "Or start the trial", href: "https://app.limespun.com/signup", icon: "play" }}
         />
       </main>
       <Footer />

@@ -28,13 +28,6 @@ const FILTER_OPTIONS: { key: FilterKey; label: string }[] = [
   { key: "product", label: categoryLabels.product },
 ];
 
-const TYPE_COLORS: Record<BlogPost["category"], string> = {
-  ops: BRAND.rust,
-  compliance: BRAND.sage,
-  craft: BRAND.amber,
-  product: BRAND.amber,
-};
-
 // ─── Post card ────────────────────────────────────────────────────────────────
 function BlogPostCard({ post, index }: { post: BlogPost; index: number }) {
   const formattedDate = new Date(post.publishedAt).toLocaleDateString(
@@ -274,10 +267,10 @@ export default function BlogPage() {
           eyebrowAccent="rust"
           headline="Practical writing for studio owners."
           italicWord="Practical"
-          subhead="The 90-second morning triage. Deposit pool math. EU REACH compliance. Written by studio owners and the InkOS team — for the people who actually do the work."
+          subhead="The 90-second morning triage. Deposit pool math. EU REACH compliance. Written by studio owners and the Limespun team — for the people who actually do the work."
           primaryCTA={{
             label: "Start a 14-day trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{ label: "Talk to us", href: "/book-a-demo" }}
         />
@@ -363,7 +356,7 @@ export default function BlogPage() {
           subhead="One email per month. Studio operations, compliance updates, the maths nobody else writes. No spam, no upsells."
           primaryCTA={{
             label: "Start a 14-day trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{
             label: "Talk to us",

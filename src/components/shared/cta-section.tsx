@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { PlayCircle } from "lucide-react";
 import { BRAND, FONT, SHADOW, fadeUp, stagger } from "@/lib/brand";
 import { MangomintBlobs } from "@/components/brand/mangomint-blobs";
-import { TriCircleMarkV2 } from "@/components/brand/tri-circle-mark";
+import { LimespunMark } from "@/components/brand/limespun-mark";
 
 interface CTASectionProps {
   badge?: string;
@@ -114,7 +114,7 @@ export function CTASection({
               marginBottom: 32,
             } as React.CSSProperties}
           >
-            <TriCircleMarkV2 size={56} />
+            <LimespunMark size={56} />
             {badge && (
               <div
                 style={{

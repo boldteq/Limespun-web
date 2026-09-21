@@ -12,7 +12,7 @@ export const openRoles: Role[] = [
     team: 'engineering',
     type: 'full-time',
     location: "Remote · 3 timezones (UTC-5 to UTC+5)",
-    description: "Ship product. Read InkOS lessons in our memory brain — that's the bar. Need React 19, Supabase RLS, TypeScript strict, and an opinion on naming things.",
+    description: "Ship product. Read Limespun lessons in our memory brain — that's the bar. Need React 19, Supabase RLS, TypeScript strict, and an opinion on naming things.",
   },
   {
     title: "Product Designer (Tattoo & Craft Industries)",

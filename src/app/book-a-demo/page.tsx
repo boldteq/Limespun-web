@@ -9,16 +9,16 @@ import { BRAND, FONT, SHADOW, GRADIENT } from "@/lib/brand";
 import { CheckCircle2 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Book a 30-min walkthrough — InkOS",
+  title: "Book a 30-min walkthrough — Limespun",
   description:
     "See how multi-session projects, deposit pools, allergy intelligence, and commission auto-splits work in your studio. 30 minutes, no slide deck.",
   openGraph: {
-    title: "Book an InkOS walkthrough",
+    title: "Book a Limespun walkthrough",
     description:
-      "30 minutes, no slide deck — see InkOS in your studio's shape.",
+      "30 minutes, no slide deck — see Limespun in your studio's shape.",
     type: "website",
   },
-  alternates: { canonical: "https://inkos.studio/book-a-demo" },
+  alternates: { canonical: "https://limespun.com/book-a-demo" },
 };
 
 const STAT_ITEMS = [
@@ -52,7 +52,7 @@ const AGENDA_STEPS = [
 const PROOF_ITEMS = [
   "Real product. No screenshots, no mockups.",
   "Migration plan from your current tool.",
-  "Honest answer on whether InkOS fits your studio.",
+  "Honest answer on whether Limespun fits your studio.",
   "Zero pressure. No follow-up unless you ask.",
 ];
 
@@ -335,7 +335,7 @@ export default function BookADemoPage() {
           subhead="If you're the kind of studio owner who'd rather poke around for ten minutes alone, the 14-day trial is open. No card. No call."
           primaryCTA={{
             label: "Start a 14-day trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
         />
       </main>

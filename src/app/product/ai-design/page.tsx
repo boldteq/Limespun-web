@@ -180,7 +180,7 @@ const itemTypes: ItemType[] = [
 
 // ── Vs table ──────────────────────────────────────────────────────────────────
 
-const vsCompetitors = ["InkOS AI Studio", "Midjourney", "ChatGPT", "Procreate"];
+const vsCompetitors = ["Limespun AI Studio", "Midjourney", "ChatGPT", "Procreate"];
 
 const vsRows: VsTableRow[] = [
   { feature: "Booking pipeline integration", values: [true, false, false, false] },
@@ -290,9 +290,9 @@ export default function AIDesignPage() {
         />
 
         <ProductVsTable
-          eyebrow="Why InkOS"
+          eyebrow="Why Limespun"
           heading="Built for ink, not images."
-          intro="General-purpose AI tools don't know the difference between a reference and a consent form. InkOS does."
+          intro="General-purpose AI tools don't know the difference between a reference and a consent form. Limespun does."
           competitors={vsCompetitors}
           rows={vsRows}
           caption="Comparison based on publicly available features as of 2025."

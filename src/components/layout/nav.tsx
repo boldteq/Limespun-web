@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
+import { LimespunMark } from "@/components/brand/limespun-mark";
 import {
   Sparkles, Inbox, Calendar, MessageSquare, Clock,
   Users, LayoutGrid, ImageIcon, FileText, CreditCard,
@@ -118,7 +120,7 @@ const navItems: NavItem[] = [
       {
         title: "Company",
         items: [
-          { icon: Heart,     name: "About InkOS",  desc: "Our story",           href: "/about" },
+          { icon: Heart,     name: "About Limespun",  desc: "Our story",           href: "/about" },
           { icon: TrendingUp,name: "Roadmap",       desc: "What we're building", href: "/roadmap" },
           { icon: Users,     name: "Careers",       desc: "Join the team",       href: "/careers" },
           { icon: ImageIcon, name: "Press kit",     desc: "Brand & assets",      href: "/press" },
@@ -503,36 +505,21 @@ export function Nav() {
       <div style={wrapperStyle}>
         <div style={barStyle}>
           {/* Logo */}
-          <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 9 } as React.CSSProperties}>
-            <span style={{
-              width: 28, height: 28,
-              background: BRAND.onyx,
-              borderRadius: 6,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              flexShrink: 0,
-            } as React.CSSProperties}>
-              <span style={{
-                fontFamily: FONT.serif,
-                fontStyle: "italic",
-                fontSize: 16,
-                color: BRAND.bone,
-                lineHeight: 1,
-                userSelect: "none",
-              } as React.CSSProperties}>i</span>
-            </span>
+          <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 9 } as React.CSSProperties}>
+            <LimespunMark size={28} />
             <span style={{
               fontFamily: FONT.sans,
               fontSize: 15,
               fontWeight: 600,
               color: BRAND.onyx,
               letterSpacing: "-0.01em",
-            } as React.CSSProperties}>InkOS</span>
-          </a>
+            } as React.CSSProperties}>Limespun</span>
+          </Link>
 
           {/* Desktop nav items */}
           <nav
             aria-label="Primary"
-            className="inkos-nav-desktop"
+            className="limespun-nav-desktop"
             style={{
               display: "flex",
               alignItems: "center",
@@ -633,8 +620,8 @@ export function Nav() {
           {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 } as React.CSSProperties}>
             <a
-              href="https://inkos.up.railway.app/login"
-              className="inkos-nav-signin"
+              href="https://app.limespun.com/login"
+              className="limespun-nav-signin"
               style={{
                 fontFamily: FONT.sans,
                 fontSize: 14,
@@ -649,7 +636,7 @@ export function Nav() {
               Sign in
             </a>
             <a
-              href="https://inkos.up.railway.app/signup"
+              href="https://app.limespun.com/signup"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -671,7 +658,7 @@ export function Nav() {
 
             {/* Mobile burger */}
             <button
-              className="inkos-nav-burger"
+              className="limespun-nav-burger"
               onClick={() => setOpen((v) => !v)}
               style={{
                 display: "none",
@@ -697,7 +684,7 @@ export function Nav() {
         {/* Mobile drawer */}
         {open && (
           <div
-            className="inkos-nav-mobile"
+            className="limespun-nav-mobile"
             style={{
               display: "none", // shown via CSS at ≤768px
               marginTop: 8,
@@ -718,7 +705,7 @@ export function Nav() {
             ))}
             <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 } as React.CSSProperties}>
               <a
-                href="https://inkos.up.railway.app/login"
+                href="https://app.limespun.com/login"
                 style={{
                   display: "block",
                   textAlign: "center",
@@ -735,7 +722,7 @@ export function Nav() {
                 Sign in
               </a>
               <a
-                href="https://inkos.up.railway.app/signup"
+                href="https://app.limespun.com/signup"
                 style={{
                   display: "block",
                   textAlign: "center",

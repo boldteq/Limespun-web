@@ -194,7 +194,7 @@ const itemTypes: ItemType[] = [
 // ── Vs table ──────────────────────────────────────────────────────────────────
 
 const vsCompetitors = [
-  "InkOS Messages",
+  "Limespun Messages",
   "DaySmart",
   "Mangomint",
   "SMS app",
@@ -308,9 +308,9 @@ export default function MessagesPage() {
         />
 
         <ProductVsTable
-          eyebrow="Why InkOS"
+          eyebrow="Why Limespun"
           heading="Five channels. Zero app-switching."
-          intro="Most tools handle one channel well. InkOS routes all five into a single thread per client."
+          intro="Most tools handle one channel well. Limespun routes all five into a single thread per client."
           competitors={vsCompetitors}
           rows={vsRows}
           caption="Comparison based on publicly available features as of 2025."
@@ -322,7 +322,7 @@ export default function MessagesPage() {
           italicWord="Saturday morning"
           intro="Nine Lives Tattoo, East London. 23 overnight messages. 8 minutes to clear them."
           paragraphs={dayInLifeParagraphs}
-          quote="I used to chase three apps to keep up with my Sunday inbox. Now I just open InkOS."
+          quote="I used to chase three apps to keep up with my Sunday inbox. Now I just open Limespun."
           person={{
             name: "Kaia Osei",
             role: "Solo · Nine Lives Tattoo · East London",

@@ -39,7 +39,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: 'p',
-        text: 'Before InkOS, my morning ritual was: unlock the door, make coffee, open four browser tabs, check the booking spreadsheet, check the WhatsApp group, text the artist who had a 10am, discover the 10am had messaged at 11pm to reschedule, panic. Forty minutes gone before I picked up a machine.',
+        text: 'Before Limespun, my morning ritual was: unlock the door, make coffee, open four browser tabs, check the booking spreadsheet, check the WhatsApp group, text the artist who had a 10am, discover the 10am had messaged at 11pm to reschedule, panic. Forty minutes gone before I picked up a machine.',
       },
       {
         type: 'h3',
@@ -47,7 +47,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: 'p',
-        text: "The Today screen in InkOS is deliberately narrow. It shows today's confirmed appointments in time order, the artist assigned to each, the deposit status, and one line of project context — the body location and approximate size. That's it. No three-month calendar. No unread message count. Just today.",
+        text: "The Today screen in Limespun is deliberately narrow. It shows today's confirmed appointments in time order, the artist assigned to each, the deposit status, and one line of project context — the body location and approximate size. That's it. No three-month calendar. No unread message count. Just today.",
       },
       {
         type: 'ul',
@@ -98,7 +98,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: 'p',
-        text: "The 90-second triage only works if the data going in is clean. That means client intake forms completed before arrival, deposits requested at booking (not chased later), and artists logging their healed photos. The discipline is a studio culture question as much as a software question. InkOS makes it easy — but someone still has to decide it matters.",
+        text: "The 90-second triage only works if the data going in is clean. That means client intake forms completed before arrival, deposits requested at booking (not chased later), and artists logging their healed photos. The discipline is a studio culture question as much as a software question. Limespun makes it easy — but someone still has to decide it matters.",
       },
       {
         type: 'callout',
@@ -107,7 +107,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: 'p',
-        text: "If you want to see what the morning triage looks like for a four-artist studio, the InkOS demo environment has a pre-loaded week with realistic data. Try it at inkos.up.railway.app/signup — no credit card needed.",
+        text: "If you want to see what the morning triage looks like for a four-artist studio, the Limespun demo environment has a pre-loaded week with realistic data. Try it at app.limespun.com/signup — no credit card needed.",
       },
     ],
   },
@@ -118,7 +118,7 @@ export const blogPosts: BlogPost[] = [
       "Why pooling deposits per project (not per session) eliminates Friday afternoon reconciling.",
     publishedAt: "2026-04-08",
     readTime: "8 min",
-    author: { name: "InkOS team", role: "Boldteq" },
+    author: { name: "Limespun team", role: "Boldteq" },
     category: "product",
     gradient: `linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.sage} 100%)`,
     content: [
@@ -159,7 +159,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: 'p',
-        text: "A deposit pool attaches to the project, not the session. When a client books a sleeve with InkOS, you set a project deposit — say £150, which represents roughly one session's value. That amount is held against the entire project. Each session then draws down from the pool as work is completed and invoiced. If the client reschedules session 4, the deposit doesn't move. It stays in the pool until the project closes.",
+        text: "A deposit pool attaches to the project, not the session. When a client books a sleeve with Limespun, you set a project deposit — say £150, which represents roughly one session's value. That amount is held against the entire project. Each session then draws down from the pool as work is completed and invoiced. If the client reschedules session 4, the deposit doesn't move. It stays in the pool until the project closes.",
       },
       {
         type: 'code',
@@ -177,11 +177,11 @@ Total received to date: £550`,
       },
       {
         type: 'h3',
-        text: 'How InkOS compares to Mangomint and DaySmart',
+        text: 'How Limespun compares to Mangomint and DaySmart',
       },
       {
         type: 'p',
-        text: "Mangomint handles deposits per appointment — standard for salons, but tattoo studios work in projects that span months. DaySmart has a client balance feature, but it's manual: you top it up, you draw it down, you reconcile it yourself. InkOS's deposit pool is automatic. When you mark a session as complete and issue the session invoice, the system checks the project pool first, applies whatever is available, and generates a balance-due amount for the remainder.",
+        text: "Mangomint handles deposits per appointment — standard for salons, but tattoo studios work in projects that span months. DaySmart has a client balance feature, but it's manual: you top it up, you draw it down, you reconcile it yourself. Limespun's deposit pool is automatic. When you mark a session as complete and issue the session invoice, the system checks the project pool first, applies whatever is available, and generates a balance-due amount for the remainder.",
       },
       {
         type: 'quote',
@@ -203,7 +203,7 @@ Total received to date: £550`,
       },
       {
         type: 'p',
-        text: "The deposit pool model won't fit every studio — if you do mostly single-session walk-ins, per-booking deposits are simpler. But if you run projects longer than two sessions, the reconciliation time savings alone justify switching. See how it works in your InkOS trial at inkos.up.railway.app/signup.",
+        text: "The deposit pool model won't fit every studio — if you do mostly single-session walk-ins, per-booking deposits are simpler. But if you run projects longer than two sessions, the reconciliation time savings alone justify switching. See how it works in your Limespun trial at app.limespun.com/signup.",
       },
     ],
   },
@@ -254,7 +254,7 @@ Total received to date: £550`,
       {
         type: 'callout',
         tone: 'sage',
-        text: "Store SDS documents digitally, not in a folder under the counter. InkOS attaches SDS files to product records — when you log a batch, the SDS is already linked. If an inspector asks, you can pull it up in 20 seconds.",
+        text: "Store SDS documents digitally, not in a folder under the counter. Limespun attaches SDS files to product records — when you log a batch, the SDS is already linked. If an inspector asks, you can pull it up in 20 seconds.",
       },
       {
         type: 'h3',
@@ -266,7 +266,7 @@ Total received to date: £550`,
       },
       {
         type: 'p',
-        text: "In InkOS, batch tracking is done at the session level. When you start a session, you log the inks used and their batch numbers. The system cross-references those batches against any supplier recall notices you've imported. If there's a match, the affected client records are flagged automatically.",
+        text: "In Limespun, batch tracking is done at the session level. When you start a session, you log the inks used and their batch numbers. The system cross-references those batches against any supplier recall notices you've imported. If there's a match, the affected client records are flagged automatically.",
       },
       {
         type: 'h3',
@@ -297,7 +297,7 @@ Total received to date: £550`,
       },
       {
         type: 'quote',
-        text: "An environmental health inspector walked into my studio last November. She asked to see my SDS files and batch logs. I had everything in InkOS. She was done in 12 minutes and left satisfied. That's the posture you want.",
+        text: "An environmental health inspector walked into my studio last November. She asked to see my SDS files and batch logs. I had everything in Limespun. She was done in 12 minutes and left satisfied. That's the posture you want.",
         attribution: "Asha Mehra, Pluma Studio",
       },
       {
@@ -311,11 +311,11 @@ Total received to date: £550`,
       {
         type: 'callout',
         tone: 'rust',
-        text: "InkOS compliance features — SDS library, batch tracking, reaction log, and client allergen record — are available on the Studio plan and above. The compliance dashboard gives you a one-screen view of any gaps: inks without SDS on file, sessions with missing batch numbers, and clients with undisclosed allergy status.",
+        text: "Limespun compliance features — SDS library, batch tracking, reaction log, and client allergen record — are available on the Studio plan and above. The compliance dashboard gives you a one-screen view of any gaps: inks without SDS on file, sessions with missing batch numbers, and clients with undisclosed allergy status.",
       },
       {
         type: 'p',
-        text: "The compliance module is the least glamorous part of InkOS and the one that matters most when things go wrong. Start your trial at inkos.up.railway.app/signup and import your existing ink inventory in under 10 minutes.",
+        text: "The compliance module is the least glamorous part of Limespun and the one that matters most when things go wrong. Start your trial at app.limespun.com/signup and import your existing ink inventory in under 10 minutes.",
       },
     ],
   },
@@ -344,7 +344,7 @@ Total received to date: £550`,
       },
       {
         type: 'p',
-        text: "In InkOS, a guest residency is a first-class object. You create a residency record, set the dates, assign a station, and define the terms — how many days, what the studio's commission rate is, whether the guest brings their own products or uses house stock. The system generates a guest booking page with a slug in the format salthouse.inkos.io/guest/[artist-handle]. That page is the only thing you send to the guest artist.",
+        text: "In Limespun, a guest residency is a first-class object. You create a residency record, set the dates, assign a station, and define the terms — how many days, what the studio's commission rate is, whether the guest brings their own products or uses house stock. The system generates a guest booking page with a slug in the format salthouse.limespun.com/guest/[artist-handle]. That page is the only thing you send to the guest artist.",
       },
       {
         type: 'ul',
@@ -362,7 +362,7 @@ Total received to date: £550`,
       },
       {
         type: 'p',
-        text: "Guest artists are prolific bookers — which is great for revenue and occasionally terrible for the studio's master schedule. InkOS's residency booking page respects two hard limits: the end date of the residency (no bookings beyond it, ever), and the daily capacity limit you set. If Mara is doing a four-day residency and you've set a max of three bookings per day, the system closes the fourth slot automatically, regardless of what the guest artist does in their own calendar app.",
+        text: "Guest artists are prolific bookers — which is great for revenue and occasionally terrible for the studio's master schedule. Limespun's residency booking page respects two hard limits: the end date of the residency (no bookings beyond it, ever), and the daily capacity limit you set. If Mara is doing a four-day residency and you've set a max of three bookings per day, the system closes the fourth slot automatically, regardless of what the guest artist does in their own calendar app.",
       },
       {
         type: 'quote',
@@ -387,7 +387,7 @@ Total received to date: £550`,
       },
       {
         type: 'p',
-        text: "At the end of the residency, InkOS generates a settlement summary: total revenue taken, studio commission, guest artist net, any product charges if they used house stock. One PDF, one bank transfer. No spreadsheet, no arguments about which session counts which way.",
+        text: "At the end of the residency, Limespun generates a settlement summary: total revenue taken, studio commission, guest artist net, any product charges if they used house stock. One PDF, one bank transfer. No spreadsheet, no arguments about which session counts which way.",
       },
       {
         type: 'callout',
@@ -396,7 +396,7 @@ Total received to date: £550`,
       },
       {
         type: 'p',
-        text: "If you're running more than four guest residencies a year and still managing them manually, the time cost is measurable. The residency module is live — start a trial at inkos.up.railway.app/signup and set up your next one in 12 minutes.",
+        text: "If you're running more than four guest residencies a year and still managing them manually, the time cost is measurable. The residency module is live — start a trial at app.limespun.com/signup and set up your next one in 12 minutes.",
       },
     ],
   },
@@ -438,11 +438,11 @@ Total received to date: £550`,
       },
       {
         type: 'h3',
-        text: 'How Stripe Connect routing works in InkOS',
+        text: 'How Stripe Connect routing works in Limespun',
       },
       {
         type: 'p',
-        text: "InkOS uses Stripe Connect to route payments at source. When a client pays for a session, the payment is split before it settles: the studio's commission goes to the studio Stripe account, the artist's share goes to their connected Stripe account. There is no 'collect everything then pay out' step. The money moves correctly the moment the transaction completes.",
+        text: "Limespun uses Stripe Connect to route payments at source. When a client pays for a session, the payment is split before it settles: the studio's commission goes to the studio Stripe account, the artist's share goes to their connected Stripe account. There is no 'collect everything then pay out' step. The money moves correctly the moment the transaction completes.",
       },
       {
         type: 'code',
@@ -463,7 +463,7 @@ Settlement: instant on payment completion`,
       },
       {
         type: 'p',
-        text: "Each artist in InkOS has a commission profile: a default split, an optional product charge method (flat fee, percentage of session, or none), and a settlement schedule (instant, weekly, or monthly). Senior artists who have negotiated a custom rate have their own profile — no global setting that accidentally applies the wrong rate.",
+        text: "Each artist in Limespun has a commission profile: a default split, an optional product charge method (flat fee, percentage of session, or none), and a settlement schedule (instant, weekly, or monthly). Senior artists who have negotiated a custom rate have their own profile — no global setting that accidentally applies the wrong rate.",
       },
       {
         type: 'quote',
@@ -476,7 +476,7 @@ Settlement: instant on payment completion`,
       },
       {
         type: 'p',
-        text: "If your studio supplies ink, gloves, and consumables and deducts a product charge from artist payouts, InkOS handles this as a line item in the commission calculation rather than a separate manual deduction. Set a flat session charge (e.g., £15 per session for consumables) or a percentage of session revenue. The deduction is visible to the artist on their payout summary.",
+        text: "If your studio supplies ink, gloves, and consumables and deducts a product charge from artist payouts, Limespun handles this as a line item in the commission calculation rather than a separate manual deduction. Set a flat session charge (e.g., £15 per session for consumables) or a percentage of session revenue. The deduction is visible to the artist on their payout summary.",
       },
       {
         type: 'h3',
@@ -489,11 +489,11 @@ Settlement: instant on payment completion`,
       {
         type: 'callout',
         tone: 'rust',
-        text: "Stripe Connect commission routing requires artists to complete a Stripe onboarding — typically a 5-minute process. InkOS sends the onboarding invitation automatically when you add an artist. Most artists complete it before their first session.",
+        text: "Stripe Connect commission routing requires artists to complete a Stripe onboarding — typically a 5-minute process. Limespun sends the onboarding invitation automatically when you add an artist. Most artists complete it before their first session.",
       },
       {
         type: 'p',
-        text: "Commission automation is available on the Studio and Business plans. If you have more than three resident artists, the time savings in the first month will cover the plan cost. Start a trial at inkos.up.railway.app/signup.",
+        text: "Commission automation is available on the Studio and Business plans. If you have more than three resident artists, the time savings in the first month will cover the plan cost. Start a trial at app.limespun.com/signup.",
       },
     ],
   },
@@ -504,7 +504,7 @@ Settlement: instant on payment completion`,
       "The four-stage record that turns ten weeks of one sleeve into the most useful Instagram you've ever posted.",
     publishedAt: "2026-03-11",
     readTime: "4 min",
-    author: { name: "InkOS team", role: "Boldteq" },
+    author: { name: "Limespun team", role: "Boldteq" },
     category: "craft",
     gradient: `linear-gradient(135deg, ${BRAND.sage} 0%, ${BRAND.rustGlow} 100%)`,
     content: [
@@ -514,7 +514,7 @@ Settlement: instant on payment completion`,
       },
       {
         type: 'p',
-        text: "Every tattoo artist knows the problem. You do exceptional work. The fresh photo looks good. The client goes home, heals, falls in love with the piece — and never sends you a healed photo. Your portfolio is full of fresh work that doesn't represent how your tattoos actually look. The four-stage timeline in InkOS is designed to close that gap.",
+        text: "Every tattoo artist knows the problem. You do exceptional work. The fresh photo looks good. The client goes home, heals, falls in love with the piece — and never sends you a healed photo. Your portfolio is full of fresh work that doesn't represent how your tattoos actually look. The four-stage timeline in Limespun is designed to close that gap.",
       },
       {
         type: 'h3',
@@ -530,7 +530,7 @@ Settlement: instant on payment completion`,
       },
       {
         type: 'p',
-        text: "FRESH photos are taken at the end of each session before wrapping. InkOS's mobile app has a guided photo mode: it prompts the artist to take one wide shot and one close shot, applies consistent lighting metadata, and tags the image to the session. If the project runs across six sessions, you end up with 12 fresh photos showing the build-up of a complex piece.",
+        text: "FRESH photos are taken at the end of each session before wrapping. Limespun's mobile app has a guided photo mode: it prompts the artist to take one wide shot and one close shot, applies consistent lighting metadata, and tags the image to the session. If the project runs across six sessions, you end up with 12 fresh photos showing the build-up of a complex piece.",
       },
       {
         type: 'h3',
@@ -538,7 +538,7 @@ Settlement: instant on payment completion`,
       },
       {
         type: 'p',
-        text: "The HEAL stage is the most commonly skipped and the most diagnostically valuable. Photos taken at two to three weeks post-session show how the ink is settling — you can see if there's uneven healing, ink loss in specific areas, or a detail that needs a touch-up. InkOS sends the client an automated photo request at day 14: 'Your session is healing — can you send us a progress photo?' The acceptance rate at Salt House is about 68%.",
+        text: "The HEAL stage is the most commonly skipped and the most diagnostically valuable. Photos taken at two to three weeks post-session show how the ink is settling — you can see if there's uneven healing, ink loss in specific areas, or a detail that needs a touch-up. Limespun sends the client an automated photo request at day 14: 'Your session is healing — can you send us a progress photo?' The acceptance rate at Salt House is about 68%.",
       },
       {
         type: 'callout',
@@ -551,12 +551,12 @@ Settlement: instant on payment completion`,
       },
       {
         type: 'p',
-        text: "The HEALED stage is triggered at eight to twelve weeks post-final-session. Another automated client request goes out, this time explicitly framed as a portfolio photo request: 'Your sleeve is fully healed — we'd love a photo for our gallery.' If the client consents, the healed photo flows automatically to the studio gallery in InkOS and — if you've connected your Instagram — can be queued for posting with one tap.",
+        text: "The HEALED stage is triggered at eight to twelve weeks post-final-session. Another automated client request goes out, this time explicitly framed as a portfolio photo request: 'Your sleeve is fully healed — we'd love a photo for our gallery.' If the client consents, the healed photo flows automatically to the studio gallery in Limespun and — if you've connected your Instagram — can be queued for posting with one tap.",
       },
       {
         type: 'quote',
         text: "I've tripled the number of healed photos in my portfolio in eight months. I'm not chasing clients. The system does it for me and I just approve the ones I want to post.",
-        attribution: "Artist, InkOS beta studio",
+        attribution: "Artist, Limespun beta studio",
       },
       {
         type: 'h3',
@@ -564,7 +564,7 @@ Settlement: instant on payment completion`,
       },
       {
         type: 'p',
-        text: "Every photo in InkOS is tagged with its stage, the session date, the body location, the style category, and the artist. When you're building an Instagram post or updating your website gallery, you can filter by stage (HEALED only), style (Japanese, fine-line, neo-traditional), and artist. No more digging through your camera roll for that one healed forearm piece from last October.",
+        text: "Every photo in Limespun is tagged with its stage, the session date, the body location, the style category, and the artist. When you're building an Instagram post or updating your website gallery, you can filter by stage (HEALED only), style (Japanese, fine-line, neo-traditional), and artist. No more digging through your camera roll for that one healed forearm piece from last October.",
       },
       {
         type: 'ul',
@@ -578,11 +578,11 @@ Settlement: instant on payment completion`,
       {
         type: 'callout',
         tone: 'amber',
-        text: "The photo timeline is available on all InkOS plans. The automated client photo requests and Instagram queue integration are Studio plan features.",
+        text: "The photo timeline is available on all Limespun plans. The automated client photo requests and Instagram queue integration are Studio plan features.",
       },
       {
         type: 'p',
-        text: "The best portfolio you can build is your actual healed work. The photo timeline makes that systematic rather than accidental. See it in the demo at inkos.up.railway.app/signup.",
+        text: "The best portfolio you can build is your actual healed work. The photo timeline makes that systematic rather than accidental. See it in the demo at app.limespun.com/signup.",
       },
     ],
   },

@@ -32,7 +32,7 @@ const sections: LegalSection[] = [
     heading: "Breach response",
     body: [
       "If we discover a personal data breach affecting your studio, we will notify you within 72 hours of discovery, provide a description of the breach, the likely consequences, and the measures taken to address it.",
-      "Internal incident response runs on a documented runbook. Post-mortems for material incidents are shared with affected customers and (in summary form) on status.inkos.studio.",
+      "Internal incident response runs on a documented runbook. Post-mortems for material incidents are shared with affected customers and (in summary form) on status.limespun.com.",
     ],
   },
   {

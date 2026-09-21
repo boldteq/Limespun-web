@@ -184,7 +184,7 @@ const moatCards: MoatCardBrightProps[] = [
     body: "Vagaro books a service. A sleeve is five visits, one deposit pool. The mismatch is total.",
     detail: [
       ["Vagaro", "Per-service"],
-      ["InkOS", "Per-project"],
+      ["Limespun", "Per-project"],
       ["Migration", "Schema re-map"],
     ],
   },
@@ -192,10 +192,10 @@ const moatCards: MoatCardBrightProps[] = [
     accent: "amber",
     icon: AlertCircle,
     title: "Allergy intelligence",
-    body: "Vagaro stores 'notes.' InkOS surfaces allergies on Today, schedule cards, kiosk forms — three places, one source.",
+    body: "Vagaro stores 'notes.' Limespun surfaces allergies on Today, schedule cards, kiosk forms — three places, one source.",
     detail: [
       ["Vagaro", "Notes field"],
-      ["InkOS", "4-place surface"],
+      ["Limespun", "4-place surface"],
       ["Risk", "Managed"],
     ],
   },
@@ -206,7 +206,7 @@ const moatCards: MoatCardBrightProps[] = [
     body: "Vagaro has no concept of an ink registry. CI numbers, MSDS, batch tracking — none of it.",
     detail: [
       ["Vagaro", "Not supported"],
-      ["InkOS", "Every plan"],
+      ["Limespun", "Every plan"],
       ["Inspector", "<30s report"],
     ],
   },
@@ -226,19 +226,19 @@ const timelineSteps = [
 
 const faqItems = [
   {
-    q: "Vagaro charges 1.99% per booking. What does InkOS charge?",
+    q: "Vagaro charges 1.99% per booking. What does Limespun charge?",
     a: "Nothing. You pay the monthly software fee. Stripe takes its standard processing fee. We add zero on top.",
   },
   {
     q: "Will my Vagaro packages convert?",
-    a: "Yes. Packages map to InkOS multi-session projects. The discount logic, scheduled visits, and prepaid deposits all carry.",
+    a: "Yes. Packages map to Limespun multi-session projects. The discount logic, scheduled visits, and prepaid deposits all carry.",
   },
   {
     q: "I run a multi-location chain on Vagaro. Will that work?",
-    a: "Yes. InkOS Enterprise supports multi-location with per-location P&L, SSO, and SCIM. Migration runs sequentially — pilot at one location, then roll out.",
+    a: "Yes. Limespun Enterprise supports multi-location with per-location P&L, SSO, and SCIM. Migration runs sequentially — pilot at one location, then roll out.",
   },
   {
-    q: "What about Vagaro's marketplace? Does InkOS have one?",
+    q: "What about Vagaro's marketplace? Does Limespun have one?",
     a: "We don't run a customer-facing marketplace. Our job is to power your studio's brand. Marketplace traffic ends with Vagaro on day-of cutover; build your own funnel through Marketing module.",
   },
   {
@@ -270,7 +270,7 @@ export default function VagaroPage() {
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
             label: "Start the trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
         />
 
@@ -365,7 +365,7 @@ export default function VagaroPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              Vagaro vs. InkOS.
+              Vagaro vs. Limespun.
             </motion.h2>
             <motion.div
               variants={fadeUp}
@@ -377,56 +377,56 @@ export default function VagaroPage() {
               <ComparisonTable
                 competitors={[
                   { key: "vagaro", label: "Vagaro" },
-                  { key: "inkos", label: "InkOS", highlighted: true },
+                  { key: "limespun", label: "Limespun", highlighted: true },
                 ]}
                 rows={[
                   {
                     feature: "Multi-session projects",
-                    values: { vagaro: false, inkos: true },
+                    values: { vagaro: false, limespun: true },
                   },
                   {
                     feature: "Deposit pool across visits",
-                    values: { vagaro: false, inkos: true },
+                    values: { vagaro: false, limespun: true },
                   },
                   {
                     feature: "Allergy intelligence (4-place surface)",
-                    values: { vagaro: "Notes only", inkos: true },
+                    values: { vagaro: "Notes only", limespun: true },
                   },
                   {
                     feature: "EU REACH ink registry",
-                    values: { vagaro: false, inkos: true },
+                    values: { vagaro: false, limespun: true },
                   },
                   {
                     feature: "Photo timeline (REF→HEALED)",
-                    values: { vagaro: "Basic", inkos: true },
+                    values: { vagaro: "Basic", limespun: true },
                   },
                   {
                     feature: "Commission auto-splits",
-                    values: { vagaro: "Salon-style only", inkos: true },
+                    values: { vagaro: "Salon-style only", limespun: true },
                   },
                   {
                     feature: "AI design assistant",
-                    values: { vagaro: false, inkos: true },
+                    values: { vagaro: false, limespun: true },
                   },
                   {
                     feature: "Guest artist residency band",
-                    values: { vagaro: false, inkos: true },
+                    values: { vagaro: false, limespun: true },
                   },
                   {
                     feature: "Tattoo-specific by design",
-                    values: { vagaro: false, inkos: true },
+                    values: { vagaro: false, limespun: true },
                   },
                   {
                     feature: "Per-booking transaction fee",
-                    values: { vagaro: "Yes", inkos: "No" },
+                    values: { vagaro: "Yes", limespun: "No" },
                   },
                   {
                     feature: "Multi-location support",
-                    values: { vagaro: true, inkos: true },
+                    values: { vagaro: true, limespun: true },
                   },
                   {
                     feature: "White-glove migration",
-                    values: { vagaro: false, inkos: true },
+                    values: { vagaro: false, limespun: true },
                   },
                 ]}
                 caption="Vagaro feature set: vagaro.com docs + pricing, April 2026."
@@ -550,7 +550,7 @@ export default function VagaroPage() {
               items={[
                 { stat: "7 days", label: "average Vagaro migration" },
                 { stat: "100%", label: "data carried" },
-                { stat: "0%", label: "transaction fees on InkOS" },
+                { stat: "0%", label: "transaction fees on Limespun" },
                 { stat: "$0", label: "until cutover" },
               ]}
             />
@@ -586,7 +586,7 @@ export default function VagaroPage() {
                 role="Owner · Calle Negra"
                 city="Mexico City, MX"
                 chairs="9 artists · 2 floors"
-                quote="InkOS shows me a body — what's been worked, what's healing, what's left. Booking a back piece across ten weeks takes twelve minutes now."
+                quote="Limespun shows me a body — what's been worked, what's healing, what's left. Booking a back piece across ten weeks takes twelve minutes now."
                 stats={[
                   { l: "Active sleeves", v: "14" },
                   { l: "Guest residencies", v: "6 in 2025" },
@@ -648,7 +648,7 @@ export default function VagaroPage() {
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
             label: "Or start the trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
             icon: "play",
           }}
         />

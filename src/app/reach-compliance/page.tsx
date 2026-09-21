@@ -182,7 +182,7 @@ export default function ReachCompliancePage() {
           headline="EU REACH 2022, built into the studio."
           italicWord="built"
           subhead="The European ink registry. MSDS attachments. Batch tracking. Reaction logging. Inspector reports in one click. The compliance layer most studios run on a spreadsheet."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Talk to compliance", href: "/book-a-demo" }}
         />
 
@@ -294,7 +294,7 @@ export default function ReachCompliancePage() {
                   marginBottom: 0,
                 } as React.CSSProperties}
               >
-                InkOS treats compliance as a feature, not a checkbox. Every bottle in your
+                Limespun treats compliance as a feature, not a checkbox. Every bottle in your
                 inventory has a CI number, batch ID, MSDS attachment, and shelf-life
                 tracking. Reactions are logged on both the client AND the bottle batch.
                 Reports export in one click for inspectors.
@@ -342,7 +342,7 @@ export default function ReachCompliancePage() {
               style={{ marginBottom: 48, maxWidth: 760 } as React.CSSProperties}
             >
               <SectionEyebrow label="Four compliance pillars" accent="amber" />
-              <SectionHeading size="sm">What InkOS automates.</SectionHeading>
+              <SectionHeading size="sm">What Limespun automates.</SectionHeading>
             </motion.div>
 
             <style>{`
@@ -515,11 +515,11 @@ export default function ReachCompliancePage() {
                 items={[
                   {
                     q: "Do I need REACH compliance if I'm not in the EU?",
-                    a: "Legally, no. Practically — many EU clients book studios in the UK, US, Australia. If you accept EU clients, the inks they receive must comply. InkOS handles it either way.",
+                    a: "Legally, no. Practically — many EU clients book studios in the UK, US, Australia. If you accept EU clients, the inks they receive must comply. Limespun handles it either way.",
                   },
                   {
                     q: "What happens if an inspector visits unannounced?",
-                    a: "You log into InkOS, generate the inspector report, hand them the PDF. <30s start to finish. The report includes every bottle's CI, MSDS, batch, expiry, and reaction history.",
+                    a: "You log into Limespun, generate the inspector report, hand them the PDF. <30s start to finish. The report includes every bottle's CI, MSDS, batch, expiry, and reaction history.",
                   },
                   {
                     q: "Can I import my existing ink list?",
@@ -527,7 +527,7 @@ export default function ReachCompliancePage() {
                   },
                   {
                     q: "Are there fines for non-compliance?",
-                    a: "Yes. EU fines for non-compliance start at €5,000 and scale with studio size. Repeat offences risk operating-licence suspension. The math on InkOS compliance vs a fine: obvious.",
+                    a: "Yes. EU fines for non-compliance start at €5,000 and scale with studio size. Repeat offences risk operating-licence suspension. The math on Limespun compliance vs a fine: obvious.",
                   },
                   {
                     q: "Is the REACH module on every plan?",
@@ -549,7 +549,7 @@ export default function ReachCompliancePage() {
           headline="Stop running compliance on a spreadsheet."
           italicWord="spreadsheet"
           subhead="14-day trial. Drop your ink list in. Watch REACH compliance light up."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Talk to compliance", href: "/book-a-demo", icon: "play" }}
         />
       </main>

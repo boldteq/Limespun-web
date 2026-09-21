@@ -101,7 +101,7 @@ function Sidebar() {
             color: BRAND.bone,
           } as React.CSSProperties}
         >
-          InkOS
+          Limespun
         </div>
       </div>
 
@@ -401,7 +401,7 @@ export function InboxMockup() {
             color: BRAND.stone,
           } as React.CSSProperties}
         >
-          inkos.app/inbox
+          app.limespun.com/inbox
         </div>
       </div>
 

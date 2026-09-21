@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Security | InkOS",
+  title: "Security | Limespun",
   description:
     "Our security practices: encryption, access controls, sub-processors, breach response, SOC 2 path.",
-  alternates: { canonical: "https://inkos.studio/legal/security" },
+  alternates: { canonical: "https://limespun.com/legal/security" },
 };
 
 export default function Layout({

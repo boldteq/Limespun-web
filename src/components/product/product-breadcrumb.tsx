@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { BRAND, FONT } from "@/lib/brand";
 
@@ -21,7 +22,7 @@ export function ProductBreadcrumb({ feature }: ProductBreadcrumbProps) {
         marginBottom: 28,
       } as React.CSSProperties}
     >
-      <a
+      <Link
         href="/"
         style={{
           fontFamily: FONT.sans,
@@ -33,8 +34,8 @@ export function ProductBreadcrumb({ feature }: ProductBreadcrumbProps) {
           textDecoration: "none",
         } as React.CSSProperties}
       >
-        InkOS
-      </a>
+        Limespun
+      </Link>
 
       <span
         style={{

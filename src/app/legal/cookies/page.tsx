@@ -8,8 +8,8 @@ const sections: LegalSection[] = [
   {
     heading: "Cookies we set",
     body: [
-      "Functional cookies (always on): theme preference, dismissed banners, last-visited page (for back-button behaviour). These are first-party cookies set by inkos.studio. They contain no personal data.",
-      "Application authentication (only on app.inkos.studio, not the marketing site): the Supabase Auth session token. This is essential to keep your studio's users logged in. It is HTTP-only, secure, and SameSite=Lax.",
+      "Functional cookies (always on): theme preference, dismissed banners, last-visited page (for back-button behaviour). These are first-party cookies set by limespun.com. They contain no personal data.",
+      "Application authentication (only on app.limespun.com, not the marketing site): the Supabase Auth session token. This is essential to keep your studio's users logged in. It is HTTP-only, secure, and SameSite=Lax.",
     ],
   },
   {
@@ -18,13 +18,13 @@ const sections: LegalSection[] = [
   },
   {
     heading: "Sub-processor cookies",
-    body: "Some pages may load content from approved sub-processors (e.g. Stripe checkout iframe on the application). These set their own cookies governed by their privacy policies. None of these load on the marketing site (inkos.studio).",
+    body: "Some pages may load content from approved sub-processors (e.g. Stripe checkout iframe on the application). These set their own cookies governed by their privacy policies. None of these load on the marketing site (limespun.com).",
   },
   {
     heading: "Controlling cookies",
     body: [
       "You can disable cookies in your browser settings. Most browsers also offer a 'private browsing' or 'incognito' mode that does not persist cookies.",
-      "Disabling functional cookies on inkos.studio will not break the site, but you will see a default theme on every visit. Disabling authentication cookies on app.inkos.studio will log you out.",
+      "Disabling functional cookies on limespun.com will not break the site, but you will see a default theme on every visit. Disabling authentication cookies on app.limespun.com will log you out.",
     ],
   },
   {
@@ -43,7 +43,7 @@ export default function CookiesPage() {
       eyebrow="Legal · Cookies"
       title="Cookie Policy"
       effectiveDate="27 April 2026"
-      intro="inkos.studio uses a small number of cookies. We do not use advertising cookies. We do not use third-party analytics that track you across the web. This document lists every cookie we set and how you can control them."
+      intro="limespun.com uses a small number of cookies. We do not use advertising cookies. We do not use third-party analytics that track you across the web. This document lists every cookie we set and how you can control them."
       sections={sections}
       contactEmail="privacy@boldteq.com"
     />

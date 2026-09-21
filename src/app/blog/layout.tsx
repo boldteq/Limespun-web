@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog — Studio playbooks, ops content, founder essays | InkOS",
+  title: "Blog — Studio playbooks, ops content, founder essays | Limespun",
   description:
     "Practical writing for tattoo studio owners. The 90-second morning triage. Deposit pool accounting. EU REACH compliance. Written by people who walk into shops.",
   openGraph: {
-    title: "InkOS Blog",
+    title: "Limespun Blog",
     description: "Practical writing for tattoo studio owners.",
     type: "website",
   },
-  alternates: { canonical: "https://inkos.studio/blog" },
+  alternates: { canonical: "https://limespun.com/blog" },
 };
 
 export default function Layout({

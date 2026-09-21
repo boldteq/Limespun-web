@@ -275,7 +275,7 @@ export function CustomerStoryDetail({ story, related }: Props) {
               {story.studioBackground}
             </p>
 
-            {[story.preInkos, story.migration, story.workflowToday].map(
+            {[story.preLimespun, story.migration, story.workflowToday].map(
               (section, i) => (
                 <div
                   key={i}
@@ -430,13 +430,13 @@ export function CustomerStoryDetail({ story, related }: Props) {
         )}
 
         <CTASection
-          badge="Run on InkOS"
+          badge="Run on Limespun"
           headline="Add your studio to the wall."
           italicWord="Add your studio"
           subhead="14-day trial. No card. White-glove migration above Solo."
           primaryCTA={{
             label: "Start a 14-day trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{
             label: "Book a walkthrough",

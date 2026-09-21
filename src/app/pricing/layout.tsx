@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing — Priced like a tool, quietly fair | InkOS",
+  title: "Pricing — Priced like a tool, quietly fair | Limespun",
   description:
     "$29 to $199/mo. No per-booking fees. No transaction take. White-glove migration included on every plan above Solo. 14-day free trial.",
   openGraph: {
-    title: "InkOS Pricing — From $29/mo",
+    title: "Limespun Pricing — From $29/mo",
     description:
       "$29 to $199/mo. No per-booking fees. No transaction take. White-glove migration included on every plan above Solo. 14-day free trial.",
     type: "website",
   },
-  alternates: { canonical: "https://inkos.studio/pricing" },
+  alternates: { canonical: "https://limespun.com/pricing" },
 };
 
 export default function PricingLayout({

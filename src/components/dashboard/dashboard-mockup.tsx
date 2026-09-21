@@ -398,7 +398,7 @@ export function DashboardMockup({ hero = false }: DashboardMockupProps) {
             color: BRAND.stoneFaint,
           } as React.CSSProperties}
         >
-          inkos.studio/sable-sparrow
+          limespun.com/sable-sparrow
         </div>
       </div>
 
@@ -447,7 +447,7 @@ export function DashboardMockup({ hero = false }: DashboardMockupProps) {
             </div>
             <div style={{ flex: 1 } as React.CSSProperties}>
               <div style={{ fontFamily: FONT.sans, fontSize: 13, fontWeight: 600 } as React.CSSProperties}>
-                InkOS
+                Limespun
               </div>
               <div
                 style={{

@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { sendEmail } from "@/lib/email";
+import { escapeHtml } from "@/lib/html";
 
 const ContactSchema = z.object({
   name: z.string().min(2, "Name required"),
@@ -60,7 +61,12 @@ export async function submitContact(
   const { data } = parsed;
   const inbox = process.env.BOLDTEQ_INBOX ?? "hello@boldteq.com";
   const topicLabel = TOPIC_LABELS[data.topic] ?? data.topic;
-  const subject = `[Contact · ${topicLabel}] ${data.name}`;
+  const safe = {
+    name: escapeHtml(data.name),
+    email: escapeHtml(data.email),
+    message: escapeHtml(data.message),
+  };
+  const subject = `[Contact · ${topicLabel}] ${data.name.replace(/[\r\n]+/g, " ")}`;
 
   const text = [
     `Name: ${data.name}`,
@@ -79,7 +85,7 @@ export async function submitContact(
       <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08);">
         <tr>
           <td style="background:#0a0a0a;padding:24px 32px;">
-            <span style="color:#ffffff;font-size:18px;font-weight:700;letter-spacing:-0.3px;">InkOS</span>
+            <span style="color:#ffffff;font-size:18px;font-weight:700;letter-spacing:-0.3px;">Limespun</span>
             <span style="color:#888888;font-size:14px;margin-left:12px;">Contact Form</span>
           </td>
         </tr>
@@ -89,11 +95,11 @@ export async function submitContact(
             <table width="100%" cellpadding="0" cellspacing="0">
               <tr>
                 <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;width:100px;color:#666;font-size:14px;">Name</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${data.name}</td>
+                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${safe.name}</td>
               </tr>
               <tr>
                 <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#666;font-size:14px;">Email</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${data.email}</td>
+                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${safe.email}</td>
               </tr>
               <tr>
                 <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#666;font-size:14px;">Topic</td>
@@ -104,16 +110,16 @@ export async function submitContact(
             </table>
             <div style="margin-top:24px;">
               <p style="margin:0 0 8px;font-size:12px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.5px;">Message</p>
-              <div style="padding:16px;background:#f9f9f9;border-radius:6px;font-size:14px;color:#0a0a0a;line-height:1.6;white-space:pre-wrap;">${data.message.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+              <div style="padding:16px;background:#f9f9f9;border-radius:6px;font-size:14px;color:#0a0a0a;line-height:1.6;white-space:pre-wrap;">${safe.message}</div>
             </div>
             <div style="margin-top:24px;">
-              <a href="mailto:${data.email}" style="display:inline-block;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:5px;font-size:14px;font-weight:600;">Reply to ${data.name}</a>
+              <a href="mailto:${safe.email}" style="display:inline-block;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:5px;font-size:14px;font-weight:600;">Reply to ${safe.name}</a>
             </div>
           </td>
         </tr>
         <tr>
           <td style="padding:16px 32px;background:#f9f9f9;border-top:1px solid #f0f0f0;">
-            <p style="margin:0;font-size:12px;color:#999;">InkOS &mdash; Tattoo Studio Management</p>
+            <p style="margin:0;font-size:12px;color:#999;">Limespun &mdash; Tattoo Studio Management</p>
           </td>
         </tr>
       </table>
@@ -131,7 +137,6 @@ export async function submitContact(
   });
 
   if (!emailOk) {
-    // eslint-disable-next-line no-console
     console.error("[CONTACT · email send failed]", emailError);
     return { status: "error", message: "Something went wrong. Please try again or email us directly." };
   }

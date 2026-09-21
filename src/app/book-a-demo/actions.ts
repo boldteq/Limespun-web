@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { sendEmail } from "@/lib/email";
+import { escapeHtml } from "@/lib/html";
 
 const DemoRequestSchema = z.object({
   name: z.string().min(2, "Name required"),
@@ -63,7 +64,15 @@ export async function submitDemoRequest(
 
   const { data } = parsed;
   const inbox = process.env.BOLDTEQ_INBOX ?? "hello@boldteq.com";
-  const subject = `[Demo Request] ${data.studioName} (${data.chairs} chairs)`;
+  const safe = {
+    name: escapeHtml(data.name),
+    email: escapeHtml(data.email),
+    studioName: escapeHtml(data.studioName),
+    chairs: escapeHtml(data.chairs),
+    currentTool: escapeHtml(data.currentTool),
+    notes: data.notes ? escapeHtml(data.notes) : "",
+  };
+  const subject = `[Demo Request] ${data.studioName.replace(/[\r\n]+/g, " ")} (${data.chairs} chairs)`;
 
   const text = [
     `Name: ${data.name}`,
@@ -87,7 +96,7 @@ export async function submitDemoRequest(
       <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08);">
         <tr>
           <td style="background:#0a0a0a;padding:24px 32px;">
-            <span style="color:#ffffff;font-size:18px;font-weight:700;letter-spacing:-0.3px;">InkOS</span>
+            <span style="color:#ffffff;font-size:18px;font-weight:700;letter-spacing:-0.3px;">Limespun</span>
             <span style="color:#888888;font-size:14px;margin-left:12px;">Demo Request</span>
           </td>
         </tr>
@@ -97,42 +106,42 @@ export async function submitDemoRequest(
             <table width="100%" cellpadding="0" cellspacing="0">
               <tr>
                 <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;width:140px;color:#666;font-size:14px;">Name</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${data.name}</td>
+                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${safe.name}</td>
               </tr>
               <tr>
                 <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#666;font-size:14px;">Email</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${data.email}</td>
+                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${safe.email}</td>
               </tr>
               <tr>
                 <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#666;font-size:14px;">Studio</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${data.studioName}</td>
+                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${safe.studioName}</td>
               </tr>
               <tr>
                 <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#666;font-size:14px;">Chairs</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${data.chairs}</td>
+                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${safe.chairs}</td>
               </tr>
               <tr>
                 <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#666;font-size:14px;">Current tool</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${data.currentTool}</td>
+                <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#0a0a0a;font-size:14px;font-weight:600;">${safe.currentTool}</td>
               </tr>
               <tr>
-                <td style="padding:10px 0;${data.notes ? "border-bottom:1px solid #f0f0f0;" : ""}color:#666;font-size:14px;">Preferred time</td>
-                <td style="padding:10px 0;${data.notes ? "border-bottom:1px solid #f0f0f0;" : ""}color:#0a0a0a;font-size:14px;font-weight:600;">${PREFERRED_TIME_LABELS[data.preferredTime] ?? data.preferredTime}</td>
+                <td style="padding:10px 0;${safe.notes ? "border-bottom:1px solid #f0f0f0;" : ""}color:#666;font-size:14px;">Preferred time</td>
+                <td style="padding:10px 0;${safe.notes ? "border-bottom:1px solid #f0f0f0;" : ""}color:#0a0a0a;font-size:14px;font-weight:600;">${PREFERRED_TIME_LABELS[data.preferredTime] ?? data.preferredTime}</td>
               </tr>
-              ${data.notes ? `
+              ${safe.notes ? `
               <tr>
                 <td style="padding:10px 0;color:#666;font-size:14px;vertical-align:top;">Notes</td>
-                <td style="padding:10px 0;color:#0a0a0a;font-size:14px;">${data.notes.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
+                <td style="padding:10px 0;color:#0a0a0a;font-size:14px;">${safe.notes}</td>
               </tr>` : ""}
             </table>
             <div style="margin-top:28px;padding:16px;background:#f9f9f9;border-radius:6px;">
-              <a href="mailto:${data.email}" style="display:inline-block;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:5px;font-size:14px;font-weight:600;">Reply to ${data.name}</a>
+              <a href="mailto:${safe.email}" style="display:inline-block;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:5px;font-size:14px;font-weight:600;">Reply to ${safe.name}</a>
             </div>
           </td>
         </tr>
         <tr>
           <td style="padding:16px 32px;background:#f9f9f9;border-top:1px solid #f0f0f0;">
-            <p style="margin:0;font-size:12px;color:#999;">InkOS &mdash; Tattoo Studio Management</p>
+            <p style="margin:0;font-size:12px;color:#999;">Limespun &mdash; Tattoo Studio Management</p>
           </td>
         </tr>
       </table>
@@ -151,7 +160,6 @@ export async function submitDemoRequest(
 
   if (!emailOk) {
     // Log error server-side (no PII in the log) but show generic message to user
-    // eslint-disable-next-line no-console
     console.error("[DEMO REQUEST · email send failed]", emailError);
     return { status: "error", message: "Something went wrong. Please try again or email us directly." };
   }

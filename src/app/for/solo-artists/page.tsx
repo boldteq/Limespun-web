@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, DollarSign, ImageIcon, Check, ArrowRight } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { BRAND, FONT, SHADOW, GRADIENT, fadeUp } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -253,7 +253,7 @@ function PainPointsSection() {
   );
 }
 
-// ── Why InkOS ─────────────────────────────────────────────────────────────────
+// ── Why Limespun ─────────────────────────────────────────────────────────────────
 
 const soloFeatures = [
   "Today launchpad — see your day in 90 seconds",
@@ -265,7 +265,7 @@ const soloFeatures = [
   "Email support — humans who answer in <24h",
 ];
 
-function WhyInkOSSection() {
+function WhyLimespunSection() {
   return (
     <section
       style={{
@@ -524,7 +524,7 @@ const faqs = [
   },
   {
     q: "Is Stripe Connect required?",
-    a: "Yes. It's how payouts work. Setup takes 5 minutes. Standard Stripe rates apply (2.9% + 30¢ in US). InkOS adds nothing.",
+    a: "Yes. It's how payouts work. Setup takes 5 minutes. Standard Stripe rates apply (2.9% + 30¢ in US). Limespun adds nothing.",
   },
   {
     q: "Can I take cash payments?",
@@ -598,11 +598,11 @@ export default function SoloArtistsPage() {
           headline="One chair. One artist. No overhead."
           italicWord="One"
           subhead="You don't need a 'platform.' You need bookings that don't no-show, deposits that don't get lost, and a Today screen that takes 90 seconds. $29/mo. Done."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "See pricing", href: "/pricing" }}
         />
         <PainPointsSection />
-        <WhyInkOSSection />
+        <WhyLimespunSection />
         <CustomerQuoteSection />
         <PricingTeaserSection />
         <FAQSection />
@@ -611,7 +611,7 @@ export default function SoloArtistsPage() {
           headline="Start the trial."
           italicWord="trial"
           subhead="14-day trial. No card. Bring your client list — we'll import it for free."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Talk to a real human", href: "/book-a-demo", icon: "play" }}
         />
       </main>

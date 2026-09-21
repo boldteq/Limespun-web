@@ -47,7 +47,7 @@ export default function FormsPage() {
         />
 
         <ProductPillars
-          eyebrow="How forms work in InkOS"
+          eyebrow="How forms work in Limespun"
           heading="Three layers that replace the clipboard."
           italicWord="replace the clipboard"
           intro="Tablet kiosk, legal compliance, and tamper-proof audit trail — baked into one form system. Nothing to bolt on."
@@ -209,7 +209,7 @@ export default function FormsPage() {
           eyebrow="How it compares"
           heading="The form system built for the studio."
           italicWord="built for the studio"
-          competitors={["InkOS Forms", "DaySmart", "Mangomint", "Paper"]}
+          competitors={["Limespun Forms", "DaySmart", "Mangomint", "Paper"]}
           rows={[
             {
               feature: "iPad kiosk mode (locked screen)",
@@ -240,7 +240,7 @@ export default function FormsPage() {
               values: [true, false, false, false],
             },
           ]}
-          caption="Based on published features as of Q1 2025. InkOS first column."
+          caption="Based on published features as of Q1 2025. Limespun first column."
         />
 
         <ProductDayInLife
@@ -256,7 +256,7 @@ export default function FormsPage() {
             "The SHA-256 hash generates. The PDF seals. The form auto-attaches to the client record and the project card. The artist sees a green tick on the session card — ready to go.",
             "No clipboard. No filing. No scanning at end of day. The form is done before the artist finishes setting up their station.",
           ]}
-          quote="I used to spend 20 minutes at the end of every day scanning and filing consent forms. InkOS killed that completely."
+          quote="I used to spend 20 minutes at the end of every day scanning and filing consent forms. Limespun killed that completely."
           person={{
             name: "Priya Nair",
             role: "Owner, Seventh Skin Studio",

@@ -18,8 +18,8 @@ interface FeeCardProps {
   accent: AccentKey;
   monthlyRevenue: string;
   freshaFee: string;
-  inkosPlan: string;
-  inkosCost: string;
+  limespunPlan: string;
+  limespunCost: string;
   savingsMonthly: string;
   savingsAnnual: string;
 }
@@ -38,8 +38,8 @@ function FeeCard({
   accent,
   monthlyRevenue,
   freshaFee,
-  inkosPlan,
-  inkosCost,
+  limespunPlan,
+  limespunCost,
   savingsMonthly,
   savingsAnnual,
 }: FeeCardProps) {
@@ -133,11 +133,11 @@ function FeeCard({
             color: BRAND.stoneDark,
           } as React.CSSProperties}
         >
-          InkOS {inkosPlan}:{" "}
+          Limespun {limespunPlan}:{" "}
           <span
             style={{ fontWeight: 700, color: BRAND.sage } as React.CSSProperties}
           >
-            {inkosCost}/mo
+            {limespunCost}/mo
           </span>
         </div>
         <div
@@ -176,8 +176,8 @@ const feeCards: FeeCardProps[] = [
     accent: "rust",
     monthlyRevenue: "On $20K/month",
     freshaFee: "$390",
-    inkosPlan: "Solo",
-    inkosCost: "$29",
+    limespunPlan: "Solo",
+    limespunCost: "$29",
     savingsMonthly: "$361",
     savingsAnnual: "$4,332",
   },
@@ -185,8 +185,8 @@ const feeCards: FeeCardProps[] = [
     accent: "amber",
     monthlyRevenue: "On $50K/month",
     freshaFee: "$975",
-    inkosPlan: "Studio",
-    inkosCost: "$59",
+    limespunPlan: "Studio",
+    limespunCost: "$59",
     savingsMonthly: "$916",
     savingsAnnual: "$10,992",
   },
@@ -194,8 +194,8 @@ const feeCards: FeeCardProps[] = [
     accent: "sage",
     monthlyRevenue: "On $100K/month",
     freshaFee: "$1,950",
-    inkosPlan: "Pro",
-    inkosCost: "$99",
+    limespunPlan: "Pro",
+    limespunCost: "$99",
     savingsMonthly: "$1,851",
     savingsAnnual: "$22,212",
   },
@@ -207,7 +207,7 @@ const timelineSteps = [
     day: "Days 2-3",
     title: "Export + clean (Fresha CSV-pull, schema map)",
   },
-  { day: "Day 4", title: "Preview run (InkOS staging, you sign off)" },
+  { day: "Day 4", title: "Preview run (Limespun staging, you sign off)" },
   {
     day: "Day 5",
     title: "Cutover (parallel hour, DNS switch, cancel Fresha)",
@@ -221,10 +221,10 @@ const faqItems = [
   },
   {
     q: "What about Fresha's marketplace? Will I lose those leads?",
-    a: "You keep your client list. Fresha marketplace leads from before cutover are now in your InkOS CRM. New leads come from your own marketing — not a marketplace that competes with you.",
+    a: "You keep your client list. Fresha marketplace leads from before cutover are now in your Limespun CRM. New leads come from your own marketing — not a marketplace that competes with you.",
   },
   {
-    q: "Does InkOS have a marketplace too?",
+    q: "Does Limespun have a marketplace too?",
     a: "No. We don't run a customer-facing marketplace. Our job is to power your studio's brand, not compete for your customers.",
   },
   {
@@ -254,11 +254,11 @@ export default function FreshaPage() {
           eyebrowAccent="amber"
           headline="Keep your bookings. Leave the platform fee."
           italicWord="leave"
-          subhead="Fresha takes 1.95% of every payment in addition to the subscription. On a $50K month, that's $975 you don't need to pay. InkOS doesn't take a cut. 5-day migration. Done."
+          subhead="Fresha takes 1.95% of every payment in addition to the subscription. On a $50K month, that's $975 you don't need to pay. Limespun doesn't take a cut. 5-day migration. Done."
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
             label: "Start the trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
         />
 
@@ -371,7 +371,7 @@ export default function FreshaPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              Fresha vs. InkOS.
+              Fresha vs. Limespun.
             </motion.h2>
             <motion.div
               variants={fadeUp}
@@ -383,44 +383,44 @@ export default function FreshaPage() {
               <ComparisonTable
                 competitors={[
                   { key: "fresha", label: "Fresha" },
-                  { key: "inkos", label: "InkOS", highlighted: true },
+                  { key: "limespun", label: "Limespun", highlighted: true },
                 ]}
                 rows={[
                   {
                     feature: "Per-booking transaction fee",
-                    values: { fresha: "1.95%", inkos: "No" },
+                    values: { fresha: "1.95%", limespun: "No" },
                   },
                   {
                     feature: "Multi-session projects",
-                    values: { fresha: false, inkos: true },
+                    values: { fresha: false, limespun: true },
                   },
                   {
                     feature: "Deposit pool across visits",
-                    values: { fresha: false, inkos: true },
+                    values: { fresha: false, limespun: true },
                   },
                   {
                     feature: "Allergy intelligence",
-                    values: { fresha: false, inkos: true },
+                    values: { fresha: false, limespun: true },
                   },
                   {
                     feature: "Photo timeline",
-                    values: { fresha: "Basic", inkos: true },
+                    values: { fresha: "Basic", limespun: true },
                   },
                   {
                     feature: "Commission auto-splits (artist payouts)",
-                    values: { fresha: "Team Pay add-on", inkos: true },
+                    values: { fresha: "Team Pay add-on", limespun: true },
                   },
                   {
                     feature: "EU REACH ink registry",
-                    values: { fresha: false, inkos: true },
+                    values: { fresha: false, limespun: true },
                   },
                   {
                     feature: "Tattoo-specific by design",
-                    values: { fresha: false, inkos: true },
+                    values: { fresha: false, limespun: true },
                   },
                   {
                     feature: "White-glove migration",
-                    values: { fresha: false, inkos: true },
+                    values: { fresha: false, limespun: true },
                   },
                 ]}
                 caption="Fresha pricing source: fresha.com pricing page, April 2026."
@@ -572,7 +572,7 @@ export default function FreshaPage() {
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
             label: "Or start the trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
             icon: "play",
           }}
         />

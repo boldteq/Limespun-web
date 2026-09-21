@@ -19,7 +19,6 @@ import {
   MessageSquare,
   Users,
   FileText,
-  Heart,
   Star,
   Calendar,
   Clock,
@@ -50,7 +49,7 @@ export default function ClientsPage() {
           eyebrow="What the client record knows"
           heading="Three systems that used to be scattered."
           italicWord="used to be scattered"
-          intro="Allergy intel, photo history, and comms have always existed — just never in one place. The client record in InkOS is the place."
+          intro="Allergy intel, photo history, and comms have always existed — just never in one place. The client record in Limespun is the place."
           pillars={[
             {
               icon: AlertCircle,
@@ -209,7 +208,7 @@ export default function ClientsPage() {
           eyebrow="How it compares"
           heading="The client record others forgot to build."
           italicWord="others forgot to build"
-          competitors={["InkOS Clients", "DaySmart", "Mangomint", "Spreadsheet"]}
+          competitors={["Limespun Clients", "DaySmart", "Mangomint", "Spreadsheet"]}
           rows={[
             {
               feature: "Per-client allergy fields surfaced in 4 places",
@@ -244,7 +243,7 @@ export default function ClientsPage() {
               values: [true, false, false, false],
             },
           ]}
-          caption="Based on published features as of Q1 2025. InkOS first column."
+          caption="Based on published features as of Q1 2025. Limespun first column."
         />
 
         <ProductDayInLife
@@ -255,7 +254,7 @@ export default function ClientsPage() {
           paragraphs={[
             "Asha books a touch-up for Thursday. Between Tuesday and Thursday she updates her GP record — new blood thinner, started post-surgery.",
             <React.Fragment key="p2">
-              <strong>Wednesday morning</strong>, the artist opens InkOS to review their day. The allergy banner on Asha&apos;s card is amber — pulsing. Not a static label. A live signal.
+              <strong>Wednesday morning</strong>, the artist opens Limespun to review their day. The allergy banner on Asha&apos;s card is amber — pulsing. Not a static label. A live signal.
             </React.Fragment>,
             "The artist taps through to the medical history. Blood thinner flagged. They move the appointment by two weeks, per studio protocol, and send Asha an SMS from the comms thread — logged automatically.",
             "Thursday comes and goes without incident. The near-miss is logged, the session is rescheduled, and the patch test note is updated. No clipboard. No phone call to check.",

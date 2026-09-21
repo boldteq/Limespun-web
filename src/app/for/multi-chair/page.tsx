@@ -103,7 +103,7 @@ function PainPointsSection() {
   );
 }
 
-// ── Why InkOS ─────────────────────────────────────────────────────────────────
+// ── Why Limespun ─────────────────────────────────────────────────────────────────
 
 const proFeatures = [
   "Unlimited active artists",
@@ -115,7 +115,7 @@ const proFeatures = [
   "Per-location P&L (when you grow)",
 ];
 
-function WhyInkOSSection() {
+function WhyLimespunSection() {
   return (
     <section style={{ background: BRAND.bone, paddingTop: 100, paddingBottom: 100 } as React.CSSProperties}>
       <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" } as React.CSSProperties}>
@@ -250,11 +250,11 @@ export default function MultiChairPage() {
           headline="The shop with a brand. The shop that scales."
           italicWord="scales"
           subhead="Six artists. Eight chairs. Two floors. Walk-in clinic Tuesdays. AI brief generator on every booking. EU REACH ink registry. Public guest booking pages. Priority support. The Pro plan."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "See pricing", href: "/pricing" }}
         />
         <PainPointsSection />
-        <WhyInkOSSection />
+        <WhyLimespunSection />
         <CustomerQuoteSection />
         <PricingTeaserSection />
         <FAQSection />
@@ -263,7 +263,7 @@ export default function MultiChairPage() {
           headline="Run Pro for 14 days."
           italicWord="14"
           subhead="Full Pro plan during the trial. AI Studio, REACH inventory, unlimited artists. No card."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
         />
       </main>

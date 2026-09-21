@@ -71,7 +71,7 @@ const processSteps = [
   {
     number: "03",
     title: "Days 4-12 — Parallel run",
-    body: "InkOS goes live alongside your current tool. New bookings flow to InkOS. Old bookings finish in your old system. Zero downtime.",
+    body: "Limespun goes live alongside your current tool. New bookings flow to Limespun. Old bookings finish in your old system. Zero downtime.",
   },
   {
     number: "04",
@@ -82,7 +82,7 @@ const processSteps = [
 
 const faqItems = [
   {
-    q: "What if I have a custom field in my current tool that InkOS doesn't have?",
+    q: "What if I have a custom field in my current tool that Limespun doesn't have?",
     a: "We add it. Migration team has shipped 200+ custom field migrations. Most show up as 'Notes' on the client record; complex ones become first-class fields.",
   },
   {
@@ -91,7 +91,7 @@ const faqItems = [
   },
   {
     q: "Do I lose any features during the parallel run?",
-    a: "No. Your current tool stays fully functional. New bookings get auto-routed to InkOS via a redirect rule we configure.",
+    a: "No. Your current tool stays fully functional. New bookings get auto-routed to Limespun via a redirect rule we configure.",
   },
   {
     q: "What if migration takes longer than 14 days?",
@@ -143,7 +143,7 @@ export default function MigratePage() {
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
             label: "Start the trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
         />
 
@@ -652,7 +652,7 @@ export default function MigratePage() {
           primaryCTA={{ label: "Book the call", href: "/book-a-demo" }}
           secondaryCTA={{
             label: "Or start the trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
             icon: "play",
           }}
         />

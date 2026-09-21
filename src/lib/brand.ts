@@ -1,5 +1,7 @@
 import type { Variants } from "framer-motion";
 
+export const SITE_URL = "https://limespun.com";
+
 export const BRAND = {
   bone:       '#F7F7F5',
   boneCream:  '#FAFAF8',

@@ -293,7 +293,7 @@ export default function ContactPage() {
               }}
             >
               Not sure which email address to use? Use the form. Select a topic and
-              we'll route your message to the right person. Sales, support, press,
+              we&apos;ll route your message to the right person. Sales, support, press,
               partnerships, feature requests — one form serves every topic.
             </motion.p>
           </motion.div>
@@ -347,7 +347,7 @@ export default function ContactPage() {
         primaryCTA={{ label: "Email hello@boldteq.com", href: "mailto:hello@boldteq.com" }}
         secondaryCTA={{
           label: "Start a 14-day trial",
-          href: "https://inkos.up.railway.app/signup",
+          href: "https://app.limespun.com/signup",
           icon: "play",
         }}
       />

@@ -7,7 +7,6 @@ import {
   Clock,
   Inbox,
   Calendar,
-  MessageSquare,
   LayoutGrid,
   Users,
   Briefcase,
@@ -41,7 +40,7 @@ export default function TodayPage() {
           feature="Today"
           headline="Today, in thirty seconds."
           italicWord="in thirty seconds"
-          subhead="Open InkOS. The day's already loaded — what's running, what's at risk, what's next — sized to your role. Owner sees the studio. Artist sees their chair. Front-desk sees the schedule. Same data, three brains."
+          subhead="Open Limespun. The day's already loaded — what's running, what's at risk, what's next — sized to your role. Owner sees the studio. Artist sees their chair. Front-desk sees the schedule. Same data, three brains."
           dashboard={<TodayMockup />}
         />
 
@@ -49,7 +48,7 @@ export default function TodayPage() {
           eyebrow="The premise"
           heading="Three questions, one screen."
           italicWord="one screen"
-          intro="Every studio owner walks into work asking the same three questions before coffee. Today is the answer to all three — built into the screen that loads when InkOS opens."
+          intro="Every studio owner walks into work asking the same three questions before coffee. Today is the answer to all three — built into the screen that loads when Limespun opens."
           pillars={[
             {
               icon: TrendingUp,
@@ -174,7 +173,7 @@ export default function TodayPage() {
           eyebrow="vs the rest"
           heading="What no one else shows you on Monday morning."
           italicWord="on Monday morning"
-          competitors={["InkOS Today", "DaySmart", "Mangomint", "Spreadsheet"]}
+          competitors={["Limespun Today", "DaySmart", "Mangomint", "Spreadsheet"]}
           rows={[
             {
               feature: "Multi-session project context",
@@ -212,7 +211,7 @@ export default function TodayPage() {
           eyebrow="A morning"
           heading="8:47 AM. Sable & Sparrow, Brooklyn."
           italicWord="Sable & Sparrow, Brooklyn"
-          intro="Miles unlocks the studio, drops his keys, and before the coffee finishes, opens InkOS on his phone."
+          intro="Miles unlocks the studio, drops his keys, and before the coffee finishes, opens Limespun on his phone."
           paragraphs={[
             <>
               The screen knows what day it is.{" "}

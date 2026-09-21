@@ -1,7 +1,7 @@
-# InkOS Marketing Site
+# Limespun Marketing Site
 
 ## Project
-Marketing site for InkOS — the studio OS for tattoo. Built on Stack A (Next.js 16.2.3 + TypeScript strict).
+Marketing site for Limespun — the studio OS for tattoo. Built on Stack A (Next.js 16.2.3 + TypeScript strict).
 
 ## Stack
 - Next.js 16.2.3, React 19.2.4, TypeScript strict

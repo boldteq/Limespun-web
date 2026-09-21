@@ -60,7 +60,7 @@ export function Truth() {
           transition={{ duration: 0.6 }}
           style={{ marginBottom: 48, maxWidth: 760 } as React.CSSProperties}
         >
-          <SectionEyebrow label="The morning before InkOS" />
+          <SectionEyebrow label="The morning before Limespun" />
           <SectionHeading>
             You opened the shop at 9. By 10:30, you&apos;d opened seven apps.
           </SectionHeading>

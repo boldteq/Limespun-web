@@ -77,16 +77,16 @@
   }
 }
 
-@keyframes inkos-pulse {
+@keyframes limespun-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.55; transform: scale(0.85); }
 }
 
 @media (max-width: 768px) {
-  .inkos-nav-desktop { display: none !important; }
-  .inkos-nav-signin { display: none !important; }
-  .inkos-nav-burger { display: flex !important; }
-  .inkos-nav-mobile { display: block !important; }
+  .limespun-nav-desktop { display: none !important; }
+  .limespun-nav-signin { display: none !important; }
+  .limespun-nav-burger { display: flex !important; }
+  .limespun-nav-mobile { display: block !important; }
 }
 
 @media (max-width: 1024px) {

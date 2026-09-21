@@ -47,7 +47,7 @@ export default function PaymentsPage() {
         />
 
         <ProductPillars
-          eyebrow="How payments work in InkOS"
+          eyebrow="How payments work in Limespun"
           heading="Three rails most studios still do by hand."
           italicWord="still do by hand"
           intro="Commission splits, deposit management, and payroll exports — automated at the point of payment. Not at the end of the month."
@@ -57,7 +57,7 @@ export default function PaymentsPage() {
               accent: BRAND.rust,
               eyebrow: "Commission auto-splits",
               title: "60/40, 70/30, custom — routed at checkout.",
-              desc: "Set the split per artist or per tier. InkOS routes the correct amount to each Stripe Connect account at the point of payment. No manual calculation.",
+              desc: "Set the split per artist or per tier. Limespun routes the correct amount to each Stripe Connect account at the point of payment. No manual calculation.",
               bullets: [
                 "Per-artist split configured once",
                 "Splits route at checkout — not at month end",
@@ -136,7 +136,7 @@ export default function PaymentsPage() {
 
         <ProductItemTypes
           eyebrow="Money on the rails"
-          heading="Eight ways InkOS handles money."
+          heading="Eight ways Limespun handles money."
           italicWord="Eight ways"
           intro="Every payment type a studio takes — structured, tracked, and reconciled without a spreadsheet."
           columns={4}
@@ -209,7 +209,7 @@ export default function PaymentsPage() {
           heading="The split everyone else charges extra for."
           italicWord="everyone else charges extra for"
           competitors={[
-            "InkOS Payments",
+            "Limespun Payments",
             "DaySmart",
             "Mangomint",
             "Fresha",
@@ -248,7 +248,7 @@ export default function PaymentsPage() {
               values: [true, true, true, true],
             },
           ]}
-          caption="Based on published features as of Q1 2025. InkOS first column."
+          caption="Based on published features as of Q1 2025. Limespun first column."
         />
 
         <ProductDayInLife
@@ -257,7 +257,7 @@ export default function PaymentsPage() {
           italicWord="six minutes"
           intro="Marcus runs commissions for 8 artists every Friday. It used to take the morning."
           paragraphs={[
-            "Before InkOS, Marcus was exporting Stripe reports, matching artist IDs to sessions in a spreadsheet, calculating splits manually, and sending individual bank transfers. Two hours, minimum.",
+            "Before Limespun, Marcus was exporting Stripe reports, matching artist IDs to sessions in a spreadsheet, calculating splits manually, and sending individual bank transfers. Two hours, minimum.",
             <React.Fragment key="p2">
               Now he opens the <strong>Payments</strong> tab on Friday afternoon. The commission dashboard shows every artist, every session, and the exact payout amount — already calculated.
             </React.Fragment>,

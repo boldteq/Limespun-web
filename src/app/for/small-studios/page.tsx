@@ -124,7 +124,7 @@ function PainPointsSection() {
   );
 }
 
-// ── Why InkOS ─────────────────────────────────────────────────────────────────
+// ── Why Limespun ─────────────────────────────────────────────────────────────────
 
 const studioFeatures = [
   "Up to 5 active artists — resident, guest, apprentice",
@@ -136,7 +136,7 @@ const studioFeatures = [
   "Per-artist payroll — 1099-K, P11D, etc generated for year-end",
 ];
 
-function WhyInkOSSection() {
+function WhyLimespunSection() {
   return (
     <section style={{ background: BRAND.bone, paddingTop: 100, paddingBottom: 100 } as React.CSSProperties}>
       <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" } as React.CSSProperties}>
@@ -244,7 +244,7 @@ function PricingTeaserSection() {
 const faqs = [
   {
     q: "How does the guest residency work?",
-    a: "Each guest gets a time-boxed band on the calendar with their own colour. They get a public booking page (portfolio.inkos.studio/[handle]) for the residency window. Auto-archives when their tour ends.",
+    a: "Each guest gets a time-boxed band on the calendar with their own colour. They get a public booking page (portfolio.limespun.com/[handle]) for the residency window. Auto-archives when their tour ends.",
   },
   {
     q: "Can artists get paid directly through Stripe Connect?",
@@ -289,11 +289,11 @@ export default function SmallStudiosPage() {
           headline="2-5 chairs. Mixed roster. One quiet system."
           italicWord="quiet"
           subhead="Resident artists, weekend guests, the new apprentice. Commission splits route on the invoice. Residencies live on the calendar. The small shop, finally not held together by group chat."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "See pricing", href: "/pricing" }}
         />
         <PainPointsSection />
-        <WhyInkOSSection />
+        <WhyLimespunSection />
         <CustomerQuoteSection />
         <PricingTeaserSection />
         <FAQSection />
@@ -302,7 +302,7 @@ export default function SmallStudiosPage() {
           headline="Get the team running."
           italicWord="running"
           subhead="14-day trial. White-glove migration included. Up to 5 artists, $59/mo."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
         />
       </main>

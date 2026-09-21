@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
+import { LimespunMarkOG as LimespunMark } from "@/components/brand/limespun-mark-og";
 
 export const runtime = "edge";
-export const alt = "InkOS Migration — Whatever you're on, we move it for you.";
+export const alt = "Limespun Migration — Whatever you're on, we move it for you.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -52,23 +53,7 @@ export default async function OGImage() {
             marginBottom: 48,
           }}
         >
-          <div
-            style={{
-              width: 56,
-              height: 56,
-              background: "#0F0F0F",
-              borderRadius: 12,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#F7F7F5",
-              fontSize: 36,
-              fontStyle: "italic",
-              fontFamily: "serif",
-            }}
-          >
-            i
-          </div>
+          <LimespunMark size={56} />
           <span
             style={{
               fontSize: 32,
@@ -77,7 +62,7 @@ export default async function OGImage() {
               letterSpacing: "-0.02em",
             }}
           >
-            InkOS
+            Limespun
           </span>
         </div>
 
@@ -95,7 +80,7 @@ export default async function OGImage() {
           <span style={{ fontStyle: "italic", color: "#C8351F" }}>
             Whatever
           </span>{" "}
-          you're on, we move it for you.
+          you&apos;re on, we move it for you.
         </div>
 
         <div
@@ -108,7 +93,7 @@ export default async function OGImage() {
             borderTop: "1px solid #E7E5E1",
           }}
         >
-          <span style={{ fontSize: 22, color: "#4B4842" }}>inkos.studio</span>
+          <span style={{ fontSize: 22, color: "#4B4842" }}>limespun.com</span>
           <span
             style={{
               fontSize: 18,

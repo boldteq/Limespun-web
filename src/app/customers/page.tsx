@@ -9,19 +9,19 @@ import { LogoBar } from "@/components/shared/logo-bar";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { StoryGrid } from "@/components/customers/story-grid";
-import { BRAND, FONT, GRADIENT, SHADOW } from "@/lib/brand";
+import { BRAND, FONT, GRADIENT } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Customers — How studios run on InkOS",
+  title: "Customers — How studios run on Limespun",
   description:
-    "Real tattoo studios using InkOS. From solo residencies in East London to two-floor shops in Mexico City. See how they cut hours and grew bookings.",
+    "Real tattoo studios using Limespun. From solo residencies in East London to two-floor shops in Mexico City. See how they cut hours and grew bookings.",
   openGraph: {
-    title: "InkOS Customers",
+    title: "Limespun Customers",
     description:
-      "Real tattoo studios using InkOS. From solo residencies in East London to two-floor shops in Mexico City.",
+      "Real tattoo studios using Limespun. From solo residencies in East London to two-floor shops in Mexico City.",
     type: "website",
   },
-  alternates: { canonical: "https://inkos.studio/customers" },
+  alternates: { canonical: "https://limespun.com/customers" },
 };
 
 export default function CustomersPage() {
@@ -40,12 +40,12 @@ export default function CustomersPage() {
           variant="centered"
           eyebrow="The proof"
           eyebrowAccent="rust"
-          headline="How studios run on InkOS."
+          headline="How studios run on Limespun."
           italicWord="run"
           subhead="From a single residency chair in East London to a two-floor shop in Mexico City — these are the studios that traded seven apps for one quiet system. And the numbers behind the move."
           primaryCTA={{
             label: "Start a 14-day trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{
             label: "Book a walkthrough",
@@ -65,7 +65,7 @@ export default function CustomersPage() {
         >
           <StatStrip
             items={[
-              { stat: "1,200+", label: "artists on InkOS" },
+              { stat: "1,200+", label: "artists on Limespun" },
               { stat: "47", label: "countries" },
               { stat: "$8.4M", label: "monthly bookings processed" },
               { stat: "$0", label: "in transaction fees taken" },
@@ -192,7 +192,7 @@ export default function CustomersPage() {
             } as React.CSSProperties}
           >
             <LogoBar
-              caption="Studios on InkOS"
+              caption="Studios on Limespun"
               logos={[
                 { name: "Sable & Sparrow" },
                 { name: "Nine Lives" },
@@ -235,7 +235,7 @@ export default function CustomersPage() {
                 margin: 0,
               } as React.CSSProperties}
             >
-              &ldquo;InkOS is the first software that understood the shop is a
+              &ldquo;Limespun is the first software that understood the shop is a
               body of work, not a calendar full of strangers.&rdquo;
             </blockquote>
             <div
@@ -255,12 +255,12 @@ export default function CustomersPage() {
         {/* ── Section 7: CTA ── */}
         <CTASection
           badge="Add your studio to the wall"
-          headline="Run on InkOS."
+          headline="Run on Limespun."
           italicWord="Run"
           subhead="14-day trial. No card. White-glove migration above Solo. We do not bill until your last appointment from your old tool has cleared."
           primaryCTA={{
             label: "Start a 14-day trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{
             label: "Book a walkthrough",

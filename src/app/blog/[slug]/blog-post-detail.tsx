@@ -446,7 +446,7 @@ export function BlogPostDetail({ post, related }: Props) {
           headline="Subscribe for the studio playbook."
           italicWord="playbook"
           subhead="One email per month. Studio operations, compliance updates, the maths nobody else writes."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Talk to us", href: "/book-a-demo", icon: "play" }}
         />
       </main>

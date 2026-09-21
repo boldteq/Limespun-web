@@ -83,7 +83,7 @@ function Sidebar() {
             color: BRAND.bone,
           } as React.CSSProperties}
         >
-          InkOS
+          Limespun
         </div>
       </div>
 
@@ -283,7 +283,7 @@ export function CalendarMockup() {
             color: BRAND.stone,
           } as React.CSSProperties}
         >
-          inkos.app/calendar
+          app.limespun.com/calendar
         </div>
       </div>
 

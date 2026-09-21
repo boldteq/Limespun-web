@@ -294,7 +294,7 @@ export default function ProductPage() {
           headline="Fifteen rooms, one floor."
           italicWord="rooms"
           subhead="Every operation in your studio — bookings, deposits, projects, payments, inventory — designed as one connected system. No exports. No syncing. The shop, held in one place."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
         />
 
@@ -507,7 +507,7 @@ export default function ProductPage() {
                   letterSpacing: "-0.01em",
                 } as React.CSSProperties}
               >
-                &ldquo;InkOS is the first software that understood the shop is a body of work, not a calendar full of strangers.&rdquo;
+                &ldquo;Limespun is the first software that understood the shop is a body of work, not a calendar full of strangers.&rdquo;
               </blockquote>
               <cite
                 style={{
@@ -531,7 +531,7 @@ export default function ProductPage() {
           headline="See the whole studio."
           italicWord="whole"
           subhead="14-day trial. No card. White-glove migration above Solo. Free walkthrough if you'd rather see it live."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://inkos.up.railway.app/signup" }}
+          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
         />
       </main>

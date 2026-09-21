@@ -19,16 +19,16 @@ export default function HomePage() {
         data={{
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "InkOS",
+          name: "Limespun",
           legalName: "Boldteq Holdings Ltd",
-          url: "https://inkos.studio",
-          logo: "https://inkos.studio/icon.png",
+          url: "https://limespun.com",
+          logo: "https://limespun.com/icon.png",
           description:
             "The studio operating system for tattoo. Multi-session projects, deposit pools, allergy intelligence, EU REACH compliance.",
           foundingDate: "2024",
           sameAs: [
-            "https://twitter.com/inkos_studio",
-            "https://www.instagram.com/inkos.studio",
+            "https://twitter.com/limespun",
+            "https://www.instagram.com/limespun",
           ],
           contactPoint: {
             "@type": "ContactPoint",
@@ -42,7 +42,7 @@ export default function HomePage() {
         data={{
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          name: "InkOS",
+          name: "Limespun",
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
           offers: {

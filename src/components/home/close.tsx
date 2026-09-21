@@ -6,7 +6,7 @@ import { Plus, PlayCircle } from "lucide-react";
 import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { MangomintBlobs } from "@/components/brand/mangomint-blobs";
-import { TriCircleMarkV2 } from "@/components/brand/tri-circle-mark";
+import { LimespunMark } from "@/components/brand/limespun-mark";
 
 interface FAQData {
   q: string;
@@ -15,8 +15,8 @@ interface FAQData {
 
 const faqs: FAQData[] = [
   {
-    q: "How is InkOS different from DaySmart, Mangomint, or Fresha?",
-    a: "Those tools were built for salons and adapted for tattoo. InkOS was built from scratch for the tattoo workflow — multi-session sleeves, deposit pools, allergy flags, EU REACH compliance, and residency scheduling are native concepts, not bolt-ons.",
+    q: "How is Limespun different from DaySmart, Mangomint, or Fresha?",
+    a: "Those tools were built for salons and adapted for tattoo. Limespun was built from scratch for the tattoo workflow — multi-session sleeves, deposit pools, allergy flags, EU REACH compliance, and residency scheduling are native concepts, not bolt-ons.",
   },
   {
     q: "Will I lose my client list, deposits, or consent forms when I migrate?",
@@ -31,15 +31,15 @@ const faqs: FAQData[] = [
     a: "Deposits sit in a pool against the project, not the session. When a session moves, the deposit stays with the client. You set the policy — we enforce it automatically across all rescheduling flows.",
   },
   {
-    q: "Is InkOS REACH-compliant for studios in the EU?",
+    q: "Is Limespun REACH-compliant for studios in the EU?",
     a: "Yes. The inventory module includes the EU REACH 2022 ink registry. Every ink in your cabinet links to a REACH record. Flagged substances surface on the appointment before the session starts.",
   },
   {
     q: "Do you take a transaction fee on bookings or deposits?",
-    a: "No. You pay the monthly software fee and Stripe's standard payment processing rate. InkOS takes no additional cut of your bookings, deposits, or sales.",
+    a: "No. You pay the monthly software fee and Stripe's standard payment processing rate. Limespun takes no additional cut of your bookings, deposits, or sales.",
   },
   {
-    q: "Who is behind InkOS?",
+    q: "Who is behind Limespun?",
     a: "Boldteq, a small team building global-first software for craft industries. We have a waiting list of 1,200+ artists across the US, UK, Canada, and Australia, and we're onboarding studios in cohorts through the private beta.",
   },
 ];
@@ -298,7 +298,7 @@ export function Close() {
             textAlign: "center",
           } as React.CSSProperties}
         >
-          {/* TriCircleMark + badge */}
+          {/* LimespunMark + badge */}
           <motion.div
             variants={fadeUp}
             style={{
@@ -309,7 +309,7 @@ export function Close() {
               marginBottom: 32,
             } as React.CSSProperties}
           >
-            <TriCircleMarkV2 size={56} />
+            <LimespunMark size={56} />
             <div
               style={{
                 display: "inline-flex",
@@ -324,7 +324,7 @@ export function Close() {
                 letterSpacing: "0.02em",
               } as React.CSSProperties}
             >
-              The next sleeve starts in InkOS
+              The next sleeve starts in Limespun
             </div>
           </motion.div>
 
@@ -380,7 +380,7 @@ export function Close() {
             } as React.CSSProperties}
           >
             <a
-              href="https://inkos.up.railway.app/signup"
+              href="https://app.limespun.com/signup"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -401,7 +401,7 @@ export function Close() {
             </a>
 
             <a
-              href="https://inkos.up.railway.app/signup"
+              href="https://app.limespun.com/signup"
               style={{
                 display: "inline-flex",
                 alignItems: "center",

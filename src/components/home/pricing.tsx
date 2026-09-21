@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Check } from "lucide-react";
-import { BRAND, FONT, SHADOW, fadeUp, stagger } from "@/lib/brand";
+import { BRAND, FONT, fadeUp, stagger } from "@/lib/brand";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 
 interface PricingTierData {
@@ -199,7 +199,7 @@ function PricingTier({ tier }: PricingTierProps) {
 
         {/* CTA */}
         <a
-          href="https://inkos.up.railway.app/signup"
+          href="https://app.limespun.com/signup"
           style={{
             display: "inline-flex",
             alignItems: "center",

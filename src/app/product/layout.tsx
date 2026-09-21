@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Product — Fifteen rooms, one floor | InkOS",
+  title: "Product — Fifteen rooms, one floor | Limespun",
   description:
     "Today, Inbox, Calendar, Messages, Clients, Projects, Forms, Payments, Inventory, AI Studio. Every studio operation, one quiet system.",
   openGraph: {
-    title: "InkOS Product Tour",
+    title: "Limespun Product Tour",
     description: "Every studio operation, one quiet system.",
     type: "website",
   },
-  alternates: { canonical: "https://inkos.studio/product" },
+  alternates: { canonical: "https://limespun.com/product" },
 };
 
 export default function ProductLayout({

@@ -15,8 +15,7 @@ import { CalendarMockup } from "@/components/product/mockups/calendar-mockup";
 import { BRAND } from "@/lib/brand";
 import {
   LayoutGrid, Plane, AlertCircle, Sparkles, MessageSquare, Repeat,
-  Droplet, Heart, Pause, MoonStar, Clock, Inbox, Users,
-  Calendar as CalendarIcon,
+  Droplet, Heart, Pause, MoonStar, Clock, Users,
 } from "lucide-react";
 
 export default function CalendarPage() {
@@ -28,7 +27,7 @@ export default function CalendarPage() {
           feature="Calendar"
           headline="The week, as your studio actually runs it."
           italicWord="as your studio actually runs it"
-          subhead="Most calendars schedule appointments. InkOS schedules tattoos. Multi-session sleeves carried across visits. Guest residencies on a time-boxed band. Allergies flagged before the chair. Sterilization buffers auto-applied. The schedule a tattoo studio actually runs on, not the one you bend to fit."
+          subhead="Most calendars schedule appointments. Limespun schedules tattoos. Multi-session sleeves carried across visits. Guest residencies on a time-boxed band. Allergies flagged before the chair. Sterilization buffers auto-applied. The schedule a tattoo studio actually runs on, not the one you bend to fit."
           dashboard={<CalendarMockup />}
         />
 
@@ -36,7 +35,7 @@ export default function CalendarPage() {
           eyebrow="The premise"
           heading="A calendar that carries the context."
           italicWord="carries the context"
-          intro="Salon software books an hour and walks away. A tattoo session is the third of five visits, shares a deposit pool, runs against an allergy chart, needs sterilization either side, and waits on a body zone to heal. InkOS knows all of that — every time you tap a slot."
+          intro="Salon software books an hour and walks away. A tattoo session is the third of five visits, shares a deposit pool, runs against an allergy chart, needs sterilization either side, and waits on a body zone to heal. Limespun knows all of that — every time you tap a slot."
           pillars={[
             {
               icon: LayoutGrid, accent: BRAND.onyx,
@@ -66,7 +65,7 @@ export default function CalendarPage() {
           eyebrow="Anatomy"
           heading="Density, with intent."
           italicWord="with intent"
-          intro="A tattoo calendar carries more signals than a salon one. InkOS shows them all — without looking like a spreadsheet. Color, pattern, and pin position do the work that competing tools spread across menus and tooltips."
+          intro="A tattoo calendar carries more signals than a salon one. Limespun shows them all — without looking like a spreadsheet. Color, pattern, and pin position do the work that competing tools spread across menus and tooltips."
           dashboard={<CalendarMockup />}
           callouts={[
             { n: 1, title: "The view switcher", desc: "Day, Week, Month — same data, three magnifications. Day view shows chairs side-by-side; Week shows a single artist across days; Month is the long view.", position: { top: '13%', left: '70%' } },
@@ -99,8 +98,8 @@ export default function CalendarPage() {
           eyebrow="vs the rest"
           heading="What every other calendar forgets to ask."
           italicWord="forgets to ask"
-          intro="We benchmarked against the calendar best-of-breed: TattooGenda (tattoo-native, strong on guests), DaySmart Body Art (the incumbent), and Mangomint (modern salon software). InkOS is the only one that asks every question a tattoo artist actually asks before tapping confirm."
-          competitors={['InkOS Calendar', 'TattooGenda', 'DaySmart', 'Mangomint']}
+          intro="We benchmarked against the calendar best-of-breed: TattooGenda (tattoo-native, strong on guests), DaySmart Body Art (the incumbent), and Mangomint (modern salon software). Limespun is the only one that asks every question a tattoo artist actually asks before tapping confirm."
+          competitors={['Limespun Calendar', 'TattooGenda', 'DaySmart', 'Mangomint']}
           rows={[
             { feature: 'Multi-chair day view (artist columns)', values: [true, true, true, true] },
             { feature: 'Multi-session project context inline', values: [true, false, false, false] },
@@ -121,12 +120,12 @@ export default function CalendarPage() {
           italicWord="Three sessions, ten weeks, twelve minutes"
           intro="Rafael's phone rings at the studio in Mexico City. A walk-in lead wants a back piece — six hours per session, three sessions, healing in between. He opens Calendar."
           paragraphs={[
-            <React.Fragment key="p1"><strong>He searches for six-hour gaps.</strong> The week of May 14 has one on Wednesday — but he's also got Asha's sleeve session that morning, and her allergy alert is still open. Cross-contamination risk. He swipes to May 21. Six hours open on Thursday. Clean.</React.Fragment>,
-            <React.Fragment key="p2"><strong>He drops the appointment in.</strong> Calendar auto-applies a 30-minute sterilization buffer before and after. The back-zone healing block goes up for May 21 through June 25 — same artist can't book the same area until it closes. Calendar asks if the second session should be six weeks out. Yes. The third, eight more. Yes.</React.Fragment>,
+            <React.Fragment key="p1"><strong>He searches for six-hour gaps.</strong> The week of May 14 has one on Wednesday — but he&apos;s also got Asha&apos;s sleeve session that morning, and her allergy alert is still open. Cross-contamination risk. He swipes to May 21. Six hours open on Thursday. Clean.</React.Fragment>,
+            <React.Fragment key="p2"><strong>He drops the appointment in.</strong> Calendar auto-applies a 30-minute sterilization buffer before and after. The back-zone healing block goes up for May 21 through June 25 — same artist can&apos;t book the same area until it closes. Calendar asks if the second session should be six weeks out. Yes. The third, eight more. Yes.</React.Fragment>,
             <React.Fragment key="p3"><strong>The proposal goes out as a single message.</strong> Three sessions across ten weeks, deposit per session, healing windows highlighted, design timeline included. The client says yes by 4:15. Each session lock-confirms only when the deposit posts.</React.Fragment>,
-            <React.Fragment key="p4">Rafael's done planning a four-month project before the next client walks in. <em>Total time: twelve minutes. The old way: a full afternoon and three follow-up emails.</em></React.Fragment>,
+            <React.Fragment key="p4">Rafael&apos;s done planning a four-month project before the next client walks in. <em>Total time: twelve minutes. The old way: a full afternoon and three follow-up emails.</em></React.Fragment>,
           ]}
-          quote="My old calendar showed me times. InkOS shows me a body — what's been worked, what's healing, what's left. It's the difference between a clock and a tattoo plan."
+          quote="My old calendar showed me times. Limespun shows me a body — what's been worked, what's healing, what's left. It's the difference between a clock and a tattoo plan."
           person={{ name: "Rafael Moreno", role: "Owner · Calle Negra · Mexico City · 9 artists", gradient: "linear-gradient(135deg, #713F12 0%, #F59E0B 60%, #FBBF24 100%)" }}
         />
 

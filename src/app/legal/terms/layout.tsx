@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | InkOS",
+  title: "Terms of Service | Limespun",
   description:
-    "InkOS subscription terms, acceptable use policy, and warranty disclaimers. Plain English where possible.",
-  alternates: { canonical: "https://inkos.studio/legal/terms" },
+    "Limespun subscription terms, acceptable use policy, and warranty disclaimers. Plain English where possible.",
+  alternates: { canonical: "https://limespun.com/legal/terms" },
 };
 
 export default function Layout({

@@ -18,7 +18,7 @@ interface ProductHeroProps {
 
 const defaultPrimary = {
   label: "Start free trial",
-  href: "https://inkos.up.railway.app/signup",
+  href: "https://app.limespun.com/signup",
 };
 
 const defaultSecondary = {

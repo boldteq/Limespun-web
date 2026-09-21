@@ -103,7 +103,7 @@ function PainPointsSection() {
   );
 }
 
-// ── Why InkOS Enterprise ──────────────────────────────────────────────────────
+// ── Why Limespun Enterprise ──────────────────────────────────────────────────────
 
 const enterpriseFeatures = [
   "Multi-location dashboard — every shop, one view",
@@ -115,7 +115,7 @@ const enterpriseFeatures = [
   "Dedicated account manager — direct line, not a ticket queue",
 ];
 
-function WhyInkOSSection() {
+function WhyLimespunSection() {
   return (
     <section style={{ background: BRAND.bone, paddingTop: 100, paddingBottom: 100 } as React.CSSProperties}>
       <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" } as React.CSSProperties}>
@@ -254,7 +254,7 @@ export default function MultiLocationPage() {
           secondaryCTA={{ label: "See pricing", href: "/pricing" }}
         />
         <PainPointsSection />
-        <WhyInkOSSection />
+        <WhyLimespunSection />
         <CustomerQuoteSection />
         <PricingTeaserSection />
         <FAQSection />

@@ -411,7 +411,7 @@ export default function CareersPage() {
                 maxWidth: 480,
               } as React.CSSProperties}
             >
-              What you'll find.
+              What you&apos;ll find.
             </motion.h2>
 
             <motion.div

@@ -89,7 +89,7 @@ export function Shift() {
             marginBottom: 60,
           } as React.CSSProperties}
         >
-          Sessions linked into projects. Deposits pooled per sleeve. Allergies surfaced before the chair. Residencies tracked without a spreadsheet. InkOS runs in the background so you don&apos;t have to.
+          Sessions linked into projects. Deposits pooled per sleeve. Allergies surfaced before the chair. Residencies tracked without a spreadsheet. Limespun runs in the background so you don&apos;t have to.
         </motion.p>
 
         {/* Dashboard */}

@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, PlayCircle } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { BRAND, FONT, SHADOW, GRADIENT, stagger } from "@/lib/brand";
 import { MangomintBlobs } from "@/components/brand/mangomint-blobs";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import type { AccentKey } from "@/lib/brand";

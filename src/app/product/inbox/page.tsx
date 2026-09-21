@@ -15,7 +15,6 @@ import {
   Shield,
   Package,
   MessageSquare,
-  Users,
 } from "lucide-react";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
@@ -53,7 +52,7 @@ export default function InboxPage() {
           eyebrow="The premise"
           heading="The morning triage, five minutes flat."
           italicWord="five minutes flat"
-          intro="Most salon software treats notifications chronologically — a timestamp dump you have to decode yourself. InkOS triages by impact, surfaces what's blocking, and lets you close loops without leaving the feed."
+          intro="Most salon software treats notifications chronologically — a timestamp dump you have to decode yourself. Limespun triages by impact, surfaces what's blocking, and lets you close loops without leaving the feed."
           pillars={[
             {
               icon: Sparkles,
@@ -158,7 +157,7 @@ export default function InboxPage() {
               accent: BRAND.warn,
               severity: "Today",
               title: "Booking requests",
-              desc: "New requests with conflict detection built in. InkOS flags double-bookings and chair conflicts before you approve.",
+              desc: "New requests with conflict detection built in. Limespun flags double-bookings and chair conflicts before you approve.",
               example:
                 '"Asha Mehra — Tue 5 PM · conflicts with Miles\' lunch"',
             },
@@ -229,7 +228,7 @@ export default function InboxPage() {
           heading="What no one else shows you in the morning."
           italicWord="in the morning"
           competitors={[
-            "InkOS Inbox",
+            "Limespun Inbox",
             "DaySmart",
             "Mangomint",
             "Spreadsheet",
@@ -275,7 +274,7 @@ export default function InboxPage() {
           eyebrow="The triage"
           heading="7:14 AM. Twelve open. Six minutes."
           italicWord="Six minutes"
-          intro="Kaia opens InkOS at the kitchen table. Inbox is the first tab. Twelve open items, three urgent. The order tells her exactly what to do, in what order."
+          intro="Kaia opens Limespun at the kitchen table. Inbox is the first tab. Twelve open items, three urgent. The order tells her exactly what to do, in what order."
           paragraphs={[
             <>
               <strong>The Stripe dispute is at the top.</strong> $300
@@ -294,7 +293,7 @@ export default function InboxPage() {
               <strong>
                 Item 3 is a booking request from Asha Mehra
               </strong>{" "}
-              for Tuesday at 5 PM. InkOS flagged a conflict with her own lunch
+              for Tuesday at 5 PM. Limespun flagged a conflict with her own lunch
               block. She moves the booking to 5:30, approves, and the
               confirmation fires automatically. Ninety seconds.
             </>,

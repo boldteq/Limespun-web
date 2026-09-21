@@ -103,19 +103,19 @@ const carryCards: CarryCardProps[] = [
     accent: "rust",
     icon: Users,
     title: "Every client record",
-    body: "Names, contacts, allergy fields, custom fields. Mapped to InkOS schema. Photo libraries migrated and re-organised by project.",
+    body: "Names, contacts, allergy fields, custom fields. Mapped to Limespun schema. Photo libraries migrated and re-organised by project.",
   },
   {
     accent: "amber",
     icon: DollarSign,
     title: "Every deposit + balance",
-    body: "Outstanding deposits ported intact. Stripe Connect re-attached. Day-1 in InkOS shows the same money state as day-zero in DaySmart.",
+    body: "Outstanding deposits ported intact. Stripe Connect re-attached. Day-1 in Limespun shows the same money state as day-zero in DaySmart.",
   },
   {
     accent: "sage",
     icon: Calendar,
     title: "Every booking on the deck",
-    body: "Future appointments, recurring bookings, blocked time, residencies — all carried. The calendar in InkOS is identical to DaySmart's the moment we cut over.",
+    body: "Future appointments, recurring bookings, blocked time, residencies — all carried. The calendar in Limespun is identical to DaySmart's the moment we cut over.",
   },
 ];
 
@@ -130,7 +130,7 @@ const timelineSteps = [
   },
   {
     day: "Days 5-7",
-    title: "Preview run (InkOS staging, you review, sign off)",
+    title: "Preview run (Limespun staging, you review, sign off)",
   },
   {
     day: "Days 8-9",
@@ -145,15 +145,15 @@ const faqItems = [
   },
   {
     q: "What about my DaySmart inventory data?",
-    a: "Migrated to InkOS Inventory module. Bottle records re-mapped to EU REACH-compliant schema. Vendor cost data preserved.",
+    a: "Migrated to Limespun Inventory module. Bottle records re-mapped to EU REACH-compliant schema. Vendor cost data preserved.",
   },
   {
     q: "Can I keep my old subscription overlapping?",
-    a: "Yes — and it's our recommendation. 14 days of overlap on us. Stripe doesn't bill InkOS until your DaySmart sub cancels.",
+    a: "Yes — and it's our recommendation. 14 days of overlap on us. Stripe doesn't bill Limespun until your DaySmart sub cancels.",
   },
   {
     q: "Will my booking links break?",
-    a: "No. We set up redirect rules from old DaySmart booking URLs to InkOS booking URLs. Clients clicking old links land on the new flow.",
+    a: "No. We set up redirect rules from old DaySmart booking URLs to Limespun booking URLs. Clients clicking old links land on the new flow.",
   },
 ];
 
@@ -178,7 +178,7 @@ export default function DaysmartPage() {
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
             label: "Start the trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
         />
 
@@ -216,7 +216,7 @@ export default function DaysmartPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              What InkOS does that DaySmart can&apos;t.
+              What Limespun does that DaySmart can&apos;t.
             </motion.h2>
             <motion.div
               variants={fadeUp}
@@ -228,51 +228,51 @@ export default function DaysmartPage() {
               <ComparisonTable
                 competitors={[
                   { key: "daysmart", label: "DaySmart" },
-                  { key: "inkos", label: "InkOS", highlighted: true },
+                  { key: "limespun", label: "Limespun", highlighted: true },
                 ]}
                 rows={[
                   {
                     feature: "Multi-session projects (sleeves)",
-                    values: { daysmart: false, inkos: true },
+                    values: { daysmart: false, limespun: true },
                   },
                   {
                     feature: "Deposit pool across visits",
-                    values: { daysmart: false, inkos: true },
+                    values: { daysmart: false, limespun: true },
                   },
                   {
                     feature: "Allergy intelligence (surfaces 4 places)",
-                    values: { daysmart: "Custom field", inkos: true },
+                    values: { daysmart: "Custom field", limespun: true },
                   },
                   {
                     feature: "Photo timeline (REF → HEALED)",
-                    values: { daysmart: "Just attachments", inkos: true },
+                    values: { daysmart: "Just attachments", limespun: true },
                   },
                   {
                     feature: "EU REACH ink registry",
-                    values: { daysmart: false, inkos: true },
+                    values: { daysmart: false, limespun: true },
                   },
                   {
                     feature: "AI design assistant",
-                    values: { daysmart: false, inkos: true },
+                    values: { daysmart: false, limespun: true },
                   },
                   {
                     feature: "Commission auto-splits",
-                    values: { daysmart: false, inkos: true },
+                    values: { daysmart: false, limespun: true },
                   },
                   {
                     feature: "Guest residency band",
-                    values: { daysmart: false, inkos: true },
+                    values: { daysmart: false, limespun: true },
                   },
                   {
                     feature: "Per-booking transaction fee",
-                    values: { daysmart: "No", inkos: "No" },
+                    values: { daysmart: "No", limespun: "No" },
                   },
                   {
                     feature: "White-glove migration in 9 days",
-                    values: { daysmart: false, inkos: true },
+                    values: { daysmart: false, limespun: true },
                   },
                 ]}
-                caption="Source: DaySmart public docs + InkOS feature set, April 2026."
+                caption="Source: DaySmart public docs + Limespun feature set, April 2026."
               />
             </motion.div>
           </div>
@@ -519,7 +519,7 @@ export default function DaysmartPage() {
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
             label: "Start the trial first",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
             icon: "play",
           }}
         />

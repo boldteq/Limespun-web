@@ -60,7 +60,7 @@ const stories: StoryData[] = [
     city: "Mexico City, MX",
     chairs: "9 artists · 2 floors",
     quote:
-      "InkOS shows me a body — what's been worked, what's healing, what's left. Booking a back piece across ten weeks takes twelve minutes now.",
+      "Limespun shows me a body — what's been worked, what's healing, what's left. Booking a back piece across ten weeks takes twelve minutes now.",
     stats: [
       { l: "Active sleeves", v: "14" },
       { l: "Guest residencies", v: "6 in 2025" },

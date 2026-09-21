@@ -43,7 +43,7 @@ export default function MarketingPage() {
         />
 
         <ProductPillars
-          eyebrow="How marketing works in InkOS"
+          eyebrow="How marketing works in Limespun"
           heading="Three mechanics worth automating."
           italicWord="worth automating"
           intro="Campaigns, loyalty, and win-back — running in the background while the studio focuses on the work."
@@ -193,7 +193,7 @@ export default function MarketingPage() {
           heading="The win-back no one else automates."
           italicWord="no one else automates"
           competitors={[
-            "InkOS Marketing",
+            "Limespun Marketing",
             "Mailchimp",
             "Klaviyo",
             "Booksy",
@@ -232,7 +232,7 @@ export default function MarketingPage() {
               values: [true, false, false, false],
             },
           ]}
-          caption="Based on published features as of Q1 2025. InkOS first column."
+          caption="Based on published features as of Q1 2025. Limespun first column."
         />
 
         <ProductDayInLife
@@ -242,7 +242,7 @@ export default function MarketingPage() {
           intro="Tomas booked a half-sleeve in October 2025. Did session 1, paid the deposit, and went silent for seven months."
           paragraphs={[
             <React.Fragment key="p1">
-              <strong>Day 180 of silence.</strong> InkOS auto-triggers the
+              <strong>Day 180 of silence.</strong> Limespun auto-triggers the
               win-back sequence. Day 1 SMS:{" "}
               <em>
                 &ldquo;Hey Tomas, the half-sleeve is waiting. We saved your

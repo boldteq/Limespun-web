@@ -3,9 +3,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, PlayCircle } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { BRAND, FONT, SHADOW, GRADIENT, stagger } from "@/lib/brand";
 import { MangomintBlobs } from "@/components/brand/mangomint-blobs";
-import { TriCircleMarkV2 } from "@/components/brand/tri-circle-mark";
+import { LimespunMark } from "@/components/brand/limespun-mark";
 import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
 
 const trustStats = [
@@ -85,7 +85,7 @@ export function Hero() {
             boxShadow: SHADOW.soft,
           } as React.CSSProperties}
         >
-          <TriCircleMarkV2 size={20} />
+          <LimespunMark size={20} />
           The studio OS for tattoo &middot; v1 in private beta
         </motion.div>
 
@@ -146,7 +146,7 @@ export function Hero() {
           } as React.CSSProperties}
         >
           <a
-            href="https://inkos.up.railway.app/signup"
+            href="https://app.limespun.com/signup"
             style={{
               display: "inline-flex",
               alignItems: "center",

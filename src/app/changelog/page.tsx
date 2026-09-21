@@ -314,7 +314,7 @@ export default function ChangelogPage() {
           subhead="Public ship log. Every release. Every fix. Every improvement. We update this on the same day we deploy. The opposite of a 'product hunt' marketing page."
           primaryCTA={{
             label: "Start a 14-day trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{ label: "See roadmap", href: "/roadmap" }}
         />
@@ -403,7 +403,7 @@ export default function ChangelogPage() {
           subhead="14-day trial includes everything in this changelog. No card. Updates auto-apply — you'll always be on the latest."
           primaryCTA={{
             label: "Start a 14-day trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{
             label: "See roadmap",

@@ -23,7 +23,7 @@ dist
 *.pem
 Thumbs.db
 
-# Vercel (not used — Railway only)
+# Vercel (local project link — IDs only, never commit)
 .vercel
 
 # Debug

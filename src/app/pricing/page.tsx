@@ -11,7 +11,7 @@ import { StatStrip } from "@/components/shared/stat-strip";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { BRAND, FONT, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { JsonLd } from "@/components/seo/json-ld";
 
 // ─── Tier data ────────────────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ const tiers: PricingTierData[] = [
     price: "$29",
     period: "/mo",
     cta: "Start free trial",
-    ctaHref: "https://inkos.up.railway.app/signup",
+    ctaHref: "https://app.limespun.com/signup",
     lines: [
       "Today, Inbox, Calendar, Messages",
       "Unlimited bookings, deposits, consents",
@@ -50,7 +50,7 @@ const tiers: PricingTierData[] = [
     price: "$59",
     period: "/mo",
     cta: "Start free trial",
-    ctaHref: "https://inkos.up.railway.app/signup",
+    ctaHref: "https://app.limespun.com/signup",
     featured: true,
     featuredLabel: "Most studios",
     lines: [
@@ -68,7 +68,7 @@ const tiers: PricingTierData[] = [
     price: "$99",
     period: "/mo",
     cta: "Start free trial",
-    ctaHref: "https://inkos.up.railway.app/signup",
+    ctaHref: "https://app.limespun.com/signup",
     lines: [
       "Everything in Studio, plus:",
       "Unlimited active artists",
@@ -103,7 +103,7 @@ const competitors = [
   { key: "mangomint", label: "Mangomint" },
   { key: "fresha", label: "Fresha" },
   { key: "tattoogenda", label: "TattooGenda" },
-  { key: "inkos", label: "InkOS", highlighted: true },
+  { key: "limespun", label: "Limespun", highlighted: true },
 ];
 
 const comparisonRows = [
@@ -114,7 +114,7 @@ const comparisonRows = [
       mangomint: true,
       fresha: true,
       tattoogenda: true,
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -124,7 +124,7 @@ const comparisonRows = [
       mangomint: "Pro tier",
       fresha: false,
       tattoogenda: "Bigger plan",
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -134,7 +134,7 @@ const comparisonRows = [
       mangomint: true,
       fresha: "Extra fee",
       tattoogenda: "Bigger plan",
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -144,7 +144,7 @@ const comparisonRows = [
       mangomint: false,
       fresha: false,
       tattoogenda: false,
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -154,7 +154,7 @@ const comparisonRows = [
       mangomint: false,
       fresha: false,
       tattoogenda: false,
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -164,7 +164,7 @@ const comparisonRows = [
       mangomint: false,
       fresha: false,
       tattoogenda: false,
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -174,7 +174,7 @@ const comparisonRows = [
       mangomint: "Team Pay",
       fresha: "Team Pay add-on",
       tattoogenda: false,
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -184,7 +184,7 @@ const comparisonRows = [
       mangomint: false,
       fresha: false,
       tattoogenda: false,
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -194,7 +194,7 @@ const comparisonRows = [
       mangomint: false,
       fresha: false,
       tattoogenda: true,
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -204,7 +204,7 @@ const comparisonRows = [
       mangomint: false,
       fresha: false,
       tattoogenda: true,
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -214,7 +214,7 @@ const comparisonRows = [
       mangomint: "Basic",
       fresha: "Basic",
       tattoogenda: "Limited",
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -224,7 +224,7 @@ const comparisonRows = [
       mangomint: false,
       fresha: false,
       tattoogenda: false,
-      inkos: true,
+      limespun: true,
     },
   },
   {
@@ -234,7 +234,7 @@ const comparisonRows = [
       mangomint: false,
       fresha: "Yes",
       tattoogenda: false,
-      inkos: false,
+      limespun: false,
     },
   },
   {
@@ -244,7 +244,7 @@ const comparisonRows = [
       mangomint: false,
       fresha: false,
       tattoogenda: false,
-      inkos: true,
+      limespun: true,
     },
   },
 ];
@@ -262,7 +262,7 @@ const faqs = [
   },
   {
     q: "Do you charge a transaction fee on bookings or deposits?",
-    a: "Never. You pay the monthly software fee. Stripe takes its standard processing fee on cards (2.9% + 30¢ in the US). InkOS takes nothing on top.",
+    a: "Never. You pay the monthly software fee. Stripe takes its standard processing fee on cards (2.9% + 30¢ in the US). Limespun takes nothing on top.",
   },
   {
     q: "What about overages — SMS sends, AI design generations?",
@@ -274,7 +274,7 @@ const faqs = [
   },
   {
     q: "Do you support currencies outside USD?",
-    a: "Yes. We bill in USD, but Stripe collects from your clients in their local currency. Studios in 47 countries are running on InkOS today.",
+    a: "Yes. We bill in USD, but Stripe collects from your clients in their local currency. Studios in 47 countries are running on Limespun today.",
   },
   {
     q: "How are taxes handled?",
@@ -646,7 +646,7 @@ function CompareSection() {
           <ComparisonTable
             competitors={competitors}
             rows={comparisonRows}
-            caption="Updated April 2026. Source: public pricing pages + InkOS signup data."
+            caption="Updated April 2026. Source: public pricing pages + Limespun signup data."
           />
         </motion.div>
       </div>
@@ -699,7 +699,7 @@ function ROISection() {
               textAlign: "center",
             } as React.CSSProperties}
           >
-            InkOS pays for itself in week one.
+            Limespun pays for itself in week one.
           </h2>
         </motion.div>
 
@@ -714,7 +714,7 @@ function ROISection() {
             items={[
               { stat: "12 hr / wk", label: "time recovered, average" },
               { stat: "$2,400 / mo", label: "recovered at $50 / hr studio rate" },
-              { stat: "$59 / mo", label: "InkOS Studio plan" },
+              { stat: "$59 / mo", label: "Limespun Studio plan" },
               { stat: "40×", label: "return in month one" },
             ]}
           />
@@ -736,9 +736,9 @@ function ROISection() {
             margin: "0 auto",
           } as React.CSSProperties}
         >
-          "On average, studios moving from a salon-coded SaaS recover the InkOS
+          &quot;On average, studios moving from a salon-coded SaaS recover the Limespun
           subscription cost 40 times over in their first month — purely from
-          time saved on app-switching."
+          time saved on app-switching.&quot;
         </motion.p>
       </div>
     </section>
@@ -827,38 +827,38 @@ export default function PricingPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "Product",
-          name: "InkOS — Studio OS for Tattoo",
+          name: "Limespun — Studio OS for Tattoo",
           description:
             "Tattoo studio software with multi-session projects, deposit pools, allergy intelligence, EU REACH compliance.",
-          brand: { "@type": "Brand", name: "InkOS" },
+          brand: { "@type": "Brand", name: "Limespun" },
           offers: [
             {
               "@type": "Offer",
               name: "Solo",
               price: "29",
               priceCurrency: "USD",
-              url: "https://inkos.studio/pricing",
+              url: "https://limespun.com/pricing",
             },
             {
               "@type": "Offer",
               name: "Studio",
               price: "59",
               priceCurrency: "USD",
-              url: "https://inkos.studio/pricing",
+              url: "https://limespun.com/pricing",
             },
             {
               "@type": "Offer",
               name: "Pro",
               price: "99",
               priceCurrency: "USD",
-              url: "https://inkos.studio/pricing",
+              url: "https://limespun.com/pricing",
             },
             {
               "@type": "Offer",
               name: "Enterprise",
               price: "199",
               priceCurrency: "USD",
-              url: "https://inkos.studio/pricing",
+              url: "https://limespun.com/pricing",
             },
           ],
         }}
@@ -888,7 +888,7 @@ export default function PricingPage() {
           subhead="No per-booking fees. No transaction take. No upsells in the chair. You pay for the software. Stripe takes its standard cut. That is the entire arrangement."
           primaryCTA={{
             label: "Start a 14-day trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{ label: "Talk to sales", href: "/book-a-demo" }}
         />
@@ -908,7 +908,7 @@ export default function PricingPage() {
           subhead="14-day free trial on every plan. No card required. White-glove migration included above Solo. Cancel without a phone call."
           primaryCTA={{
             label: "Start a 14-day trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{
             label: "Book a 30-min walkthrough",

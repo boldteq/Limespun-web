@@ -32,7 +32,7 @@ export default function PortfolioPage() {
           feature="Portfolio"
           headline="The portfolio that builds itself."
           italicWord="builds itself"
-          subhead="Stop manually uploading photos to Squarespace. InkOS auto-syncs every healed photo from your project timelines into a studio gallery. Flash sheets get deposit-tied booking links. The portfolio is finally a byproduct of the work, not another job."
+          subhead="Stop manually uploading photos to Squarespace. Limespun auto-syncs every healed photo from your project timelines into a studio gallery. Flash sheets get deposit-tied booking links. The portfolio is finally a byproduct of the work, not another job."
           dashboard={<PortfolioMockup />}
         />
 
@@ -128,7 +128,7 @@ export default function PortfolioPage() {
           eyebrow="Gallery types"
           heading="Six ways to show the work."
           italicWord="show the work"
-          intro="Not all gallery content is the same. InkOS handles each type differently — so flash sheets get booking links and healed photos get their day count without you lifting a finger."
+          intro="Not all gallery content is the same. Limespun handles each type differently — so flash sheets get booking links and healed photos get their day count without you lifting a finger."
           columns={3}
           items={[
             {
@@ -186,8 +186,8 @@ export default function PortfolioPage() {
           eyebrow="vs the rest"
           heading="Other tools make the portfolio your job."
           italicWord="your job"
-          intro="Squarespace needs manual uploads. Instagram has no booking layer. Booksy has no gallery at all. InkOS auto-syncs your healed photos and ties every flash sheet to a deposit-gated booking link."
-          competitors={["InkOS Portfolio", "Squarespace", "Instagram", "Booksy"]}
+          intro="Squarespace needs manual uploads. Instagram has no booking layer. Booksy has no gallery at all. Limespun auto-syncs your healed photos and ties every flash sheet to a deposit-gated booking link."
+          competitors={["Limespun Portfolio", "Squarespace", "Instagram", "Booksy"]}
           rows={[
             { feature: "Auto-sync from project sessions", values: [true, false, false, false] },
             { feature: "Per-flash deposit-tied booking", values: [true, false, false, true] },
@@ -208,13 +208,13 @@ export default function PortfolioPage() {
           intro="Ten weeks after Asha's first session, her koi sleeve is finally healed. She uploads the final photo via the kiosk app at her checkup."
           paragraphs={[
             <React.Fragment key="p1">
-              <strong>The HEALED tag fires.</strong> InkOS auto-tags her healed photo as Day 45 from the original session timestamp.
+              <strong>The HEALED tag fires.</strong> Limespun auto-tags her healed photo as Day 45 from the original session timestamp.
             </React.Fragment>,
             <React.Fragment key="p2">
-              <strong>Three things happen at once.</strong> The project closes. The healed photo is archived to her client record. And — without Miles lifting a finger — it appears in the Sable &amp; Sparrow studio gallery, tagged "MV" for Miles Verena.
+              <strong>Three things happen at once.</strong> The project closes. The healed photo is archived to her client record. And — without Miles lifting a finger — it appears in the Sable &amp; Sparrow studio gallery, tagged &quot;MV&quot; for Miles Verena.
             </React.Fragment>,
             <React.Fragment key="p3">
-              <strong>By Friday it&apos;s pinned.</strong> Miles drags it to featured. The studio&apos;s homepage gallery now leads with the koi. Two new booking inquiries by Sunday cite "saw the koi sleeve."
+              <strong>By Friday it&apos;s pinned.</strong> Miles drags it to featured. The studio&apos;s homepage gallery now leads with the koi. Two new booking inquiries by Sunday cite &quot;saw the koi sleeve.&quot;
             </React.Fragment>,
             <React.Fragment key="p4">
               The portfolio used to be a Saturday-night chore. Now it&apos;s a{" "}

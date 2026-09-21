@@ -9,7 +9,7 @@ export default function Loading() {
       <div style={{
         width: 6, height: 6, borderRadius: '50%',
         background: BRAND.rust,
-        animation: 'inkos-pulse 1.5s ease-in-out infinite',
+        animation: 'limespun-pulse 1.5s ease-in-out infinite',
       } as React.CSSProperties} />
     </div>
   );

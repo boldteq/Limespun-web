@@ -7,15 +7,15 @@ import { AboutSections } from "./about-sections";
 import { JsonLd } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-  title: "About — Built for the work, not the spreadsheet | InkOS",
+  title: "About — Built for the work, not the spreadsheet | Limespun",
   description:
-    "Boldteq, a small team building global-first software for craft industries. Why we built InkOS, and the principles behind every line of code.",
+    "Boldteq, a small team building global-first software for craft industries. Why we built Limespun, and the principles behind every line of code.",
   openGraph: {
-    title: "About InkOS",
+    title: "About Limespun",
     description: "Built for tattoo studios. By a team that actually walks into shops.",
     type: "website",
   },
-  alternates: { canonical: "https://inkos.studio/about" },
+  alternates: { canonical: "https://limespun.com/about" },
 };
 
 export default function AboutPage() {
@@ -31,12 +31,12 @@ export default function AboutPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "InkOS",
+          name: "Limespun",
           legalName: "Boldteq Holdings Ltd",
-          url: "https://inkos.studio",
-          logo: "https://inkos.studio/icon.png",
+          url: "https://limespun.com",
+          logo: "https://limespun.com/icon.png",
           description:
-            "Boldteq builds global-first software for craft industries. InkOS is the studio operating system purpose-built for tattoo.",
+            "Boldteq builds global-first software for craft industries. Limespun is the studio operating system purpose-built for tattoo.",
           foundingDate: "2024",
           foundingLocation: [
             { "@type": "Place", name: "United Kingdom" },
@@ -50,8 +50,8 @@ export default function AboutPage() {
             },
           ],
           sameAs: [
-            "https://twitter.com/inkos_studio",
-            "https://www.instagram.com/inkos.studio",
+            "https://twitter.com/limespun",
+            "https://www.instagram.com/limespun",
           ],
           contactPoint: {
             "@type": "ContactPoint",

@@ -213,7 +213,7 @@ const moatCards: MoatCardBrightProps[] = [
 
 const timelineSteps = [
   { day: "Day 1", title: "Discovery + TattooGenda CSV export" },
-  { day: "Day 2", title: "Schema mapping (Bigger Plan features map to InkOS defaults)" },
+  { day: "Day 2", title: "Schema mapping (Bigger Plan features map to Limespun defaults)" },
   { day: "Day 3", title: "Preview run + sign-off" },
   { day: "Day 4", title: "Cutover + cancel TattooGenda" },
 ];
@@ -221,7 +221,7 @@ const timelineSteps = [
 const faqItems = [
   {
     q: "What about TattooGenda's tattoo-specific custom fields?",
-    a: "Migrated. Every TattooGenda field — body part, ink type, session count, healing notes — maps to first-class InkOS fields. Custom fields you've added become InkOS Notes.",
+    a: "Migrated. Every TattooGenda field — body part, ink type, session count, healing notes — maps to first-class Limespun fields. Custom fields you've added become Limespun Notes.",
   },
   {
     q: "Does TattooGenda's API export everything?",
@@ -229,7 +229,7 @@ const faqItems = [
   },
   {
     q: "I'm on TattooGenda's 'Bigger Plan' for $79/mo. Why switch?",
-    a: "Two reasons: (1) every InkOS plan includes the Bigger Plan features (multi-session, deposit pools, REACH); (2) AI Studio + commission auto-splits + omnichannel inbox don't exist in TattooGenda at any tier.",
+    a: "Two reasons: (1) every Limespun plan includes the Bigger Plan features (multi-session, deposit pools, REACH); (2) AI Studio + commission auto-splits + omnichannel inbox don't exist in TattooGenda at any tier.",
   },
   {
     q: "Will my guest residency setup carry over?",
@@ -260,15 +260,15 @@ export default function TattoogendaPage() {
           eyebrowAccent="rust"
           headline="Tattoo-native vs tattoo-native. We win on the small stuff."
           italicWord="the small stuff"
-          subhead="TattooGenda was the original tattoo-only booking SaaS. We respect that. But the things they put behind 'Bigger Plan' — REACH compliance, guest residencies, deposit pools — InkOS includes on every plan. 4-day migration. White-glove. Free above Solo."
+          subhead="TattooGenda was the original tattoo-only booking SaaS. We respect that. But the things they put behind 'Bigger Plan' — REACH compliance, guest residencies, deposit pools — Limespun includes on every plan. 4-day migration. White-glove. Free above Solo."
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
             label: "Start the trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
           }}
         />
 
-        {/* Why InkOS */}
+        {/* Why Limespun */}
         <section
           style={{
             background: GRADIENT.sectionCool,
@@ -359,7 +359,7 @@ export default function TattoogendaPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              TattooGenda vs. InkOS.
+              TattooGenda vs. Limespun.
             </motion.h2>
             <motion.div
               variants={fadeUp}
@@ -371,56 +371,56 @@ export default function TattoogendaPage() {
               <ComparisonTable
                 competitors={[
                   { key: "tattoogenda", label: "TattooGenda" },
-                  { key: "inkos", label: "InkOS", highlighted: true },
+                  { key: "limespun", label: "Limespun", highlighted: true },
                 ]}
                 rows={[
                   {
                     feature: "Multi-session projects (sleeves)",
-                    values: { tattoogenda: "Bigger plan", inkos: true },
+                    values: { tattoogenda: "Bigger plan", limespun: true },
                   },
                   {
                     feature: "Deposit pool across visits",
-                    values: { tattoogenda: "Bigger plan", inkos: true },
+                    values: { tattoogenda: "Bigger plan", limespun: true },
                   },
                   {
                     feature: "EU REACH ink registry",
-                    values: { tattoogenda: true, inkos: true },
+                    values: { tattoogenda: true, limespun: true },
                   },
                   {
                     feature: "Allergy intelligence (4-place surface)",
-                    values: { tattoogenda: "Limited", inkos: true },
+                    values: { tattoogenda: "Limited", limespun: true },
                   },
                   {
                     feature: "AI design assistant",
-                    values: { tattoogenda: false, inkos: true },
+                    values: { tattoogenda: false, limespun: true },
                   },
                   {
                     feature: "Photo timeline (REF→HEALED)",
-                    values: { tattoogenda: "Limited", inkos: true },
+                    values: { tattoogenda: "Limited", limespun: true },
                   },
                   {
                     feature: "Commission auto-splits (Stripe Connect)",
-                    values: { tattoogenda: false, inkos: true },
+                    values: { tattoogenda: false, limespun: true },
                   },
                   {
                     feature: "Guest residency band",
-                    values: { tattoogenda: true, inkos: true },
+                    values: { tattoogenda: true, limespun: true },
                   },
                   {
                     feature: "API access",
-                    values: { tattoogenda: "Enterprise", inkos: true },
+                    values: { tattoogenda: "Enterprise", limespun: true },
                   },
                   {
                     feature: "Tattoo-specific by design",
-                    values: { tattoogenda: true, inkos: true },
+                    values: { tattoogenda: true, limespun: true },
                   },
                   {
                     feature: "Per-booking transaction fee",
-                    values: { tattoogenda: "No", inkos: "No" },
+                    values: { tattoogenda: "No", limespun: "No" },
                   },
                   {
                     feature: "White-glove migration",
-                    values: { tattoogenda: false, inkos: true },
+                    values: { tattoogenda: false, limespun: true },
                   },
                 ]}
                 caption="TattooGenda feature set: tattoogenda.com pricing + docs, April 2026."
@@ -616,7 +616,7 @@ export default function TattoogendaPage() {
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
             label: "Or start the trial",
-            href: "https://inkos.up.railway.app/signup",
+            href: "https://app.limespun.com/signup",
             icon: "play",
           }}
         />

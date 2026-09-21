@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Changelog — What's new in InkOS",
+  title: "Changelog — What's new in Limespun",
   description:
     "Public ship log. Every release, every fix, every improvement. Filterable by module. The opposite of a 'product hunt' marketing page.",
   openGraph: {
-    title: "InkOS Changelog",
+    title: "Limespun Changelog",
     description: "Public ship log.",
     type: "website",
   },
-  alternates: { canonical: "https://inkos.studio/changelog" },
+  alternates: { canonical: "https://limespun.com/changelog" },
 };
 
 export default function Layout({

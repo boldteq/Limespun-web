@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, Inter } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/brand";
 
 const instrumentSerif = Instrument_Serif({
   weight: ["400"],
@@ -17,7 +18,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "InkOS — The Studio OS for Tattoo",
+  title: "Limespun — The Studio OS for Tattoo",
   description:
     "Bookings, deposits, projects, portfolio, consent, payments, messages — one quiet system built for tattoo studios. Multi-session projects, allergy intelligence, deposit pools, EU REACH compliance.",
   keywords: [
@@ -29,20 +30,20 @@ export const metadata: Metadata = {
     "REACH compliance",
   ],
   openGraph: {
-    title: "InkOS — The Studio OS for Tattoo",
+    title: "Limespun — The Studio OS for Tattoo",
     description:
       "One quiet system that understands multi-session work, red-ink allergies, and deposits split across five visits.",
     type: "website",
-    url: "https://inkos.studio",
+    url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "InkOS — The Studio OS for Tattoo",
+    title: "Limespun — The Studio OS for Tattoo",
     description:
       "One quiet system that understands multi-session work, red-ink allergies, and deposits split across five visits.",
   },
   robots: { index: true, follow: true },
-  metadataBase: new URL("https://inkos.studio"),
+  metadataBase: new URL(SITE_URL),
 };
 
 export default function RootLayout({

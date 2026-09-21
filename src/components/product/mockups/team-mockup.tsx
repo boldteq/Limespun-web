@@ -89,7 +89,7 @@ function Sidebar({ activeItem }: { activeItem: string }) {
             color: BRAND.bone,
           } as React.CSSProperties}
         >
-          InkOS
+          Limespun
         </div>
       </div>
 
@@ -311,7 +311,7 @@ export function TeamMockup() {
             color: BRAND.stone,
           } as React.CSSProperties}
         >
-          inkos.app/team
+          app.limespun.com/team
         </div>
       </div>
 

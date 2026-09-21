@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { LayoutGrid, AlertCircle, DollarSign, Sparkles, ImageIcon } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { BRAND, FONT, SHADOW, GRADIENT, fadeUp } from "@/lib/brand";
 import { MangomintBlobs } from "@/components/brand/mangomint-blobs";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { SectionHeading } from "@/components/shared/section-heading";
@@ -612,7 +612,7 @@ export function Work() {
           <SectionSubhead>
             A tattoo is the third of five visits, shares a deposit pool, runs against
             an allergy chart, needs sterilization either side, and waits on a body
-            zone to heal. InkOS knows all of that &mdash; every time you tap a slot.
+            zone to heal. Limespun knows all of that &mdash; every time you tap a slot.
           </SectionSubhead>
         </motion.div>
 
@@ -643,7 +643,7 @@ export function Work() {
               accent="rust"
               icon={LayoutGrid}
               title="Multi-session project grouping"
-              body="A sleeve is one project, four visits. InkOS keeps the deposit pool, photo timeline, consent history, and artist's notes attached to the project — not the appointment."
+              body="A sleeve is one project, four visits. Limespun keeps the deposit pool, photo timeline, consent history, and artist's notes attached to the project — not the appointment."
               detail={[
                 ["Deposit pool",   "$420 of $600"],
                 ["Session count",  "S4 of 5"],

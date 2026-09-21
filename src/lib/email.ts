@@ -17,20 +17,20 @@ export interface EmailPayload {
   replyTo?: string;
 }
 
-const FROM = process.env.RESEND_FROM ?? "InkOS <hello@boldteq.com>";
+const FROM = process.env.RESEND_FROM ?? "Limespun <hello@boldteq.com>";
 
 export async function sendEmail(
   payload: EmailPayload,
 ): Promise<{ ok: boolean; error?: string }> {
   const client = getClient();
   if (!client) {
-    if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
-      console.log("[EMAIL · resend not configured · would send]", {
-        to: payload.to,
-        subject: payload.subject,
-      });
+    if (process.env.NODE_ENV === "production") {
+      return { ok: false, error: "RESEND_API_KEY is not configured" };
     }
+    console.log("[EMAIL · resend not configured · would send]", {
+      to: payload.to,
+      subject: payload.subject,
+    });
     return { ok: true };
   }
 

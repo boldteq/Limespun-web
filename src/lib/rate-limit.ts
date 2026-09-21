@@ -12,7 +12,7 @@ function getLimiter(): Ratelimit | null {
       redis: new Redis({ url, token }),
       limiter: Ratelimit.slidingWindow(5, "1 m"),
       analytics: true,
-      prefix: "inkos-marketing-form",
+      prefix: "limespun-marketing-form",
     });
   }
   return _instance;
@@ -26,6 +26,11 @@ export async function checkRateLimit(
     // No Upstash configured — pass through (dev / local).
     return { ok: true };
   }
-  const result = await limiter.limit(identifier);
-  return { ok: result.success, remaining: result.remaining };
+  try {
+    const result = await limiter.limit(identifier);
+    return { ok: result.success, remaining: result.remaining };
+  } catch (err) {
+    console.error("[RATE LIMIT · upstash unavailable · failing open]", err instanceof Error ? err.message : err);
+    return { ok: true };
+  }
 }

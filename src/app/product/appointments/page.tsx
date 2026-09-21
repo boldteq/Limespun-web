@@ -41,7 +41,7 @@ export default function AppointmentsPage() {
           feature="Appointments"
           headline="Booking and deposit, finally one tap."
           italicWord="one tap"
-          subhead="Salon software books an appointment. InkOS books an appointment AND a deposit AND an allergy check AND a multi-session link — all locked at the same moment. The chair only commits when the money does."
+          subhead="Salon software books an appointment. Limespun books an appointment AND a deposit AND an allergy check AND a multi-session link — all locked at the same moment. The chair only commits when the money does."
           dashboard={<CalendarMockup />}
         />
 
@@ -50,7 +50,7 @@ export default function AppointmentsPage() {
           eyebrow="The mechanics"
           heading="Three locks, one tap."
           italicWord="one tap"
-          intro="Every other booking tool treats the appointment and the deposit as separate steps. InkOS treats them as one atomic action — both confirm together, or neither does."
+          intro="Every other booking tool treats the appointment and the deposit as separate steps. Limespun treats them as one atomic action — both confirm together, or neither does."
           pillars={[
             {
               icon: Lock,
@@ -70,7 +70,7 @@ export default function AppointmentsPage() {
               accent: BRAND.amber,
               eyebrow: "Multi-session linking",
               title: "Session 4 of 5, automatic.",
-              desc: "When a client with an active project books a new slot, InkOS surfaces a link prompt. One tap chains the booking to the project — deposit pool, artist notes, and healing windows all carry forward.",
+              desc: "When a client with an active project books a new slot, Limespun surfaces a link prompt. One tap chains the booking to the project — deposit pool, artist notes, and healing windows all carry forward.",
               bullets: [
                 "Auto-link to active project",
                 "Inherit deposit pool",
@@ -140,7 +140,7 @@ export default function AppointmentsPage() {
           eyebrow="Booking flow"
           heading="Five gates before a chair locks."
           italicWord="Five gates"
-          intro="A booked slot in InkOS has passed five sequential checks. Each one is a reason another platform loses a dispute."
+          intro="A booked slot in Limespun has passed five sequential checks. Each one is a reason another platform loses a dispute."
           columns={3}
           items={[
             {
@@ -203,7 +203,7 @@ export default function AppointmentsPage() {
           italicWord="Eight things"
           intro="Every row is a scenario that ends a booking dispute in your favour — or against you."
           competitors={[
-            "InkOS Appointments",
+            "Limespun Appointments",
             "DaySmart",
             "Mangomint",
             "Calendly",
@@ -255,7 +255,7 @@ export default function AppointmentsPage() {
               <strong>Asha picks Apr 24, 1 PM.</strong> Calendar shows a 2.5-hour gap. Slot height matches Miles&apos; standard sleeve session.
             </React.Fragment>,
             <React.Fragment key="p2">
-              <strong>InkOS recognises Asha&apos;s active project.</strong> A banner appears: &ldquo;Link this booking to Koi sleeve &middot; Session 4 of 5?&rdquo; Yes. Deposit pool already has $420 banked — Apr 24 will draw $120.
+              <strong>Limespun recognises Asha&apos;s active project.</strong> A banner appears: &ldquo;Link this booking to Koi sleeve &middot; Session 4 of 5?&rdquo; Yes. Deposit pool already has $420 banked — Apr 24 will draw $120.
             </React.Fragment>,
             <React.Fragment key="p3">
               <strong>The medical check fires.</strong> Asha updated her allergy form last week — &ldquo;red ink, latex.&rdquo; Booking page surfaces a yellow note for Miles: &ldquo;patch-test new ink first.&rdquo; Asha sees nothing on her end. The slot accepts.
@@ -264,7 +264,7 @@ export default function AppointmentsPage() {
               <strong>Stripe takes the $120 in 4 seconds.</strong> Slot flips from HOLD to LOCKED. Email + SMS + iCal go out. Miles&apos; calendar updates. Total time, end-to-end: <em>three minutes, one tap each side.</em>
             </React.Fragment>,
           ]}
-          quote="Booking on DaySmart was four screens and a phone call. On InkOS it's a slot, a tap, and a Stripe receipt — and the booking already knows the project, the allergy, and the deposit history."
+          quote="Booking on DaySmart was four screens and a phone call. On Limespun it's a slot, a tap, and a Stripe receipt — and the booking already knows the project, the allergy, and the deposit history."
           person={{
             name: "Miles Verena",
             role: "Owner · Sable & Sparrow · Brooklyn",

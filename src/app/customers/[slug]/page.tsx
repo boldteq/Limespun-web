@@ -17,14 +17,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const story = customerStories.find((s) => s.slug === slug);
   if (!story) return {};
   return {
-    title: `${story.name} — ${story.role} | InkOS`,
+    title: `${story.name} — ${story.role} | Limespun`,
     description: story.shortQuote.slice(0, 160),
     openGraph: {
-      title: `${story.name} runs ${story.role.split("·")[1]?.trim() ?? "their studio"} on InkOS`,
+      title: `${story.name} runs ${story.role.split("·")[1]?.trim() ?? "their studio"} on Limespun`,
       description: story.shortQuote,
       type: "article",
     },
-    alternates: { canonical: `https://inkos.studio/customers/${slug}` },
+    alternates: { canonical: `https://limespun.com/customers/${slug}` },
   };
 }
 
@@ -53,10 +53,10 @@ export default async function Page({ params }: PageProps) {
           },
           publisher: {
             "@type": "Organization",
-            name: "InkOS",
+            name: "Limespun",
             logo: {
               "@type": "ImageObject",
-              url: "https://inkos.studio/icon.png",
+              url: "https://limespun.com/icon.png",
             },
           },
         }}

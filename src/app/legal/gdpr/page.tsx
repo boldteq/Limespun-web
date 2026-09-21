@@ -3,7 +3,7 @@ import { LegalPage, type LegalSection } from "@/components/shared/legal-page";
 const sections: LegalSection[] = [
   {
     heading: "Roles",
-    body: "When your studio operates InkOS, your studio is the data controller for client and operational data. Boldteq is the data processor. The relationship is governed by our Data Processing Agreement (DPA), which is auto-applied on all paid plans.",
+    body: "When your studio operates Limespun, your studio is the data controller for client and operational data. Boldteq is the data processor. The relationship is governed by our Data Processing Agreement (DPA), which is auto-applied on all paid plans.",
   },
   {
     heading: "Data Processing Agreement (DPA)",
@@ -55,7 +55,7 @@ export default function GdprPage() {
       eyebrow="Legal · GDPR"
       title="GDPR & DPA"
       effectiveDate="27 April 2026"
-      intro="InkOS is built for global studios, including those in the EU/UK. This document summarises our GDPR compliance posture, our Data Processing Agreement (DPA), and the rights of EU/UK data subjects. The full DPA is available on request to any paying studio at any plan."
+      intro="Limespun is built for global studios, including those in the EU/UK. This document summarises our GDPR compliance posture, our Data Processing Agreement (DPA), and the rights of EU/UK data subjects. The full DPA is available on request to any paying studio at any plan."
       sections={sections}
       contactEmail="privacy@boldteq.com"
     />

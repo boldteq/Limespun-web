@@ -15,7 +15,7 @@ import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
 import { BRAND } from "@/lib/brand";
 import {
   LayoutGrid, DollarSign, ImageIcon, Calendar, FileText,
-  AlertCircle, MessageSquare, Sparkles, Users, CreditCard,
+  AlertCircle, MessageSquare, Users, CreditCard,
 } from "lucide-react";
 
 export default function ProjectsPage() {
@@ -27,7 +27,7 @@ export default function ProjectsPage() {
           feature="Projects"
           headline="A sleeve isn't a booking. It's a project."
           italicWord="a project"
-          subhead="Multi-session work has a deposit pool, a photo timeline, a consent history, and an artist's running notes. InkOS treats it that way from the first commit — linking every session, every photo, every dollar to the same sleeve. No other studio software does this."
+          subhead="Multi-session work has a deposit pool, a photo timeline, a consent history, and an artist's running notes. Limespun treats it that way from the first commit — linking every session, every photo, every dollar to the same sleeve. No other studio software does this."
           dashboard={<DashboardMockup />}
         />
 
@@ -35,7 +35,7 @@ export default function ProjectsPage() {
           eyebrow="The premise"
           heading="One sleeve. Four visits. One record."
           italicWord="One record"
-          intro="Booking software sees five separate appointments. InkOS sees one project. The deposit pool, photo stages, consent forms, and artist notes all live on the project — not scattered across individual bookings."
+          intro="Booking software sees five separate appointments. Limespun sees one project. The deposit pool, photo stages, consent forms, and artist notes all live on the project — not scattered across individual bookings."
           pillars={[
             {
               icon: LayoutGrid, accent: BRAND.rust,
@@ -96,8 +96,8 @@ export default function ProjectsPage() {
           eyebrow="vs the rest"
           heading="Salon software treats every visit as a stranger."
           italicWord="every visit as a stranger"
-          intro="DaySmart and Mangomint are built for salons — appointment-first, context-last. TattooGenda is tattoo-native but stops at the appointment. InkOS is the only one that carries the full project context across visits."
-          competitors={['InkOS Projects', 'DaySmart', 'Mangomint', 'TattooGenda']}
+          intro="DaySmart and Mangomint are built for salons — appointment-first, context-last. TattooGenda is tattoo-native but stops at the appointment. Limespun is the only one that carries the full project context across visits."
+          competitors={['Limespun Projects', 'DaySmart', 'Mangomint', 'TattooGenda']}
           rows={[
             { feature: 'Multi-session project entity', values: [true, false, false, false] },
             { feature: 'Deposit pool across visits', values: [true, false, false, false] },
@@ -114,10 +114,10 @@ export default function ProjectsPage() {
           eyebrow="Ten weeks of one sleeve"
           heading="Day 0 to Day 70. One project, five sessions."
           italicWord="five sessions"
-          intro="Asha books a half-sleeve. The next ten weeks of her tattoo are now one project in InkOS."
+          intro="Asha books a half-sleeve. The next ten weeks of her tattoo are now one project in Limespun."
           paragraphs={[
             <React.Fragment key="p1">Day 0: <strong>The reference photos go in.</strong> Mood board, line study, palette swatches. Consent form auto-attached to the project. Deposit pool created — $600, $420 banked at booking.</React.Fragment>,
-            <React.Fragment key="p2">Session 1 (Day 0): <strong>The first three hours.</strong> Photos: REF and FRESH. The artist's notes go in: "Reacted well to red, slight wincing on outline" — those notes will surface on session 2 automatically.</React.Fragment>,
+            <React.Fragment key="p2">Session 1 (Day 0): <strong>The first three hours.</strong> Photos: REF and FRESH. The artist&apos;s notes go in: &quot;Reacted well to red, slight wincing on outline&quot; — those notes will surface on session 2 automatically.</React.Fragment>,
             <React.Fragment key="p3">Day 7: <strong>HEAL photo uploads from the client kiosk.</strong> Session 2 booked for Day 14. Pool re-applied: $120 of the $420 for S2.</React.Fragment>,
             <React.Fragment key="p4">Day 70: <strong>HEALED photo uploads. Project closes.</strong> The full record — bookings, deposits, consents, photos, notes — archives to her client record. <em>Portfolio auto-updates.</em></React.Fragment>,
           ]}

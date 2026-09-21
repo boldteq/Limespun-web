@@ -63,7 +63,7 @@ const stories: Story[] = [
     city: "Mexico City, MX",
     chairs: "9 artists · 2 floors",
     quote:
-      "InkOS shows me a body — what's been worked, what's healing, what's left. Booking a back piece across ten weeks takes twelve minutes now.",
+      "Limespun shows me a body — what's been worked, what's healing, what's left. Booking a back piece across ten weeks takes twelve minutes now.",
     stats: [
       { l: "Active sleeves", v: "14" },
       { l: "Guest residencies", v: "6 in 2025" },
@@ -165,7 +165,7 @@ const stories: Story[] = [
     city: "Seoul, KR",
     chairs: "1 chair · single artist",
     quote:
-      "I don't run a business, I make tattoos. InkOS understood that. Every screen does its job and stays out of the way.",
+      "I don't run a business, I make tattoos. Limespun understood that. Every screen does its job and stays out of the way.",
     stats: [
       { l: "Sessions / wk", v: "12" },
       { l: "Admin time", v: "<3 hr / wk" },

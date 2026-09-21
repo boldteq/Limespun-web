@@ -42,7 +42,7 @@ export default function TeamPage() {
           eyebrow="The premise"
           heading="Every role. Every split. Every payout — automatic."
           italicWord="automatic"
-          intro="Residents, guests, apprentices — each with different default rules. InkOS routes every invoice split at checkout via Stripe Connect and builds the year-end payroll record without a spreadsheet in sight."
+          intro="Residents, guests, apprentices — each with different default rules. Limespun routes every invoice split at checkout via Stripe Connect and builds the year-end payroll record without a spreadsheet in sight."
           pillars={[
             {
               icon: Users,
@@ -130,7 +130,7 @@ export default function TeamPage() {
           eyebrow="Roster categories"
           heading="Six member types, each with their own rules."
           italicWord="their own rules"
-          intro="A resident and a guest artist have completely different financial relationships with your studio. InkOS handles each with the right default rules — so you never apply a resident split to a guest by mistake."
+          intro="A resident and a guest artist have completely different financial relationships with your studio. Limespun handles each with the right default rules — so you never apply a resident split to a guest by mistake."
           columns={3}
           items={[
             {
@@ -188,8 +188,8 @@ export default function TeamPage() {
           eyebrow="vs the rest"
           heading="Other tools handle commissions like a spreadsheet would."
           italicWord="like a spreadsheet would"
-          intro="DaySmart has routing but no residency bands. Mangomint has splits but no year-end exports. Spreadsheets have nothing. InkOS is the only studio tool that routes at checkout, tracks residency windows, and generates 1099-K at year-end."
-          competitors={["InkOS Team", "DaySmart", "Mangomint", "Spreadsheet"]}
+          intro="DaySmart has routing but no residency bands. Mangomint has splits but no year-end exports. Spreadsheets have nothing. Limespun is the only studio tool that routes at checkout, tracks residency windows, and generates 1099-K at year-end."
+          competitors={["Limespun Team", "DaySmart", "Mangomint", "Spreadsheet"]}
           rows={[
             { feature: "Per-artist Stripe Connect routing", values: [true, true, true, false] },
             { feature: "Custom split per artist + per piece", values: [true, false, true, false] },
@@ -213,7 +213,7 @@ export default function TeamPage() {
               <strong>The week&apos;s invoices have been routing all week.</strong> Each session at checkout split 65/35 to the artist via Stripe Connect — automatically.
             </React.Fragment>,
             <React.Fragment key="p2">
-              <strong>5:02 PM.</strong> Marcus opens Team. Hits "Run weekly payroll." InkOS surfaces a one-pager:{" "}
+              <strong>5:02 PM.</strong> Marcus opens Team. Hits &quot;Run weekly payroll.&quot; Limespun surfaces a one-pager:{" "}
               <em>$24,400 total · $15,860 to artists · $8,540 to studio · 0 disputes · 0 manual adjustments.</em>
             </React.Fragment>,
             <React.Fragment key="p3">

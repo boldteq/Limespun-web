@@ -2,12 +2,12 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Image, FileText, Download } from "lucide-react";
+import { Image as ImageIcon, FileText, Download } from "lucide-react";
 import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { HeroSection } from "@/components/shared/hero-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { CTASection } from "@/components/shared/cta-section";
-import { TriCircleMarkV2 } from "@/components/brand/tri-circle-mark";
+import { LimespunMark } from "@/components/brand/limespun-mark";
 
 // ─── Accent tokens ────────────────────────────────────────────────────────────
 type AccentColor = "rust" | "amber" | "sage";
@@ -20,7 +20,7 @@ const accentTokens: Record<AccentColor, { color: string; bg: string; border: str
 
 // ─── Factsheet rows ───────────────────────────────────────────────────────────
 const FACTSHEET_ROWS: { label: string; value: string }[] = [
-  { label: "Product:", value: "InkOS — the studio operating system for tattoo" },
+  { label: "Product:", value: "Limespun — the studio operating system for tattoo" },
   { label: "Company:", value: "Boldteq Holdings (registered United Kingdom)" },
   { label: "Founded:", value: "2024" },
   { label: "Beta launch:", value: "April 2026" },
@@ -69,7 +69,7 @@ interface DownloadCard {
 const DOWNLOAD_CARDS: DownloadCard[] = [
   {
     accent: "rust",
-    icon: <Image size={20} strokeWidth={1.8} />,
+    icon: <ImageIcon size={20} strokeWidth={1.8} />,
     title: "Brand kit (.zip, 4.2MB)",
     description:
       "Logos: SVG, PNG, mono / colour. Three-circles mark. Brand colours guide. Typography spec.",
@@ -77,7 +77,7 @@ const DOWNLOAD_CARDS: DownloadCard[] = [
   },
   {
     accent: "amber",
-    icon: <Image size={20} strokeWidth={1.8} />,
+    icon: <ImageIcon size={20} strokeWidth={1.8} />,
     title: "Product screenshots (.zip, 18MB)",
     description:
       "Today, Calendar, Projects, Inventory, Forms. PNG + JPG. Light & dark.",
@@ -95,9 +95,9 @@ const DOWNLOAD_CARDS: DownloadCard[] = [
 
 // ─── Press coverage placeholders ──────────────────────────────────────────────
 const COVERAGE_PLACEHOLDERS = [
-  { outlet: "Inked Magazine", quote: '"InkOS is quietly changing how tattoo studios run their businesses."', date: "Mar 2026" },
+  { outlet: "Inked Magazine", quote: '"Limespun is quietly changing how tattoo studios run their businesses."', date: "Mar 2026" },
   { outlet: "Total Tattoo", quote: '"Finally, software built by people who understand the craft."', date: "Feb 2026" },
-  { outlet: "Tattoo Life", quote: '"From walk-ins to REACH compliance — InkOS covers it all."', date: "Jan 2026" },
+  { outlet: "Tattoo Life", quote: '"From walk-ins to REACH compliance — Limespun covers it all."', date: "Jan 2026" },
 ];
 
 // ─── Download Card Component ──────────────────────────────────────────────────
@@ -206,7 +206,7 @@ export default function PressPage() {
               marginTop: 0,
             }}
           >
-            InkOS in five lines.
+            Limespun in five lines.
           </h2>
 
           <motion.div
@@ -367,7 +367,7 @@ export default function PressPage() {
               gap: 16,
             }}
           >
-            <TriCircleMarkV2 size={100} />
+            <LimespunMark size={100} />
             <p
               style={{
                 fontFamily: FONT.sans,
@@ -647,7 +647,7 @@ export default function PressPage() {
         italicWord="touch"
         subhead="press@boldteq.com — embargoes honoured, founder available for interview, brand kit at /press#download."
         primaryCTA={{ label: "Email press@boldteq.com", href: "mailto:press@boldteq.com" }}
-        secondaryCTA={{ label: "About InkOS", href: "/about", icon: "play" }}
+        secondaryCTA={{ label: "About Limespun", href: "/about", icon: "play" }}
       />
 
       <style>{`

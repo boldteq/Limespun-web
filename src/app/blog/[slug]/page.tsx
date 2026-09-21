@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = blogPosts.find((p) => p.slug === slug);
   if (!post) return {};
   return {
-    title: `${post.title} | InkOS Blog`,
+    title: `${post.title} | Limespun Blog`,
     description: post.excerpt,
     openGraph: {
       title: post.title,
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       publishedTime: post.publishedAt,
       authors: [post.author.name],
     },
-    alternates: { canonical: `https://inkos.studio/blog/${slug}` },
+    alternates: { canonical: `https://limespun.com/blog/${slug}` },
   };
 }
 
@@ -55,10 +55,10 @@ export default async function Page({ params }: PageProps) {
           },
           publisher: {
             "@type": "Organization",
-            name: "InkOS",
+            name: "Limespun",
             logo: {
               "@type": "ImageObject",
-              url: "https://inkos.studio/icon.png",
+              url: "https://limespun.com/icon.png",
             },
           },
         }}

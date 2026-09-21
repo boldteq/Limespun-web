@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Analytics — Studio P&L, retention, no-show risk | InkOS",
+  title: "Analytics — Studio P&L, retention, no-show risk | Limespun",
   description:
     "The numbers that actually matter for tattoo studios. Per-artist revenue, retention, no-show risk, ink-color mix. Real-time, exportable, audit-ready.",
   openGraph: {
-    title: "InkOS Analytics — Studio P&L, retention, no-show risk",
+    title: "Limespun Analytics — Studio P&L, retention, no-show risk",
     description:
       "The numbers that actually matter for tattoo studios. Per-artist revenue, retention, no-show risk, ink-color mix.",
     type: "website",
   },
-  alternates: { canonical: "https://inkos.studio/product/analytics" },
+  alternates: { canonical: "https://limespun.com/product/analytics" },
 };
 
 export default function AnalyticsLayout({

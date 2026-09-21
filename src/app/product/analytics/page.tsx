@@ -45,7 +45,7 @@ export default function AnalyticsPage() {
         />
 
         <ProductPillars
-          eyebrow="How analytics work in InkOS"
+          eyebrow="How analytics work in Limespun"
           heading="Three reports most studios build in spreadsheets."
           italicWord="most studios build in spreadsheets"
           intro="Live P&L, predictive no-show scoring, and cohort retention — calculated automatically from the data already in your studio."
@@ -210,7 +210,7 @@ export default function AnalyticsPage() {
           eyebrow="How it compares"
           heading="The P&L most software won't touch."
           italicWord="most software won't touch"
-          competitors={["InkOS Analytics", "DaySmart", "Mangomint", "Excel"]}
+          competitors={["Limespun Analytics", "DaySmart", "Mangomint", "Excel"]}
           rows={[
             {
               feature: "Live per-artist P&L",
@@ -245,7 +245,7 @@ export default function AnalyticsPage() {
               values: [true, true, false, false],
             },
           ]}
-          caption="Based on published features as of Q1 2025. InkOS first column."
+          caption="Based on published features as of Q1 2025. Limespun first column."
         />
 
         <ProductDayInLife

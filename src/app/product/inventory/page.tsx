@@ -47,17 +47,17 @@ export default function InventoryPage() {
         />
 
         <ProductPillars
-          eyebrow="What InkOS tracks"
+          eyebrow="What Limespun tracks"
           heading="Three problems the cabinet can't solve."
           italicWord="the cabinet can't solve"
-          intro="A physical cabinet tells you what you have. InkOS tells you what you have, where it came from, whether it's compliant, and if it's caused a reaction anywhere in your studio."
+          intro="A physical cabinet tells you what you have. Limespun tells you what you have, where it came from, whether it's compliant, and if it's caused a reaction anywhere in your studio."
           pillars={[
             {
               icon: Shield,
               accent: BRAND.rust,
               eyebrow: "REACH 2022 compliance",
               title: "Inspector-ready in 30 seconds.",
-              desc: "EU REACH Annex XVII regulation requires per-bottle CI numbers, MSDS documents, and supplier batch references. InkOS captures all of it at intake.",
+              desc: "EU REACH Annex XVII regulation requires per-bottle CI numbers, MSDS documents, and supplier batch references. Limespun captures all of it at intake.",
               bullets: [
                 "CI number per bottle at intake",
                 "MSDS document attached per product",
@@ -135,7 +135,7 @@ export default function InventoryPage() {
         />
 
         <ProductItemTypes
-          eyebrow="What InkOS tracks"
+          eyebrow="What Limespun tracks"
           heading="Eight inventory categories, one cabinet."
           italicWord="Eight inventory categories"
           intro="Every consumable a tattoo studio uses — tracked, batched, and REACH-compliant where required."
@@ -208,7 +208,7 @@ export default function InventoryPage() {
           heading="The only cabinet with REACH inside."
           italicWord="REACH inside"
           competitors={[
-            "InkOS Inventory",
+            "Limespun Inventory",
             "DaySmart",
             "TattooGenda",
             "Spreadsheet",
@@ -247,7 +247,7 @@ export default function InventoryPage() {
               values: [true, true, false, true],
             },
           ]}
-          caption="Based on published features as of Q1 2025. InkOS first column."
+          caption="Based on published features as of Q1 2025. Limespun first column."
         />
 
         <ProductDayInLife
@@ -258,7 +258,7 @@ export default function InventoryPage() {
           paragraphs={[
             "The inspector arrived unannounced at 11am on a Tuesday. No warning, no appointment. Pluma Studio was mid-session across three chairs.",
             <React.Fragment key="p2">
-              Asha opened InkOS on the front desk iPad, tapped <strong>Inventory → REACH Report</strong>, and hit export. The PDF was on screen in 28 seconds.
+              Asha opened Limespun on the front desk iPad, tapped <strong>Inventory → REACH Report</strong>, and hit export. The PDF was on screen in 28 seconds.
             </React.Fragment>,
             "All 84 inks. CI numbers, batch references, MSDS links, expiry dates — every field the inspector needed. Two inks were flagged as non-compliant at intake six months earlier and had already been removed from service.",
             "The inspector spent four minutes reviewing the report. No findings. No follow-up required. The studio was back to full capacity before noon.",
