@@ -101,7 +101,7 @@ export default async function OGImage() {
               textTransform: "uppercase",
             }}
           >
-            $29–$199 · No transaction fees
+            $39–$329 · No transaction fees
           </span>
         </div>
       </div>

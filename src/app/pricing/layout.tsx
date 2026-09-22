@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing — Priced like a tool, quietly fair | Limespun",
+  title: "Pricing — priced per shop, never per booking | Limespun",
   description:
-    "$29 to $199/mo. No per-booking fees. No transaction take. White-glove migration included on every plan above Solo. 14-day free trial.",
+    "Tattoo studio software from $39/mo. Solo, Studio, Pro and Multi-Location plans. No cut of bookings or deposits, 20% off yearly, 30-day money-back guarantee.",
   openGraph: {
-    title: "Limespun Pricing — From $29/mo",
+    title: "Limespun pricing, from $39/mo",
     description:
-      "$29 to $199/mo. No per-booking fees. No transaction take. White-glove migration included on every plan above Solo. 14-day free trial.",
+      "Solo, Studio, Pro and Multi-Location plans. No cut of bookings or deposits. 30-day money-back guarantee.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/pricing" },
