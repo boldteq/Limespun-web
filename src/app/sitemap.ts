@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/brand";
 import { blogPosts } from "@/lib/data/blog-posts";
-import { customerStories } from "@/lib/data/customer-stories";
+import { competitors } from "@/lib/data/competitors";
+import { TOOLS_INDEX } from "@/lib/site-links";
 
 const STATIC_ROUTES: ReadonlyArray<{ path: string; priority: number }> = [
   { path: "", priority: 1 },
@@ -33,7 +34,8 @@ const STATIC_ROUTES: ReadonlyArray<{ path: string; priority: number }> = [
   { path: "/migrate/mangomint", priority: 0.6 },
   { path: "/migrate/tattoogenda", priority: 0.6 },
   { path: "/migrate/vagaro", priority: 0.6 },
-  { path: "/customers", priority: 0.7 },
+  { path: "/compare", priority: 0.8 },
+  { path: "/tools", priority: 0.7 },
   { path: "/blog", priority: 0.7 },
   { path: "/about", priority: 0.6 },
   { path: "/careers", priority: 0.5 },
@@ -63,11 +65,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
-  const customerEntries = customerStories.map((s) => ({
-    url: `${SITE_URL}/customers/${s.slug}`,
+  const compareEntries = competitors.map((c) => ({
+    url: `${SITE_URL}/compare/${c.slug}`,
+    lastModified,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+  const toolEntries = TOOLS_INDEX.map((t) => ({
+    url: `${SITE_URL}/tools/${t.slug}`,
     lastModified,
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
-  return [...staticEntries, ...blogEntries, ...customerEntries];
+  return [...staticEntries, ...blogEntries, ...compareEntries, ...toolEntries];
 }

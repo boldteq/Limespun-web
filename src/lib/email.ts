@@ -52,3 +52,33 @@ export async function sendEmail(
     };
   }
 }
+
+/**
+ * Adds an email to the newsletter segment in Resend.
+ * Returns ok when the contact exists already, so a repeat signup still succeeds.
+ */
+export async function addNewsletterContact(
+  email: string,
+): Promise<{ ok: boolean; configured: boolean; error?: string }> {
+  const client = getClient();
+  const segmentId = process.env.RESEND_NEWSLETTER_SEGMENT_ID;
+  if (!client || !segmentId) return { ok: false, configured: false };
+
+  try {
+    const { error } = await client.contacts.create({
+      email,
+      unsubscribed: false,
+      segments: [{ id: segmentId }],
+    });
+    if (error && !/already exists/i.test(error.message)) {
+      return { ok: false, configured: true, error: error.message };
+    }
+    return { ok: true, configured: true };
+  } catch (err) {
+    return {
+      ok: false,
+      configured: true,
+      error: err instanceof Error ? err.message : "contact create failed",
+    };
+  }
+}
