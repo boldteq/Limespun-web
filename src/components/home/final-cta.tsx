@@ -1,6 +1,7 @@
 import React from "react";
 import { CalendarCheck2, HandCoins } from "lucide-react";
 import { CTA } from "@/lib/brand";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { CheckRow, Display, PrimaryButton, SecondaryButton, StripedFrame, Toast } from "./ui";
 
 /** Client-side booking view on a phone, built in code. */
@@ -42,7 +43,7 @@ function PhoneBooking() {
 export function FinalCta() {
   return (
     <section className="bg-canvas px-4 pt-8 pb-24 sm:px-8">
-      <div className="mx-auto grid max-w-[1296px] overflow-hidden rounded-[28px] bg-white shadow-[var(--shadow-lift)] ring-1 ring-graphite/5 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <div className="mx-auto grid max-w-[1280px] overflow-hidden rounded-[28px] bg-white shadow-[var(--shadow-lift)] ring-1 ring-graphite/5 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         {/* Orange side: what the client sees */}
         <StripedFrame className="relative order-last flex min-h-[420px] items-end justify-center rounded-none px-6 pt-14 lg:order-first lg:min-h-[520px]">
           <div aria-hidden="true" className="relative translate-y-10">
@@ -60,15 +61,15 @@ export function FinalCta() {
         {/* White side: the ask */}
         <div className="flex flex-col justify-center px-7 py-14 sm:px-14 lg:py-20">
           <Display>Ready to open your books?</Display>
-          <p className="mt-5 max-w-[480px] text-[19px] leading-[1.55] text-graphite-soft">
-            Request early access and we&apos;ll set your studio up with you, then move everything over from your current
-            tool.
+          <p className="mt-5 max-w-[480px] text-[18px] leading-[1.6] text-pretty text-graphite-soft sm:text-[19px]">
+            Create your account in a few minutes. We move your clients, bookings, deposits and signed forms over for
+            you.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <PrimaryButton />
             <SecondaryButton href={CTA.demoHref}>{CTA.demoLabel}</SecondaryButton>
           </div>
-          <CheckRow className="mt-6" items={["No card to apply", "No per-booking fees"]} />
+          <CheckRow className="mt-6" items={[`${MONEY_BACK_DAYS}-day money-back guarantee`, "No per-booking fees"]} />
         </div>
       </div>
     </section>

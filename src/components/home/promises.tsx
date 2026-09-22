@@ -4,7 +4,7 @@ import { Display } from "./ui";
 
 const policies = [
   { value: "$0", label: "per-booking or deposit fees" },
-  { value: "Free", label: "migration on Studio and Pro" },
+  { value: "Free", label: "migration on every plan" },
   { value: "100%", label: "of your data exportable, any time" },
   { value: "1 price", label: "per shop, not per artist seat" },
 ];
@@ -13,17 +13,17 @@ const promises = [
   {
     quote: "A real person sets up your studio with you, and stays your contact after launch.",
     who: "Onboarding",
-    detail: "Every early-access studio",
+    detail: "Every new studio",
   },
   {
     quote: "We move your clients, bookings, deposits and signed forms for you, so nothing gets retyped.",
     who: "Migration",
-    detail: "Included on Studio and Pro",
+    detail: "Included on every plan",
   },
   {
     quote: "Tell us what your shop needs next. The roadmap is shaped by the studios using it.",
     who: "Roadmap",
-    detail: "Monthly calls with beta studios",
+    detail: "Shaped by the studios using it",
   },
 ];
 
@@ -37,7 +37,7 @@ export function Promises() {
             {policies.map((p) => (
               <div key={p.label} className="flex flex-col-reverse justify-end gap-1 bg-canvas p-6">
                 <dt className="text-[15px] leading-snug text-mute">{p.label}</dt>
-                <dd className="text-[34px] font-medium tracking-[-0.02em] text-graphite">{p.value}</dd>
+                <dd className="text-[34px] leading-[1.15] font-medium tracking-[-0.02em] text-graphite">{p.value}</dd>
               </div>
             ))}
           </dl>
@@ -55,9 +55,9 @@ export function Promises() {
         <ol className="flex flex-col rounded-[24px] bg-canvas-deep px-7 sm:px-10">
           {promises.map((p, i) => (
             <li key={p.who} className="flex gap-6 border-b border-hair-strong/70 py-9 last:border-b-0">
-              <span className="font-serif text-[40px] leading-none text-ember tabular-nums">{i + 1}</span>
+              <span className="w-6 shrink-0 font-serif text-[40px] leading-none text-ember tabular-nums">{i + 1}</span>
               <div>
-                <p className="font-serif text-[25px] leading-[1.3] text-graphite">{p.quote}</p>
+                <p className="font-serif text-[24px] leading-[1.3] text-graphite">{p.quote}</p>
                 <p className="mt-4 text-[15px]">
                   <span className="font-semibold text-graphite">{p.who}</span>
                   <span className="text-mute"> · {p.detail}</span>

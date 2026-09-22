@@ -5,6 +5,7 @@ import { Pillars } from "@/components/home/pillars";
 import { Tour } from "@/components/home/tour";
 import { Connected } from "@/components/home/connected";
 import { Promises } from "@/components/home/promises";
+import { Reviews } from "@/components/home/reviews";
 import { Pricing } from "@/components/home/pricing";
 import { Faq, faqs } from "@/components/home/faq";
 import { FinalCta } from "@/components/home/final-cta";
@@ -47,8 +48,8 @@ export default function HomePage() {
           offers: {
             "@type": "AggregateOffer",
             priceCurrency: "USD",
-            lowPrice: "29",
-            highPrice: "199",
+            lowPrice: "39",
+            highPrice: "329",
             offerCount: "4",
           },
         }}
@@ -71,6 +72,7 @@ export default function HomePage() {
         <Tour />
         <Connected />
         <Promises />
+        <Reviews />
         <Pricing />
         <Faq />
         <FinalCta />

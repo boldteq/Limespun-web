@@ -111,7 +111,7 @@ export function Tour() {
     <section className="bg-canvas py-24 sm:py-28">
       <div className="mx-auto grid max-w-[1280px] gap-12 px-5 sm:px-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.6fr)] lg:gap-16">
         <div>
-          <Display className="sm:text-[48px]">Built for how tattooing actually works</Display>
+          <Display>Built for how tattooing works</Display>
           <div role="tablist" aria-label="Product areas" aria-orientation="vertical" className="mt-10 flex flex-col gap-1.5">
             {tabs.map((t) => {
               const Icon = t.icon;

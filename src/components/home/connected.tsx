@@ -20,7 +20,7 @@ function Tile({
   return (
     <article className={`flex flex-col overflow-hidden rounded-[24px] bg-canvas ${className}`}>
       <div className="px-7 pt-7 sm:px-8 sm:pt-8">
-        <h3 className="text-[23px] font-medium tracking-[-0.01em] text-graphite">{title}</h3>
+        <h3 className="text-[24px] leading-[1.25] font-medium tracking-[-0.01em] text-graphite">{title}</h3>
         <p className="mt-2 max-w-[440px] text-[16px] leading-[1.55] text-mute">{body}</p>
       </div>
       <div aria-hidden="true" className={`relative mt-6 shrink-0 grow ${visualClass}`}>
@@ -37,7 +37,9 @@ function AllergyVisual() {
         <p className="pb-2 text-[12px] font-medium text-mute">Thursday · Dev</p>
         {[
           ["10:00", "Asha M. · Koi sleeve", false],
+          ["11:30", "Jo K. · Consult", false],
           ["1:30", "Elena R. · Back piece", true],
+          ["3:00", "Priya S. · Fine-line florals", false],
           ["4:30", "Sam T. · Touch-up", false],
           ["5:30", "Walk-in · flash", false],
         ].map(([t, w, flag]) => (
@@ -147,7 +149,7 @@ export function Connected() {
       <div className="mx-auto max-w-[1280px] px-5 sm:px-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-end">
           <Display className="max-w-[720px]">The details salon software never thought about</Display>
-          <p className="max-w-[420px] text-[17px] leading-[1.6] text-mute lg:justify-self-end">
+          <p className="max-w-[420px] text-[18px] leading-[1.6] text-mute lg:justify-self-end">
             Small things that decide whether a day at the shop runs on time, and whether you keep the money you&apos;re
             owed.
           </p>
@@ -171,7 +173,7 @@ export function Connected() {
           </Tile>
           <Tile
             className="md:col-span-3"
-            visualClass="h-[130px] md:h-[170px]"
+            visualClass="h-[130px] md:h-[150px]"
             title="Guest artists, handled"
             body="Their own dates, booking link and split, paid out with everyone else."
           >
@@ -180,7 +182,7 @@ export function Connected() {
           <Tile
             className="md:col-span-4"
             title="We move you over"
-            body="Clients, upcoming bookings, deposits and consent forms come across with you. Our team does the move on Studio and Pro plans."
+            body="Clients, upcoming bookings, deposits and consent forms come across with you. Our team does the move on every plan."
           >
             <MigrationVisual />
           </Tile>

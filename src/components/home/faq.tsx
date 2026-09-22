@@ -9,7 +9,7 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Will I lose my clients, deposits or consent forms when I switch?",
-    a: "No. On Studio and Pro plans our team moves your clients, upcoming bookings, deposits and signed forms for you. You keep using your old tool until everything has been checked.",
+    a: "No. On every plan our team moves your clients, upcoming bookings, deposits and signed forms for you. You keep using your old tool until everything has been checked.",
   },
   {
     q: "What happens to a deposit when a client reschedules or cancels?",
@@ -17,34 +17,42 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Can guest artists take their own bookings?",
-    a: "Yes. Each guest gets their own dates, booking link and split. Their sessions are paid out with the rest of your artists.",
+    a: "Yes, on the Pro and Multi-Location plans. Each guest gets their own dates, booking link and split, and their sessions are paid out with the rest of your artists.",
   },
   {
     q: "Do you take a fee on bookings or deposits?",
-    a: "No. You pay the monthly plan. Card payments are charged at the payment provider's standard rate, and Limespun adds nothing on top.",
+    a: "No. You pay for your plan, monthly, yearly or once. Card payments are charged at the payment provider's standard rate, and Limespun adds nothing on top.",
   },
   {
     q: "Is Limespun ready for my studio today?",
-    a: "Limespun is in private beta. We onboard a small number of studios at a time so each one gets hands-on setup. Request access and we'll tell you honestly whether it fits your shop yet.",
+    a: "Yes. Create an account and start today. Every plan comes with a 30-day money-back guarantee and 60 days of onboarding help from the founding team, and if you'd like to see it first, book a walkthrough.",
   },
   {
     q: "Who is behind Limespun?",
-    a: "Limespun is built by Boldteq, a small software team working directly with tattoo artists and studio owners during the beta.",
+    a: "Limespun is built by Boldteq, a small software team that works directly with the tattoo artists and studio owners using it.",
   },
 ];
 
-export function Faq() {
+export function Faq({
+  items = faqs,
+  title = "Questions studio owners ask",
+  tone = "canvas",
+}: {
+  items?: { q: string; a: string }[];
+  title?: string;
+  tone?: "canvas" | "white";
+} = {}) {
   return (
-    <section className="bg-canvas py-24 sm:py-28">
-      <div className="mx-auto grid max-w-[1180px] gap-12 px-5 sm:px-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.4fr)]">
+    <section className={`${tone === "white" ? "bg-white" : "bg-canvas"} py-24 sm:py-28`}>
+      <div className="mx-auto grid max-w-[1280px] gap-12 px-5 sm:px-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.4fr)]">
         <div className="lg:sticky lg:top-32 lg:self-start">
-          <Display>Questions studio owners ask</Display>
-          <p className="mt-5 max-w-[360px] text-[17px] leading-[1.6] text-mute">
+          <Display>{title}</Display>
+          <p className="mt-5 max-w-[360px] text-[18px] leading-[1.6] text-mute">
             Anything else? Book a call and ask a real person.
           </p>
         </div>
         <div className="border-t border-hair-strong">
-          {faqs.map((f) => (
+          {items.map((f) => (
             <details key={f.q} className="group border-b border-hair-strong">
               <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite [&::-webkit-details-marker]:hidden">
                 <h3 className="text-[18px] font-medium text-graphite">{f.q}</h3>
