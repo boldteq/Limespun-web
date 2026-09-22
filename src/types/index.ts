@@ -19,6 +19,8 @@ export interface NavColumnItem {
   name: string;
   desc: string;
   href: string;
+  /** Shows a small "new" dot after the name */
+  dot?: boolean;
 }
 
 export interface NavFooter {

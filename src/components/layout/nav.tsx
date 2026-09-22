@@ -4,16 +4,23 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { LimespunMark } from "@/components/brand/limespun-mark";
 import {
-  Sparkles, Inbox, Calendar, MessageSquare, Clock,
-  Users, LayoutGrid, ImageIcon, FileText, CreditCard,
-  Package, BarChart3, Megaphone, Star, Globe,
-  ArrowUpRight, Shield, MapPin, Database, CheckCircle2,
-  Bell, Heart, TrendingUp, Menu, X, ChevronDown,
+  CalendarDays, HandCoins, MessagesSquare, UserRound,
+  FileSignature, Layers, Images, Wand2,
+  Banknote, UsersRound, Droplet, ChartColumn,
+  User, Store, Building2, ArrowLeftRight,
+  BookOpen, Calculator, Map, ShieldCheck,
+  LifeBuoy, Mail, Sparkles, Heart,
+  ArrowUpRight, Menu, X, ChevronDown,
 } from "lucide-react";
-import { BRAND, FONT, CTA } from "@/lib/brand";
+import { BRAND, FONT, ACCOUNT } from "@/lib/brand";
+import { PLANS, formatPrice, type PlanTier } from "@/lib/data/plans";
 import type { NavItem, NavColumn, NavColumnItem, NavFooter } from "@/types";
 
 // ─── Nav data ────────────────────────────────────────────────────────────────
+
+const planPrice = (tier: PlanTier): string => formatPrice(PLANS.find((p) => p.tier === tier)?.monthlyCents ?? 0);
+// Grouped by what a studio gets done, in plain words. Pages not listed here
+// (Today, Inbox, Marketing) stay reachable from /product and the footer.
 
 const navItems: NavItem[] = [
   {
@@ -21,75 +28,68 @@ const navItems: NavItem[] = [
     type: "mega",
     columns: [
       {
-        title: "Run the day",
+        title: "Get booked",
         items: [
-          { icon: Sparkles,      name: "Today",        desc: "Morning launchpad",        href: "/product/today" },
-          { icon: Inbox,         name: "Inbox",         desc: "Action items in one feed",  href: "/product/inbox" },
-          { icon: Calendar,      name: "Calendar",      desc: "Multi-chair scheduling",    href: "/product/calendar" },
-          { icon: MessageSquare, name: "Messages",      desc: "Unified client chat",       href: "/product/messages" },
-          { icon: Clock,         name: "Appointments",  desc: "Booking & deposits",        href: "/product/appointments" },
+          { icon: CalendarDays,   name: "Calendar",        desc: "Every artist's chair on one calendar", href: "/product/calendar" },
+          { icon: HandCoins,      name: "Deposits",        desc: "Take deposits, cut no-shows",          href: "/product/appointments" },
+          { icon: MessagesSquare, name: "Client messages", desc: "Every DM and text in one inbox",       href: "/product/messages" },
+          { icon: UserRound,      name: "Client records",  desc: "History, photos and allergy alerts",   href: "/product/clients" },
         ],
       },
       {
-        title: "Clients & creative",
+        title: "Do the tattoo work",
         items: [
-          { icon: Users,      name: "Clients",           desc: "CRM with allergy alerts",  href: "/product/clients" },
-          { icon: LayoutGrid, name: "Projects",           desc: "Multi-session sleeves",    href: "/product/projects" },
-          { icon: ImageIcon,  name: "Flash & Portfolio",  desc: "Design library",           href: "/product/portfolio" },
-          { icon: FileText,   name: "Forms",              desc: "Consent & waivers",        href: "/product/forms" },
+          { icon: FileSignature, name: "Consent forms",          desc: "Signed on a phone, stored safely",           href: "/product/forms" },
+          { icon: Layers,        name: "Multi-session projects", desc: "Sleeves and back pieces, session by session", href: "/product/projects" },
+          { icon: Images,        name: "Portfolio & flash",      desc: "Show your work, sell your flash",            href: "/product/portfolio" },
+          { icon: Wand2,         name: "AI design briefs",       desc: "Turn a client's idea into a clear brief",    href: "/product/ai-design" },
         ],
       },
       {
-        title: "Studio operations",
+        title: "Run the shop",
         items: [
-          { icon: Users,      name: "Team",       desc: "Artists, guests, payroll",   href: "/product/team" },
-          { icon: CreditCard, name: "Payments",   desc: "Commission auto-splits",     href: "/product/payments" },
-          { icon: Package,    name: "Inventory",  desc: "Ink, needles, REACH",        href: "/product/inventory" },
-        ],
-      },
-      {
-        title: "Grow",
-        items: [
-          { icon: BarChart3,  name: "Analytics",  desc: "Revenue, retention, mix",   href: "/product/analytics" },
-          { icon: Megaphone,  name: "Marketing",  desc: "Campaigns & loyalty",       href: "/product/marketing" },
-          { icon: Sparkles,   name: "AI Studio",  desc: "Design assist & briefs",    href: "/product/ai-design" },
+          { icon: Banknote,    name: "Payments & payouts",  desc: "Card payments and artist splits",  href: "/product/payments" },
+          { icon: UsersRound,  name: "Team & guest artists", desc: "Residents, guests and booth rent", href: "/product/team" },
+          { icon: Droplet,     name: "Inventory",           desc: "Ink, needles and EU REACH",        href: "/product/inventory" },
+          { icon: ChartColumn, name: "Reports",             desc: "Revenue, rebookings and busy days", href: "/product/analytics" },
         ],
       },
     ] satisfies NavColumn[],
     footer: {
-      title: "The studio OS for tattoo",
-      desc: "Fifteen modules, one source of truth — built for resident, guest, and chain studios.",
-      ctaLabel: "See full product tour",
+      title: "One app for the whole shop",
+      desc: "Bookings, forms, payouts and stock in one place. No more five tabs.",
+      ctaLabel: "See all features",
       ctaHref: "/product",
     } satisfies NavFooter,
   },
   {
-    label: "Solutions",
+    label: "Who it's for",
     type: "mega",
     columns: [
       {
         title: "By studio size",
         items: [
-          { icon: Star,       name: "Solo artists",         desc: "One chair, full kit · $29/mo",     href: "/for/solo-artists" },
-          { icon: Users,      name: "Small studios",        desc: "2–5 chairs · $59/mo",              href: "/for/small-studios" },
-          { icon: LayoutGrid, name: "Multi-chair shops",    desc: "6+ chairs · $99/mo",               href: "/for/multi-chair" },
-          { icon: Globe,      name: "Multi-location chains",desc: "Enterprise scale · $199/mo",        href: "/for/multi-location" },
+          { icon: User,       name: "Solo artists",       desc: `Just you and one chair · ${planPrice("solo")}/mo`,       href: "/for/solo-artists" },
+          { icon: Store,      name: "Small studios",      desc: `2–5 artists · ${planPrice("studio")}/mo`,                href: "/for/small-studios" },
+          { icon: UsersRound, name: "Busy shops",         desc: `Up to 15 artists, plus guests · ${planPrice("pro")}/mo`, href: "/for/multi-chair" },
+          { icon: Building2,  name: "Multiple locations", desc: `Every shop in one account · ${planPrice("enterprise")}/mo`, href: "/for/multi-location" },
         ],
       },
       {
-        title: "By goal",
+        title: "Switching from",
         items: [
-          { icon: ArrowUpRight, name: "Migrate from DaySmart", desc: "9-day white-glove move",     href: "/migrate/daysmart" },
-          { icon: ArrowUpRight, name: "Migrate from Fresha",   desc: "Keep your bookings",         href: "/migrate/fresha" },
-          { icon: Shield,       name: "EU REACH compliance",   desc: "Ink registry built-in",      href: "/reach-compliance" },
-          { icon: MapPin,       name: "Guest artist tours",    desc: "Time-boxed residencies",     href: "/product" },
+          { icon: ArrowLeftRight, name: "Vagaro",      desc: "Side by side, and how we move you", href: "/compare/vagaro" },
+          { icon: ArrowLeftRight, name: "Square",      desc: "Side by side, and how we move you", href: "/compare/square" },
+          { icon: ArrowLeftRight, name: "Fresha",      desc: "Side by side, and how we move you", href: "/compare/fresha" },
+          { icon: ArrowLeftRight, name: "TattooGenda", desc: "Side by side, and how we move you", href: "/compare/tattoogenda" },
+          { icon: Layers,         name: "See all comparisons", desc: "Limespun next to 7 other tools", href: "/compare" },
         ],
       },
     ] satisfies NavColumn[],
     footer: {
-      title: "Migrate in 14 days",
-      desc: "White-glove import from any tattoo or salon SaaS. Zero data loss, zero downtime.",
-      ctaLabel: "Talk to migrations team",
+      title: "We move you over",
+      desc: "Your clients, bookings and signed forms, moved by our team on every plan.",
+      ctaLabel: "How switching works",
       ctaHref: "/migrate",
     } satisfies NavFooter,
   },
@@ -101,51 +101,64 @@ const navItems: NavItem[] = [
       {
         title: "Learn",
         items: [
-          { icon: FileText,     name: "Blog",                    desc: "Studio playbooks & ops",    href: "/blog" },
-          { icon: ArrowUpRight, name: "Migration guide",          desc: "Move from any platform",   href: "/migrate" },
-          { icon: Shield,       name: "REACH compliance hub",     desc: "EU ink regulations",       href: "/reach-compliance" },
-          { icon: Sparkles,     name: "Studio operations 101",    desc: "New owner essentials",     href: "#" },
+          { icon: BookOpen,   name: "Blog",            desc: "Guides for running a studio",                  href: "/blog" },
+          { icon: Calculator, name: "Free tools",      desc: "Deposit and payout calculators, consent template", href: "/tools" },
+          { icon: ArrowLeftRight, name: "Switching guide", desc: "Move over without losing a booking",       href: "/migrate" },
+          { icon: Droplet,     name: "EU REACH hub",   desc: "What the ink rules mean for you",              href: "/reach-compliance" },
         ],
       },
       {
-        title: "Support",
+        title: "Limespun",
         items: [
-          { icon: MessageSquare, name: "Help center",        desc: "Docs & how-tos",     href: "#" },
-          { icon: Database,      name: "API documentation",  desc: "For developers",     href: "#" },
-          { icon: CheckCircle2,  name: "Status",             desc: "System health",      href: "#" },
-          { icon: Bell,          name: "Contact support",    desc: "24/7 chat & email",  href: "/contact" },
+          { icon: Sparkles,  name: "What's new", desc: "Latest updates to the app",        href: "/changelog", dot: true },
+          { icon: Map,       name: "Roadmap",    desc: "What we're building next",          href: "/roadmap" },
+          { icon: Heart,     name: "About",      desc: "Who's behind Limespun",             href: "/about" },
+          { icon: ShieldCheck, name: "Security",   desc: "How we protect your studio's data", href: "/legal/security" },
         ],
       },
       {
-        title: "Company",
+        title: "Get help",
         items: [
-          { icon: Heart,     name: "About Limespun",  desc: "Our story",           href: "/about" },
-          { icon: TrendingUp,name: "Roadmap",       desc: "What we're building", href: "/roadmap" },
-          { icon: Users,     name: "Careers",       desc: "Join the team",       href: "/careers" },
-          { icon: ImageIcon, name: "Press kit",     desc: "Brand & assets",      href: "/press" },
+          { icon: LifeBuoy, name: "Book a demo", desc: "A 30-minute walkthrough", href: "/book-a-demo" },
+          { icon: Mail,     name: "Contact",     desc: "Talk to a real person",   href: "/contact" },
         ],
       },
     ] satisfies NavColumn[],
     footer: {
-      title: "New here? Start with the playbook",
-      desc: "A 12-page guide to running a modern tattoo studio — written by studio owners, free.",
-      ctaLabel: "Download the playbook",
-      ctaHref: "#",
+      title: "What do no-shows cost you?",
+      desc: "Put in your prices and see how much deposits would save each month. Free, no sign-up.",
+      ctaLabel: "Try the calculator",
+      ctaHref: "/tools/deposit-calculator",
     } satisfies NavFooter,
   },
-  { label: "Changelog", href: "/changelog", type: "link", dot: true },
 ];
 
 // ─── Mega menu grid column counts ────────────────────────────────────────────
 
 function megaGridCols(label: string): number {
-  if (label === "Product")   return 4;
-  if (label === "Solutions") return 2;
-  if (label === "Resources") return 3;
+  if (label === "Product")      return 3;
+  if (label === "Who it's for") return 2;
+  if (label === "Resources")    return 3;
   return 1;
 }
 
+/** DOM id for a menu panel: "Who it's for" → "mega-who-its-for". */
+function megaId(label: string): string {
+  return `mega-${label.toLowerCase().replace(/'/g, "").replace(/[^a-z0-9]+/g, "-")}`;
+}
+
 // ─── NavColumnItem component ──────────────────────────────────────────────────
+
+/** Small ember dot flagging something new, e.g. a fresh changelog entry. */
+function NewDot() {
+  return (
+    <span
+      role="img"
+      aria-label="New"
+      style={{ width: 5, height: 5, borderRadius: 100, background: BRAND.rust, display: "inline-block", flexShrink: 0 } as React.CSSProperties}
+    />
+  );
+}
 
 function MegaItem({ item }: { item: NavColumnItem }) {
   const [hovered, setHovered] = useState(false);
@@ -188,7 +201,13 @@ function MegaItem({ item }: { item: NavColumnItem }) {
           fontWeight: 500,
           color: BRAND.ink,
           lineHeight: 1.3,
-        } as React.CSSProperties}>{item.name}</span>
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+        } as React.CSSProperties}>
+          {item.name}
+          {item.dot && <NewDot />}
+        </span>
         <span style={{
           fontFamily: FONT.sans,
           fontSize: 12,
@@ -212,30 +231,40 @@ function MegaPanel({ item, onMouseEnter, onMouseLeave }: MegaPanelProps) {
   const cols = megaGridCols(item.label);
 
   return (
+    // Outer layer hangs off the bar: same left/right edges, and its top padding is an
+    // invisible bridge across the gap so the pointer can travel down without closing it.
     <div
+      id={megaId(item.label)}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       style={{
         position: "absolute",
-        top: "calc(100% + 8px)",
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: 1100,
-        maxWidth: "calc(100vw - 48px)",
+        top: "100%",
+        left: 0,
+        right: 0,
+        paddingTop: 10,
+        zIndex: 1000,
+      } as React.CSSProperties}
+    >
+    <div
+      role="region"
+      aria-label={`${item.label} menu`}
+      style={{
         background: BRAND.white,
         border: `1px solid ${BRAND.border}`,
-        borderRadius: 16,
-        boxShadow: "0 20px 60px -12px rgba(15,15,15,0.14), 0 4px 16px -4px rgba(15,15,15,0.06)",
-        zIndex: 1000,
+        borderRadius: 20,
+        boxShadow: "0 24px 60px -16px rgba(29,30,28,0.20), 0 4px 16px -4px rgba(29,30,28,0.06)",
         overflow: "hidden",
+        maxHeight: "calc(100vh - 110px)",
+        overflowY: "auto",
       } as React.CSSProperties}
     >
       {/* Columns */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: `repeat(${cols}, 1fr)`,
+        gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
         gap: 0,
-        padding: "20px 20px 0",
+        padding: "22px 22px 0",
       } as React.CSSProperties}>
         {item.columns?.map((col) => (
           <div key={col.title} style={{ padding: "0 12px 20px" } as React.CSSProperties}>
@@ -305,6 +334,7 @@ function MegaPanel({ item, onMouseEnter, onMouseLeave }: MegaPanelProps) {
           </a>
         </div>
       )}
+    </div>
     </div>
   );
 }
@@ -412,6 +442,7 @@ function MobileNavItem({ item, expanded, onToggle }: MobileNavItemProps) {
                       fontSize: 14,
                       color: BRAND.ink,
                     } as React.CSSProperties}>{it.name}</span>
+                    {it.dot && <NewDot />}
                   </a>
                 );
               })}
@@ -444,8 +475,28 @@ export function Nav() {
   };
 
   const handleLeave = () => {
-    closeTimer.current = setTimeout(() => setActiveMenu(null), 120);
+    closeTimer.current = setTimeout(() => setActiveMenu(null), 180);
   };
+
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!activeMenu) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveMenu(null);
+    };
+    const onDown = (e: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) setActiveMenu(null);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onDown);
+    };
+  }, [activeMenu]);
+
+  const activeItem = navItems.find((n) => n.type === "mega" && n.label === activeMenu) ?? null;
 
   const toggleMobile = (label: string) => {
     setMobileExpanded((prev) => (prev === label ? null : label));
@@ -479,17 +530,18 @@ export function Nav() {
 
   return (
     <>
-      <div style={wrapperStyle}>
+      <div ref={wrapperRef} style={wrapperStyle}>
         <div style={barStyle}>
           {/* Logo */}
-          <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 9 } as React.CSSProperties}>
-            <LimespunMark size={28} />
-            <span style={{
+          <Link href="/" aria-label="Limespun home" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 } as React.CSSProperties}>
+            <LimespunMark size={30} />
+            <span className="max-[480px]:!text-[18px]" style={{
               fontFamily: FONT.sans,
-              fontSize: 15,
-              fontWeight: 600,
+              fontSize: 21,
+              fontWeight: 700,
+              lineHeight: 1,
               color: BRAND.onyx,
-              letterSpacing: "-0.01em",
+              letterSpacing: "-0.03em",
             } as React.CSSProperties}>Limespun</span>
           </Link>
 
@@ -554,6 +606,8 @@ export function Nav() {
                     type="button"
                     aria-haspopup="true"
                     aria-expanded={isActive}
+                    aria-controls={megaId(item.label)}
+                    onClick={() => setActiveMenu((cur) => (cur === item.label ? null : item.label))}
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
@@ -582,13 +636,6 @@ export function Nav() {
                     />
                   </button>
 
-                  {isActive && (
-                    <MegaPanel
-                      item={item}
-                      onMouseEnter={() => handleEnter(item.label)}
-                      onMouseLeave={handleLeave}
-                    />
-                  )}
                 </div>
               );
             })}
@@ -597,7 +644,7 @@ export function Nav() {
           {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 } as React.CSSProperties}>
             <a
-              href={CTA.demoHref}
+              href={ACCOUNT.signInHref}
               className="limespun-nav-secondary"
               style={{
                 display: "inline-flex",
@@ -613,10 +660,11 @@ export function Nav() {
                 whiteSpace: "nowrap",
               } as React.CSSProperties}
             >
-              {CTA.demoLabel}
+              {ACCOUNT.signInLabel}
             </a>
             <a
-              href={CTA.primaryHref}
+              href={ACCOUNT.signUpHref}
+              className="max-[480px]:!min-h-10 max-[480px]:!px-3.5 max-[480px]:!text-[14px]"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -632,7 +680,7 @@ export function Nav() {
                 whiteSpace: "nowrap",
               } as React.CSSProperties}
             >
-              {CTA.primaryLabel}<span className="limespun-nav-secondary" aria-hidden="true">&nbsp;&nbsp;→</span>
+              {ACCOUNT.signUpLabel}<span className="limespun-nav-secondary" aria-hidden="true">&nbsp;&nbsp;→</span>
             </a>
 
             {/* Mobile burger */}
@@ -660,6 +708,17 @@ export function Nav() {
           </div>
         </div>
 
+        {/* Desktop mega menu — one panel, aligned to the bar's edges */}
+        {activeItem && (
+          <div className="limespun-nav-desktop">
+            <MegaPanel
+              item={activeItem}
+              onMouseEnter={() => handleEnter(activeItem.label)}
+              onMouseLeave={handleLeave}
+            />
+          </div>
+        )}
+
         {/* Mobile drawer */}
         {open && (
           <div
@@ -684,7 +743,7 @@ export function Nav() {
             ))}
             <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 } as React.CSSProperties}>
               <a
-                href={CTA.demoHref}
+                href={ACCOUNT.signInHref}
                 style={{
                   display: "block",
                   textAlign: "center",
@@ -698,10 +757,10 @@ export function Nav() {
                   textDecoration: "none",
                 } as React.CSSProperties}
               >
-                {CTA.demoLabel}
+                {ACCOUNT.signInLabel}
               </a>
               <a
-                href={CTA.primaryHref}
+                href={ACCOUNT.signUpHref}
                 style={{
                   display: "block",
                   textAlign: "center",
@@ -715,7 +774,7 @@ export function Nav() {
                   textDecoration: "none",
                 } as React.CSSProperties}
               >
-                {CTA.primaryLabel}
+                {ACCOUNT.signUpLabel}
               </a>
             </div>
           </div>
