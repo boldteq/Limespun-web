@@ -10,9 +10,11 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { ComparisonTable } from "@/components/shared/comparison-table";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
-import { TestimonialCard } from "@/components/shared/testimonial-card";
 import { StatStrip } from "@/components/shared/stat-strip";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
+import { PLANS, formatPrice, MONEY_BACK_DAYS } from "@/lib/data/plans";
+
+const [MULTI] = PLANS.filter((p) => p.tier === "enterprise");
 
 // ── MoatCardBright (local — lifted from work.tsx) ────────────────────────────
 
@@ -235,7 +237,7 @@ const faqItems = [
   },
   {
     q: "I run a multi-location chain on Vagaro. Will that work?",
-    a: "Yes. Limespun Enterprise supports multi-location with per-location P&L, SSO, and SCIM. Migration runs sequentially — pilot at one location, then roll out.",
+    a: `Yes. Pro covers up to 5 locations; Multi-Location (${formatPrice(MULTI.monthlyCents)}/mo flat) covers unlimited locations, with reports across every shop. Migration runs sequentially — pilot at one location, then roll out.`,
   },
   {
     q: "What about Vagaro's marketplace? Does Limespun have one?",
@@ -243,7 +245,7 @@ const faqItems = [
   },
   {
     q: "Can I keep using Vagaro during migration?",
-    a: "Yes. Standard 14-day parallel run. Cancel Vagaro day-of cutover. We don't bill until you do.",
+    a: `Yes. Standard 14-day parallel run. Cancel Vagaro day-of cutover. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   },
 ];
 
@@ -269,7 +271,7 @@ export default function VagaroPage() {
           subhead="Vagaro is excellent salon software — for haircuts, manicures, and waxing. None of that translates to a 5-session sleeve, a deposit pool across visits, or a REACH-compliant ink registry. We re-map your data to a tattoo schema. 7 days. White-glove."
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
-            label: "Start the trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
         />
@@ -402,15 +404,15 @@ export default function VagaroPage() {
                   },
                   {
                     feature: "Commission auto-splits",
-                    values: { vagaro: "Salon-style only", limespun: true },
+                    values: { vagaro: "Salon-style only", limespun: "Studio and up" },
                   },
                   {
                     feature: "AI design assistant",
-                    values: { vagaro: false, limespun: true },
+                    values: { vagaro: false, limespun: "Pro and up" },
                   },
                   {
                     feature: "Guest artist residency band",
-                    values: { vagaro: false, limespun: true },
+                    values: { vagaro: false, limespun: "Pro and up" },
                   },
                   {
                     feature: "Tattoo-specific by design",
@@ -422,7 +424,7 @@ export default function VagaroPage() {
                   },
                   {
                     feature: "Multi-location support",
-                    values: { vagaro: true, limespun: true },
+                    values: { vagaro: true, limespun: "Pro and up" },
                   },
                   {
                     feature: "White-glove migration",
@@ -548,16 +550,16 @@ export default function VagaroPage() {
           >
             <StatStrip
               items={[
-                { stat: "7 days", label: "average Vagaro migration" },
-                { stat: "100%", label: "data carried" },
+                { stat: "Re-mapped", label: "salon records to a tattoo schema" },
+                { stat: "Side by side", label: "Vagaro runs until cutover" },
                 { stat: "0%", label: "transaction fees on Limespun" },
-                { stat: "$0", label: "until cutover" },
+                { stat: `${MONEY_BACK_DAYS} days`, label: "money-back guarantee" },
               ]}
             />
           </div>
         </section>
 
-        {/* Testimonial */}
+        {/* Early-days note */}
         <section
           style={{
             background: GRADIENT.sectionWarm,
@@ -579,22 +581,44 @@ export default function VagaroPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-60px" }}
-              style={{ maxWidth: 460, width: "100%" } as React.CSSProperties}
+              style={{ maxWidth: 560, width: "100%" } as React.CSSProperties}
             >
-              <TestimonialCard
-                name="Rafael Moreno"
-                role="Owner · Calle Negra"
-                city="Mexico City, MX"
-                chairs="9 artists · 2 floors"
-                quote="Limespun shows me a body — what's been worked, what's healing, what's left. Booking a back piece across ten weeks takes twelve minutes now."
-                stats={[
-                  { l: "Active sleeves", v: "14" },
-                  { l: "Guest residencies", v: "6 in 2025" },
-                  { l: "Disputes", v: "$0" },
-                ]}
-                gradient={`linear-gradient(135deg, ${BRAND.sage} 0%, ${BRAND.amber} 50%, ${BRAND.rustGlow} 100%)`}
-                initials="RM"
-              />
+              <div
+                style={{
+                  background: BRAND.white,
+                  borderRadius: 18,
+                  padding: 32,
+                  boxShadow: SHADOW.soft,
+                  border: `1px solid ${BRAND.borderSoft}`,
+                } as React.CSSProperties}
+              >
+                <SectionEyebrow label="Early days" accent="rust" />
+                <p
+                  style={{
+                    fontFamily: FONT.serif,
+                    fontStyle: "italic",
+                    fontSize: 24,
+                    lineHeight: 1.3,
+                    color: BRAND.onyx,
+                    margin: "0 0 16px",
+                  } as React.CSSProperties}
+                >
+                  No testimonials here yet &mdash; and we won&apos;t invent them.
+                </p>
+                <p
+                  style={{
+                    fontFamily: FONT.sans,
+                    fontSize: 15,
+                    lineHeight: 1.65,
+                    color: BRAND.stoneDark,
+                    margin: 0,
+                  } as React.CSSProperties}
+                >
+                  Limespun is new, so there are no switching stories yet. Moving from
+                  {" "}Vagaro, you work directly with the people building the product: we map your
+                  data with you and run both systems side by side, and if it isn&apos;t right in the first {MONEY_BACK_DAYS} days you get your money back.
+                </p>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -644,10 +668,10 @@ export default function VagaroPage() {
           badge="Stop bending salon software"
           headline="Move to software built for tattoo."
           italicWord="for tattoo"
-          subhead="7-day migration. Free above Solo. We don't bill until you cancel Vagaro."
+          subhead={`7-day migration. Free on every plan. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
-            label: "Or start the trial",
+            label: "Or get started",
             href: "https://app.limespun.com/signup",
             icon: "play",
           }}

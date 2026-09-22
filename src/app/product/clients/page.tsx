@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -259,12 +260,8 @@ export default function ClientsPage() {
             "The artist taps through to the medical history. Blood thinner flagged. They move the appointment by two weeks, per studio protocol, and send Asha an SMS from the comms thread — logged automatically.",
             "Thursday comes and goes without incident. The near-miss is logged, the session is rescheduled, and the patch test note is updated. No clipboard. No phone call to check.",
           ]}
-          quote="We caught an allergy update on Wednesday that would have been a problem Thursday. That doesn't happen with any other system we've used."
-          person={{
-            name: "Miles Verena",
-            role: "Studio Manager, Sable & Sparrow",
-            gradient: `linear-gradient(135deg, ${BRAND.rust} 0%, ${BRAND.amber} 100%)`,
-          }}
+          quote="An allergy change made between bookings reaches the artist before the needle does — not after."
+          takeawayLabel="What this means for your studio"
         />
 
         <ProductRelated
@@ -302,7 +299,7 @@ export default function ClientsPage() {
         <ProductCTA
           headline="The client, fully held."
           italicWord="fully held"
-          subhead="14-day free trial. No card required. Every client record, every allergy flag, every photo — from day one."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Every client record, every allergy flag, every photo — from day one.`}
         />
       </main>
       <Footer />

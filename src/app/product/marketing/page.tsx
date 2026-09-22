@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { MarketingMockup } from "@/components/product/mockups/marketing-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -266,13 +267,8 @@ export default function MarketingPage() {
               the moment he books.
             </React.Fragment>,
           ]}
-          quote="I used to send mass-blast emails twice a year and feel sleazy. Now Marketing just runs three campaigns in the background, and the sleazy feeling is gone."
-          person={{
-            name: "Miles Verena",
-            role: "Owner · Sable & Sparrow · Brooklyn",
-            gradient:
-              "linear-gradient(135deg, #0F0F0F 0%, #4B4842 50%, #9A9792 100%)",
-          }}
+          quote="Win-back, rebook and aftercare campaigns run quietly in the background — no twice-a-year mass blast."
+          takeawayLabel="The upshot"
         />
 
         <ProductRelated
@@ -310,7 +306,7 @@ export default function MarketingPage() {
         <ProductCTA
           headline="Speak like the artist, not the algorithm."
           italicWord="the algorithm"
-          subhead="14-day free trial. No card required. Targeted campaigns, loyalty milestones, and win-back sequences from day one."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Targeted campaigns, loyalty milestones, and win-back sequences from day one.`}
         />
       </main>
       <Footer />

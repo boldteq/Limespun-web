@@ -102,7 +102,7 @@ export default async function OGImage() {
               textTransform: "uppercase",
             }}
           >
-            14-day white-glove · Free above Solo
+            14-day white-glove · Free on every plan
           </span>
         </div>
       </div>

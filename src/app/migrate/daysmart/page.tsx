@@ -10,8 +10,8 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { ComparisonTable } from "@/components/shared/comparison-table";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
-import { TestimonialCard } from "@/components/shared/testimonial-card";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 type AccentKey = "rust" | "amber" | "sage";
 
@@ -149,7 +149,7 @@ const faqItems = [
   },
   {
     q: "Can I keep my old subscription overlapping?",
-    a: "Yes — and it's our recommendation. 14 days of overlap on us. Stripe doesn't bill Limespun until your DaySmart sub cancels.",
+    a: `Yes — and it's our recommendation. Run both for up to 14 days, then cancel DaySmart at cutover. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   },
   {
     q: "Will my booking links break?",
@@ -174,10 +174,10 @@ export default function DaysmartPage() {
           eyebrowAccent="rust"
           headline="DaySmart was built for spas. You're a tattoo studio."
           italicWord="tattoo"
-          subhead="Multi-session sleeves don't exist in DaySmart. Allergy intelligence is a custom field. Deposit pools are a Notes app. We move you in 9 days. White-glove. Zero data loss."
+          subhead="Multi-session sleeves don't exist in DaySmart. Allergy intelligence is a custom field. Deposit pools are a Notes app. We plan your move over 9 days. White-glove. Every record checked with you."
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
-            label: "Start the trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
         />
@@ -253,15 +253,15 @@ export default function DaysmartPage() {
                   },
                   {
                     feature: "AI design assistant",
-                    values: { daysmart: false, limespun: true },
+                    values: { daysmart: false, limespun: "Pro and up" },
                   },
                   {
                     feature: "Commission auto-splits",
-                    values: { daysmart: false, limespun: true },
+                    values: { daysmart: false, limespun: "Studio and up" },
                   },
                   {
                     feature: "Guest residency band",
-                    values: { daysmart: false, limespun: true },
+                    values: { daysmart: false, limespun: "Pro and up" },
                   },
                   {
                     feature: "Per-booking transaction fee",
@@ -428,7 +428,7 @@ export default function DaysmartPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
+        {/* Early-days note */}
         <section
           style={{
             background: GRADIENT.sectionWarm,
@@ -450,22 +450,44 @@ export default function DaysmartPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-60px" }}
-              style={{ maxWidth: 480, width: "100%" } as React.CSSProperties}
+              style={{ maxWidth: 560, width: "100%" } as React.CSSProperties}
             >
-              <TestimonialCard
-                name="Miles Verena"
-                role="Owner · Sable & Sparrow"
-                city="Brooklyn, NY"
-                chairs="4 chairs · 6 artists"
-                quote="We used to lose forty minutes every morning to app-switching. Now I open Today and the schedule's loaded before my coffee."
-                stats={[
-                  { l: "Time recovered", v: "12 hr / wk" },
-                  { l: "Booking lift", v: "+22%" },
-                  { l: "Migration", v: "9 days" },
-                ]}
-                gradient={`linear-gradient(135deg, ${BRAND.rust} 0%, ${BRAND.rustGlow} 50%, ${BRAND.amber} 100%)`}
-                initials="MV"
-              />
+              <div
+                style={{
+                  background: BRAND.white,
+                  borderRadius: 18,
+                  padding: 32,
+                  boxShadow: SHADOW.soft,
+                  border: `1px solid ${BRAND.borderSoft}`,
+                } as React.CSSProperties}
+              >
+                <SectionEyebrow label="Early days" accent="rust" />
+                <p
+                  style={{
+                    fontFamily: FONT.serif,
+                    fontStyle: "italic",
+                    fontSize: 24,
+                    lineHeight: 1.3,
+                    color: BRAND.onyx,
+                    margin: "0 0 16px",
+                  } as React.CSSProperties}
+                >
+                  No testimonials here yet &mdash; and we won&apos;t invent them.
+                </p>
+                <p
+                  style={{
+                    fontFamily: FONT.sans,
+                    fontSize: 15,
+                    lineHeight: 1.65,
+                    color: BRAND.stoneDark,
+                    margin: 0,
+                  } as React.CSSProperties}
+                >
+                  Limespun is new, so there are no switching stories yet. Moving from
+                  {" "}DaySmart, you work directly with the people building the product: we map your
+                  data with you and run both systems side by side, and if it isn&apos;t right in the first {MONEY_BACK_DAYS} days you get your money back.
+                </p>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -518,7 +540,7 @@ export default function DaysmartPage() {
           subhead="30-min discovery call. We map your studio's data shape and give you an honest 9-day plan. Free."
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
-            label: "Start the trial first",
+            label: "Or get started",
             href: "https://app.limespun.com/signup",
             icon: "play",
           }}

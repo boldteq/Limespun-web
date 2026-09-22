@@ -29,6 +29,7 @@ import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import type { RelatedModule } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 // ── Pillars ───────────────────────────────────────────────────────────────────
 
@@ -226,7 +227,7 @@ const related: RelatedModule[] = [
 
 const dayInLifeParagraphs: React.ReactNode[] = [
   <>
-    Lin Chen runs Aoiro Atelier in Tokyo. Sunday night, a client emails a paragraph:{" "}
+    Picture Lin, who runs a private studio in Tokyo. Sunday night, a client emails a paragraph:{" "}
     <em>geometric sleeve, negative space, sakura motif, cool greys and ink black</em>. No
     reference images. No placement notes. Just the idea.
   </>,
@@ -302,15 +303,10 @@ export default function AIDesignPage() {
           eyebrow="A day in the life"
           heading="Lin's Monday morning."
           italicWord="Monday morning"
-          intro="Aoiro Atelier, Tokyo. A Sunday night email turns into a full prep deck by Tuesday consultation."
+          intro="A private studio in Tokyo. A Sunday night email turns into a full prep deck by Tuesday consultation."
           paragraphs={dayInLifeParagraphs}
-          quote="The prep that used to take 90 minutes now takes 9. The work is still mine."
-          person={{
-            name: "Lin Chen",
-            role: "Owner · Aoiro Atelier · Tokyo",
-            gradient:
-              "linear-gradient(135deg, #DC2626 0%, #F97316 50%, #FBBF24 100%)",
-          }}
+          quote="The AI handles the prep. The design is still the artist's."
+          takeawayLabel="The point"
         />
 
         <ProductRelated
@@ -322,7 +318,7 @@ export default function AIDesignPage() {
         <ProductCTA
           headline="Prep without the blank page."
           italicWord="blank page"
-          subhead="14-day trial includes AI Studio on Pro. Generate your first brief in 12 seconds."
+          subhead={`AI Studio is on Pro and Multi-Location, with a ${MONEY_BACK_DAYS}-day money-back guarantee. Generate your first brief in 12 seconds.`}
         />
       </main>
       <Footer />

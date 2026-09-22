@@ -25,6 +25,7 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -294,7 +295,7 @@ export default function ProductPage() {
           headline="Fifteen rooms, one floor."
           italicWord="rooms"
           subhead="Every operation in your studio — bookings, deposits, projects, payments, inventory — designed as one connected system. No exports. No syncing. The shop, held in one place."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
         />
 
@@ -456,7 +457,7 @@ export default function ProductPage() {
           </div>
         </section>
 
-        {/* 4. Pull quote */}
+        {/* 4. Principle */}
         <section
           style={{
             background: BRAND.white,
@@ -495,7 +496,20 @@ export default function ProductPage() {
                   background: `linear-gradient(90deg, ${BRAND.rust} 0%, ${BRAND.amber} 100%)`,
                 } as React.CSSProperties}
               />
-              <blockquote
+              <div
+                style={{
+                  fontFamily: FONT.sans,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: BRAND.rust,
+                  marginBottom: 16,
+                } as React.CSSProperties}
+              >
+                Why we built it this way
+              </div>
+              <p
                 style={{
                   fontFamily: FONT.serif,
                   fontSize: "clamp(20px, 2.5vw, 28px)",
@@ -507,20 +521,20 @@ export default function ProductPage() {
                   letterSpacing: "-0.01em",
                 } as React.CSSProperties}
               >
-                &ldquo;Limespun is the first software that understood the shop is a body of work, not a calendar full of strangers.&rdquo;
-              </blockquote>
-              <cite
+                A tattoo shop is a body of work, not a calendar full of strangers. Every
+                screen in Limespun starts from that.
+              </p>
+              <p
                 style={{
                   fontFamily: FONT.sans,
                   fontSize: 13,
                   fontWeight: 500,
                   color: BRAND.stoneDark,
-                  fontStyle: "normal",
-                  display: "block",
+                  margin: 0,
                 } as React.CSSProperties}
               >
-                Miles Verena &mdash; Sable & Sparrow
-              </cite>
+                Now live &mdash; shaped week by week with the studios using it.
+              </p>
             </motion.div>
           </div>
         </section>
@@ -530,8 +544,8 @@ export default function ProductPage() {
           badge="Open every room"
           headline="See the whole studio."
           italicWord="whole"
-          subhead="14-day trial. No card. White-glove migration above Solo. Free walkthrough if you'd rather see it live."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration on every plan. Free walkthrough if you'd rather see it live.`}
+          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
         />
       </main>

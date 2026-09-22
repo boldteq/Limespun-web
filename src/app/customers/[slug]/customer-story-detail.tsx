@@ -11,6 +11,7 @@ import { TestimonialCard } from "@/components/shared/testimonial-card";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import type { CustomerStory } from "@/lib/data/customer-stories";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 interface Props {
   story: CustomerStory;
@@ -433,9 +434,9 @@ export function CustomerStoryDetail({ story, related }: Props) {
           badge="Run on Limespun"
           headline="Add your studio to the wall."
           italicWord="Add your studio"
-          subhead="14-day trial. No card. White-glove migration above Solo."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration above Solo.`}
           primaryCTA={{
-            label: "Start a 14-day trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{

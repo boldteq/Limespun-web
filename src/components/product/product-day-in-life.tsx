@@ -16,8 +16,12 @@ interface ProductDayInLifeProps {
   italicWord?: string;
   intro: string;
   paragraphs: Array<string | React.ReactNode>;
+  /** Closing pull line. Rendered as an attributed quote only when `person` is set. */
   quote: string;
-  person: DayInLifePerson;
+  /** Only pass a real, consenting customer. Omit to render `quote` as a takeaway. */
+  person?: DayInLifePerson;
+  /** Label shown above the takeaway when there is no `person`. */
+  takeawayLabel?: string;
 }
 
 function buildHeadlineParts(heading: string, italicWord?: string) {
@@ -39,6 +43,7 @@ export function ProductDayInLife({
   paragraphs,
   quote,
   person,
+  takeawayLabel = "What this means for your studio",
 }: ProductDayInLifeProps) {
   const { before, italic, after } = buildHeadlineParts(heading, italicWord);
 
@@ -149,6 +154,21 @@ export function ProductDayInLife({
             marginTop: 48,
           } as React.CSSProperties}
         >
+          {!person && (
+            <div
+              style={{
+                fontFamily: FONT.sans,
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: BRAND.rust,
+                marginBottom: 12,
+              } as React.CSSProperties}
+            >
+              {takeawayLabel}
+            </div>
+          )}
           <p
             style={{
               fontFamily: FONT.serif,
@@ -157,12 +177,13 @@ export function ProductDayInLife({
               lineHeight: 1.3,
               color: BRAND.onyx,
               letterSpacing: "-0.01em",
-              marginBottom: 18,
+              marginBottom: person ? 18 : 0,
             } as React.CSSProperties}
           >
             {quote}
           </p>
 
+          {person && (
           <div
             style={{
               display: "flex",
@@ -204,6 +225,7 @@ export function ProductDayInLife({
               </div>
             </div>
           </div>
+          )}
         </motion.div>
       </div>
     </section>

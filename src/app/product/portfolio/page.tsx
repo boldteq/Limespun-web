@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { PortfolioMockup } from "@/components/product/mockups/portfolio-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -211,7 +212,7 @@ export default function PortfolioPage() {
               <strong>The HEALED tag fires.</strong> Limespun auto-tags her healed photo as Day 45 from the original session timestamp.
             </React.Fragment>,
             <React.Fragment key="p2">
-              <strong>Three things happen at once.</strong> The project closes. The healed photo is archived to her client record. And — without Miles lifting a finger — it appears in the Sable &amp; Sparrow studio gallery, tagged &quot;MV&quot; for Miles Verena.
+              <strong>Three things happen at once.</strong> The project closes. The healed photo is archived to her client record. And — without the artist lifting a finger — it appears in the studio gallery, tagged with the artist&apos;s initials.
             </React.Fragment>,
             <React.Fragment key="p3">
               <strong>By Friday it&apos;s pinned.</strong> Miles drags it to featured. The studio&apos;s homepage gallery now leads with the koi. Two new booking inquiries by Sunday cite &quot;saw the koi sleeve.&quot;
@@ -221,12 +222,8 @@ export default function PortfolioPage() {
               <em>byproduct of the work itself.</em>
             </React.Fragment>,
           ]}
-          quote="I haven't manually uploaded a photo to my studio site in six months. The work just shows up there."
-          person={{
-            name: "Miles Verena",
-            role: "Owner · Sable & Sparrow · Brooklyn",
-            gradient: "linear-gradient(135deg, #0F0F0F 0%, #4B4842 50%, #9A9792 100%)",
-          }}
+          quote="Healed work reaches the studio site on its own, once the client has said yes."
+          takeawayLabel="In short"
         />
 
         <ProductRelated
@@ -244,7 +241,7 @@ export default function PortfolioPage() {
         <ProductCTA
           headline="The work, the gallery, one feed."
           italicWord="one feed"
-          subhead="14-day free trial. No credit card. Tag your first healed photo and watch it appear in your studio gallery — automatically."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Tag your first healed photo and watch it appear in your studio gallery — automatically.`}
         />
       </main>
       <Footer />

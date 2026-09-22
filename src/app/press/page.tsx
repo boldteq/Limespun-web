@@ -2,12 +2,22 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Image as ImageIcon, FileText, Download } from "lucide-react";
+import { Image as ImageIcon, FileText, Download, Mail } from "lucide-react";
 import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { HeroSection } from "@/components/shared/hero-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { CTASection } from "@/components/shared/cta-section";
 import { LimespunMark } from "@/components/brand/limespun-mark";
+import {
+  PLANS,
+  formatPrice,
+  ANNUAL_DISCOUNT_PERCENT,
+  FOUNDING_OFFER_OPEN,
+  FOUNDING_OFFER_SIZE,
+} from "@/lib/data/plans";
+
+const [SOLO] = PLANS.filter((p) => p.tier === "solo");
+const [MULTI] = PLANS.filter((p) => p.tier === "enterprise");
 
 // ─── Accent tokens ────────────────────────────────────────────────────────────
 type AccentColor = "rust" | "amber" | "sage";
@@ -23,9 +33,16 @@ const FACTSHEET_ROWS: { label: string; value: string }[] = [
   { label: "Product:", value: "Limespun — the studio operating system for tattoo" },
   { label: "Company:", value: "Boldteq Holdings (registered United Kingdom)" },
   { label: "Founded:", value: "2024" },
-  { label: "Beta launch:", value: "April 2026" },
-  { label: "Customers:", value: "1,200+ artists across 47 countries" },
-  { label: "Pricing:", value: "$29 / mo (Solo) to $199 / mo per location (Enterprise)" },
+  {
+    label: "Status:",
+    value: `Live — studios sign up and pay monthly or yearly${
+      FOUNDING_OFFER_OPEN ? `, or once on the founding lifetime offer (first ${FOUNDING_OFFER_SIZE} studios)` : ""
+    }`,
+  },
+  {
+    label: "Pricing:",
+    value: `${formatPrice(SOLO.monthlyCents)} / mo (Solo) to ${formatPrice(MULTI.monthlyCents)} / mo flat (${MULTI.name}); ${ANNUAL_DISCOUNT_PERCENT}% off billed yearly`,
+  },
 ];
 
 // ─── Colour swatches ──────────────────────────────────────────────────────────
@@ -64,40 +81,38 @@ interface DownloadCard {
   title: string;
   description: string;
   href: string;
+  /** Direct file download (true) vs. a request-by-email link (false). */
+  isFile: boolean;
 }
 
 const DOWNLOAD_CARDS: DownloadCard[] = [
   {
     accent: "rust",
     icon: <ImageIcon size={20} strokeWidth={1.8} />,
-    title: "Brand kit (.zip, 4.2MB)",
+    title: "Logo mark (.svg)",
     description:
-      "Logos: SVG, PNG, mono / colour. Three-circles mark. Brand colours guide. Typography spec.",
-    href: "#",
+      "The Limespun mark as a full-colour vector on a transparent background. Scales to any size.",
+    href: "/brand/limespun-mark.svg",
+    isFile: true,
   },
   {
     accent: "amber",
     icon: <ImageIcon size={20} strokeWidth={1.8} />,
-    title: "Product screenshots (.zip, 18MB)",
+    title: "Product screenshots",
     description:
-      "Today, Calendar, Projects, Inventory, Forms. PNG + JPG. Light & dark.",
-    href: "#",
+      "Today, Calendar, Projects, Inventory, Forms. Sent on request so they match the current build and your layout.",
+    href: "mailto:press@boldteq.com?subject=Limespun%20screenshot%20request",
+    isFile: false,
   },
   {
     accent: "sage",
     icon: <FileText size={20} strokeWidth={1.8} />,
-    title: "Factsheet (.pdf, 220KB)",
+    title: "Full brand kit",
     description:
-      "One-page company snapshot. Founder bio. Key dates. Customer numbers. Press contacts.",
-    href: "#",
+      "Logo variants (PNG, mono), colour guide, typography spec and founder bio. Emailed so you never work from an outdated file.",
+    href: "mailto:press@boldteq.com?subject=Limespun%20brand%20kit%20request",
+    isFile: false,
   },
-];
-
-// ─── Press coverage placeholders ──────────────────────────────────────────────
-const COVERAGE_PLACEHOLDERS = [
-  { outlet: "Inked Magazine", quote: '"Limespun is quietly changing how tattoo studios run their businesses."', date: "Mar 2026" },
-  { outlet: "Total Tattoo", quote: '"Finally, software built by people who understand the craft."', date: "Feb 2026" },
-  { outlet: "Tattoo Life", quote: '"From walk-ins to REACH compliance — Limespun covers it all."', date: "Jan 2026" },
 ];
 
 // ─── Download Card Component ──────────────────────────────────────────────────
@@ -157,6 +172,7 @@ function DownloadCardItem({ card }: { card: DownloadCard }) {
       </p>
       <a
         href={card.href}
+        download={card.isFile ? "" : undefined}
         style={{
           display: "inline-flex",
           alignItems: "center",
@@ -168,8 +184,12 @@ function DownloadCardItem({ card }: { card: DownloadCard }) {
           textDecoration: "none",
         }}
       >
-        <Download size={12} strokeWidth={2.2} />
-        Download
+        {card.isFile ? (
+          <Download size={12} strokeWidth={2.2} />
+        ) : (
+          <Mail size={12} strokeWidth={2.2} />
+        )}
+        {card.isFile ? "Download" : "Request by email"}
       </a>
     </motion.div>
   );
@@ -185,9 +205,9 @@ export default function PressPage() {
         eyebrowAccent="rust"
         headline="Everything you need to write about us."
         italicWord="us"
-        subhead="Brand assets, product screenshots, factsheet, founder bio, key dates. Pre-cleared for journalists. Press inquiries go to press@boldteq.com — we answer within one business day."
+        subhead="Brand assets, factsheet, founder bio and key dates. Screenshots and the full kit on request. Press inquiries go to press@boldteq.com — we answer within one business day."
         primaryCTA={{ label: "Email press@boldteq.com", href: "mailto:press@boldteq.com" }}
-        secondaryCTA={{ label: "Download brand kit (.zip)", href: "#download" }}
+        secondaryCTA={{ label: "Get brand assets", href: "#download" }}
       />
 
       {/* ─── Brand at a glance ────────────────────────────────────────────────── */}
@@ -206,7 +226,7 @@ export default function PressPage() {
               marginTop: 0,
             }}
           >
-            Limespun in five lines.
+            The short version.
           </h2>
 
           <motion.div
@@ -378,8 +398,8 @@ export default function PressPage() {
                 margin: 0,
               }}
             >
-              Artist · Ink · Skin — three intersecting circles. The recurring brand mark,
-              available in SVG and PNG in the kit.
+              The Limespun mark. Download the SVG below, or email us for PNG and
+              mono versions.
             </p>
           </motion.div>
         </div>
@@ -404,7 +424,7 @@ export default function PressPage() {
               marginTop: 0,
             }}
           >
-            Brand kit + screenshots.
+            Brand assets.
           </h2>
 
           <motion.div
@@ -542,10 +562,10 @@ export default function PressPage() {
         </div>
       </section>
 
-      {/* ─── Recent coverage ──────────────────────────────────────────────────── */}
+      {/* ─── Coverage ───────────────────────────────────────────────────────── */}
       <section style={{ background: BRAND.bone, paddingTop: 80, paddingBottom: 100 }}>
         <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-          <SectionEyebrow label="Recent coverage" accent="amber" />
+          <SectionEyebrow label="Coverage" accent="amber" />
           <h2
             style={{
               fontFamily: FONT.serif,
@@ -554,89 +574,60 @@ export default function PressPage() {
               color: BRAND.onyx,
               letterSpacing: "-0.02em",
               lineHeight: 1.1,
-              marginBottom: 40,
+              marginBottom: 24,
               marginTop: 0,
             }}
           >
-            Where we&rsquo;ve been mentioned.
+            No headlines yet. That&rsquo;s on purpose.
           </h2>
 
           <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
-            className="press-coverage"
+            transition={{ duration: 0.5 }}
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 24,
+              background: BRAND.white,
+              maxWidth: 720,
+              borderRadius: 16,
+              padding: 28,
+              boxShadow: SHADOW.soft,
             }}
           >
-            {COVERAGE_PLACEHOLDERS.map((item) => (
-              <motion.div
-                key={item.outlet}
-                variants={fadeUp}
-                style={{
-                  background: BRAND.white,
-                  borderRadius: 16,
-                  padding: 28,
-                  boxShadow: SHADOW.soft,
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: FONT.serif,
-                    fontStyle: "italic",
-                    fontSize: 22,
-                    color: BRAND.stoneDark,
-                    marginBottom: 16,
-                  }}
-                >
-                  {item.outlet}
-                </div>
-                <p
-                  style={{
-                    fontFamily: FONT.sans,
-                    fontSize: 14,
-                    fontStyle: "italic",
-                    color: BRAND.stoneDark,
-                    lineHeight: 1.6,
-                    marginBottom: 16,
-                  }}
-                >
-                  {item.quote}
-                </p>
-                <div
-                  style={{
-                    fontFamily: FONT.mono,
-                    fontSize: 11,
-                    color: BRAND.stoneFaint,
-                  }}
-                >
-                  {item.date}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <p
-            style={{
-              textAlign: "center",
-              fontFamily: FONT.sans,
-              fontSize: 13,
-              color: BRAND.stoneFaint,
-              marginTop: 24,
-            }}
-          >
-            Full coverage list:{" "}
-            <a
-              href="mailto:press@boldteq.com"
-              style={{ color: BRAND.stoneDark, textDecoration: "underline" }}
+            <p
+              style={{
+                fontFamily: FONT.sans,
+                fontSize: 15,
+                color: BRAND.stoneDark,
+                lineHeight: 1.65,
+                margin: "0 0 14px",
+              }}
             >
-              press@boldteq.com
-            </a>
-          </p>
+              Limespun is new. We&rsquo;re spending our energy on the product and the studios
+              using it rather than on a press push, so there&rsquo;s no coverage to point you
+              to yet.
+            </p>
+            <p
+              style={{
+                fontFamily: FONT.sans,
+                fontSize: 15,
+                color: BRAND.stoneDark,
+                lineHeight: 1.65,
+                margin: 0,
+              }}
+            >
+              If you&rsquo;re writing about tattoo, studio software or independent craft
+              businesses, we&rsquo;d still love to talk &mdash; a full product walkthrough and time with
+              the founder are both on the table. Email{" "}
+              <a
+                href="mailto:press@boldteq.com"
+                style={{ color: BRAND.onyx, textDecoration: "underline" }}
+              >
+                press@boldteq.com
+              </a>
+              .
+            </p>
+          </motion.div>
         </div>
       </section>
 
@@ -645,7 +636,7 @@ export default function PressPage() {
         badge="On the record"
         headline="Get in touch."
         italicWord="touch"
-        subhead="press@boldteq.com — embargoes honoured, founder available for interview, brand kit at /press#download."
+        subhead="press@boldteq.com — embargoes honoured, founder available for interview, brand assets at /press#download."
         primaryCTA={{ label: "Email press@boldteq.com", href: "mailto:press@boldteq.com" }}
         secondaryCTA={{ label: "About Limespun", href: "/about", icon: "play" }}
       />
@@ -655,7 +646,6 @@ export default function PressPage() {
           .press-colors { grid-template-columns: 1fr !important; }
           .press-downloads { grid-template-columns: 1fr !important; }
           .press-contact-grid { grid-template-columns: 1fr !important; }
-          .press-coverage { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </>

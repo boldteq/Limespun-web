@@ -243,7 +243,7 @@ export default function RoadmapPage() {
           headline="What's shipped. What's building. What's next."
           italicWord="next"
           subhead="The honest version. Updated when the plan changes — not when the marketing team needs a reason to publish a blog post. Vote with your studio: tell us what to build."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Request a feature", href: "/contact", icon: "play" }}
         />
 
@@ -400,7 +400,7 @@ export default function RoadmapPage() {
           headline="Tell us what to build."
           italicWord="build"
           subhead="Every paying studio gets a vote. We answer feature requests within 5 business days. Honest yes, no, or 'on the roadmap.'"
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Request a feature", href: "/contact", icon: "play" }}
         />
       </main>

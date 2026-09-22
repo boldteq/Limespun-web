@@ -10,7 +10,11 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { TestimonialCard } from "@/components/shared/testimonial-card";
+import { PLANS, formatPrice, MONEY_BACK_DAYS } from "@/lib/data/plans";
+
+const [STUDIO] = PLANS.filter((p) => p.tier === "studio");
+const [PRO] = PLANS.filter((p) => p.tier === "pro");
+const STUDIO_PRICE = formatPrice(STUDIO.monthlyCents);
 
 // ── MoatCardBright ────────────────────────────────────────────────────────────
 
@@ -107,9 +111,9 @@ function PainPointsSection() {
           <MoatCardBright
             accent="amber"
             icon={Calendar}
-            title="Guest residencies in three places"
-            body="DM with the guest. iCal entry. Client SMS. Their booking link. The four-source-of-truth problem."
-            detail={[["Tools used", "4+"], ["Setup time", "~45 min/guest"], ["Confusion", "high"]]}
+            title="Four artists, four calendars"
+            body="Everyone books from their own phone. Two clients land in the same chair at 2pm, and you find out when both walk in."
+            detail={[["Calendars", "one per artist"], ["Clash checks", "none"], ["Found out", "at the door"]]}
           />
           <MoatCardBright
             accent="sage"
@@ -127,13 +131,13 @@ function PainPointsSection() {
 // ── Why Limespun ─────────────────────────────────────────────────────────────────
 
 const studioFeatures = [
-  "Up to 5 active artists — resident, guest, apprentice",
-  "Commission auto-splits — route on Stripe at booking time",
-  "Guest residency band — time-boxed on calendar, own booking page",
+  "Up to 5 artists — residents, booth renters, apprentices",
+  "Commission and booth-rent splits — route on Stripe at booking time",
+  "One calendar for every artist — clash checks before anything double-books",
   "Kiosk consent — iPad in the studio, signed before the chair",
-  "Free white-glove migration — included on Studio plan and above",
-  "Chat support — 24h response",
-  "Per-artist payroll — 1099-K, P11D, etc generated for year-end",
+  "Unlimited bookings and 500 texts a month",
+  "Free white-glove migration — included on every plan",
+  "Email support — 24h response",
 ];
 
 function WhyLimespunSection() {
@@ -176,7 +180,7 @@ function WhyLimespunSection() {
   );
 }
 
-// ── Customer Quote ─────────────────────────────────────────────────────────────
+// ── Early-days note ────────────────────────────────────────────────────────────
 
 function CustomerQuoteSection() {
   return (
@@ -189,27 +193,46 @@ function CustomerQuoteSection() {
           transition={{ duration: 0.6 }}
           style={{ marginBottom: 32 } as React.CSSProperties}
         >
-          <SectionEyebrow label="Real small studio" accent="amber" />
+          <SectionEyebrow label="Early days" accent="amber" />
           <h2 style={{ fontFamily: FONT.serif, fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 400, color: BRAND.onyx, letterSpacing: "-0.025em", lineHeight: 1.1 } as React.CSSProperties}>
-            How Tomas runs Salt House.
+            Small studios are who we&apos;re building with.
           </h2>
         </motion.div>
 
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} style={{ maxWidth: 460 } as React.CSSProperties}>
-          <TestimonialCard
-            name="Tomas Bel"
-            role="Owner · Salt House Tattoo"
-            city="Reykjavik, IS"
-            chairs="3 chairs · rotating guests"
-            quote="Guest residencies used to mean three spreadsheets. Now I drop them on the calendar and the booking page just works."
-            stats={[
-              { l: "Residencies / yr", v: "11" },
-              { l: "Setup time", v: "12 min" },
-              { l: "Guest no-shows", v: "0" },
-            ]}
-            gradient={`linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.rust} 100%)`}
-            initials="TB"
-          />
+        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} style={{ maxWidth: 560 } as React.CSSProperties}>
+          <div
+            style={{
+              background: BRAND.white,
+              borderRadius: 18,
+              padding: 32,
+              boxShadow: SHADOW.soft,
+              border: `1px solid ${BRAND.borderSoft}`,
+            } as React.CSSProperties}
+          >
+            <p
+              style={{
+                fontFamily: FONT.serif,
+                fontStyle: "italic",
+                fontSize: 24,
+                lineHeight: 1.3,
+                color: BRAND.onyx,
+                margin: "0 0 16px",
+              } as React.CSSProperties}
+            >
+              The stories will come from real studios. We&apos;re not there yet.
+            </p>
+            <p
+              style={{
+                fontFamily: FONT.sans,
+                fontSize: 15,
+                lineHeight: 1.65,
+                color: BRAND.stoneDark,
+                margin: 0,
+              } as React.CSSProperties}
+            >
+              Limespun is new, and open to every studio. Two to five chairs, a booth renter or two, an apprentice learning the ropes &mdash; if that&apos;s you, book a walkthrough and we&apos;ll show you commission splits live.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -225,10 +248,10 @@ function PricingTeaserSection() {
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <SectionEyebrow label="Studio plan" accent="amber" />
           <h2 style={{ fontFamily: FONT.serif, fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 400, color: BRAND.onyx, letterSpacing: "-0.025em", lineHeight: 1.05, marginBottom: 16 } as React.CSSProperties}>
-            $59 / month
+            {STUDIO_PRICE} / month
           </h2>
           <p style={{ fontSize: 17, fontFamily: FONT.sans, color: BRAND.stoneDark, marginBottom: 32, lineHeight: 1.6 } as React.CSSProperties}>
-            Up to 5 artists. Free migration. 14-day trial. No card.
+            Up to 5 artists. Unlimited bookings. Free migration. {MONEY_BACK_DAYS}-day money-back guarantee.
           </p>
           <a href="/pricing" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 24px", borderRadius: 100, background: BRAND.onyx, color: BRAND.bone, textDecoration: "none", fontFamily: FONT.sans, fontSize: 14, fontWeight: 600 } as React.CSSProperties}>
             See Studio plan details <ArrowRight size={14} />
@@ -243,8 +266,8 @@ function PricingTeaserSection() {
 
 const faqs = [
   {
-    q: "How does the guest residency work?",
-    a: "Each guest gets a time-boxed band on the calendar with their own colour. They get a public booking page (portfolio.limespun.com/[handle]) for the residency window. Auto-archives when their tour ends.",
+    q: "Can I host guest artists on Studio?",
+    a: `Guest-artist seats start on Pro (${formatPrice(PRO.monthlyCents)}/mo). There, each guest gets a time-boxed band on the calendar with their own colour and a public booking page (portfolio.limespun.com/[handle]) for the residency window. Auto-archives when their tour ends.`,
   },
   {
     q: "Can artists get paid directly through Stripe Connect?",
@@ -252,7 +275,7 @@ const faqs = [
   },
   {
     q: "What if I have 6 artists?",
-    a: "Pro plan ($99/mo). Includes unlimited artists, AI Studio, and EU REACH inventory.",
+    a: `Move to Pro (${formatPrice(PRO.monthlyCents)}/mo): up to 15 artists, unlimited guest-artist seats, payroll and 1099s, and AI replies and aftercare. EU REACH ink tracking is already on every plan, Studio included.`,
   },
   {
     q: "Do you support apprentices that don't take a commission cut?",
@@ -288,8 +311,8 @@ export default function SmallStudiosPage() {
           eyebrowAccent="amber"
           headline="2-5 chairs. Mixed roster. One quiet system."
           italicWord="quiet"
-          subhead="Resident artists, weekend guests, the new apprentice. Commission splits route on the invoice. Residencies live on the calendar. The small shop, finally not held together by group chat."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          subhead="Resident artists, a booth renter, the new apprentice. Commission and booth-rent splits route on the invoice. Every artist on one calendar, with clash checks. The small shop, finally not held together by group chat."
+          primaryCTA={{ label: "Choose Studio", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "See pricing", href: "/pricing" }}
         />
         <PainPointsSection />
@@ -301,8 +324,8 @@ export default function SmallStudiosPage() {
           badge="Small studio, big rails"
           headline="Get the team running."
           italicWord="running"
-          subhead="14-day trial. White-glove migration included. Up to 5 artists, $59/mo."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration included. Up to 5 artists, ${STUDIO_PRICE}/mo.`}
+          primaryCTA={{ label: "Choose Studio", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
         />
       </main>

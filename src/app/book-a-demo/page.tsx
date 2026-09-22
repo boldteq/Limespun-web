@@ -7,6 +7,7 @@ import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { BRAND, FONT, SHADOW, GRADIENT } from "@/lib/brand";
 import { CheckCircle2 } from "lucide-react";
+import { MONEY_BACK_DAYS, ONBOARDING_SUPPORT_DAYS } from "@/lib/data/plans";
 
 export const metadata: Metadata = {
   title: "Book a 30-min walkthrough — Limespun",
@@ -23,9 +24,9 @@ export const metadata: Metadata = {
 
 const STAT_ITEMS = [
   { stat: "< 1 day", label: "response time" },
-  { stat: "92%", label: "of demos result in a trial" },
   { stat: "0", label: "sales pressure" },
-  { stat: "14 days", label: "free trial after demo" },
+  { stat: `${MONEY_BACK_DAYS} days`, label: "money-back guarantee" },
+  { stat: `${ONBOARDING_SUPPORT_DAYS} days`, label: "founder-priority onboarding" },
 ];
 
 const AGENDA_STEPS = [
@@ -330,11 +331,11 @@ export default function BookADemoPage() {
         {/* ─── Section 4: Closing CTA ─────────────────────────────────────── */}
         <CTASection
           badge="Or jump straight in"
-          headline="Skip the demo, start the trial."
-          italicWord="trial"
-          subhead="If you're the kind of studio owner who'd rather poke around for ten minutes alone, the 14-day trial is open. No card. No call."
+          headline="Skip the demo, pick a plan."
+          italicWord="plan"
+          subhead={`If you're the kind of studio owner who'd rather poke around alone, sign up and start. No call. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
           primaryCTA={{
-            label: "Start a 14-day trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
         />

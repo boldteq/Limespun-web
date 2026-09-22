@@ -17,7 +17,7 @@ interface ProductHeroProps {
 }
 
 const defaultPrimary = {
-  label: "Start free trial",
+  label: "Get started",
   href: "https://app.limespun.com/signup",
 };
 

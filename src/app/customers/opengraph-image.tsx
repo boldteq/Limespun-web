@@ -101,7 +101,7 @@ export default async function OGImage() {
               textTransform: "uppercase",
             }}
           >
-            1,200+ artists · 47 countries
+            The studio OS for tattoo
           </span>
         </div>
       </div>

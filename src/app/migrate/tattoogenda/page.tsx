@@ -10,8 +10,8 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { ComparisonTable } from "@/components/shared/comparison-table";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
-import { TestimonialCard } from "@/components/shared/testimonial-card";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 // ── MoatCardBright (local — lifted from work.tsx) ────────────────────────────
 
@@ -233,11 +233,11 @@ const faqItems = [
   },
   {
     q: "Will my guest residency setup carry over?",
-    a: "Fully. Time-boxed bands, per-guest booking pages, email-approval flow — all 1:1 between platforms.",
+    a: "Fully, on Pro and up (guest-artist seats start on Pro). Time-boxed bands, per-guest booking pages, email-approval flow — all 1:1 between platforms.",
   },
   {
     q: "Can I keep both running during migration?",
-    a: "Yes. 14-day overlap recommended. Cancel TattooGenda day-of cutover. We don't bill until your last TattooGenda appointment clears.",
+    a: `Yes. 14-day overlap recommended. Cancel TattooGenda day-of cutover. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   },
 ];
 
@@ -260,10 +260,10 @@ export default function TattoogendaPage() {
           eyebrowAccent="rust"
           headline="Tattoo-native vs tattoo-native. We win on the small stuff."
           italicWord="the small stuff"
-          subhead="TattooGenda was the original tattoo-only booking SaaS. We respect that. But the things they put behind 'Bigger Plan' — REACH compliance, guest residencies, deposit pools — Limespun includes on every plan. 4-day migration. White-glove. Free above Solo."
+          subhead="TattooGenda was the original tattoo-only booking SaaS. We respect that. But the things they put behind 'Bigger Plan' — REACH compliance and deposit pools — Limespun includes on every plan. 4-day migration. White-glove. Free on every plan."
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
-            label: "Start the trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
         />
@@ -392,7 +392,7 @@ export default function TattoogendaPage() {
                   },
                   {
                     feature: "AI design assistant",
-                    values: { tattoogenda: false, limespun: true },
+                    values: { tattoogenda: false, limespun: "Pro and up" },
                   },
                   {
                     feature: "Photo timeline (REF→HEALED)",
@@ -400,15 +400,15 @@ export default function TattoogendaPage() {
                   },
                   {
                     feature: "Commission auto-splits (Stripe Connect)",
-                    values: { tattoogenda: false, limespun: true },
+                    values: { tattoogenda: false, limespun: "Studio and up" },
                   },
                   {
                     feature: "Guest residency band",
-                    values: { tattoogenda: true, limespun: true },
+                    values: { tattoogenda: true, limespun: "Pro and up" },
                   },
                   {
                     feature: "API access",
-                    values: { tattoogenda: "Enterprise", limespun: true },
+                    values: { tattoogenda: "Enterprise", limespun: "Pro and up" },
                   },
                   {
                     feature: "Tattoo-specific by design",
@@ -525,7 +525,7 @@ export default function TattoogendaPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
+        {/* Early-days note */}
         <section
           style={{
             background: BRAND.bone,
@@ -547,22 +547,44 @@ export default function TattoogendaPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-60px" }}
-              style={{ maxWidth: 460, width: "100%" } as React.CSSProperties}
+              style={{ maxWidth: 560, width: "100%" } as React.CSSProperties}
             >
-              <TestimonialCard
-                name="Tomas Bel"
-                role="Owner · Salt House Tattoo"
-                city="Reykjavik, IS"
-                chairs="3 chairs · rotating guests"
-                quote="Guest residencies used to mean three spreadsheets. Now I drop them on the calendar and the booking page just works."
-                stats={[
-                  { l: "Residencies / yr", v: "11" },
-                  { l: "Setup time", v: "12 min" },
-                  { l: "Guest no-shows", v: "0" },
-                ]}
-                gradient={`linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.rust} 100%)`}
-                initials="TB"
-              />
+              <div
+                style={{
+                  background: BRAND.white,
+                  borderRadius: 18,
+                  padding: 32,
+                  boxShadow: SHADOW.soft,
+                  border: `1px solid ${BRAND.borderSoft}`,
+                } as React.CSSProperties}
+              >
+                <SectionEyebrow label="Early days" accent="rust" />
+                <p
+                  style={{
+                    fontFamily: FONT.serif,
+                    fontStyle: "italic",
+                    fontSize: 24,
+                    lineHeight: 1.3,
+                    color: BRAND.onyx,
+                    margin: "0 0 16px",
+                  } as React.CSSProperties}
+                >
+                  No testimonials here yet &mdash; and we won&apos;t invent them.
+                </p>
+                <p
+                  style={{
+                    fontFamily: FONT.sans,
+                    fontSize: 15,
+                    lineHeight: 1.65,
+                    color: BRAND.stoneDark,
+                    margin: 0,
+                  } as React.CSSProperties}
+                >
+                  Limespun is new, so there are no switching stories yet. Moving from
+                  {" "}TattooGenda, you work directly with the people building the product: we map your
+                  data with you and run both systems side by side, and if it isn&apos;t right in the first {MONEY_BACK_DAYS} days you get your money back.
+                </p>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -612,10 +634,10 @@ export default function TattoogendaPage() {
           badge="Tattoo-native, no upsells"
           headline="Move where every feature is on every plan."
           italicWord="every feature"
-          subhead="4-day migration. Free above Solo. We don't bill until you cancel TattooGenda."
+          subhead={`4-day migration. Free on every plan. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
-            label: "Or start the trial",
+            label: "Or get started",
             href: "https://app.limespun.com/signup",
             icon: "play",
           }}

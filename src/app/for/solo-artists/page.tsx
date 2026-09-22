@@ -10,7 +10,12 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { TestimonialCard } from "@/components/shared/testimonial-card";
+import { PLANS, formatPrice, MONEY_BACK_DAYS, ONBOARDING_SUPPORT_DAYS } from "@/lib/data/plans";
+
+const [SOLO] = PLANS.filter((p) => p.tier === "solo");
+const [STUDIO] = PLANS.filter((p) => p.tier === "studio");
+const [PRO] = PLANS.filter((p) => p.tier === "pro");
+const SOLO_PRICE = formatPrice(SOLO.monthlyCents);
 
 // ── MoatCardBright (lifted from home/work.tsx) ────────────────────────────────
 
@@ -372,7 +377,8 @@ function WhyLimespunSection() {
               paddingTop: 20,
             } as React.CSSProperties}
           >
-            Everything in this list comes with the $29 Solo plan. No add-ons, no platform fees.
+            Everything in this list comes with the {SOLO_PRICE} Solo plan: one artist, 100 bookings and 75 texts a
+            month. No add-ons, no platform fees.
           </p>
         </motion.div>
       </div>
@@ -380,7 +386,7 @@ function WhyLimespunSection() {
   );
 }
 
-// ── Customer Quote ─────────────────────────────────────────────────────────────
+// ── Early-days note ────────────────────────────────────────────────────────────
 
 function CustomerQuoteSection() {
   return (
@@ -405,7 +411,7 @@ function CustomerQuoteSection() {
           transition={{ duration: 0.6 }}
           style={{ marginBottom: 32 } as React.CSSProperties}
         >
-          <SectionEyebrow label="Real solo studio" accent="rust" />
+          <SectionEyebrow label="Early days" accent="rust" />
           <h2
             style={{
               fontFamily: FONT.serif,
@@ -416,7 +422,7 @@ function CustomerQuoteSection() {
               lineHeight: 1.1,
             } as React.CSSProperties}
           >
-            How Kaia runs Nine Lives.
+            Built with solo artists, not about them.
           </h2>
         </motion.div>
 
@@ -425,22 +431,41 @@ function CustomerQuoteSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          style={{ maxWidth: 460 } as React.CSSProperties}
+          style={{ maxWidth: 560 } as React.CSSProperties}
         >
-          <TestimonialCard
-            name="Kaia Osei"
-            role="Solo · Nine Lives Tattoo"
-            city="East London, UK"
-            chairs="1 chair · resident-only"
-            quote="My whole week starts with a six-minute triage now. Inbox sorts the urgent stuff before I've even opened the shop."
-            stats={[
-              { l: "Triage time", v: "6 min" },
-              { l: "Disputes won", v: "4 of 4" },
-              { l: "Migration", v: "1 day" },
-            ]}
-            gradient={`linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.rustGlow} 50%, ${BRAND.rust} 100%)`}
-            initials="KO"
-          />
+          <div
+            style={{
+              background: BRAND.white,
+              borderRadius: 18,
+              padding: 32,
+              boxShadow: SHADOW.soft,
+              border: `1px solid ${BRAND.borderSoft}`,
+            } as React.CSSProperties}
+          >
+            <p
+              style={{
+                fontFamily: FONT.serif,
+                fontStyle: "italic",
+                fontSize: 24,
+                lineHeight: 1.3,
+                color: BRAND.onyx,
+                margin: "0 0 16px",
+              } as React.CSSProperties}
+            >
+              No case study yet &mdash; we&apos;d rather wait for a true one.
+            </p>
+            <p
+              style={{
+                fontFamily: FONT.sans,
+                fontSize: 15,
+                lineHeight: 1.65,
+                color: BRAND.stoneDark,
+                margin: 0,
+              } as React.CSSProperties}
+            >
+              Limespun is new, and solo artists are shaping it directly. Run a one-chair studio? You get {ONBOARDING_SUPPORT_DAYS} days of onboarding help from the founding team: tell us what slows your week down and it goes on the roadmap.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -477,7 +502,7 @@ function PricingTeaserSection() {
               marginBottom: 16,
             } as React.CSSProperties}
           >
-            $29 / month
+            {SOLO_PRICE} / month
           </h2>
           <p
             style={{
@@ -488,8 +513,9 @@ function PricingTeaserSection() {
               lineHeight: 1.6,
             } as React.CSSProperties}
           >
-            Everything above. 14-day trial. No card. Stripe takes its standard
-            processing fee on cards. We take nothing on top.
+            Everything above, plus inventory, EU REACH ink tracking and your own
+            booking domain. {MONEY_BACK_DAYS}-day money-back guarantee. Stripe takes its
+            standard processing fee on cards. We take nothing on top.
           </p>
           <a
             href="/pricing"
@@ -520,7 +546,7 @@ function PricingTeaserSection() {
 const faqs = [
   {
     q: "Will I outgrow Solo?",
-    a: "When you add a second active artist, you switch to Studio ($59). One click, no migration. Until then, Solo has every feature except multi-artist commissions.",
+    a: `When you add a second artist or pass 100 bookings a month, you move to Studio (${formatPrice(STUDIO.monthlyCents)}/mo). One click, no migration. Until then, Solo has the full one-chair kit; Studio adds one calendar for every artist and commission and booth-rent splits.`,
   },
   {
     q: "Is Stripe Connect required?",
@@ -531,8 +557,8 @@ const faqs = [
     a: "Yes. Logged manually. Reconciles against the day's bookings. Tax forms include cash totals.",
   },
   {
-    q: "Does Solo include the AI Studio?",
-    a: "AI Studio is on the Pro plan ($99/mo). Solo includes everything else — bookings, deposits, projects, payments, inventory, forms, photo timeline.",
+    q: "Does Solo include AI?",
+    a: `AI replies, aftercare and consult summaries start on Pro (${formatPrice(PRO.monthlyCents)}/mo). Solo includes the rest of the kit — bookings, deposits, projects, payments, inventory, forms, photo timeline and EU REACH ink tracking.`,
   },
 ];
 
@@ -597,8 +623,8 @@ export default function SoloArtistsPage() {
           eyebrowAccent="rust"
           headline="One chair. One artist. No overhead."
           italicWord="One"
-          subhead="You don't need a 'platform.' You need bookings that don't no-show, deposits that don't get lost, and a Today screen that takes 90 seconds. $29/mo. Done."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          subhead={`You don't need a 'platform.' You need bookings that don't no-show, deposits that don't get lost, and a Today screen that takes 90 seconds. ${SOLO_PRICE}/mo. Done.`}
+          primaryCTA={{ label: "Choose Solo", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "See pricing", href: "/pricing" }}
         />
         <PainPointsSection />
@@ -608,10 +634,10 @@ export default function SoloArtistsPage() {
         <FAQSection />
         <CTASection
           badge="One chair, full kit"
-          headline="Start the trial."
-          italicWord="trial"
-          subhead="14-day trial. No card. Bring your client list — we'll import it for free."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          headline="Start with Solo."
+          italicWord="Solo"
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Our team moves your clients, bookings and deposits over for free.`}
+          primaryCTA={{ label: "Choose Solo", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Talk to a real human", href: "/book-a-demo", icon: "play" }}
         />
       </main>

@@ -15,7 +15,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const story = customerStories.find((s) => s.slug === slug);
-  if (!story) return {};
+  if (!story) return { robots: { index: false, follow: false } };
   return {
     title: `${story.name} — ${story.role} | Limespun`,
     description: story.shortQuote.slice(0, 160),
@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "article",
     },
     alternates: { canonical: `https://limespun.com/customers/${slug}` },
+    robots: { index: false, follow: false },
   };
 }
 

@@ -16,7 +16,7 @@ export const roadmapItems: RoadmapItem[] = [
   // Building (Q2-Q3 2026)
   { title: "Per-location P&L dashboard", description: "Multi-location chains: every shop, one view, monthly auto-reports.", modules: ["Analytics", "Locations"], status: 'building', quarter: 'Q2-2026' },
   { title: "Public booking pages v2", description: "Customisable per-artist, per-residency. Studio-branded.", modules: ["Bookings"], status: 'building', quarter: 'Q3-2026' },
-  { title: "SSO + SCIM (Enterprise)", description: "Google, Microsoft, SAML. Auto-provision artists across locations.", modules: ["Auth", "Locations"], status: 'building', quarter: 'Q3-2026' },
+  { title: "SSO + SCIM (Multi-Location)", description: "Google, Microsoft, SAML. Auto-provision artists across locations.", modules: ["Auth", "Locations"], status: 'building', quarter: 'Q3-2026' },
   // Next (Q3-Q4 2026)
   { title: "Mobile app for artists", description: "Native iOS + Android. Today, schedule, messages, photo capture.", modules: ["Mobile"], status: 'next', quarter: 'Q3-2026' },
   { title: "Loyalty + referral mechanics", description: "Per-studio loyalty programmes. Referral tracking. Auto-credits.", modules: ["Marketing"], status: 'next', quarter: 'Q4-2026' },

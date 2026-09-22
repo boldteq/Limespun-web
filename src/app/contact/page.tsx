@@ -346,7 +346,7 @@ export default function ContactPage() {
         subhead="One inbox. One human. Every message read."
         primaryCTA={{ label: "Email hello@boldteq.com", href: "mailto:hello@boldteq.com" }}
         secondaryCTA={{
-          label: "Start a 14-day trial",
+          label: "Get started",
           href: "https://app.limespun.com/signup",
           icon: "play",
         }}

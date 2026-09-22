@@ -26,10 +26,10 @@ export const blogPosts: BlogPost[] = [
     slug: "the-90-second-morning-triage",
     title: "The 90-second morning triage that runs a tattoo studio",
     excerpt:
-      "How Sable & Sparrow opens the shop in 90 seconds — and why most studios still take 40 minutes.",
+      "How a tattoo studio can open the shop in 90 seconds — and why it so often takes forty minutes instead.",
     publishedAt: "2026-04-15",
     readTime: "6 min",
-    author: { name: "Miles Verena", role: "Owner · Sable & Sparrow" },
+    author: { name: "The Limespun team", role: "Limespun" },
     category: "ops",
     gradient: `linear-gradient(135deg, ${BRAND.rust} 0%, ${BRAND.amber} 100%)`,
     content: [
@@ -39,7 +39,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: 'p',
-        text: 'Before Limespun, my morning ritual was: unlock the door, make coffee, open four browser tabs, check the booking spreadsheet, check the WhatsApp group, text the artist who had a 10am, discover the 10am had messaged at 11pm to reschedule, panic. Forty minutes gone before I picked up a machine.',
+        text: 'For a lot of studio owners, the morning goes like this: unlock the door, make coffee, open four browser tabs, check the booking spreadsheet, check the WhatsApp group, text the artist who has a 10am, discover the 10am messaged at 11pm to reschedule, panic. Forty minutes gone before anyone picks up a machine.',
       },
       {
         type: 'h3',
@@ -64,7 +64,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: 'p',
-        text: "Above the appointment list, three numbers: today's projected revenue, the fill rate for this week, and the number of outstanding deposit requests. I glance at those for about four seconds. If the fill rate is under 70% and it's Monday, I know I need to push the waitlist. If outstanding deposits is above 3, I deal with that before anything else.",
+        text: "Above the appointment list, three numbers: today's projected revenue, the fill rate for this week, and the number of outstanding deposit requests. The idea is a four-second glance. If the fill rate is under 70% and it's Monday, that's the cue to push the waitlist. If outstanding deposits is above three, deal with those before anything else.",
       },
       {
         type: 'h3',
@@ -72,7 +72,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: 'p',
-        text: "Sable & Sparrow had a near-miss two years ago. A client had a documented nickel sensitivity in their intake form and we missed it when switching to a new ink brand. We were lucky. Now, any client with a documented allergy or skin sensitivity gets a persistent amber banner on their appointment tile — not a buried note in a tab. It's the first thing you see when you tap the booking.",
+        text: "Allergy near-misses tend to happen at moments of change: a client documents a nickel sensitivity on their intake form, the studio switches ink brands, and the note sits three taps deep in a tab nobody opens. That's why, in Limespun, any client with a documented allergy or skin sensitivity gets a persistent amber banner on their appointment tile — not a buried note in a tab. It's the first thing you see when you tap the booking.",
       },
       {
         type: 'callout',
@@ -86,11 +86,6 @@ export const blogPosts: BlogPost[] = [
       {
         type: 'p',
         text: "The Project Pulse widget sits below the day view. It shows any multi-session project where the next session is within 14 days and the reference image hasn't been approved yet, or the healed photo from the previous session is missing. This is the catch-all for the things that fall through the cracks in a busy studio.",
-      },
-      {
-        type: 'quote',
-        text: "I used to lose 30 minutes every morning chasing context that was already in the system. Now I glance at one screen for 90 seconds and I know exactly what needs my attention.",
-        attribution: "Miles Verena, Sable & Sparrow",
       },
       {
         type: 'h3',
@@ -118,7 +113,7 @@ export const blogPosts: BlogPost[] = [
       "Why pooling deposits per project (not per session) eliminates Friday afternoon reconciling.",
     publishedAt: "2026-04-08",
     readTime: "8 min",
-    author: { name: "Limespun team", role: "Boldteq" },
+    author: { name: "The Limespun team", role: "Limespun" },
     category: "product",
     gradient: `linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.sage} 100%)`,
     content: [
@@ -199,11 +194,11 @@ Total received to date: £550`,
       {
         type: 'callout',
         tone: 'sage',
-        text: "Deposit pools are available on the Studio and Business plans. Per-session deposits remain available on all plans for studios that prefer that model.",
+        text: "Deposit pools are available on every plan, alongside per-session deposits for studios that prefer that model.",
       },
       {
         type: 'p',
-        text: "The deposit pool model won't fit every studio — if you do mostly single-session walk-ins, per-booking deposits are simpler. But if you run projects longer than two sessions, the reconciliation time savings alone justify switching. See how it works in your Limespun trial at app.limespun.com/signup.",
+        text: "The deposit pool model won't fit every studio — if you do mostly single-session walk-ins, per-booking deposits are simpler. But if you run projects longer than two sessions, the reconciliation time savings alone justify switching. See how it works in Limespun at app.limespun.com/signup.",
       },
     ],
   },
@@ -214,7 +209,7 @@ Total received to date: £550`,
       "The complete compliance checklist. CI numbers, MSDS, batch tracking, reaction logging — what's required and what's optional.",
     publishedAt: "2026-04-01",
     readTime: "12 min",
-    author: { name: "Asha Mehra", role: "Solo · Pluma Studio" },
+    author: { name: "The Limespun team", role: "Limespun" },
     category: "compliance",
     gradient: `linear-gradient(135deg, ${BRAND.sage} 0%, ${BRAND.amber} 100%)`,
     content: [
@@ -262,7 +257,7 @@ Total received to date: £550`,
       },
       {
         type: 'p',
-        text: "Batch tracking means recording the batch number from the ink bottle used in each tattoo session. This sounds like administrative overhead until a supplier issues a batch recall — which has happened twice in the EU market since 2022. With a batch log, you can identify which clients received ink from the recalled batch and contact them. Without it, you're hoping nothing goes wrong.",
+        text: "Batch tracking means recording the batch number from the ink bottle used in each tattoo session. This sounds like administrative overhead until a supplier issues a batch recall — which does happen in the EU market. With a batch log, you can identify which clients received ink from the recalled batch and contact them. Without it, you're hoping nothing goes wrong.",
       },
       {
         type: 'p',
@@ -296,26 +291,21 @@ Total received to date: £550`,
         text: "UK REACH mirrors the EU restriction but is enforced by the Health and Safety Executive rather than national market surveillance authorities. In practice, enforcement in both the EU and UK has been uneven — several member states have been slow to prosecute studios using non-compliant ink. Do not mistake slow enforcement for no enforcement. The liability is yours when a client has a reaction and asks what was in the ink.",
       },
       {
-        type: 'quote',
-        text: "An environmental health inspector walked into my studio last November. She asked to see my SDS files and batch logs. I had everything in Limespun. She was done in 12 minutes and left satisfied. That's the posture you want.",
-        attribution: "Asha Mehra, Pluma Studio",
-      },
-      {
         type: 'h3',
         text: 'Inspector-ready in practice',
       },
       {
         type: 'p',
-        text: "Being inspector-ready doesn't mean having perfect paperwork — it means being able to produce the right document for any question in under a minute. The three documents inspectors most commonly request: the SDS for an ink currently in use, the batch log for a specific date's session, and evidence of allergen disclosure in client intake. If you can pull all three in under three minutes, you're ahead of 90% of studios.",
+        text: "Being inspector-ready doesn't mean having perfect paperwork — it means being able to produce the right document for any question in under a minute. The three documents inspectors most commonly request: the SDS for an ink currently in use, the batch log for a specific date's session, and evidence of allergen disclosure in client intake. If you can pull all three in under three minutes, you're in good shape.",
       },
       {
         type: 'callout',
         tone: 'rust',
-        text: "Limespun compliance features — SDS library, batch tracking, reaction log, and client allergen record — are available on the Studio plan and above. The compliance dashboard gives you a one-screen view of any gaps: inks without SDS on file, sessions with missing batch numbers, and clients with undisclosed allergy status.",
+        text: "Limespun compliance features — SDS library, batch tracking, reaction log, and client allergen record — are available on every plan. The compliance dashboard gives you a one-screen view of any gaps: inks without SDS on file, sessions with missing batch numbers, and clients with undisclosed allergy status.",
       },
       {
         type: 'p',
-        text: "The compliance module is the least glamorous part of Limespun and the one that matters most when things go wrong. Start your trial at app.limespun.com/signup and import your existing ink inventory in under 10 minutes.",
+        text: "The compliance module is the least glamorous part of Limespun and the one that matters most when things go wrong. Get started at app.limespun.com/signup and import your existing ink inventory in under 10 minutes.",
       },
     ],
   },
@@ -323,20 +313,20 @@ Total received to date: £550`,
     slug: "guest-residency-bookings-that-actually-work",
     title: "Guest residency bookings that actually work",
     excerpt:
-      "How Salt House Tattoo runs 11 guest residencies a year on a 12-minute setup — and zero spreadsheets.",
+      "How to run a guest residency on a 12-minute setup — and zero spreadsheets.",
     publishedAt: "2026-03-25",
     readTime: "5 min",
-    author: { name: "Tomas Bel", role: "Owner · Salt House Tattoo" },
+    author: { name: "The Limespun team", role: "Limespun" },
     category: "ops",
     gradient: `linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.rust} 100%)`,
     content: [
       {
         type: 'h2',
-        text: 'Eleven residencies a year used to mean eleven rounds of setup hell.',
+        text: 'A busy guest calendar used to mean a round of setup hell for every residency.',
       },
       {
         type: 'p',
-        text: "Salt House has been running guest artists since 2019. For the first three years, every residency meant the same manual process: create a temporary booking link, email it to the guest, monitor their calendar so double-bookings didn't happen, chase the deposit split at the end of the week, then archive everything. Multiply that by 11 and it's a part-time job.",
+        text: "Studios that host guest artists regularly know the manual routine: create a temporary booking link, email it to the guest, monitor their calendar so double-bookings didn't happen, chase the deposit split at the end of the week, then archive everything. Multiply that by ten or more residencies a year and it's a part-time job.",
       },
       {
         type: 'h3',
@@ -344,7 +334,7 @@ Total received to date: £550`,
       },
       {
         type: 'p',
-        text: "In Limespun, a guest residency is a first-class object. You create a residency record, set the dates, assign a station, and define the terms — how many days, what the studio's commission rate is, whether the guest brings their own products or uses house stock. The system generates a guest booking page with a slug in the format salthouse.limespun.com/guest/[artist-handle]. That page is the only thing you send to the guest artist.",
+        text: "In Limespun, a guest residency is a first-class object. You create a residency record, set the dates, assign a station, and define the terms — how many days, what the studio's commission rate is, whether the guest brings their own products or uses house stock. The system generates a guest booking page with a slug in the format yourstudio.limespun.com/guest/[artist-handle]. That page is the only thing you send to the guest artist.",
       },
       {
         type: 'ul',
@@ -365,17 +355,12 @@ Total received to date: £550`,
         text: "Guest artists are prolific bookers — which is great for revenue and occasionally terrible for the studio's master schedule. Limespun's residency booking page respects two hard limits: the end date of the residency (no bookings beyond it, ever), and the daily capacity limit you set. If Mara is doing a four-day residency and you've set a max of three bookings per day, the system closes the fourth slot automatically, regardless of what the guest artist does in their own calendar app.",
       },
       {
-        type: 'quote',
-        text: "I used to get messages at 11pm from guest artists asking me to manually add a booking because their calendar was full but a client had messaged them directly. That just doesn't happen anymore.",
-        attribution: "Tomas Bel, Salt House Tattoo",
-      },
-      {
         type: 'h3',
         text: 'The email approval flow',
       },
       {
         type: 'p',
-        text: "For high-volume or well-known guest artists, Salt House uses the optional approval step: new booking requests go into a pending queue rather than auto-confirming. The guest artist gets an email with the client's brief and can approve or decline from their phone without logging in. Approved bookings auto-confirm to the client, declined bookings trigger a polite waiting-list message.",
+        text: "For high-volume or well-known guest artists, you can switch on the optional approval step: new booking requests go into a pending queue rather than auto-confirming. The guest artist gets an email with the client's brief and can approve or decline from their phone without logging in. Approved bookings auto-confirm to the client, declined bookings trigger a polite waiting-list message.",
       },
       {
         type: 'p',
@@ -392,11 +377,11 @@ Total received to date: £550`,
       {
         type: 'callout',
         tone: 'amber',
-        text: "Guest residency management is available on the Studio plan. You can run up to 3 concurrent residencies. The Business plan removes the concurrency limit.",
+        text: "Guest residency management is available on the Pro plan and up, with unlimited guest-artist seats.",
       },
       {
         type: 'p',
-        text: "If you're running more than four guest residencies a year and still managing them manually, the time cost is measurable. The residency module is live — start a trial at app.limespun.com/signup and set up your next one in 12 minutes.",
+        text: "If you're running more than four guest residencies a year and still managing them manually, the time cost is measurable. The residency module is live on Pro — get started at app.limespun.com/signup and set up your next one in 12 minutes.",
       },
     ],
   },
@@ -407,17 +392,17 @@ Total received to date: £550`,
       "Why eight artists getting paid by spreadsheet at 5pm Friday is the most expensive bug in your studio.",
     publishedAt: "2026-03-18",
     readTime: "7 min",
-    author: { name: "Marcus Lane", role: "Owner · Iron + Ash" },
+    author: { name: "The Limespun team", role: "Limespun" },
     category: "ops",
     gradient: `linear-gradient(135deg, ${BRAND.rust} 0%, ${BRAND.rustDeep} 50%, ${BRAND.amber} 100%)`,
     content: [
       {
         type: 'h2',
-        text: 'Every Friday at 4:45pm, I became a part-time accountant.',
+        text: 'Every Friday at 4:45pm, the studio owner becomes a part-time accountant.',
       },
       {
         type: 'p',
-        text: "Iron + Ash runs eight resident artists on varying commission structures — some on 50/50, two senior artists on 60/40, one on a flat weekly rate plus 40%. When we were doing payroll by spreadsheet, Friday afternoon was my most stressful two hours of the week. I was manually pulling session data, applying the right rate for each artist, subtracting product charges, and sending eight individual bank transfers before people left for the weekend.",
+        text: "Picture a studio with eight resident artists on varying commission structures — some on 50/50, two senior artists on 60/40, one on a flat weekly rate plus 40%. Run payroll by spreadsheet and Friday afternoon becomes the most stressful two hours of the week: manually pulling session data, applying the right rate for each artist, subtracting product charges, and sending eight individual bank transfers before people leave for the weekend.",
       },
       {
         type: 'h3',
@@ -425,15 +410,15 @@ Total received to date: £550`,
       },
       {
         type: 'p',
-        text: "Two hours of owner time, every week. At a conservative £50/hour opportunity cost, that's £100/week in wasted time — £5,200/year. Add the error rate: in 18 months of spreadsheet payroll, I made three calculation errors significant enough to require a correction. Two of those required a difficult conversation. One almost cost me an artist.",
+        text: "Two hours of owner time, every week. At a conservative £50/hour opportunity cost, that's £100/week — £5,200/year. Then add the errors. One wrong rate applied to one payout means a correction, an awkward conversation, and a dent in trust with an artist you want to keep.",
       },
       {
         type: 'ul',
         items: [
-          '£5,200/year in owner time lost to manual commission calculation',
-          '3 calculation errors in 18 months',
-          'Average correction time per error: 45 minutes including the conversation',
-          '1 artist retention risk directly linked to a payroll dispute',
+          '£5,200/year in owner time, at two hours a week and £50/hour',
+          'Every manual calculation is a chance to apply the wrong rate',
+          'Every correction costs time — and a conversation nobody enjoys',
+          'Payroll disputes are a real artist-retention risk',
         ],
       },
       {
@@ -466,9 +451,8 @@ Settlement: instant on payment completion`,
         text: "Each artist in Limespun has a commission profile: a default split, an optional product charge method (flat fee, percentage of session, or none), and a settlement schedule (instant, weekly, or monthly). Senior artists who have negotiated a custom rate have their own profile — no global setting that accidentally applies the wrong rate.",
       },
       {
-        type: 'quote',
-        text: "My artists can see their earnings in real time. They don't need to wait until Friday to know what they made this week. That transparency has changed the mood in the studio.",
-        attribution: "Marcus Lane, Iron + Ash",
+        type: 'p',
+        text: "Because splits are calculated per transaction, artists can see their earnings as the week goes, instead of waiting until Friday to find out what they made. Fewer questions for the owner, fewer surprises for the artist.",
       },
       {
         type: 'h3',
@@ -484,16 +468,16 @@ Settlement: instant on payment completion`,
       },
       {
         type: 'p',
-        text: "Friday at 4:45pm I look at the weekly payout summary, confirm nothing looks anomalous, and close my laptop. The payments have already been routing all week. If I want to, I can review the breakdown for any artist in two taps. I don't need to.",
+        text: "With routing at source, Friday at 4:45pm becomes a glance at the weekly payout summary to confirm nothing looks anomalous. The payments have already been routing all week, and the breakdown for any artist is two taps away if you want it.",
       },
       {
         type: 'callout',
         tone: 'rust',
-        text: "Stripe Connect commission routing requires artists to complete a Stripe onboarding — typically a 5-minute process. Limespun sends the onboarding invitation automatically when you add an artist. Most artists complete it before their first session.",
+        text: "Stripe Connect commission routing requires artists to complete a Stripe onboarding — typically a 5-minute process. Limespun sends the onboarding invitation automatically when you add an artist. Artists can complete it before their first session.",
       },
       {
         type: 'p',
-        text: "Commission automation is available on the Studio and Business plans. If you have more than three resident artists, the time savings in the first month will cover the plan cost. Start a trial at app.limespun.com/signup.",
+        text: "Commission automation is available on the Studio plan and up. If you have more than three resident artists, the time saved is likely to outweigh the plan cost. Get started at app.limespun.com/signup.",
       },
     ],
   },
@@ -504,7 +488,7 @@ Settlement: instant on payment completion`,
       "The four-stage record that turns ten weeks of one sleeve into the most useful Instagram you've ever posted.",
     publishedAt: "2026-03-11",
     readTime: "4 min",
-    author: { name: "Limespun team", role: "Boldteq" },
+    author: { name: "The Limespun team", role: "Limespun" },
     category: "craft",
     gradient: `linear-gradient(135deg, ${BRAND.sage} 0%, ${BRAND.rustGlow} 100%)`,
     content: [
@@ -538,7 +522,7 @@ Settlement: instant on payment completion`,
       },
       {
         type: 'p',
-        text: "The HEAL stage is the most commonly skipped and the most diagnostically valuable. Photos taken at two to three weeks post-session show how the ink is settling — you can see if there's uneven healing, ink loss in specific areas, or a detail that needs a touch-up. Limespun sends the client an automated photo request at day 14: 'Your session is healing — can you send us a progress photo?' The acceptance rate at Salt House is about 68%.",
+        text: "The HEAL stage is the most commonly skipped and the most diagnostically valuable. Photos taken at two to three weeks post-session show how the ink is settling — you can see if there's uneven healing, ink loss in specific areas, or a detail that needs a touch-up. Limespun sends the client an automated photo request at day 14: 'Your session is healing — can you send us a progress photo?'",
       },
       {
         type: 'callout',
@@ -552,11 +536,6 @@ Settlement: instant on payment completion`,
       {
         type: 'p',
         text: "The HEALED stage is triggered at eight to twelve weeks post-final-session. Another automated client request goes out, this time explicitly framed as a portfolio photo request: 'Your sleeve is fully healed — we'd love a photo for our gallery.' If the client consents, the healed photo flows automatically to the studio gallery in Limespun and — if you've connected your Instagram — can be queued for posting with one tap.",
-      },
-      {
-        type: 'quote',
-        text: "I've tripled the number of healed photos in my portfolio in eight months. I'm not chasing clients. The system does it for me and I just approve the ones I want to post.",
-        attribution: "Artist, Limespun beta studio",
       },
       {
         type: 'h3',

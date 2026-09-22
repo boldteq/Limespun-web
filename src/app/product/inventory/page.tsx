@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -254,21 +255,17 @@ export default function InventoryPage() {
           eyebrow="A day in the studio"
           heading="The inspector who arrived on a Tuesday."
           italicWord="arrived on a Tuesday"
-          intro="Asha Mehra at Pluma Studio, Amsterdam. REACH inspector walk-in. She had 30 seconds."
+          intro="A three-chair studio in Amsterdam. REACH inspector walk-in. She had 30 seconds."
           paragraphs={[
-            "The inspector arrived unannounced at 11am on a Tuesday. No warning, no appointment. Pluma Studio was mid-session across three chairs.",
+            "The inspector arrived unannounced at 11am on a Tuesday. No warning, no appointment. The studio was mid-session across three chairs.",
             <React.Fragment key="p2">
               Asha opened Limespun on the front desk iPad, tapped <strong>Inventory → REACH Report</strong>, and hit export. The PDF was on screen in 28 seconds.
             </React.Fragment>,
             "All 84 inks. CI numbers, batch references, MSDS links, expiry dates — every field the inspector needed. Two inks were flagged as non-compliant at intake six months earlier and had already been removed from service.",
             "The inspector spent four minutes reviewing the report. No findings. No follow-up required. The studio was back to full capacity before noon.",
           ]}
-          quote="I used to have nightmares about unannounced inspections. Now I actually sleep well — I know the data is there when I need it."
-          person={{
-            name: "Asha Mehra",
-            role: "Owner, Pluma Studio, Amsterdam",
-            gradient: `linear-gradient(135deg, ${BRAND.sage} 0%, ${BRAND.amber} 100%)`,
-          }}
+          quote="When an inspector walks in unannounced, the batch log and every SDS are one search away."
+          takeawayLabel="What changes"
         />
 
         <ProductRelated
@@ -306,7 +303,7 @@ export default function InventoryPage() {
         <ProductCTA
           headline="Inventory, on the rails."
           italicWord="on the rails"
-          subhead="14-day free trial. No card required. REACH compliance, batch tracking, and reaction logging from day one."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. REACH compliance, batch tracking, and reaction logging from day one.`}
         />
       </main>
       <Footer />

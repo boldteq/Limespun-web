@@ -9,7 +9,6 @@ import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
-import { TestimonialCard } from "@/components/shared/testimonial-card";
 import { StatStrip } from "@/components/shared/stat-strip";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { SectionHeading } from "@/components/shared/section-heading";
@@ -182,7 +181,7 @@ export default function ReachCompliancePage() {
           headline="EU REACH 2022, built into the studio."
           italicWord="built"
           subhead="The European ink registry. MSDS attachments. Batch tracking. Reaction logging. Inspector reports in one click. The compliance layer most studios run on a spreadsheet."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Talk to compliance", href: "/book-a-demo" }}
         />
 
@@ -424,7 +423,7 @@ export default function ReachCompliancePage() {
           >
             <StatStrip
               items={[
-                { stat: "84", label: "inks tracked, average studio" },
+                { stat: "Every bottle", label: "logged to the ink registry" },
                 { stat: "EU REACH 2022", label: "compliant out of the box" },
                 { stat: "< 30s", label: "inspector report generation" },
                 { stat: "7 years", label: "default retention" },
@@ -433,7 +432,7 @@ export default function ReachCompliancePage() {
           </div>
         </section>
 
-        {/* ── Testimonial ───────────────────────────────────────────────── */}
+        {/* ── Early-days note ───────────────────────────────────────────── */}
         <section
           style={{
             background: BRAND.bone,
@@ -455,22 +454,44 @@ export default function ReachCompliancePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-60px" }}
-              style={{ maxWidth: 480, width: "100%" } as React.CSSProperties}
+              style={{ maxWidth: 560, width: "100%" } as React.CSSProperties}
             >
-              <TestimonialCard
-                name="Asha Mehra"
-                role="Solo · Pluma Studio"
-                city="Amsterdam, NL"
-                chairs="1 chair · by appointment"
-                quote="REACH compliance was the unlock. Every bottle on a registry, every reaction logged. I sleep better."
-                stats={[
-                  { l: "Inks tracked", v: "84" },
-                  { l: "Compliance reports", v: "Auto" },
-                  { l: "Migration", v: "2 days" },
-                ]}
-                gradient={`linear-gradient(135deg, ${BRAND.sage} 0%, ${BRAND.rustGlow} 100%)`}
-                initials="AM"
-              />
+              <div
+                style={{
+                  background: BRAND.white,
+                  borderRadius: 18,
+                  padding: 32,
+                  boxShadow: SHADOW.soft,
+                  border: `1px solid ${BRAND.borderSoft}`,
+                } as React.CSSProperties}
+              >
+                <SectionEyebrow label="Early days" accent="sage" />
+                <p
+                  style={{
+                    fontFamily: FONT.serif,
+                    fontStyle: "italic",
+                    fontSize: 24,
+                    lineHeight: 1.3,
+                    color: BRAND.onyx,
+                    margin: "0 0 16px",
+                  } as React.CSSProperties}
+                >
+                  We&apos;d rather show you the registry than quote a customer we made up.
+                </p>
+                <p
+                  style={{
+                    fontFamily: FONT.sans,
+                    fontSize: 15,
+                    lineHeight: 1.65,
+                    color: BRAND.stoneDark,
+                    margin: 0,
+                  } as React.CSSProperties}
+                >
+                  Limespun is new, so there are no compliance case studies yet. Book a
+                  walkthrough and we&apos;ll log a bottle, attach its SDS and pull an inspector
+                  report in front of you &mdash; then you can judge it on the work.
+                </p>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -523,7 +544,7 @@ export default function ReachCompliancePage() {
                   },
                   {
                     q: "Can I import my existing ink list?",
-                    a: "Yes. CSV import or copy-paste. The migration team helps map existing bottles to REACH records. Studio plan and above includes white-glove.",
+                    a: "Yes. CSV import or copy-paste. The migration team maps existing bottles to REACH records for you, on every plan.",
                   },
                   {
                     q: "Are there fines for non-compliance?",
@@ -531,7 +552,7 @@ export default function ReachCompliancePage() {
                   },
                   {
                     q: "Is the REACH module on every plan?",
-                    a: "Pro plan and above includes the full registry + inspector reports. Solo and Studio plans get the basic ink-tracking module.",
+                    a: "Yes. EU REACH ink tracking is on every plan, Solo included. It isn't an add-on or a Pro-only feature.",
                   },
                   {
                     q: "Do you update when REACH regulations change?",
@@ -548,8 +569,8 @@ export default function ReachCompliancePage() {
           badge="Compliance, automated"
           headline="Stop running compliance on a spreadsheet."
           italicWord="spreadsheet"
-          subhead="14-day trial. Drop your ink list in. Watch REACH compliance light up."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          subhead="On every plan. Drop your ink list in. Watch REACH compliance light up."
+          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Talk to compliance", href: "/book-a-demo", icon: "play" }}
         />
       </main>

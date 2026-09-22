@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { TeamMockup } from "@/components/product/mockups/team-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -207,7 +208,7 @@ export default function TeamPage() {
           eyebrow="Friday at 5 PM"
           heading="Friday, 5 PM. Eight artists paid, weekend started."
           italicWord="weekend started"
-          intro="Marcus runs Iron + Ash, eight artists across two floors in Austin. Friday at 5 used to mean three hours of commission spreadsheet wrangling. Now it doesn't."
+          intro="Picture Marcus, running eight artists across two floors. Friday at 5 used to mean three hours of commission spreadsheet wrangling. Now it doesn't."
           paragraphs={[
             <React.Fragment key="p1">
               <strong>The week&apos;s invoices have been routing all week.</strong> Each session at checkout split 65/35 to the artist via Stripe Connect — automatically.
@@ -223,12 +224,8 @@ export default function TeamPage() {
               Marcus closes the laptop. Total time: <em>two minutes.</em> The old way: three hours, one mistake every two weeks, one apologetic Slack message a month.
             </React.Fragment>,
           ]}
-          quote="Commission splits used to be Friday afternoon. Now they hit Stripe Connect on the invoice. We got our weekends back."
-          person={{
-            name: "Marcus Lane",
-            role: "Owner · Iron + Ash · Austin",
-            gradient: "linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #FBBF24 100%)",
-          }}
+          quote="Splits land in Stripe Connect as each invoice is paid, so payday doesn't eat the weekend."
+          takeawayLabel="What this means for your studio"
         />
 
         <ProductRelated
@@ -246,7 +243,7 @@ export default function TeamPage() {
         <ProductCTA
           headline="Pay the team. Get the weekend."
           italicWord="Get the weekend"
-          subhead="14-day free trial. No credit card. Add your first artist, set the split, and watch the first invoice route automatically."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Add your first artist, set the split, and watch the first invoice route automatically.`}
         />
       </main>
       <Footer />

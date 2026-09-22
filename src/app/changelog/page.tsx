@@ -9,6 +9,7 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { CTASection } from "@/components/shared/cta-section";
 import { BRAND, FONT, SHADOW, fadeUp, stagger } from "@/lib/brand";
 import { changelogEntries, type ChangelogEntry } from "@/lib/data/changelog";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TypeFilter = "all" | ChangelogEntry["type"];
@@ -313,7 +314,7 @@ export default function ChangelogPage() {
           italicWord="why"
           subhead="Public ship log. Every release. Every fix. Every improvement. We update this on the same day we deploy. The opposite of a 'product hunt' marketing page."
           primaryCTA={{
-            label: "Start a 14-day trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{ label: "See roadmap", href: "/roadmap" }}
@@ -400,9 +401,9 @@ export default function ChangelogPage() {
           badge="Always shipping"
           headline="Try the latest."
           italicWord="latest"
-          subhead="14-day trial includes everything in this changelog. No card. Updates auto-apply — you'll always be on the latest."
+          subhead={`Updates auto-apply on every plan — you'll always be on the latest. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
           primaryCTA={{
-            label: "Start a 14-day trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{

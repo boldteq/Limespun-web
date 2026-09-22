@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -121,8 +122,8 @@ export default function ProjectsPage() {
             <React.Fragment key="p3">Day 7: <strong>HEAL photo uploads from the client kiosk.</strong> Session 2 booked for Day 14. Pool re-applied: $120 of the $420 for S2.</React.Fragment>,
             <React.Fragment key="p4">Day 70: <strong>HEALED photo uploads. Project closes.</strong> The full record — bookings, deposits, consents, photos, notes — archives to her client record. <em>Portfolio auto-updates.</em></React.Fragment>,
           ]}
-          quote="I used to keep four spreadsheets per client. Projects deleted all of them."
-          person={{ name: "Miles Verena", role: "Owner · Sable & Sparrow · Brooklyn", gradient: "linear-gradient(135deg, #0F0F0F 0%, #4B4842 50%, #9A9792 100%)" }}
+          quote="One project record replaces the per-client spreadsheets — every deposit, photo and note for the sleeve in one place."
+          takeawayLabel="In short"
         />
 
         <ProductRelated
@@ -140,7 +141,7 @@ export default function ProjectsPage() {
         <ProductCTA
           headline="Book a sleeve. Not a slot."
           italicWord="Not a slot"
-          subhead="14-day free trial. No credit card. Build a real project from session one to healed — deposits, photos, consents, and artist notes included from day one."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Build a real project from session one to healed — deposits, photos, consents, and artist notes included from day one.`}
         />
       </main>
       <Footer />

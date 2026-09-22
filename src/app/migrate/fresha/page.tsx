@@ -11,6 +11,7 @@ import { ComparisonTable } from "@/components/shared/comparison-table";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
+import { PLANS, formatPrice, MONEY_BACK_DAYS, type PlanTier } from "@/lib/data/plans";
 
 type AccentKey = "rust" | "amber" | "sage";
 
@@ -171,34 +172,30 @@ function FeeCard({
   );
 }
 
+/** Fresha's payment fee, applied to monthly card revenue. Limespun cost is the plan's monthly price from PLANS. */
+const FRESHA_FEE_RATE = 0.0195;
+
+function feeCard(accent: AccentKey, monthlyRevenueDollars: number, tier: PlanTier): FeeCardProps {
+  const [plan] = PLANS.filter((p) => p.tier === tier);
+  const freshaFeeCents = Math.round(monthlyRevenueDollars * FRESHA_FEE_RATE * 100);
+  const savingsCents = freshaFeeCents - plan.monthlyCents;
+  return {
+    accent,
+    monthlyRevenue: `On $${monthlyRevenueDollars / 1000}K/month`,
+    freshaFee: formatPrice(freshaFeeCents),
+    limespunPlan: plan.name,
+    limespunCost: formatPrice(plan.monthlyCents),
+    savingsMonthly: formatPrice(savingsCents),
+    savingsAnnual: formatPrice(savingsCents * 12),
+  };
+}
+
+// $20K → $390 fee vs Solo $39 ($351/mo, $4,212/yr); $50K → $975 vs Studio $99 ($876, $10,512);
+// $100K → $1,950 vs Pro $179 ($1,771, $21,252).
 const feeCards: FeeCardProps[] = [
-  {
-    accent: "rust",
-    monthlyRevenue: "On $20K/month",
-    freshaFee: "$390",
-    limespunPlan: "Solo",
-    limespunCost: "$29",
-    savingsMonthly: "$361",
-    savingsAnnual: "$4,332",
-  },
-  {
-    accent: "amber",
-    monthlyRevenue: "On $50K/month",
-    freshaFee: "$975",
-    limespunPlan: "Studio",
-    limespunCost: "$59",
-    savingsMonthly: "$916",
-    savingsAnnual: "$10,992",
-  },
-  {
-    accent: "sage",
-    monthlyRevenue: "On $100K/month",
-    freshaFee: "$1,950",
-    limespunPlan: "Pro",
-    limespunCost: "$99",
-    savingsMonthly: "$1,851",
-    savingsAnnual: "$22,212",
-  },
+  feeCard("rust", 20_000, "solo"),
+  feeCard("amber", 50_000, "studio"),
+  feeCard("sage", 100_000, "pro"),
 ];
 
 const timelineSteps = [
@@ -233,7 +230,7 @@ const faqItems = [
   },
   {
     q: "Can I keep using my Fresha subscription during migration?",
-    a: "Yes. 14-day overlap recommended. Stop billing on Fresha day-of cutover.",
+    a: `Yes. 14-day overlap recommended. Stop billing on Fresha day-of cutover. Limespun comes with a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   },
 ];
 
@@ -257,7 +254,7 @@ export default function FreshaPage() {
           subhead="Fresha takes 1.95% of every payment in addition to the subscription. On a $50K month, that's $975 you don't need to pay. Limespun doesn't take a cut. 5-day migration. Done."
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
-            label: "Start the trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
         />
@@ -408,7 +405,7 @@ export default function FreshaPage() {
                   },
                   {
                     feature: "Commission auto-splits (artist payouts)",
-                    values: { fresha: "Team Pay add-on", limespun: true },
+                    values: { fresha: "Team Pay add-on", limespun: "Studio and up" },
                   },
                   {
                     feature: "EU REACH ink registry",
@@ -568,10 +565,10 @@ export default function FreshaPage() {
           badge="Stop paying the take"
           headline="Leave Fresha cleanly."
           italicWord="cleanly"
-          subhead="5-day move. Free. We don't bill until you've cancelled Fresha."
+          subhead={`5-day move. Free. ${MONEY_BACK_DAYS}-day money-back guarantee if Limespun isn't right for you.`}
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
-            label: "Or start the trial",
+            label: "Or get started",
             href: "https://app.limespun.com/signup",
             icon: "play",
           }}

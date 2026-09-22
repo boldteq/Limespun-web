@@ -10,7 +10,17 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { TestimonialCard } from "@/components/shared/testimonial-card";
+import {
+  PLANS,
+  formatPrice,
+  ANNUAL_DISCOUNT_PERCENT,
+  MONEY_BACK_DAYS,
+  ONBOARDING_SUPPORT_DAYS,
+} from "@/lib/data/plans";
+
+const [PRO] = PLANS.filter((p) => p.tier === "pro");
+const [MULTI] = PLANS.filter((p) => p.tier === "enterprise");
+const MULTI_PRICE = formatPrice(MULTI.monthlyCents);
 
 // ── MoatCardBright ────────────────────────────────────────────────────────────
 
@@ -87,15 +97,15 @@ function PainPointsSection() {
             accent="amber"
             icon={Users}
             title="Onboarding artists across locations"
-            body="New hire at Brooklyn shop has to be added separately at Manhattan. SSO non-existent. Permission management: by hand."
-            detail={[["Onboarding time", "hours"], ["SSO", "no"], ["Permission audit", "never"]]}
+            body="New hire at Brooklyn shop has to be added separately at Manhattan. No shared roster. Permission management: by hand."
+            detail={[["Onboarding time", "hours"], ["Shared roster", "no"], ["Permission audit", "never"]]}
           />
           <MoatCardBright
             accent="sage"
             icon={Shield}
             title="Audit logs that don't span locations"
             body="Compliance audit asks 'who deleted that consent form?' Answer: depends on which location's audit log you check."
-            detail={[["Cross-location audit", "no"], ["SOC2 readiness", "behind"], ["Investigation time", "high"]]}
+            detail={[["Cross-location audit", "no"], ["One answer", "never"], ["Investigation time", "high"]]}
           />
         </div>
       </div>
@@ -103,15 +113,16 @@ function PainPointsSection() {
   );
 }
 
-// ── Why Limespun Enterprise ──────────────────────────────────────────────────────
+// ── Why Limespun Multi-Location ──────────────────────────────────────────────────
 
-const enterpriseFeatures = [
-  "Multi-location dashboard — every shop, one view",
-  "Per-location P&L — monthly reports, year-over-year",
-  "SSO via Google, Microsoft, or SAML",
-  "SCIM provisioning — auto-add/remove artists across all locations",
+const multiLocationFeatures = [
+  "Unlimited artists and locations — one flat price, not per shop",
+  "Reports across locations — every shop, one view",
+  "Roles and permissions across every location",
   "Cross-location audit log — every action, one stream",
-  "Dedicated migration team — 30-day pilot at one location first",
+  "API access with webhooks",
+  "5,000 texts a month",
+  "Dedicated migration team — one location first, then the rest",
   "Dedicated account manager — direct line, not a ticket queue",
 ];
 
@@ -122,14 +133,14 @@ function WhyLimespunSection() {
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.6 }} style={{ marginBottom: 48 } as React.CSSProperties}>
           <SectionEyebrow label="What changes" accent="amber" />
           <h2 style={{ fontFamily: FONT.serif, fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 400, color: BRAND.onyx, letterSpacing: "-0.025em", lineHeight: 1.1 } as React.CSSProperties}>
-            Enterprise plan, chain infrastructure.
+            Multi-Location plan, chain infrastructure.
           </h2>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} style={{ background: BRAND.white, borderRadius: 20, padding: 32, boxShadow: SHADOW.soft, maxWidth: 720 } as React.CSSProperties}>
           <ul style={{ listStyle: "none", padding: 0, margin: 0 } as React.CSSProperties}>
-            {enterpriseFeatures.map((feature, i) => (
-              <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, paddingTop: i === 0 ? 0 : 14, paddingBottom: i === enterpriseFeatures.length - 1 ? 0 : 14, borderBottom: i < enterpriseFeatures.length - 1 ? `1px solid ${BRAND.borderSoft}` : "none" } as React.CSSProperties}>
+            {multiLocationFeatures.map((feature, i) => (
+              <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, paddingTop: i === 0 ? 0 : 14, paddingBottom: i === multiLocationFeatures.length - 1 ? 0 : 14, borderBottom: i < multiLocationFeatures.length - 1 ? `1px solid ${BRAND.borderSoft}` : "none" } as React.CSSProperties}>
                 <div style={{ width: 22, height: 22, borderRadius: "50%", background: BRAND.amberWash, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 } as React.CSSProperties}>
                   <Check size={13} color={BRAND.amber} strokeWidth={2.5} />
                 </div>
@@ -143,34 +154,53 @@ function WhyLimespunSection() {
   );
 }
 
-// ── Customer Quote ─────────────────────────────────────────────────────────────
+// ── Pilot note ─────────────────────────────────────────────────────────────────
 
 function CustomerQuoteSection() {
   return (
     <section style={{ background: BRAND.bone, paddingTop: 80, paddingBottom: 80 } as React.CSSProperties}>
       <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" } as React.CSSProperties}>
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.6 }} style={{ marginBottom: 32 } as React.CSSProperties}>
-          <SectionEyebrow label="Real multi-location group" accent="amber" />
+          <SectionEyebrow label="Pilot programme" accent="amber" />
           <h2 style={{ fontFamily: FONT.serif, fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 400, color: BRAND.onyx, letterSpacing: "-0.025em", lineHeight: 1.1 } as React.CSSProperties}>
-            How Elena runs Cinco Manos.
+            Groups get a pilot, not a pitch.
           </h2>
         </motion.div>
 
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} style={{ maxWidth: 460 } as React.CSSProperties}>
-          <TestimonialCard
-            name="Elena Ruiz"
-            role="Director · Cinco Manos Group"
-            city="Madrid, ES"
-            chairs="3 locations · 22 artists"
-            quote="Per-location P&L was the moment we knew. We can finally see which shop is healthy and which one needs help, in one dashboard."
-            stats={[
-              { l: "Locations", v: "3" },
-              { l: "Artists", v: "22" },
-              { l: "Payroll runs", v: "Monthly · auto" },
-            ]}
-            gradient={`linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.sage} 100%)`}
-            initials="ER"
-          />
+        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} style={{ maxWidth: 560 } as React.CSSProperties}>
+          <div
+            style={{
+              background: BRAND.white,
+              borderRadius: 18,
+              padding: 32,
+              boxShadow: SHADOW.soft,
+              border: `1px solid ${BRAND.borderSoft}`,
+            } as React.CSSProperties}
+          >
+            <p
+              style={{
+                fontFamily: FONT.serif,
+                fontStyle: "italic",
+                fontSize: 24,
+                lineHeight: 1.3,
+                color: BRAND.onyx,
+                margin: "0 0 16px",
+              } as React.CSSProperties}
+            >
+              No invented case studies &mdash; just a {MONEY_BACK_DAYS}-day money-back guarantee.
+            </p>
+            <p
+              style={{
+                fontFamily: FONT.sans,
+                fontSize: 15,
+                lineHeight: 1.65,
+                color: BRAND.stoneDark,
+                margin: 0,
+              } as React.CSSProperties}
+            >
+              Limespun is new. For groups, that means starting at one location with our migration lead, proving it on your own numbers, and rolling out the rest only if it earns it.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -184,15 +214,15 @@ function PricingTeaserSection() {
     <section style={{ background: GRADIENT.sectionCool, paddingTop: 80, paddingBottom: 80 } as React.CSSProperties}>
       <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto", padding: "0 32px" } as React.CSSProperties}>
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-          <SectionEyebrow label="Enterprise plan" accent="amber" />
+          <SectionEyebrow label="Multi-Location plan" accent="amber" />
           <h2 style={{ fontFamily: FONT.serif, fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 400, color: BRAND.onyx, letterSpacing: "-0.025em", lineHeight: 1.05, marginBottom: 16 } as React.CSSProperties}>
-            $199 per location / month
+            {MULTI_PRICE} / month, flat
           </h2>
           <p style={{ fontSize: 17, fontFamily: FONT.sans, color: BRAND.stoneDark, marginBottom: 32, lineHeight: 1.6 } as React.CSSProperties}>
-            Volume discounts available. Talk to us for 5+ locations.
+            One price for the whole group, not per location. Unlimited artists and locations.
           </p>
           <a href="/pricing" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 24px", borderRadius: 100, background: BRAND.onyx, color: BRAND.bone, textDecoration: "none", fontFamily: FONT.sans, fontSize: 14, fontWeight: 600 } as React.CSSProperties}>
-            See Enterprise plan details <ArrowRight size={14} />
+            See Multi-Location plan details <ArrowRight size={14} />
           </a>
         </motion.div>
       </div>
@@ -205,19 +235,19 @@ function PricingTeaserSection() {
 const faqs = [
   {
     q: "Is there a minimum number of locations?",
-    a: "Enterprise starts at 2 locations. For single-location chains, Pro plan covers most needs.",
+    a: `No. Multi-Location is a flat ${MULTI_PRICE}/mo with unlimited artists and locations. If you run up to 5 locations and 15 artists, Pro (${formatPrice(PRO.monthlyCents)}/mo) already covers you.`,
   },
   {
     q: "Do you offer custom contracts and procurement?",
-    a: "Yes. SOC2-ready, MSA, NDA, custom DPAs. Procurement teams find us easy to work with.",
+    a: "Yes. We can sign an NDA and a data processing agreement, and we'll answer your security questionnaire honestly. We don't hold a SOC 2 report yet; our security page lists exactly what we do today.",
   },
   {
-    q: "How long does Enterprise migration take?",
-    a: "30-day pilot at one location, then sequential rollout. Typical 3-location chain: 90 days end-to-end.",
+    q: "How long does a multi-location migration take?",
+    a: "We move one location first, then roll out the rest in sequence. For a 3-location group we plan for roughly 90 days end-to-end.",
   },
   {
-    q: "Can I get a discount for 5+ locations?",
-    a: "Yes. Volume pricing kicks in at 5 locations. Talk to us for a custom quote.",
+    q: "Does the price go up as we add locations?",
+    a: `No. Multi-Location is ${MULTI_PRICE}/mo flat, however many shops you run. Pay yearly and save ${ANNUAL_DISCOUNT_PERCENT}%.`,
   },
 ];
 
@@ -249,7 +279,7 @@ export default function MultiLocationPage() {
           eyebrowAccent="amber"
           headline="Three locations. One operating system."
           italicWord="One"
-          subhead="Per-location P&L in one dashboard. SSO across the team. Dedicated migration team and a real account manager. The infrastructure for studios that grow into chains."
+          subhead="Reports across every location in one dashboard. Roles and permissions across the team. Dedicated migration team and a real account manager. The infrastructure for studios that grow into chains."
           primaryCTA={{ label: "Talk to us", href: "/book-a-demo" }}
           secondaryCTA={{ label: "See pricing", href: "/pricing" }}
         />
@@ -262,7 +292,7 @@ export default function MultiLocationPage() {
           badge="The infrastructure for scale"
           headline="Talk to the team."
           italicWord="team"
-          subhead="Enterprise demos run live with our migration lead. 30-day pilot. We don't bill until your first location is fully moved."
+          subhead={`Demos run live with our migration lead. One flat ${MULTI_PRICE}/mo, a ${MONEY_BACK_DAYS}-day money-back guarantee, and ${ONBOARDING_SUPPORT_DAYS} days of founder-priority onboarding.`}
           primaryCTA={{ label: "Book a demo", href: "/book-a-demo" }}
           secondaryCTA={{ label: "See pricing", href: "/pricing", icon: "play" }}
         />

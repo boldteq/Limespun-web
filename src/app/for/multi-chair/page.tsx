@@ -10,7 +10,18 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { TestimonialCard } from "@/components/shared/testimonial-card";
+import {
+  PLANS,
+  formatPrice,
+  ANNUAL_DISCOUNT_PERCENT,
+  FOUNDING_OFFER_OPEN,
+  FOUNDING_OFFER_SIZE,
+  MONEY_BACK_DAYS,
+  ONBOARDING_SUPPORT_DAYS,
+} from "@/lib/data/plans";
+
+const [PRO] = PLANS.filter((p) => p.tier === "pro");
+const PRO_PRICE = formatPrice(PRO.monthlyCents);
 
 // ── MoatCardBright ────────────────────────────────────────────────────────────
 
@@ -94,7 +105,7 @@ function PainPointsSection() {
             accent="sage"
             icon={Shield}
             title="REACH compliance: spreadsheet"
-            body="EU 2022 ink registry mandates batch tracking, MSDS attachments, reaction logging. Most studios: a Numbers file."
+            body="EU 2022 ink registry mandates batch tracking, MSDS attachments, reaction logging. For plenty of studios: a Numbers file."
             detail={[["Compliance method", "manual"], ["Inspector readiness", "low"], ["Reaction logs", "scattered"]]}
           />
         </div>
@@ -106,13 +117,15 @@ function PainPointsSection() {
 // ── Why Limespun ─────────────────────────────────────────────────────────────────
 
 const proFeatures = [
-  "Unlimited active artists",
-  "AI design assistant — brief generator, reference grids, style preview",
-  "EU REACH 2022 ink registry — every bottle CI-numbered, MSDS-attached",
+  "Up to 15 artists, plus unlimited guest-artist seats",
+  "AI replies, aftercare and consult summaries — in your studio's voice",
   "Public guest booking pages — one URL per residency",
+  "Payroll and 1099s — every artist's split, ready at year-end",
+  "Roles and permissions — owner, artist, front desk",
   "Per-artist + per-chair P&L — monthly auto-reports",
-  "Priority chat support — 4h response",
-  "Per-location P&L (when you grow)",
+  "EU REACH 2022 ink registry — on every plan, Pro included",
+  "Priority support",
+  "Up to 5 locations, with reports across them (when you grow)",
 ];
 
 function WhyLimespunSection() {
@@ -143,34 +156,53 @@ function WhyLimespunSection() {
   );
 }
 
-// ── Customer Quote ─────────────────────────────────────────────────────────────
+// ── Early-days note ────────────────────────────────────────────────────────────
 
 function CustomerQuoteSection() {
   return (
     <section style={{ background: BRAND.bone, paddingTop: 80, paddingBottom: 80 } as React.CSSProperties}>
       <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" } as React.CSSProperties}>
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.6 }} style={{ marginBottom: 32 } as React.CSSProperties}>
-          <SectionEyebrow label="Real multi-chair shop" accent="rust" />
+          <SectionEyebrow label="Early days" accent="rust" />
           <h2 style={{ fontFamily: FONT.serif, fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 400, color: BRAND.onyx, letterSpacing: "-0.025em", lineHeight: 1.1 } as React.CSSProperties}>
-            How Marcus runs Iron + Ash.
+            Your shop could be the first story here.
           </h2>
         </motion.div>
 
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} style={{ maxWidth: 460 } as React.CSSProperties}>
-          <TestimonialCard
-            name="Marcus Lane"
-            role="Owner · Iron + Ash"
-            city="Austin, TX"
-            chairs="8 artists · 2 floors"
-            quote="Commission splits used to be Friday afternoon. Now they hit Stripe Connect on the invoice. We got our weekends back."
-            stats={[
-              { l: "Artists paid", v: "8 / week" },
-              { l: "Reconciliation time", v: "0 min" },
-              { l: "Disputes", v: "0 in 2025" },
-            ]}
-            gradient={`linear-gradient(135deg, ${BRAND.rust} 0%, ${BRAND.rustDeep} 50%, ${BRAND.amber} 100%)`}
-            initials="ML"
-          />
+        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} style={{ maxWidth: 560 } as React.CSSProperties}>
+          <div
+            style={{
+              background: BRAND.white,
+              borderRadius: 18,
+              padding: 32,
+              boxShadow: SHADOW.soft,
+              border: `1px solid ${BRAND.borderSoft}`,
+            } as React.CSSProperties}
+          >
+            <p
+              style={{
+                fontFamily: FONT.serif,
+                fontStyle: "italic",
+                fontSize: 24,
+                lineHeight: 1.3,
+                color: BRAND.onyx,
+                margin: "0 0 16px",
+              } as React.CSSProperties}
+            >
+              We won&apos;t publish a testimonial we haven&apos;t earned.
+            </p>
+            <p
+              style={{
+                fontFamily: FONT.sans,
+                fontSize: 15,
+                lineHeight: 1.65,
+                color: BRAND.stoneDark,
+                margin: 0,
+              } as React.CSSProperties}
+            >
+              Limespun is new, and open to every shop. You get {ONBOARDING_SUPPORT_DAYS} days of onboarding help from the founding team, a hand-held move off your current tool, and a {MONEY_BACK_DAYS}-day money-back guarantee.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -186,10 +218,10 @@ function PricingTeaserSection() {
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <SectionEyebrow label="Pro plan" accent="rust" />
           <h2 style={{ fontFamily: FONT.serif, fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 400, color: BRAND.onyx, letterSpacing: "-0.025em", lineHeight: 1.05, marginBottom: 16 } as React.CSSProperties}>
-            $99 / month
+            {PRO_PRICE} / month
           </h2>
           <p style={{ fontSize: 17, fontFamily: FONT.sans, color: BRAND.stoneDark, marginBottom: 32, lineHeight: 1.6 } as React.CSSProperties}>
-            Unlimited artists. AI Studio. REACH inventory. Priority support.
+            Up to 15 artists and 5 locations. Unlimited guest seats. AI replies and aftercare. Priority support.
           </p>
           <a href="/pricing" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 24px", borderRadius: 100, background: BRAND.onyx, color: BRAND.bone, textDecoration: "none", fontFamily: FONT.sans, fontSize: 14, fontWeight: 600 } as React.CSSProperties}>
             See Pro plan details <ArrowRight size={14} />
@@ -208,16 +240,20 @@ const faqs = [
     a: "Yes. Three-way and four-way splits supported. Routing rules per-artist, per-piece, or per-time-period.",
   },
   {
-    q: "Does AI Studio respect my brand voice?",
-    a: "Yes. Train it on your past briefs and it inherits your tone, style references, and palette preferences.",
+    q: "Does the AI sound like my studio?",
+    a: "Yes. Pro includes AI voice profiles, so replies, aftercare notes and consult summaries go out in your studio's tone, not a generic one.",
   },
   {
-    q: "What's the SLA on Pro plan support?",
-    a: "4h response during business hours, 24h overnight. Dedicated channel in chat.",
+    q: "What does priority support mean on Pro?",
+    a: "Pro and Multi-Location tickets are answered first, ahead of the email support queue on Solo and Studio.",
   },
   {
-    q: "Do you offer Pro at a discount for non-profits?",
-    a: "Yes. 30% off for verified registered non-profits. Email us with your registration.",
+    q: "Is there a cheaper way to pay for Pro?",
+    a: `Pay yearly and save ${ANNUAL_DISCOUNT_PERCENT}%: ${formatPrice(PRO.annualCents)} a year instead of ${PRO_PRICE} a month.${
+      FOUNDING_OFFER_OPEN
+        ? ` The founding offer for the first ${FOUNDING_OFFER_SIZE} studios is also open: Pro for ${formatPrice(PRO.lifetimeCents)} once, no monthly bill.`
+        : ""
+    }`,
   },
 ];
 
@@ -249,8 +285,8 @@ export default function MultiChairPage() {
           eyebrowAccent="rust"
           headline="The shop with a brand. The shop that scales."
           italicWord="scales"
-          subhead="Six artists. Eight chairs. Two floors. Walk-in clinic Tuesdays. AI brief generator on every booking. EU REACH ink registry. Public guest booking pages. Priority support. The Pro plan."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          subhead="Six artists. Eight chairs. Two floors. Walk-in clinic Tuesdays. AI replies and consult summaries on every booking. Unlimited guest-artist seats. Payroll and 1099s. Priority support. The Pro plan."
+          primaryCTA={{ label: "Choose Pro", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "See pricing", href: "/pricing" }}
         />
         <PainPointsSection />
@@ -260,10 +296,10 @@ export default function MultiChairPage() {
         <FAQSection />
         <CTASection
           badge="The shop that scales"
-          headline="Run Pro for 14 days."
-          italicWord="14"
-          subhead="Full Pro plan during the trial. AI Studio, REACH inventory, unlimited artists. No card."
-          primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+          headline="Run the shop on Pro."
+          italicWord="Pro"
+          subhead={`Up to 15 artists, unlimited guest seats, AI replies and aftercare. ${MONEY_BACK_DAYS}-day money-back guarantee and ${ONBOARDING_SUPPORT_DAYS} days of founder-priority onboarding.`}
+          primaryCTA={{ label: "Choose Pro", href: "https://app.limespun.com/signup" }}
           secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
         />
       </main>

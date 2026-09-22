@@ -10,9 +10,9 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { ComparisonTable } from "@/components/shared/comparison-table";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
-import { TestimonialCard } from "@/components/shared/testimonial-card";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 // ── MoatCardBright (local — lifted from work.tsx) ────────────────────────────
 
@@ -355,7 +355,7 @@ export default function MangomintMigrationPage() {
           italicWord="tattoo"
           subhead="Mangomint is the best salon SaaS. We respect them. But a sleeve isn't a haircut. A deposit pool isn't a tip jar. An allergy isn't a hair-colour preference. 6-day migration. White-glove."
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
-          secondaryCTA={{ label: "Start the trial", href: "https://app.limespun.com/signup" }}
+          secondaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
         />
 
         {/* ── Architectural difference ──────────────────────────────────── */}
@@ -479,9 +479,9 @@ export default function MangomintMigrationPage() {
                   { feature: "Allergy intelligence (4-place surface)", values: { mangomint: "Notes only", limespun: true } },
                   { feature: "Photo timeline (REF → HEALED)", values: { mangomint: "Basic", limespun: true } },
                   { feature: "EU REACH ink registry", values: { mangomint: false, limespun: true } },
-                  { feature: "AI design assistant", values: { mangomint: false, limespun: true } },
-                  { feature: "Commission auto-splits", values: { mangomint: "Team Pay add-on", limespun: true } },
-                  { feature: "Guest artist residency band", values: { mangomint: false, limespun: true } },
+                  { feature: "AI design assistant", values: { mangomint: false, limespun: "Pro and up" } },
+                  { feature: "Commission auto-splits", values: { mangomint: "Team Pay add-on", limespun: "Studio and up" } },
+                  { feature: "Guest artist residency band", values: { mangomint: false, limespun: "Pro and up" } },
                   { feature: "Tattoo-specific by design", values: { mangomint: false, limespun: true } },
                   { feature: "Per-booking transaction fee", values: { mangomint: "No", limespun: "No" } },
                   { feature: "White-glove migration", values: { mangomint: false, limespun: true } },
@@ -616,7 +616,7 @@ export default function MangomintMigrationPage() {
           </div>
         </section>
 
-        {/* ── Testimonial ───────────────────────────────────────────────── */}
+        {/* ── Early-days note ───────────────────────────────────────────── */}
         <section
           style={{
             background: BRAND.bone,
@@ -638,22 +638,44 @@ export default function MangomintMigrationPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-60px" }}
-              style={{ maxWidth: 480, width: "100%" } as React.CSSProperties}
+              style={{ maxWidth: 560, width: "100%" } as React.CSSProperties}
             >
-              <TestimonialCard
-                name="Tomas Bel"
-                role="Owner · Salt House Tattoo"
-                city="Reykjavik, IS"
-                chairs="3 chairs · rotating guests"
-                quote="Guest residencies used to mean three spreadsheets. Now I drop them on the calendar and the booking page just works."
-                stats={[
-                  { l: "Residencies / yr", v: "11" },
-                  { l: "Setup time", v: "12 min" },
-                  { l: "Guest no-shows", v: "0" },
-                ]}
-                gradient={`linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.rust} 100%)`}
-                initials="TB"
-              />
+              <div
+                style={{
+                  background: BRAND.white,
+                  borderRadius: 18,
+                  padding: 32,
+                  boxShadow: SHADOW.soft,
+                  border: `1px solid ${BRAND.borderSoft}`,
+                } as React.CSSProperties}
+              >
+                <SectionEyebrow label="Early days" accent="rust" />
+                <p
+                  style={{
+                    fontFamily: FONT.serif,
+                    fontStyle: "italic",
+                    fontSize: 24,
+                    lineHeight: 1.3,
+                    color: BRAND.onyx,
+                    margin: "0 0 16px",
+                  } as React.CSSProperties}
+                >
+                  No testimonials here yet &mdash; and we won&apos;t invent them.
+                </p>
+                <p
+                  style={{
+                    fontFamily: FONT.sans,
+                    fontSize: 15,
+                    lineHeight: 1.65,
+                    color: BRAND.stoneDark,
+                    margin: 0,
+                  } as React.CSSProperties}
+                >
+                  Limespun is new, so there are no switching stories yet. Moving from
+                  {" "}Mangomint, you work directly with the people building the product: we map your
+                  data with you and run both systems side by side, and if it isn&apos;t right in the first {MONEY_BACK_DAYS} days you get your money back.
+                </p>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -698,7 +720,7 @@ export default function MangomintMigrationPage() {
                 items={[
                   {
                     q: "Mangomint's customer support is great. Does Limespun match?",
-                    a: "Different model. Mangomint has a big support org for a wide audience. We have engineers + a small team for tattoo studios specifically. Email response under 24h on every plan, chat under 4h on Pro.",
+                    a: "Different model. Mangomint has a big support org for a wide audience. We have engineers + a small team for tattoo studios specifically. Email response under 24h on every plan, priority support on Pro and Multi-Location.",
                   },
                   {
                     q: "Will my packages convert to Limespun projects?",
@@ -710,11 +732,11 @@ export default function MangomintMigrationPage() {
                   },
                   {
                     q: "Can I run Limespun alongside Mangomint during migration?",
-                    a: "Yes. Standard parallel run for 14 days. We don't bill until you cancel Mangomint.",
+                    a: `Yes. Standard parallel run for 14 days. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
                   },
                   {
                     q: "What if my staff is used to Mangomint's UI?",
-                    a: "Most teams transition in 2-3 days. We do a remote training session on day 5 of migration. Includes recording for new hires.",
+                    a: "The core screens are built to be learnable in a day or two. We do a remote training session on day 5 of migration. Includes recording for new hires.",
                   },
                 ]}
               />
@@ -727,9 +749,9 @@ export default function MangomintMigrationPage() {
           badge="Tattoo-native"
           headline="Move to software built for the work."
           italicWord="work"
-          subhead="6-day migration. Free. We don't bill until you cancel Mangomint."
+          subhead={`6-day migration. Free. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
-          secondaryCTA={{ label: "Or start the trial", href: "https://app.limespun.com/signup", icon: "play" }}
+          secondaryCTA={{ label: "Or get started", href: "https://app.limespun.com/signup", icon: "play" }}
         />
       </main>
       <Footer />

@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
+import { PLANS, formatPrice } from "@/lib/data/plans";
+
+const [PRO] = PLANS.filter((p) => p.tier === "pro");
+const PRO_PRICE = formatPrice(PRO.monthlyCents);
 
 export const metadata: Metadata = {
-  title: "For Multi-Chair Shops — 6+ chairs, AI-assisted, REACH-compliant, $99/mo | Limespun",
+  title: `For Multi-Chair Shops — 6+ chairs, guest artists, AI replies, ${PRO_PRICE}/mo | Limespun`,
   description:
-    "Tattoo studio software for 6+ chair shops. AI design assistant, EU REACH inventory, public booking pages, priority support. Pro plan, $99/mo.",
+    `Tattoo studio software for 6+ chair shops. Up to 15 artists, unlimited guest-artist seats, AI replies and aftercare, payroll and 1099s, priority support. Pro plan, ${PRO_PRICE}/mo.`,
   openGraph: {
     title: "Limespun for Multi-Chair Shops",
-    description: "6+ chairs. AI design assistant, EU REACH inventory, priority support. Pro plan, $99/mo.",
+    description: `6+ chairs. Unlimited guest-artist seats, AI replies and aftercare, priority support. Pro plan, ${PRO_PRICE}/mo.`,
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/for/multi-chair" },

@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -264,12 +265,8 @@ export default function PaymentsPage() {
             "He reviews the numbers in two minutes. Clicks approve. Stripe Connect routes every payout simultaneously. Artists get their money before they leave for the weekend.",
             "Eight artists. Forty-three sessions across the week. £11,400 processed. Six minutes start to finish.",
           ]}
-          quote="I get my Fridays back. That's not a small thing when you're running a studio with eight artists."
-          person={{
-            name: "Marcus Lane",
-            role: "Owner, Iron + Ash, Austin TX",
-            gradient: `linear-gradient(135deg, ${BRAND.rust} 0%, ${BRAND.rustGlow} 100%)`,
-          }}
+          quote="Commission settles on every invoice, so Friday becomes a five-minute review instead of a morning of spreadsheets."
+          takeawayLabel="The upshot"
         />
 
         <ProductRelated
@@ -307,7 +304,7 @@ export default function PaymentsPage() {
         <ProductCTA
           headline="Auto-pay your artists."
           italicWord="Auto-pay"
-          subhead="14-day free trial. No card required. Commission splits, deposit pools, and tax exports from day one."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Commission splits, deposit pools, and tax exports from day one.`}
         />
       </main>
       <Footer />

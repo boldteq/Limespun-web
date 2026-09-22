@@ -18,8 +18,8 @@ const WHY_CARDS = [
   {
     accent: BRAND.rust,
     accentBg: BRAND.rustWash,
-    title: "Real product, real users",
-    body: "We're profitable, growing, and known by the studios we serve. Your work ships to artists in 47 countries by Friday — not to a stakeholder review deck.",
+    title: "Real product, real studios",
+    body: "We're an early-stage team building Limespun alongside the studios using it. Your work ships to artists who tell us what broke by Friday — not to a stakeholder review deck.",
   },
   {
     accent: BRAND.amber,

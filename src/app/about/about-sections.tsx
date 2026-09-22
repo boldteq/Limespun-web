@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { HeroSection } from "@/components/shared/hero-section";
 import { CTASection } from "@/components/shared/cta-section";
 import { StatStrip } from "@/components/shared/stat-strip";
-import { LogoBar } from "@/components/shared/logo-bar";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { LimespunMark } from "@/components/brand/limespun-mark";
 import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -157,7 +157,7 @@ function ThesisSection() {
             {[
               "We started Boldteq in 2024 because we kept watching craft businesses try to run on software written for spas and barbershops. The 'multi-session project' didn't exist. The 'allergy field' was buried three menus deep. The 'deposit pool' was a Notes app on a second phone.",
               "Limespun is what happens when you stop adapting salon software for tattoo and start designing for tattoo from the first commit. Sleeves are projects. Deposits pool. Allergies surface. Residencies have their own band on the calendar. None of these are configurable add-ons. They're the foundation.",
-              "We are not a Series B venture-backed company chasing a billion-dollar TAM. We are a small, profitable team writing software for an industry we admire — and we'd rather have 200 studios that love us than 20,000 that tolerate us.",
+              "We are not a Series B venture-backed company chasing a billion-dollar TAM. We are a small, independent team writing software for an industry we admire — and we'd rather have 200 studios that love us than 20,000 that tolerate us.",
               "Every decision we make starts with the same question: would a great studio owner pay us, by choice, every month, to keep this running? If the answer is no, we cut it.",
             ].map((para, i) => (
               <motion.p
@@ -398,7 +398,7 @@ function TimelineSection() {
               marginBottom: 16,
             } as React.CSSProperties}
           >
-            From an idea to 1,200 artists.
+            From an idea to open doors.
           </h2>
           <p
             style={{
@@ -410,7 +410,7 @@ function TimelineSection() {
               margin: "0 auto",
             } as React.CSSProperties}
           >
-            Two years from concept to private beta. Here&apos;s what&apos;s true today.
+            Two years from concept to launch. Here&apos;s what&apos;s true today.
           </p>
         </motion.div>
 
@@ -424,8 +424,8 @@ function TimelineSection() {
             items={[
               { stat: "2024",   label: "Boldteq founded" },
               { stat: "13",     label: "sprints to v1" },
-              { stat: "1,200+", label: "artists on the waitlist" },
-              { stat: "47",     label: "countries represented" },
+              { stat: "Live",   label: "any studio can create an account today" },
+              { stat: "Tattoo-only",  label: "no salon templates underneath" },
               { stat: "$0",     label: "in transaction fees taken" },
             ]}
           />
@@ -576,40 +576,6 @@ function TeamGrid() {
   );
 }
 
-// ── PressLogoBar ──────────────────────────────────────────────────────────────
-
-function PressLogoBar() {
-  return (
-    <section
-      style={{
-        background: GRADIENT.sectionWarm,
-        paddingTop: 80,
-        paddingBottom: 80,
-      } as React.CSSProperties}
-    >
-      <div
-        style={{
-          maxWidth: 1120,
-          margin: "0 auto",
-          padding: "0 32px",
-        } as React.CSSProperties}
-      >
-        <LogoBar
-          caption="Press & community"
-          logos={[
-            { name: "Inked Magazine" },
-            { name: "Total Tattoo" },
-            { name: "Tattoo Life" },
-            { name: "Skin Deep" },
-            { name: "Things&Ink" },
-            { name: "TATTOOPHILE" },
-          ]}
-        />
-      </div>
-    </section>
-  );
-}
-
 // ── AboutSections (composite export) ─────────────────────────────────────────
 
 export function AboutSections() {
@@ -622,7 +588,7 @@ export function AboutSections() {
         headline="Built for the work, not the spreadsheet."
         italicWord="work"
         subhead="Boldteq is a small team in three time zones, building software for studios in many. We don't make 'platforms.' We make tools. The kind that show up at 9am, do the job, and stay out of the way."
-        primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+        primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
         secondaryCTA={{ label: "Talk to the team", href: "/book-a-demo" }}
       />
 
@@ -630,14 +596,13 @@ export function AboutSections() {
       <PrinciplesGrid />
       <TimelineSection />
       <TeamGrid />
-      <PressLogoBar />
 
       <CTASection
         badge="Run on Limespun"
         headline="Studios that care, building with us."
         italicWord="care"
-        subhead="14-day trial. No card. White-glove migration above Solo. Or talk to us — we answer every email."
-        primaryCTA={{ label: "Start a 14-day trial", href: "https://app.limespun.com/signup" }}
+        subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration on every plan. Or talk to us — we answer every email.`}
+        primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
         secondaryCTA={{ label: "Talk to the team", href: "/book-a-demo", icon: "play" }}
       />
     </>

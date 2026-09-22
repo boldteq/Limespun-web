@@ -10,6 +10,7 @@ import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { StoryGrid } from "@/components/customers/story-grid";
 import { BRAND, FONT, GRADIENT } from "@/lib/brand";
+import { MONEY_BACK_DAYS, ONBOARDING_SUPPORT_DAYS } from "@/lib/data/plans";
 
 export const metadata: Metadata = {
   title: "Customers — How studios run on Limespun",
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/customers" },
+  robots: { index: false, follow: false },
 };
 
 export default function CustomersPage() {
@@ -44,7 +46,7 @@ export default function CustomersPage() {
           italicWord="run"
           subhead="From a single residency chair in East London to a two-floor shop in Mexico City — these are the studios that traded seven apps for one quiet system. And the numbers behind the move."
           primaryCTA={{
-            label: "Start a 14-day trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{
@@ -257,9 +259,9 @@ export default function CustomersPage() {
           badge="Add your studio to the wall"
           headline="Run on Limespun."
           italicWord="Run"
-          subhead="14-day trial. No card. White-glove migration above Solo. We do not bill until your last appointment from your old tool has cleared."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration above Solo. ${ONBOARDING_SUPPORT_DAYS} days of founder-priority onboarding support.`}
           primaryCTA={{
-            label: "Start a 14-day trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{

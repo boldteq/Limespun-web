@@ -26,6 +26,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { InboxMockup } from "@/components/product/mockups/inbox-mockup";
 import { BRAND } from "@/lib/brand";
 
@@ -305,13 +306,8 @@ export default function InboxPage() {
               before the studio opens.
             </>,
           ]}
-          quote="I used to dread Monday mornings — three apps, three notification piles, and the thing I was missing was always the most expensive one. Now my whole week starts with a six-minute triage."
-          person={{
-            name: "Kaia Osei",
-            role: "Solo artist · Nine Lives Tattoo · London",
-            gradient:
-              "linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #F97316 100%)",
-          }}
+          quote="Three apps and three notification piles become one ordered queue — the most expensive item always sits at the top."
+          takeawayLabel="Why it matters"
         />
 
         <ProductRelated
@@ -349,7 +345,7 @@ export default function InboxPage() {
         <ProductCTA
           headline="Triage by lunch. Not after dinner."
           italicWord="Not after dinner"
-          subhead="14-day free trial. No credit card. White-glove migration from any tool you're on."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration from any tool you're on.`}
         />
       </main>
       <Footer />

@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { AnalyticsMockup } from "@/components/product/mockups/analytics-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -252,7 +253,7 @@ export default function AnalyticsPage() {
           eyebrow="End of month"
           heading="April 30, 9:14 PM. Twenty minutes for the month."
           italicWord="Twenty minutes"
-          intro="Elena runs Cinco Manos in Madrid — three locations, 22 artists. End of month used to be a full Sunday with QuickBooks and three spreadsheets. Now it isn't."
+          intro="Picture Elena, running a three-location group in Madrid with 22 artists. End of month used to be a full Sunday with QuickBooks and three spreadsheets. Now it isn't."
           paragraphs={[
             <React.Fragment key="p1">
               <strong>9:14 PM.</strong> Elena opens Analytics. Studio P&L for
@@ -277,12 +278,8 @@ export default function AnalyticsPage() {
               way: three Excel files, two coffee refills, half a Sunday.
             </React.Fragment>,
           ]}
-          quote="Per-location P&L was the moment we knew. We can finally see which shop is healthy and which one needs help, in one dashboard."
-          person={{
-            name: "Elena Ruiz",
-            role: "Director · Cinco Manos Group · Madrid",
-            gradient: "linear-gradient(135deg, #D89538 0%, #5C8A55 100%)",
-          }}
+          quote="Per-location P&L in one dashboard shows which shop is healthy and which one needs help."
+          takeawayLabel="Why it matters"
         />
 
         <ProductRelated
@@ -320,7 +317,7 @@ export default function AnalyticsPage() {
         <ProductCTA
           headline="Make the call before the spreadsheet does."
           italicWord="before the spreadsheet does"
-          subhead="14-day free trial. No card required. Live P&L, no-show risk, and cohort retention from day one."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Live P&L, no-show risk, and cohort retention from day one.`}
         />
       </main>
       <Footer />

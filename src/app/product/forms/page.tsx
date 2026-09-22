@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -256,12 +257,8 @@ export default function FormsPage() {
             "The SHA-256 hash generates. The PDF seals. The form auto-attaches to the client record and the project card. The artist sees a green tick on the session card — ready to go.",
             "No clipboard. No filing. No scanning at end of day. The form is done before the artist finishes setting up their station.",
           ]}
-          quote="I used to spend 20 minutes at the end of every day scanning and filing consent forms. Limespun killed that completely."
-          person={{
-            name: "Priya Nair",
-            role: "Owner, Seventh Skin Studio",
-            gradient: `linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.sage} 100%)`,
-          }}
+          quote="Consent is signed, stored and filed against the booking before the client sits down. No end-of-day scanning."
+          takeawayLabel="What this means for your studio"
         />
 
         <ProductRelated
@@ -299,7 +296,7 @@ export default function FormsPage() {
         <ProductCTA
           headline="Consent in 90 seconds."
           italicWord="90 seconds"
-          subhead="14-day free trial. No card required. Kiosk mode, hashed PDFs, and REACH waivers from day one."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Kiosk mode, hashed PDFs, and REACH waivers from day one.`}
         />
       </main>
       <Footer />

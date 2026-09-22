@@ -11,6 +11,7 @@ import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { StatStrip } from "@/components/shared/stat-strip";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 interface MigrationRow {
   from: string;
@@ -22,7 +23,7 @@ const migrationRows: MigrationRow[] = [
   {
     from: "DaySmart Body Art",
     time: "9 days",
-    carries: "2 white-glove calls · 100% data preserved",
+    carries: "2 white-glove calls · bookings, clients and projects carried",
   },
   {
     from: "Mangomint",
@@ -55,6 +56,8 @@ const deepLinkCards = [
   { label: "From DaySmart", href: "/migrate/daysmart" },
   { label: "From Fresha", href: "/migrate/fresha" },
   { label: "From Mangomint", href: "/migrate/mangomint" },
+  { label: "From TattooGenda", href: "/migrate/tattoogenda" },
+  { label: "From Vagaro", href: "/migrate/vagaro" },
 ];
 
 const processSteps = [
@@ -71,19 +74,19 @@ const processSteps = [
   {
     number: "03",
     title: "Days 4-12 — Parallel run",
-    body: "Limespun goes live alongside your current tool. New bookings flow to Limespun. Old bookings finish in your old system. Zero downtime.",
+    body: "Limespun goes live alongside your current tool. New bookings flow to Limespun. Old bookings finish in your old system. You keep taking bookings the whole way through.",
   },
   {
     number: "04",
-    title: "Day 13-14 — Cutover + bill",
-    body: "Last appointment in old tool clears. We flip the switch. Your old subscription gets cancelled. We start billing on day 15.",
+    title: "Day 13-14 — Cutover",
+    body: "Last appointment in your old tool clears. We flip the switch, and you cancel your old subscription. Nothing is left behind.",
   },
 ];
 
 const faqItems = [
   {
     q: "What if I have a custom field in my current tool that Limespun doesn't have?",
-    a: "We add it. Migration team has shipped 200+ custom field migrations. Most show up as 'Notes' on the client record; complex ones become first-class fields.",
+    a: "We carry it across. Simple custom fields come over as 'Notes' on the client record; if a field matters to how your studio works, we'll talk through making it a first-class field.",
   },
   {
     q: "What about historical client photos in my current tool?",
@@ -95,11 +98,11 @@ const faqItems = [
   },
   {
     q: "What if migration takes longer than 14 days?",
-    a: "We don't bill until cutover. Period. We've had migrations take 21 days; the studio paid nothing extra.",
+    a: `We keep going until you're moved. Migration costs nothing extra, however long it takes, and every plan has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   },
   {
-    q: "Is migration included in the Solo plan?",
-    a: "Solo gets self-serve CSV import (still free, just less hand-holding). Studio plan and above get white-glove with calls.",
+    q: "Is migration included on the Solo plan?",
+    a: "Yes. Done-for-you migration is included on every plan, Solo too: our team moves your clients, bookings, deposits and signed forms, with calls along the way.",
   },
 ];
 
@@ -139,10 +142,10 @@ export default function MigratePage() {
           eyebrowAccent="amber"
           headline="Whatever you're on, we move it for you."
           italicWord="whatever"
-          subhead="14-day white-glove move. Bookings, deposits, client notes, consent forms, photo libraries — all carried. We don't bill until your last appointment from your old tool clears."
+          subhead={`14-day white-glove move. Bookings, deposits, client notes, consent forms, photo libraries — all carried. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
           primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
           secondaryCTA={{
-            label: "Start the trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
         />
@@ -164,10 +167,10 @@ export default function MigratePage() {
           >
             <StatStrip
               items={[
-                { stat: "14 days", label: "average migration" },
-                { stat: "100%", label: "data carried" },
-                { stat: "$0", label: "until cutover" },
-                { stat: "Zero", label: "downtime" },
+                { stat: "Side by side", label: "your old tool runs until cutover" },
+                { stat: "Previewed", label: "you check the import before it lands" },
+                { stat: `${MONEY_BACK_DAYS} days`, label: "money-back guarantee" },
+                { stat: "Your call", label: "you decide when to switch" },
               ]}
             />
           </div>
@@ -332,11 +335,11 @@ export default function MigratePage() {
               className="migrate-deep-grid"
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
+                gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
                 gap: 14,
                 marginTop: 0,
                 width: "100%",
-                maxWidth: 860,
+                maxWidth: 960,
               } as React.CSSProperties}
             >
               {deepLinkCards.map((card) => (
@@ -651,7 +654,7 @@ export default function MigratePage() {
           subhead="30-minute discovery call. Honest answer on fit. Zero pressure."
           primaryCTA={{ label: "Book the call", href: "/book-a-demo" }}
           secondaryCTA={{
-            label: "Or start the trial",
+            label: "Or get started",
             href: "https://app.limespun.com/signup",
             icon: "play",
           }}

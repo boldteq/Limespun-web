@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { CalendarMockup } from "@/components/product/mockups/calendar-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -249,7 +250,7 @@ export default function AppointmentsPage() {
           eyebrow="A booking, locked"
           heading="Tuesday, 2:14 PM. From inquiry to lock in three minutes."
           italicWord="three minutes"
-          intro="Asha Mehra DMs Sable & Sparrow on Instagram: 'When can we start session 4 of the koi sleeve?' Miles taps the booking link in his templated reply."
+          intro="Asha DMs the studio on Instagram: 'When can we start session 4 of the koi sleeve?' The owner taps the booking link in their templated reply."
           paragraphs={[
             <React.Fragment key="p1">
               <strong>Asha picks Apr 24, 1 PM.</strong> Calendar shows a 2.5-hour gap. Slot height matches Miles&apos; standard sleeve session.
@@ -264,13 +265,8 @@ export default function AppointmentsPage() {
               <strong>Stripe takes the $120 in 4 seconds.</strong> Slot flips from HOLD to LOCKED. Email + SMS + iCal go out. Miles&apos; calendar updates. Total time, end-to-end: <em>three minutes, one tap each side.</em>
             </React.Fragment>,
           ]}
-          quote="Booking on DaySmart was four screens and a phone call. On Limespun it's a slot, a tap, and a Stripe receipt — and the booking already knows the project, the allergy, and the deposit history."
-          person={{
-            name: "Miles Verena",
-            role: "Owner · Sable & Sparrow · Brooklyn",
-            gradient:
-              "linear-gradient(135deg, #0F0F0F 0%, #4B4842 50%, #9A9792 100%)",
-          }}
+          quote="One tap books the slot, takes the deposit, and brings the project, allergy and payment history along with it."
+          takeawayLabel="What changes"
         />
 
         {/* ── Related ─────────────────────────────────────────────────────── */}
@@ -310,7 +306,7 @@ export default function AppointmentsPage() {
         <ProductCTA
           headline="Lock the chair. Lock the money."
           italicWord="the money"
-          subhead="14-day free trial. No card. Watch your no-show rate drop 60% in week one."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Deposits lock at booking, so a no-show stops being a free cancellation.`}
         />
       </main>
       <Footer />

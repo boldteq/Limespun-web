@@ -269,7 +269,7 @@ export default function BlogPage() {
           italicWord="Practical"
           subhead="The 90-second morning triage. Deposit pool math. EU REACH compliance. Written by studio owners and the Limespun team — for the people who actually do the work."
           primaryCTA={{
-            label: "Start a 14-day trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{ label: "Talk to us", href: "/book-a-demo" }}
@@ -355,7 +355,7 @@ export default function BlogPage() {
           italicWord="playbook"
           subhead="One email per month. Studio operations, compliance updates, the maths nobody else writes. No spam, no upsells."
           primaryCTA={{
-            label: "Start a 14-day trial",
+            label: "Get started",
             href: "https://app.limespun.com/signup",
           }}
           secondaryCTA={{

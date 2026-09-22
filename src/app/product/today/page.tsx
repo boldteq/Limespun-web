@@ -22,6 +22,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { TodayMockup } from "@/components/product/mockups/today-mockup";
 import { BRAND } from "@/lib/brand";
 
@@ -209,8 +210,8 @@ export default function TodayPage() {
 
         <ProductDayInLife
           eyebrow="A morning"
-          heading="8:47 AM. Sable & Sparrow, Brooklyn."
-          italicWord="Sable & Sparrow, Brooklyn"
+          heading="8:47 AM. A four-chair studio in Brooklyn."
+          italicWord="A four-chair studio in Brooklyn"
           intro="Miles unlocks the studio, drops his keys, and before the coffee finishes, opens Limespun on his phone."
           paragraphs={[
             <>
@@ -235,13 +236,8 @@ export default function TodayPage() {
               <em>Total time on the screen: forty-two seconds.</em>
             </>,
           ]}
-          quote="I used to spend the first thirty minutes flipping between three apps and a spreadsheet, just to figure out what the day looked like. Today does it before my coffee."
-          person={{
-            name: "Miles Verena",
-            role: "Owner · Sable & Sparrow · Brooklyn",
-            gradient:
-              "linear-gradient(135deg, #0F0F0F 0%, #4B4842 50%, #9A9792 100%)",
-          }}
+          quote="The first half hour stops being detective work. Today has the answers loaded before the coffee is."
+          takeawayLabel="The point"
         />
 
         <ProductRelated
@@ -280,7 +276,7 @@ export default function TodayPage() {
         <ProductCTA
           headline="Start the morning differently."
           italicWord="differently"
-          subhead="14-day free trial. No credit card. White-glove migration from any tool you're on."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration from any tool you're on.`}
         />
       </main>
       <Footer />

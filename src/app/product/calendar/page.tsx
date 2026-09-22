@@ -11,6 +11,7 @@ import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 import { CalendarMockup } from "@/components/product/mockups/calendar-mockup";
 import { BRAND } from "@/lib/brand";
 import {
@@ -125,8 +126,8 @@ export default function CalendarPage() {
             <React.Fragment key="p3"><strong>The proposal goes out as a single message.</strong> Three sessions across ten weeks, deposit per session, healing windows highlighted, design timeline included. The client says yes by 4:15. Each session lock-confirms only when the deposit posts.</React.Fragment>,
             <React.Fragment key="p4">Rafael&apos;s done planning a four-month project before the next client walks in. <em>Total time: twelve minutes. The old way: a full afternoon and three follow-up emails.</em></React.Fragment>,
           ]}
-          quote="My old calendar showed me times. Limespun shows me a body — what's been worked, what's healing, what's left. It's the difference between a clock and a tattoo plan."
-          person={{ name: "Rafael Moreno", role: "Owner · Calle Negra · Mexico City · 9 artists", gradient: "linear-gradient(135deg, #713F12 0%, #F59E0B 60%, #FBBF24 100%)" }}
+          quote="A calendar that knows what's healing books the next session around the body, not just the clock."
+          takeawayLabel="Why it matters"
         />
 
         <ProductRelated
@@ -144,7 +145,7 @@ export default function CalendarPage() {
         <ProductCTA
           headline="Plan a sleeve. Not just a slot."
           italicWord="Not just a slot"
-          subhead="14-day free trial. No credit card. Import your bookings from any other tool in a single CSV — we keep guest residencies, deposits, and consent files attached."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Import your bookings from any other tool in a single CSV — we keep guest residencies, deposits, and consent files attached.`}
         />
       </main>
       <Footer />

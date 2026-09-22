@@ -33,6 +33,7 @@ import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import type { RelatedModule } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 // ── Pillars ───────────────────────────────────────────────────────────────────
 
@@ -244,7 +245,7 @@ const related: RelatedModule[] = [
 
 const dayInLifeParagraphs: React.ReactNode[] = [
   <>
-    Kaia Osei runs Nine Lives Tattoo solo in East London. Saturday morning she opens
+    Picture Kaia, a solo artist in East London. Saturday morning she opens
     the app to{" "}
     <strong>23 messages across 4 channels overnight.</strong> Instagram DMs, two WhatsApp
     threads, a handful of SMS, and three emails.
@@ -320,15 +321,10 @@ export default function MessagesPage() {
           eyebrow="A day in the life"
           heading="Kaia's Saturday morning."
           italicWord="Saturday morning"
-          intro="Nine Lives Tattoo, East London. 23 overnight messages. 8 minutes to clear them."
+          intro="A solo studio in East London. 23 overnight messages. 8 minutes to clear them."
           paragraphs={dayInLifeParagraphs}
-          quote="I used to chase three apps to keep up with my Sunday inbox. Now I just open Limespun."
-          person={{
-            name: "Kaia Osei",
-            role: "Solo · Nine Lives Tattoo · East London",
-            gradient:
-              "linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #F97316 100%)",
-          }}
+          quote="Every channel lands in one thread, so Saturday morning is one app — not four."
+          takeawayLabel="The difference"
         />
 
         <ProductRelated
@@ -340,7 +336,7 @@ export default function MessagesPage() {
         <ProductCTA
           headline="One inbox, every channel."
           italicWord="every channel"
-          subhead="14-day trial. Connect SMS or email and watch threads merge by client."
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Connect SMS or email and watch threads merge by client.`}
         />
       </main>
       <Footer />
