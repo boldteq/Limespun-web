@@ -1,10 +1,12 @@
 import React from "react";
 import { Plus } from "lucide-react";
+import { CTA } from "@/lib/brand";
+import { FOUNDING_OFFER_OPEN, MONEY_BACK_DAYS, ONBOARDING_SUPPORT_DAYS } from "@/lib/data/plans";
 import { Display } from "./ui";
 
 export const faqs: { q: string; a: string }[] = [
   {
-    q: "How is Limespun different from Vagaro, Fresha or DaySmart?",
+    q: "How is Limespun different from Vagaro, Fresha or GlossGenius?",
     a: "Those tools were built for salons and adapted for tattoo. Limespun starts from how tattooing works: pieces that take several sessions, deposits that carry across them, consent and allergy notes that matter on the day, and artists paid by commission, booth rent or guest split.",
   },
   {
@@ -21,11 +23,24 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Do you take a fee on bookings or deposits?",
-    a: "No. You pay for your plan, monthly, yearly or once. Card payments are charged at the payment provider's standard rate, and Limespun adds nothing on top.",
+    // "Once" is the founding lifetime offer, so it only shows while that offer is open.
+    a: `No. You pay for your plan, ${FOUNDING_OFFER_OPEN ? "monthly, yearly or once" : "monthly or yearly"}. Card payments are charged at the payment provider's standard rate, and Limespun adds nothing on top.`,
   },
   {
-    q: "Is Limespun ready for my studio today?",
-    a: "Yes. Create an account and start today. Every plan comes with a 30-day money-back guarantee and 60 days of onboarding help from the founding team, and if you'd like to see it first, book a walkthrough.",
+    q: "Is there a free trial?",
+    a: `No. Every plan has a ${MONEY_BACK_DAYS}-day money-back guarantee instead, and our team moves your data over for you.`,
+  },
+  {
+    q: "Can I cancel any time?",
+    a: "Yes. Cancel from your settings whenever you like, and export your clients and signed consent forms first.",
+  },
+  {
+    q: "Does it work on iPad and phone?",
+    a: "Yes. Limespun runs in the browser on a computer, iPad or phone, and clients sign consent forms on their own phone or a front-desk tablet.",
+  },
+  {
+    q: "How do I get help?",
+    a: `Email support on every plan, priority support on Pro and Multi-Location, and ${ONBOARDING_SUPPORT_DAYS} days of onboarding help from the founding team when you start.`,
   },
   {
     q: "Who is behind Limespun?",
@@ -44,11 +59,18 @@ export function Faq({
 } = {}) {
   return (
     <section className={`${tone === "white" ? "bg-white" : "bg-canvas"} py-24 sm:py-28`}>
-      <div className="mx-auto grid max-w-[1280px] gap-12 px-5 sm:px-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.4fr)]">
-        <div className="lg:sticky lg:top-32 lg:self-start">
+      <div className="mx-auto grid max-w-[1280px] gap-12 px-5 sm:px-8 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.4fr)]">
+        <div className="xl:sticky xl:top-32 xl:self-start">
           <Display>{title}</Display>
-          <p className="mt-5 max-w-[360px] text-[18px] leading-[1.6] text-mute">
-            Anything else? Book a call and ask a real person.
+          <p className="mt-5 max-w-[360px] text-[18px] leading-[1.6] text-pretty text-mute">
+            Anything else?{" "}
+            <a
+              href={CTA.demoHref}
+              className="font-semibold whitespace-nowrap text-graphite underline decoration-ember decoration-2 underline-offset-4 hover:text-ember-deep"
+            >
+              {CTA.demoLabel}
+            </a>{" "}
+            and ask a real person.
           </p>
         </div>
         <div className="border-t border-hair-strong">

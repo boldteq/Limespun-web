@@ -78,8 +78,13 @@ function ReviewCard({ t, sample }: { t: Testimonial; sample: boolean }) {
         <blockquote className="font-serif text-[22px] leading-[1.3] text-graphite">&ldquo;{t.quote}&rdquo;</blockquote>
         <div className="mt-auto pt-5">
           <p className="text-[15px] font-semibold text-graphite">{t.name}</p>
-          <p className="text-[14px] text-mute">
-            {t.role} · {t.studio}, {t.city}
+          {/* Two reserved lines keep names aligned across cards. Each half wraps as a unit, so a
+              long meta breaks at the dot instead of orphaning the city or country. */}
+          <p className="min-h-[2lh] text-[14px] text-mute">
+            <span className="inline-block">{t.role}&nbsp;·</span>{" "}
+            <span className="inline-block">
+              {t.studio}, {t.city}
+            </span>
           </p>
         </div>
       </figcaption>

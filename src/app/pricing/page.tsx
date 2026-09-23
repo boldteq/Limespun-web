@@ -55,7 +55,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Will someone help me set up?",
-    a: `Yes. Every new studio gets ${ONBOARDING_SUPPORT_DAYS} days of onboarding help from the founding team. If you'd like to see Limespun first, book a walkthrough.`,
+    a: `Yes. Every new studio gets ${ONBOARDING_SUPPORT_DAYS} days of onboarding help from the founding team. If you'd like to see Limespun first, book a demo.`,
   },
 ];
 
@@ -91,11 +91,11 @@ export default function PricingPage() {
           <div className="mx-auto max-w-[1280px] px-5 sm:px-8">
             <div className="flex flex-col items-center text-center">
               <Display as="h1" className="max-w-[900px] !text-[44px] sm:!text-[64px]">
-                Priced per shop, never per booking
+                Flat plans, never per booking
               </Display>
-              <p className="mt-5 max-w-[580px] text-[18px] leading-[1.6] text-mute">
-                One price for the whole shop. No cut of your bookings or deposits. Card payments carry the payment
-                provider&apos;s standard fee.
+              <p className="mt-5 max-w-[580px] text-[18px] leading-[1.6] text-balance text-mute">
+                Pick the plan that fits your team. No cut of your bookings or deposits. Card payments carry the
+                payment provider&apos;s standard fee.
               </p>
             </div>
             <div className="mt-12">
@@ -119,7 +119,7 @@ export default function PricingPage() {
         <Faq items={faqs} title="Pricing questions" tone="white" />
         <ClosingCta
           title="Pick a plan, or see it first"
-          body={`Create your account in a few minutes, or book a walkthrough. Every plan has a ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+          body={`Create your account in a few minutes, or book a demo. Every plan has a ${MONEY_BACK_DAYS}-day money-back guarantee.`}
         />
       </main>
       <Footer />

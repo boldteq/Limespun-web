@@ -1,67 +1,77 @@
 import React from "react";
-import { CTA } from "@/lib/brand";
+import Link from "next/link";
+import { MONEY_BACK_DAYS, ONBOARDING_SUPPORT_DAYS } from "@/lib/data/plans";
 import { Display } from "./ui";
 
+const linkClass =
+  "font-semibold text-graphite underline decoration-ember decoration-2 underline-offset-4 hover:text-ember-deep";
+
 const policies = [
-  { value: "$0", label: "per-booking or deposit fees" },
+  { value: "$0", label: "Limespun fee on bookings or deposits" },
   { value: "Free", label: "migration on every plan" },
   { value: "100%", label: "of your data exportable, any time" },
-  { value: "1 price", label: "per shop, not per artist seat" },
+  { value: "Flat", label: "price for your whole team, no per-seat fees" },
 ];
 
-const promises = [
+const promises: { title: string; body: React.ReactNode }[] = [
   {
-    quote: "A real person sets up your studio with you, and stays your contact after launch.",
-    who: "Onboarding",
-    detail: "Every new studio",
+    title: "A real person sets you up",
+    body: `We set up your studio with you, with ${ONBOARDING_SUPPORT_DAYS} days of onboarding help from the founding team.`,
   },
   {
-    quote: "We move your clients, bookings, deposits and signed forms for you, so nothing gets retyped.",
-    who: "Migration",
-    detail: "Included on every plan",
+    title: `Your money back for ${MONEY_BACK_DAYS} days`,
+    body: `Not right for your shop in the first ${MONEY_BACK_DAYS} days? You get your money back.`,
   },
   {
-    quote: "Tell us what your shop needs next. The roadmap is shaped by the studios using it.",
-    who: "Roadmap",
-    detail: "Shaped by the studios using it",
+    title: "You shape the roadmap",
+    body: (
+      <>
+        Tell us what your shop needs next and follow it on the{" "}
+        <Link href="/roadmap" className={linkClass}>
+          public roadmap
+        </Link>
+        .
+      </>
+    ),
   },
 ];
 
 export function Promises() {
   return (
     <section className="bg-canvas py-24 sm:py-28">
-      <div className="mx-auto grid max-w-[1280px] gap-14 px-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-20">
+      <div className="mx-auto grid max-w-[1280px] gap-14 px-5 sm:px-8 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] xl:gap-20">
         <div>
-          <Display>Built with tattooers, not adapted from salon software</Display>
+          <Display>What every studio gets from us</Display>
           <dl className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-[20px] bg-hair-strong/60 ring-1 ring-hair-strong/60">
             {policies.map((p) => (
-              <div key={p.label} className="flex flex-col-reverse justify-end gap-1 bg-canvas p-6">
-                <dt className="text-[15px] leading-snug text-mute">{p.label}</dt>
+              <div key={p.label} className="flex flex-col-reverse justify-end gap-1 bg-canvas p-5 sm:p-6">
+                <dt className="text-[15px] leading-snug text-pretty text-mute">{p.label}</dt>
                 <dd className="text-[34px] leading-[1.15] font-medium tracking-[-0.02em] text-graphite">{p.value}</dd>
               </div>
             ))}
           </dl>
-          <p className="mt-8 text-[16px] text-graphite">
-            Running more than one location?{" "}
-            <a
-              href={CTA.demoHref}
-              className="font-semibold underline decoration-ember decoration-2 underline-offset-4 hover:text-ember-deep"
-            >
-              {CTA.demoLabel}
+          <p className="mt-8 text-[16px] text-pretty text-graphite">
+            Running more than one shop? Pro covers up to 5 locations.{" "}
+            <a href="#pricing" className={`${linkClass} whitespace-nowrap`}>
+              See pricing
             </a>
           </p>
         </div>
 
-        <ol className="flex flex-col rounded-[24px] bg-canvas-deep px-7 sm:px-10">
+        <ol className="flex flex-col rounded-[24px] bg-canvas-deep px-6 sm:px-10">
           {promises.map((p, i) => (
-            <li key={p.who} className="flex gap-6 border-b border-hair-strong/70 py-9 last:border-b-0">
-              <span className="w-6 shrink-0 font-serif text-[40px] leading-none text-ember tabular-nums">{i + 1}</span>
-              <div>
-                <p className="font-serif text-[24px] leading-[1.3] text-graphite">{p.quote}</p>
-                <p className="mt-4 text-[15px]">
-                  <span className="font-semibold text-graphite">{p.who}</span>
-                  <span className="text-mute"> · {p.detail}</span>
-                </p>
+            <li key={p.title} className="flex gap-4 border-b border-hair-strong/70 py-9 last:border-b-0 sm:gap-6">
+              <span
+                aria-hidden="true"
+                className="w-6 shrink-0 font-serif text-[40px] leading-none text-ember-deep tabular-nums"
+              >
+                {i + 1}
+              </span>
+              <div className="pt-1">
+                <h3 className="text-[18px] leading-[1.3] font-semibold text-balance text-graphite sm:text-[20px]">
+                  {p.title}
+                </h3>
+                <p className="mt-2 text-[16px] leading-[1.6] text-pretty text-mute">{p.body}</p>
               </div>
             </li>
           ))}

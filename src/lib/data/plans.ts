@@ -58,11 +58,7 @@ export const PLANS: Plan[] = [
     lifetimeCents: 59900,
     recommended: true,
     listIntro: "Everything in Solo, plus",
-    lines: [
-      "One calendar for every artist, with clash checks",
-      "Commission and booth-rent splits",
-      "Unlimited bookings",
-    ],
+    lines: ["Every artist on one calendar", "Clash checks before anything double-books", "Commission and booth-rent splits"],
   },
   {
     tier: "pro",
@@ -75,9 +71,9 @@ export const PLANS: Plan[] = [
     lines: [
       "Unlimited guest-artist seats",
       "Payroll and 1099s",
-      "AI replies, aftercare and consult notes",
+      "AI replies, aftercare and consult summaries",
       "Roles and permissions",
-      "Your brand on the booking page, not ours",
+      "Remove Limespun branding",
       "Priority support",
     ],
   },
@@ -198,7 +194,8 @@ export interface DisplayPrice {
 
 export function priceFor(plan: Plan, option: BillingOption): DisplayPrice {
   if (option === "lifetime") {
-    const months = Math.round(plan.lifetimeCents / plan.monthlyCents);
+    // Round up: the claim must name the month by which monthly billing has passed the one-off price.
+    const months = Math.ceil(plan.lifetimeCents / plan.monthlyCents);
     return { amount: formatPrice(plan.lifetimeCents), suffix: "once", note: `Pays for itself in ${months} months` };
   }
   if (option === "annual") {
