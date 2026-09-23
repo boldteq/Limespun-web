@@ -86,15 +86,15 @@
     scroll-behavior: smooth;
   }
   body {
-    background: #F7F7F5;
-    color: #0F0F0F;
+    background: var(--color-canvas);
+    color: var(--color-graphite);
     font-feature-settings: 'ss01', 'ss02', 'cv11';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   ::selection {
-    background: #C8351F;
-    color: #F7F7F5;
+    background: var(--color-ember-soft);
+    color: var(--color-graphite);
   }
 }
 
@@ -103,7 +103,8 @@
   50% { opacity: 0.55; transform: scale(0.85); }
 }
 
-@media (max-width: 1024px) {
+/* Header: full nav from 1024px (iPad landscape) up, burger menu below */
+@media (width < 1024px) {
   .limespun-nav-desktop { display: none !important; }
   .limespun-nav-secondary { display: none !important; }
   .limespun-nav-burger { display: flex !important; }

@@ -15,7 +15,7 @@ export interface NavColumn {
 }
 
 export interface NavColumnItem {
-  icon: React.ComponentType<{ size?: number; strokeWidth?: number; style?: React.CSSProperties }>;
+  icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string; style?: React.CSSProperties }>;
   name: string;
   desc: string;
   href: string;

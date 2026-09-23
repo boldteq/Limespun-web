@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { LimespunMark } from "@/components/brand/limespun-mark";
 import {
   CalendarDays, HandCoins, MessagesSquare, UserRound,
@@ -10,10 +10,11 @@ import {
   User, Store, Building2, ArrowLeftRight,
   BookOpen, Calculator, Map, ShieldCheck,
   LifeBuoy, Mail, Sparkles, Heart,
-  ArrowUpRight, Menu, X, ChevronDown,
+  ArrowRight, Menu, X, ChevronDown,
 } from "lucide-react";
-import { BRAND, FONT, ACCOUNT } from "@/lib/brand";
+import { ACCOUNT, CTA } from "@/lib/brand";
 import { PLANS, formatPrice, type PlanTier } from "@/lib/data/plans";
+import { cn } from "@/lib/utils";
 import type { NavItem, NavColumn, NavColumnItem, NavFooter } from "@/types";
 
 // ─── Nav data ────────────────────────────────────────────────────────────────
@@ -49,7 +50,7 @@ const navItems: NavItem[] = [
         title: "Run the shop",
         items: [
           { icon: Banknote,    name: "Payments & payouts",  desc: "Card payments and artist splits",  href: "/product/payments" },
-          { icon: UsersRound,  name: "Team & guest artists", desc: "Residents, guests and booth rent", href: "/product/team" },
+          { icon: UsersRound,  name: "Team & guest artists", desc: "Residents, booth rent, guests on Pro", href: "/product/team" },
           { icon: Droplet,     name: "Inventory",           desc: "Ink, needles and EU REACH",        href: "/product/inventory" },
           { icon: ChartColumn, name: "Reports",             desc: "Revenue, rebookings and busy days", href: "/product/analytics" },
         ],
@@ -57,7 +58,7 @@ const navItems: NavItem[] = [
     ] satisfies NavColumn[],
     footer: {
       title: "One app for the whole shop",
-      desc: "Bookings, forms, payouts and stock in one place. No more five tabs.",
+      desc: "Bookings, forms, payouts and stock in one place. One login instead of seven apps.",
       ctaLabel: "See all features",
       ctaHref: "/product",
     } satisfies NavFooter,
@@ -119,7 +120,7 @@ const navItems: NavItem[] = [
       {
         title: "Get help",
         items: [
-          { icon: LifeBuoy, name: "Book a demo", desc: "A 30-minute walkthrough", href: "/book-a-demo" },
+          { icon: LifeBuoy, name: "Book a demo", desc: "A 30-minute walkthrough", href: CTA.demoHref },
           { icon: Mail,     name: "Contact",     desc: "Talk to a real person",   href: "/contact" },
         ],
       },
@@ -147,73 +148,45 @@ function megaId(label: string): string {
   return `mega-${label.toLowerCase().replace(/'/g, "").replace(/[^a-z0-9]+/g, "-")}`;
 }
 
+const MOBILE_MENU_ID = "mobile-menu";
+
+/**
+ * Hover opens and closes the mega menus for a mouse only. A tap on a touch screen
+ * (iPad landscape gets the desktop nav) also fires emulated mouse events, which would
+ * open the menu just before the click toggles it shut; taps go through onClick instead.
+ */
+const isMouse = (e: ReactPointerEvent): boolean => e.pointerType === "mouse";
+
+/** Keyboard focus ring used across the site: graphite, never the browser's blue. */
+const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite";
+
+/** Column heading inside a menu: small caps label in mute. */
+const COL_LABEL = "text-[12px] font-semibold uppercase tracking-[0.08em] text-mute";
+
 // ─── NavColumnItem component ──────────────────────────────────────────────────
 
 /** Small ember dot flagging something new, e.g. a fresh changelog entry. */
 function NewDot() {
-  return (
-    <span
-      role="img"
-      aria-label="New"
-      style={{ width: 5, height: 5, borderRadius: 100, background: BRAND.rust, display: "inline-block", flexShrink: 0 } as React.CSSProperties}
-    />
-  );
+  return <span role="img" aria-label="New" className="inline-block size-[5px] shrink-0 rounded-full bg-ember" />;
 }
 
 function MegaItem({ item }: { item: NavColumnItem }) {
-  const [hovered, setHovered] = useState(false);
   const Icon = item.icon;
 
   return (
     <a
       href={item.href}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: "flex",
-        alignItems: "flex-start",
-        gap: 10,
-        padding: "8px 10px",
-        borderRadius: 8,
-        textDecoration: "none",
-        background: hovered ? BRAND.bone : "transparent",
-        transition: "background 0.15s",
-        cursor: "pointer",
-      } as React.CSSProperties}
+      className={cn("group flex items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors duration-150 hover:bg-canvas", FOCUS)}
     >
-      <span style={{
-        flexShrink: 0,
-        width: 30,
-        height: 30,
-        borderRadius: 6,
-        background: hovered ? BRAND.rustWash : BRAND.boneDeep,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        transition: "background 0.15s",
-      } as React.CSSProperties}>
-        <Icon size={15} strokeWidth={1.6} style={{ color: hovered ? BRAND.rust : BRAND.stoneDark } as React.CSSProperties} />
+      <span className="flex size-[30px] shrink-0 items-center justify-center rounded-md bg-canvas-deep transition-colors duration-150 group-hover:bg-ember-soft group-focus-visible:bg-ember-soft">
+        <Icon size={15} strokeWidth={1.6} className="text-graphite-soft transition-colors duration-150 group-hover:text-ember group-focus-visible:text-ember" />
       </span>
-      <span style={{ display: "flex", flexDirection: "column", gap: 1 } as React.CSSProperties}>
-        <span style={{
-          fontFamily: FONT.sans,
-          fontSize: 13,
-          fontWeight: 500,
-          color: BRAND.ink,
-          lineHeight: 1.3,
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-        } as React.CSSProperties}>
+      <span className="flex flex-col gap-px">
+        <span className="inline-flex items-center gap-1.5 text-[14px] font-medium leading-[1.3] text-graphite">
           {item.name}
           {item.dot && <NewDot />}
         </span>
-        <span style={{
-          fontFamily: FONT.sans,
-          fontSize: 12,
-          color: BRAND.stone,
-          lineHeight: 1.4,
-        } as React.CSSProperties}>{item.desc}</span>
+        <span className="text-[13px] leading-[1.4] text-mute">{item.desc}</span>
       </span>
     </a>
   );
@@ -223,11 +196,11 @@ function MegaItem({ item }: { item: NavColumnItem }) {
 
 interface MegaPanelProps {
   item: NavItem;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
+  onHoverStart: () => void;
+  onHoverEnd: () => void;
 }
 
-function MegaPanel({ item, onMouseEnter, onMouseLeave }: MegaPanelProps) {
+function MegaPanel({ item, onHoverStart, onHoverEnd }: MegaPanelProps) {
   const cols = megaGridCols(item.label);
 
   return (
@@ -235,106 +208,47 @@ function MegaPanel({ item, onMouseEnter, onMouseLeave }: MegaPanelProps) {
     // invisible bridge across the gap so the pointer can travel down without closing it.
     <div
       id={megaId(item.label)}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      style={{
-        position: "absolute",
-        top: "100%",
-        left: 0,
-        right: 0,
-        paddingTop: 10,
-        zIndex: 1000,
-      } as React.CSSProperties}
+      onPointerEnter={(e) => isMouse(e) && onHoverStart()}
+      onPointerLeave={(e) => isMouse(e) && onHoverEnd()}
+      className="absolute inset-x-0 top-full z-[1000] pt-2.5"
     >
-    <div
-      role="region"
-      aria-label={`${item.label} menu`}
-      style={{
-        background: BRAND.white,
-        border: `1px solid ${BRAND.border}`,
-        borderRadius: 20,
-        boxShadow: "0 24px 60px -16px rgba(29,30,28,0.20), 0 4px 16px -4px rgba(29,30,28,0.06)",
-        overflow: "hidden",
-        maxHeight: "calc(100vh - 110px)",
-        overflowY: "auto",
-      } as React.CSSProperties}
-    >
-      {/* Columns */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-        gap: 0,
-        padding: "22px 22px 0",
-      } as React.CSSProperties}>
-        {item.columns?.map((col) => (
-          <div key={col.title} style={{ padding: "0 12px 20px" } as React.CSSProperties}>
-            <div style={{
-              fontFamily: FONT.sans,
-              fontSize: 11,
-              fontWeight: 600,
-              color: BRAND.stoneLight,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 8,
-              paddingLeft: 10,
-            } as React.CSSProperties}>{col.title}</div>
-            {col.items.map((it) => (
-              <MegaItem key={it.name} item={it} />
-            ))}
-          </div>
-        ))}
-      </div>
-
-      {/* Footer band */}
-      {item.footer && (
-        <div style={{
-          borderTop: `1px solid ${BRAND.border}`,
-          background: BRAND.bone,
-          padding: "16px 32px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 24,
-        } as React.CSSProperties}>
-          <div>
-            <div style={{
-              fontFamily: FONT.serif,
-              fontSize: 16,
-              color: BRAND.ink,
-              marginBottom: 2,
-            } as React.CSSProperties}>{item.footer.title}</div>
-            <div style={{
-              fontFamily: FONT.sans,
-              fontSize: 12,
-              color: BRAND.stone,
-              lineHeight: 1.5,
-            } as React.CSSProperties}>{item.footer.desc}</div>
-          </div>
-          <a
-            href={item.footer.ctaHref}
-            style={{
-              flexShrink: 0,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "9px 18px",
-              borderRadius: 100,
-              background: BRAND.onyx,
-              color: BRAND.bone,
-              fontFamily: FONT.sans,
-              fontSize: 13,
-              fontWeight: 500,
-              textDecoration: "none",
-              whiteSpace: "nowrap",
-              transition: "background 0.15s",
-            } as React.CSSProperties}
-          >
-            {item.footer.ctaLabel}
-            <ArrowUpRight size={13} strokeWidth={2} />
-          </a>
+      <div
+        role="region"
+        aria-label={`${item.label} menu`}
+        className="max-h-[calc(100vh-110px)] overflow-y-auto overflow-x-hidden rounded-[20px] border border-hair bg-white shadow-[0_24px_60px_-16px_rgba(29,30,28,0.20),0_4px_16px_-4px_rgba(29,30,28,0.06)]"
+      >
+        {/* Columns */}
+        <div className="grid px-[22px] pt-[22px]" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+          {item.columns?.map((col) => (
+            <div key={col.title} className="px-3 pb-5">
+              <div className={cn(COL_LABEL, "mb-2 pl-2.5")}>{col.title}</div>
+              {col.items.map((it) => (
+                <MegaItem key={it.name} item={it} />
+              ))}
+            </div>
+          ))}
         </div>
-      )}
-    </div>
+
+        {/* Footer band */}
+        {item.footer && (
+          <div className="flex items-center justify-between gap-6 border-t border-hair bg-canvas px-8 py-4">
+            <div>
+              <div className="mb-0.5 text-[15px] font-semibold leading-snug text-graphite">{item.footer.title}</div>
+              <div className="text-[13px] leading-normal text-mute">{item.footer.desc}</div>
+            </div>
+            <a
+              href={item.footer.ctaHref}
+              className={cn(
+                "inline-flex min-h-11 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-graphite px-5 text-[13px] font-semibold text-white transition-colors duration-150 hover:bg-graphite-soft",
+                FOCUS,
+              )}
+            >
+              {item.footer.ctaLabel}
+              <ArrowRight size={14} strokeWidth={2.2} aria-hidden="true" />
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -347,101 +261,53 @@ interface MobileNavItemProps {
   onToggle: () => void;
 }
 
+/** Top-level row in the mobile menu: 16px, full width, at least 52px tall. */
+const MOBILE_ROW = "flex min-h-[52px] w-full items-center py-3.5 text-[16px] font-medium text-graphite";
+
 function MobileNavItem({ item, expanded, onToggle }: MobileNavItemProps) {
   if (item.type === "link") {
     return (
-      <a
-        href={item.href}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: "14px 0",
-          borderBottom: `1px solid ${BRAND.border}`,
-          fontFamily: FONT.sans,
-          fontSize: 16,
-          fontWeight: 500,
-          color: BRAND.ink,
-          textDecoration: "none",
-        } as React.CSSProperties}
-      >
+      <a href={item.href} className={cn(MOBILE_ROW, "gap-2 border-b border-hair", FOCUS)}>
         {item.label}
-        {item.dot && (
-          <span style={{
-            width: 6, height: 6, borderRadius: 100,
-            background: BRAND.rust, display: "inline-block",
-          } as React.CSSProperties} />
-        )}
+        {item.dot && <NewDot />}
       </a>
     );
   }
 
+  const panelId = `${megaId(item.label)}-mobile`;
+
   return (
-    <div style={{ borderBottom: `1px solid ${BRAND.border}` } as React.CSSProperties}>
+    <div className="border-b border-hair">
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
-        style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "14px 0",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          fontFamily: FONT.sans,
-          fontSize: 16,
-          fontWeight: 500,
-          color: BRAND.ink,
-        } as React.CSSProperties}
+        aria-controls={panelId}
+        className={cn(MOBILE_ROW, "cursor-pointer justify-between bg-transparent text-left", FOCUS)}
       >
         {item.label}
         <ChevronDown
           size={16}
           strokeWidth={2}
-          style={{
-            color: BRAND.stone,
-            transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "transform 0.2s",
-          } as React.CSSProperties}
+          aria-hidden="true"
+          className={cn("text-mute transition-transform duration-200", expanded && "rotate-180")}
         />
       </button>
       {expanded && (
-        <div style={{ paddingBottom: 12 } as React.CSSProperties}>
+        <div id={panelId} className="pb-3">
           {item.columns?.map((col) => (
-            <div key={col.title} style={{ marginBottom: 16 } as React.CSSProperties}>
-              <div style={{
-                fontFamily: FONT.sans,
-                fontSize: 11,
-                fontWeight: 600,
-                color: BRAND.stoneLight,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                marginBottom: 6,
-                paddingLeft: 4,
-              } as React.CSSProperties}>{col.title}</div>
+            <div key={col.title} className="mb-4">
+              <div className={cn(COL_LABEL, "mb-1 pl-1")}>{col.title}</div>
               {col.items.map((it) => {
                 const Icon = it.icon;
                 return (
                   <a
                     key={it.name}
                     href={it.href}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      padding: "7px 4px",
-                      textDecoration: "none",
-                    } as React.CSSProperties}
+                    className={cn("flex min-h-11 items-center gap-2.5 rounded-lg px-1 py-2.5", FOCUS)}
                   >
-                    <Icon size={14} strokeWidth={1.6} style={{ color: BRAND.stone } as React.CSSProperties} />
-                    <span style={{
-                      fontFamily: FONT.sans,
-                      fontSize: 14,
-                      color: BRAND.ink,
-                    } as React.CSSProperties}>{it.name}</span>
+                    <Icon size={15} strokeWidth={1.6} className="shrink-0 text-mute" />
+                    <span className="text-[15px] text-graphite">{it.name}</span>
                     {it.dot && <NewDot />}
                   </a>
                 );
@@ -462,6 +328,7 @@ export function Nav() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const burgerRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -496,99 +363,92 @@ export function Nav() {
     };
   }, [activeMenu]);
 
+  const closeMobile = () => {
+    setOpen(false);
+    setMobileExpanded(null);
+  };
+
+  // While the mobile menu is open: the page behind can't scroll, Escape closes it
+  // (focus goes back to the burger), and growing to the desktop nav closes it.
+  useEffect(() => {
+    if (!open) return;
+    const { body } = document;
+    const prevOverflow = body.style.overflow;
+    const prevPadding = body.style.paddingRight;
+    const scrollbar = window.innerWidth - document.documentElement.clientWidth;
+    body.style.overflow = "hidden";
+    if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      setMobileExpanded(null);
+      burgerRef.current?.focus();
+    };
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const onResize = (e: MediaQueryListEvent) => {
+      if (e.matches) setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", onResize);
+    return () => {
+      body.style.overflow = prevOverflow;
+      body.style.paddingRight = prevPadding;
+      document.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onResize);
+    };
+  }, [open]);
+
   const activeItem = navItems.find((n) => n.type === "mega" && n.label === activeMenu) ?? null;
 
   const toggleMobile = (label: string) => {
     setMobileExpanded((prev) => (prev === label ? null : label));
   };
 
-  // Always a floating white bar; only the shadow deepens once the page scrolls
-  const wrapperStyle: React.CSSProperties = {
-    position: "fixed",
-    top: 14,
-    left: "50%",
-    transform: "translateX(-50%)",
-    width: "calc(100% - 28px)",
-    maxWidth: 1296,
-    zIndex: 900,
-  };
-
-  const barStyle: React.CSSProperties = {
-    background: BRAND.white,
-    borderRadius: 20,
-    border: `1px solid ${scrolled ? BRAND.border : "rgba(231,229,225,0.6)"}`,
-    boxShadow: scrolled
-      ? "0 10px 30px -12px rgba(29,30,28,0.18), 0 2px 6px -2px rgba(29,30,28,0.08)"
-      : "0 4px 18px -10px rgba(29,30,28,0.14)",
-    padding: "0 10px 0 20px",
-    height: 64,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    transition: "box-shadow 0.25s ease, border-color 0.25s ease",
-  };
-
   return (
     <>
-      <div ref={wrapperRef} style={wrapperStyle}>
-        <div style={barStyle}>
-          {/* Logo */}
-          <Link href="/" aria-label="Limespun home" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 } as React.CSSProperties}>
+      {/* Mobile scrim: dims the page behind the open menu; a tap closes it */}
+      {open && (
+        <div
+          aria-hidden="true"
+          onClick={closeMobile}
+          className="limespun-nav-mobile fixed inset-0 z-[899] hidden bg-graphite/20"
+        />
+      )}
+
+      {/* Always a floating white bar; only the shadow deepens once the page scrolls */}
+      <div ref={wrapperRef} className="fixed inset-x-3.5 top-3.5 z-[900] mx-auto max-w-[1296px] max-sm:top-2.5">
+        <div
+          className={cn(
+            "flex h-16 items-center justify-between rounded-[20px] border bg-white pl-5 pr-2.5 transition-[box-shadow,border-color] duration-[250ms] ease-out max-sm:h-14 max-[400px]:pl-3.5 max-[400px]:pr-2",
+            scrolled
+              ? "border-hair shadow-[0_10px_30px_-12px_rgba(29,30,28,0.18),0_2px_6px_-2px_rgba(29,30,28,0.08)]"
+              : "border-hair/60 shadow-[0_4px_18px_-10px_rgba(29,30,28,0.14)]",
+          )}
+        >
+          {/* Logo — the wordmark drops below 360px so the bar never overflows; 44px tall to tap */}
+          <Link href="/" aria-label="Limespun home" className={cn("flex min-h-11 items-center gap-2.5 rounded-lg max-[400px]:gap-2", FOCUS)}>
             <LimespunMark size={30} />
-            <span className="max-[480px]:!text-[18px]" style={{
-              fontFamily: FONT.sans,
-              fontSize: 21,
-              fontWeight: 700,
-              lineHeight: 1,
-              color: BRAND.onyx,
-              letterSpacing: "-0.03em",
-            } as React.CSSProperties}>Limespun</span>
+            <span className="text-[21px] font-bold leading-none tracking-[-0.03em] text-graphite max-[480px]:text-[18px] max-[359px]:hidden">
+              Limespun
+            </span>
           </Link>
 
-          {/* Desktop nav items */}
-          <nav
-            aria-label="Primary"
-            className="limespun-nav-desktop"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-              position: "relative",
-            } as React.CSSProperties}
-          >
+          {/* Desktop nav items — 44px tall so iPad-landscape taps land */}
+          <nav aria-label="Primary" className="limespun-nav-desktop relative flex items-center gap-0.5">
             {navItems.map((item) => {
               if (item.type === "link") {
                 return (
                   <a
                     key={item.label}
                     href={item.href}
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 5,
-                      padding: "6px 12px",
-                      borderRadius: 8,
-                      fontFamily: FONT.sans,
-                      fontSize: 14,
-                      fontWeight: 450,
-                      color: BRAND.ink,
-                      textDecoration: "none",
-                      transition: "background 0.12s",
-                    } as React.CSSProperties}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.background = BRAND.boneDeep;
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
-                    }}
+                    className={cn(
+                      "inline-flex min-h-11 items-center gap-[5px] whitespace-nowrap rounded-lg px-3 py-1.5 text-[14px] font-[450] text-graphite transition-colors duration-[120ms] hover:bg-canvas-deep",
+                      FOCUS,
+                    )}
                   >
                     {item.label}
-                    {item.dot && (
-                      <span style={{
-                        width: 5, height: 5, borderRadius: 100,
-                        background: BRAND.rust, display: "inline-block",
-                      } as React.CSSProperties} />
-                    )}
+                    {item.dot && <NewDot />}
                   </a>
                 );
               }
@@ -598,9 +458,9 @@ export function Nav() {
               return (
                 <div
                   key={item.label}
-                  style={{ position: "relative" } as React.CSSProperties}
-                  onMouseEnter={() => handleEnter(item.label)}
-                  onMouseLeave={handleLeave}
+                  className="relative"
+                  onPointerEnter={(e) => isMouse(e) && handleEnter(item.label)}
+                  onPointerLeave={(e) => isMouse(e) && handleLeave()}
                 >
                   <button
                     type="button"
@@ -608,102 +468,61 @@ export function Nav() {
                     aria-expanded={isActive}
                     aria-controls={megaId(item.label)}
                     onClick={() => setActiveMenu((cur) => (cur === item.label ? null : item.label))}
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 4,
-                      padding: "6px 12px",
-                      borderRadius: 8,
-                      background: isActive ? BRAND.boneDeep : "transparent",
-                      border: "none",
-                      cursor: "pointer",
-                      fontFamily: FONT.sans,
-                      fontSize: 14,
-                      fontWeight: 450,
-                      color: BRAND.ink,
-                      transition: "background 0.12s",
-                    } as React.CSSProperties}
+                    className={cn(
+                      "inline-flex min-h-11 cursor-pointer items-center gap-1 whitespace-nowrap rounded-lg px-3 py-1.5 text-[14px] font-[450] text-graphite transition-colors duration-[120ms]",
+                      isActive ? "bg-canvas-deep" : "bg-transparent",
+                      FOCUS,
+                    )}
                   >
                     {item.label}
                     <ChevronDown
                       size={13}
                       strokeWidth={2}
-                      style={{
-                        color: BRAND.stone,
-                        transform: isActive ? "rotate(180deg)" : "rotate(0deg)",
-                        transition: "transform 0.2s",
-                      } as React.CSSProperties}
+                      aria-hidden="true"
+                      className={cn("text-mute transition-transform duration-200", isActive && "rotate-180")}
                     />
                   </button>
-
                 </div>
               );
             })}
           </nav>
 
           {/* Right side */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8 } as React.CSSProperties}>
+          <div className="flex items-center gap-2 max-[400px]:gap-1.5">
             <a
               href={ACCOUNT.signInHref}
-              className="limespun-nav-secondary"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                minHeight: 44,
-                padding: "0 14px",
-                borderRadius: 100,
-                color: BRAND.onyx,
-                fontFamily: FONT.sans,
-                fontSize: 15,
-                fontWeight: 600,
-                textDecoration: "none",
-                whiteSpace: "nowrap",
-              } as React.CSSProperties}
+              className={cn(
+                "limespun-nav-secondary inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-3.5 text-[15px] font-semibold text-graphite transition-colors duration-150 hover:bg-canvas-deep",
+                FOCUS,
+              )}
             >
               {ACCOUNT.signInLabel}
             </a>
             <a
               href={ACCOUNT.signUpHref}
-              className="max-[480px]:!min-h-10 max-[480px]:!px-3.5 max-[480px]:!text-[14px]"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                minHeight: 44,
-                padding: "0 18px",
-                borderRadius: 100,
-                background: BRAND.onyx,
-                color: BRAND.white,
-                fontFamily: FONT.sans,
-                fontSize: 15,
-                fontWeight: 600,
-                textDecoration: "none",
-                whiteSpace: "nowrap",
-              } as React.CSSProperties}
+              className={cn(
+                "inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-full bg-graphite px-[18px] text-[15px] font-semibold text-white transition-colors duration-200 hover:bg-graphite-soft max-[480px]:px-3.5 max-[480px]:text-[14px] max-[400px]:px-3",
+                FOCUS,
+              )}
             >
-              {ACCOUNT.signUpLabel}<span className="limespun-nav-secondary" aria-hidden="true">&nbsp;&nbsp;→</span>
+              {ACCOUNT.signUpLabel}
+              <ArrowRight size={16} strokeWidth={2.2} aria-hidden="true" className="limespun-nav-secondary" />
             </a>
 
             {/* Mobile burger */}
             <button
-              className="limespun-nav-burger"
-              onClick={() => setOpen((v) => !v)}
-              style={{
-                display: "none",
-                alignItems: "center",
-                justifyContent: "center",
-                width: 36,
-                height: 36,
-                borderRadius: 8,
-                background: BRAND.boneDeep,
-                border: "none",
-                cursor: "pointer",
-              } as React.CSSProperties}
+              ref={burgerRef}
+              type="button"
+              onClick={() => (open ? closeMobile() : setOpen(true))}
               aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls={MOBILE_MENU_ID}
+              className={cn(
+                "limespun-nav-burger hidden size-11 cursor-pointer items-center justify-center rounded-[10px] bg-canvas-deep text-graphite",
+                FOCUS,
+              )}
             >
-              {open
-                ? <X size={18} strokeWidth={2} style={{ color: BRAND.ink } as React.CSSProperties} />
-                : <Menu size={18} strokeWidth={2} style={{ color: BRAND.ink } as React.CSSProperties} />
-              }
+              {open ? <X size={18} strokeWidth={2} aria-hidden="true" /> : <Menu size={18} strokeWidth={2} aria-hidden="true" />}
             </button>
           </div>
         </div>
@@ -713,76 +532,64 @@ export function Nav() {
           <div className="limespun-nav-desktop">
             <MegaPanel
               item={activeItem}
-              onMouseEnter={() => handleEnter(activeItem.label)}
-              onMouseLeave={handleLeave}
+              onHoverStart={() => handleEnter(activeItem.label)}
+              onHoverEnd={handleLeave}
             />
           </div>
         )}
 
-        {/* Mobile drawer */}
+        {/* Mobile drawer — shown via CSS below 1024px; scrolls inside the viewport */}
         {open && (
           <div
-            className="limespun-nav-mobile"
-            style={{
-              display: "none", // shown via CSS at ≤768px
-              marginTop: 8,
-              background: BRAND.white,
-              border: `1px solid ${BRAND.border}`,
-              borderRadius: 16,
-              padding: "8px 24px 24px",
-              boxShadow: "0 12px 32px -8px rgba(15,15,15,0.12)",
-            } as React.CSSProperties}
+            id={MOBILE_MENU_ID}
+            className="limespun-nav-mobile mt-2 hidden max-h-[calc(100dvh-96px)] overflow-y-auto overscroll-contain rounded-2xl border border-hair bg-white px-6 pb-5 pt-2 shadow-[0_12px_32px_-8px_rgba(29,30,28,0.14)] max-[400px]:px-5"
           >
-            {navItems.map((item) => (
-              <MobileNavItem
-                key={item.label}
-                item={item}
-                expanded={mobileExpanded === item.label}
-                onToggle={() => toggleMobile(item.label)}
-              />
-            ))}
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 } as React.CSSProperties}>
+            <nav aria-label="Mobile">
+              {navItems.map((item) => (
+                <MobileNavItem
+                  key={item.label}
+                  item={item}
+                  expanded={mobileExpanded === item.label}
+                  onToggle={() => toggleMobile(item.label)}
+                />
+              ))}
+            </nav>
+            <div className="mt-5 flex flex-col gap-2.5">
+              <a
+                href={CTA.primaryHref}
+                className={cn(
+                  "inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-graphite px-6 text-[15px] font-semibold text-white transition-colors duration-200 hover:bg-graphite-soft",
+                  FOCUS,
+                )}
+              >
+                {CTA.primaryLabel}
+                <ArrowRight size={16} strokeWidth={2.2} aria-hidden="true" />
+              </a>
+              <a
+                href={CTA.demoHref}
+                className={cn(
+                  "inline-flex min-h-12 items-center justify-center rounded-full border border-graphite/80 px-6 text-[15px] font-semibold text-graphite transition-colors duration-200 hover:bg-canvas",
+                  FOCUS,
+                )}
+              >
+                {CTA.demoLabel}
+              </a>
+            </div>
+            <p className="mt-2 flex flex-wrap items-center justify-center gap-x-1.5 text-[14px] text-mute">
+              Already have an account?
               <a
                 href={ACCOUNT.signInHref}
-                style={{
-                  display: "block",
-                  textAlign: "center",
-                  padding: "13px",
-                  borderRadius: 100,
-                  border: `1px solid ${BRAND.onyx}`,
-                  fontFamily: FONT.sans,
-                  fontSize: 15,
-                  fontWeight: 600,
-                  color: BRAND.onyx,
-                  textDecoration: "none",
-                } as React.CSSProperties}
+                className={cn("inline-flex min-h-11 items-center rounded-md px-1 font-semibold text-graphite underline decoration-hair-strong underline-offset-4 hover:decoration-graphite", FOCUS)}
               >
                 {ACCOUNT.signInLabel}
               </a>
-              <a
-                href={ACCOUNT.signUpHref}
-                style={{
-                  display: "block",
-                  textAlign: "center",
-                  padding: "13px",
-                  borderRadius: 100,
-                  background: BRAND.onyx,
-                  fontFamily: FONT.sans,
-                  fontSize: 15,
-                  fontWeight: 600,
-                  color: BRAND.white,
-                  textDecoration: "none",
-                } as React.CSSProperties}
-              >
-                {ACCOUNT.signUpLabel}
-              </a>
-            </div>
+            </p>
           </div>
         )}
       </div>
 
-      {/* Spacer so content doesn't sit under fixed nav */}
-      <div style={{ height: 92 } as React.CSSProperties} aria-hidden="true" />
+      {/* Spacer so content doesn't sit under the fixed nav */}
+      <div className="h-[92px] max-sm:h-20" aria-hidden="true" />
     </>
   );
 }
