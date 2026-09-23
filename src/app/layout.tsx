@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Instrument_Serif, Inter } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/brand";
+import { PLANS, formatPrice } from "@/lib/data/plans";
 
 const instrumentSerif = Instrument_Serif({
   weight: ["400"],
@@ -17,30 +18,23 @@ const inter = Inter({
   display: "swap",
 });
 
+const TITLE = "Limespun — Tattoo studio software";
+const DESCRIPTION = `Book the whole sleeve. Keep every deposit. Limespun runs bookings, deposits, consent forms and artist payouts for tattoo studios. Plans from ${formatPrice(Math.min(...PLANS.map((p) => p.monthlyCents)))}/mo.`;
+
 export const metadata: Metadata = {
-  title: "Limespun — The Studio OS for Tattoo",
-  description:
-    "Bookings, deposits, projects, portfolio, consent, payments, messages — one quiet system built for tattoo studios. Multi-session projects, allergy intelligence, deposit pools, EU REACH compliance.",
-  keywords: [
-    "tattoo studio software",
-    "tattoo booking",
-    "tattoo management",
-    "studio OS",
-    "tattoo appointment",
-    "REACH compliance",
-  ],
+  title: TITLE,
+  description: DESCRIPTION,
   openGraph: {
-    title: "Limespun — The Studio OS for Tattoo",
-    description:
-      "One quiet system that understands multi-session work, red-ink allergies, and deposits split across five visits.",
+    title: TITLE,
+    description: DESCRIPTION,
     type: "website",
     url: SITE_URL,
+    siteName: "Limespun",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Limespun — The Studio OS for Tattoo",
-    description:
-      "One quiet system that understands multi-session work, red-ink allergies, and deposits split across five visits.",
+    title: TITLE,
+    description: DESCRIPTION,
   },
   robots: { index: true, follow: true },
   metadataBase: new URL(SITE_URL),

@@ -294,12 +294,6 @@ export default function MarketingPage() {
               desc: "Cohort retention data feeds win-back triggers. Campaign revenue feeds the P&L.",
               href: "/product/analytics",
             },
-            {
-              icon: Megaphone,
-              label: "Customers",
-              desc: "Client profiles, lifetime value, and communication history — all in one place.",
-              href: "/customers",
-            },
           ]}
         />
 

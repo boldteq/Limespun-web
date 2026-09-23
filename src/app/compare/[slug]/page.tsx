@@ -130,7 +130,7 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
                 <li className="flex gap-2.5 text-[16px] leading-snug text-graphite">
                   <Check size={18} strokeWidth={2.6} className="mt-0.5 shrink-0 text-ember" aria-hidden="true" />
                   <span>
-                    <span className="font-semibold">One price per shop.</span>{" "}
+                    <span className="font-semibold">Flat plans, never per booking.</span>{" "}
                     <span className="text-graphite-soft">No cut of your bookings or deposits.</span>
                   </span>
                 </li>

@@ -10,14 +10,17 @@ import { Pricing } from "@/components/home/pricing";
 import { Faq, faqs } from "@/components/home/faq";
 import { FinalCta } from "@/components/home/final-cta";
 import { JsonLd } from "@/components/seo/json-ld";
-import { SITE_URL } from "@/lib/brand";
+import { CONTACT_EMAIL, SITE_URL } from "@/lib/brand";
+import { PLANS } from "@/lib/data/plans";
+
+const monthlyDollars = PLANS.map((p) => p.monthlyCents / 100);
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-canvas text-graphite">
       <a
         href="#main"
-        className="sr-only z-[1000] rounded-full bg-graphite px-4 py-2 text-white focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+        className="sr-only z-[1000] items-center rounded-full bg-graphite text-[15px] font-semibold text-white focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:inline-flex focus:min-h-11 focus:px-[18px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite"
       >
         Skip to content
       </a>
@@ -33,7 +36,7 @@ export default function HomePage() {
           contactPoint: {
             "@type": "ContactPoint",
             contactType: "customer service",
-            email: "hello@boldteq.com",
+            email: CONTACT_EMAIL,
             availableLanguage: ["English"],
           },
         }}
@@ -48,9 +51,9 @@ export default function HomePage() {
           offers: {
             "@type": "AggregateOffer",
             priceCurrency: "USD",
-            lowPrice: "39",
-            highPrice: "329",
-            offerCount: "4",
+            lowPrice: String(Math.min(...monthlyDollars)),
+            highPrice: String(Math.max(...monthlyDollars)),
+            offerCount: String(PLANS.length),
           },
         }}
       />
