@@ -26,6 +26,7 @@ interface ChairRow {
   live?: boolean;
 }
 
+/* Canonical sample studio, Thu Oct 8: four of today's six sessions. Nobody is double-booked. */
 const rows: ChairRow[] = [
   {
     time: "10:00",
@@ -37,21 +38,21 @@ const rows: ChairRow[] = [
     live: true,
   },
   {
+    time: "11:00",
+    end: "12:00",
+    client: "Jo K.",
+    piece: "Consult · fine-line florals",
+    artist: "Mara",
+    status: <Chip tone="paid">$100 deposit paid</Chip>,
+  },
+  {
     time: "1:30",
     end: "4:00",
     client: "Elena R.",
     piece: "Back piece · session 2 of 3",
     artist: "Dev",
-    status: <Chip tone="flag">Red-ink allergy</Chip>,
+    status: <Chip tone="flag">Red ink allergy</Chip>,
     flagged: true,
-  },
-  {
-    time: "2:00",
-    end: "3:00",
-    client: "Jo K.",
-    piece: "Consult · fine-line florals",
-    artist: "Mara",
-    status: <Chip tone="paid">$100 deposit paid</Chip>,
   },
   {
     time: "4:30",
@@ -66,36 +67,59 @@ const rows: ChairRow[] = [
 function TodayPanel() {
   return (
     <AppWindow active="Today">
-      <div className="flex items-center justify-between gap-3 border-b border-hair px-5 py-4">
-        <div>
-          <p className="text-[15px] font-semibold text-graphite">Today</p>
-          <p className="text-[12px] text-mute">4 sessions · $1,840 booked</p>
+      <div className="flex h-full flex-col">
+        <div className="flex items-center justify-between gap-3 border-b border-hair px-5 py-4">
+          <div>
+            <p className="text-[15px] font-semibold text-graphite">Today</p>
+            <p className="text-[12px] text-mute">
+              <span className="whitespace-nowrap">6 sessions ·</span> <span className="whitespace-nowrap">3 artists</span>
+            </p>
+          </div>
+          <SampleTag />
         </div>
-        <SampleTag />
+        <ul>
+          {rows.map((r) => (
+            <li
+              key={r.client}
+              className={`grid grid-cols-[52px_1fr] items-center gap-3 border-b border-hair px-5 py-3 last:border-b-0 sm:grid-cols-[60px_1fr_auto] ${
+                r.flagged ? "bg-flag-soft/60" : ""
+              }`}
+            >
+              <div className="text-[12px] leading-tight tabular-nums">
+                <p className="font-semibold text-graphite">{r.time}</p>
+                <p className="text-mute">to {r.end}</p>
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-[13px] font-semibold text-graphite">
+                  {r.client} <span className="font-normal text-mute">· {r.artist}</span>
+                </p>
+                <p className="text-[12px] text-graphite-soft sm:truncate">
+                  {/* On narrow phones the line wraps at a "·", never mid-phrase */}
+                  {r.piece.split(" · ").map((part, i, all) => (
+                    <React.Fragment key={part}>
+                      <span className="whitespace-nowrap">
+                        {part}
+                        {i < all.length - 1 ? " ·" : ""}
+                      </span>
+                      {i < all.length - 1 ? " " : ""}
+                    </React.Fragment>
+                  ))}
+                </p>
+                <div className="mt-1 sm:hidden">{r.status}</div>
+              </div>
+              <div className="hidden sm:block">{r.status}</div>
+            </li>
+          ))}
+        </ul>
+        {/* Accounts for the 2 sessions not listed so the rows agree with the header; on sm+ it also closes the pane under the sidebar's height */}
+        <div className="mt-auto flex items-center justify-between gap-3 border-t border-hair bg-canvas/60 px-5 py-3 text-[12px]">
+          <span className="truncate text-mute">
+            +2 more · Priya S.<span className="sm:hidden">, Rio (guest)</span>
+            <span className="hidden sm:inline"> · Rio (guest) walk-ins</span>
+          </span>
+          <span className="hidden shrink-0 font-semibold text-graphite tabular-nums sm:inline">$340 deposits held</span>
+        </div>
       </div>
-      <ul>
-        {rows.map((r) => (
-          <li
-            key={r.client}
-            className={`grid grid-cols-[52px_1fr] items-center gap-3 border-b border-hair px-5 py-3 last:border-b-0 sm:grid-cols-[60px_1fr_auto] ${
-              r.flagged ? "bg-flag-soft/60" : ""
-            }`}
-          >
-            <div className="text-[12px] leading-tight tabular-nums">
-              <p className="font-semibold text-graphite">{r.time}</p>
-              <p className="text-mute">to {r.end}</p>
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-[13px] font-semibold text-graphite">
-                {r.client} <span className="font-normal text-mute">· {r.artist}</span>
-              </p>
-              <p className="truncate text-[12px] text-graphite-soft">{r.piece}</p>
-              <div className="mt-1 sm:hidden">{r.status}</div>
-            </div>
-            <div className="hidden sm:block">{r.status}</div>
-          </li>
-        ))}
-      </ul>
     </AppWindow>
   );
 }
@@ -109,7 +133,7 @@ export function Hero() {
           {FOUNDING_OFFER_OPEN ? (
             <a
               href="#pricing-lifetime"
-              className="group mb-6 inline-flex items-center gap-2 rounded-full border border-hair bg-white/70 px-4 py-1.5 text-[14px] font-medium text-graphite-soft transition-colors hover:border-hair-strong hover:text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite"
+              className="group mb-6 inline-flex items-center gap-2 rounded-full border border-hair bg-white/70 px-4 py-1.5 text-[14px] font-medium max-[359px]:gap-1.5 max-[359px]:px-3 max-[359px]:text-[13px] text-graphite-soft transition-colors hover:border-hair-strong hover:text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite"
             >
               <span className="h-2 w-2 rounded-full bg-ember" aria-hidden="true" />
               <span className="font-semibold text-graphite">Founding offer</span>
@@ -125,7 +149,7 @@ export function Hero() {
           )}
           <Display as="h1">
             Book the whole sleeve.
-            <br className="hidden sm:block" /> Keep <Underlined>every deposit.</Underlined>
+            <br /> Keep <Underlined>every deposit.</Underlined>
           </Display>
           <p className="mt-7 max-w-[600px] text-[18px] leading-[1.6] text-graphite-soft sm:text-[19px]">
             Limespun runs bookings, deposits, consent forms and artist payouts for tattoo studios. It is built
@@ -155,7 +179,7 @@ export function Hero() {
               tone="flag"
               icon={<AlertTriangle size={16} strokeWidth={2.2} />}
               title="Flagged before 1:30"
-              body="Elena reacted to red ink in session 1. Patch test booked for Dev."
+              body="Elena reacted to red ink after session 1. No red today; patch test booked before session 3."
               className="mx-auto mt-5 xl:absolute xl:right-4 xl:bottom-10 xl:mt-0 xl:max-w-[212px]"
             />
           </StripedFrame>

@@ -172,7 +172,7 @@ export function Toast({
       <span className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-full", toneClass)}>{icon}</span>
       <span>
         <span className="block text-[13px] font-semibold text-graphite">{title}</span>
-        {body && <span className="block text-[12px] leading-snug text-graphite-soft">{body}</span>}
+        {body && <span className="block text-[12px] leading-snug text-pretty text-graphite-soft">{body}</span>}
       </span>
     </div>
   );
@@ -252,7 +252,9 @@ export function Display({
     <Tag
       className={cn(
         "font-serif font-normal tracking-[-0.01em] text-balance text-graphite",
-        Tag === "h1" ? "text-[52px] leading-[1.02] sm:text-[72px] lg:text-[84px]" : "text-[40px] leading-[1.06] sm:text-[56px]",
+        Tag === "h1"
+          ? "text-[clamp(36px,11.6vw,52px)] leading-[1.02] sm:text-[72px] lg:text-[84px]"
+          : "text-[40px] leading-[1.06] sm:text-[56px]",
         className,
       )}
     >
