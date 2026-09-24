@@ -38,3 +38,10 @@ next-env.d.ts
 
 # Local design audit captures
 .design-audit
+
+# Reusable audit harness (the rest of .design-audit is scratch output)
+!.design-audit/
+.design-audit/*
+!.design-audit/page-audit.mjs
+!.design-audit/banned.json
+!.design-audit/routes-*.txt
