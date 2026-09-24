@@ -99,7 +99,8 @@ function SlotBoard({ e }: { e: FlashEvent }) {
       title={
         <span className="flex items-center gap-2">
           {e.name}
-          <AppStatus tone={BADGE[e.status].tone} dot>
+          {/* Under 19rem the event name keeps the row; the chip comes back from there. */}
+          <AppStatus tone={BADGE[e.status].tone} dot className="hidden @min-[19rem]:inline-flex">
             {BADGE[e.status].label}
           </AppStatus>
         </span>
@@ -108,7 +109,7 @@ function SlotBoard({ e }: { e: FlashEvent }) {
     >
       <AppTabs tabs={["Overview", "Designs", "Slots", "Bookings", "Settings"]} active="Slots" className="px-2 @md:px-4" />
       {/* The Slots tab's own filter (FlashEventTabs.tsx): All · Open · Reserved · Booked · Blocked. */}
-      <div className="flex flex-wrap gap-1.5 px-4 pt-3.5">
+      <div className="flex flex-wrap gap-1.5 px-3 pt-3.5 @min-[19rem]:px-4">
         <ToolbarPill active count={all.length}>
           All
         </ToolbarPill>
@@ -120,18 +121,25 @@ function SlotBoard({ e }: { e: FlashEvent }) {
         </span>
         <span className="ml-auto hidden items-center text-ui-sm font-semibold text-app-active-fg tabular-nums @2xl:flex">{pct}% filled</span>
       </div>
-      <div className="flex flex-col gap-4 p-4">
+      {/* Three slots a row in phone frames, so "Reserved" and "Blocked" always read whole. */}
+      <div className="flex flex-col gap-4 p-3 @min-[19rem]:p-4">
         {e.artists.map((a) => (
           <div key={a} className="flex flex-col gap-2">
             <span className="flex items-center gap-2 text-ui-sm font-semibold text-app-text">
               <AppAvatar initials={ARTISTS[a].initials} tone={ARTISTS[a].tone} size="sm" />
               {ARTISTS[a].name}
             </span>
-            <div className="grid grid-cols-4 gap-1.5 @lg:grid-cols-6">
+            <div className="grid grid-cols-3 gap-1.5 @lg:grid-cols-4 @2xl:grid-cols-6">
               {slots[a].map((s) => (
-                <span key={s.time} className={cn("flex min-w-0 flex-col rounded-app px-1.5 py-1.5 @md:px-2", SLOT_STYLE[s.state].cell)}>
+                <span
+                  key={s.time}
+                  data-slot
+                  className={cn("flex min-w-0 flex-col rounded-app px-1.5 py-1.5 @min-[19rem]:px-2", SLOT_STYLE[s.state].cell)}
+                >
                   <span className={cn("text-[10.5px] font-semibold tabular-nums", SLOT_STYLE[s.state].time)}>{s.time}</span>
-                  <span className="truncate text-[10.5px] font-semibold @md:text-ui-xs">{SLOT_STYLE[s.state].label}</span>
+                  <span className="text-[10px] font-semibold whitespace-nowrap @min-[19rem]:text-[10.5px] @md:text-ui-xs">
+                    {SLOT_STYLE[s.state].label}
+                  </span>
                 </span>
               ))}
             </div>

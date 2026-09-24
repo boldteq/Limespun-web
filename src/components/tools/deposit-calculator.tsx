@@ -39,14 +39,18 @@ export function DepositCalculator() {
         <NumberField id="deposit" label="Deposit you take" suffix="% of price" value={depositPct} onChange={setDepositPct} max={100} step={5} />
       </div>
 
-      <div className="flex flex-col justify-between gap-6 rounded-[24px] bg-white p-7 ring-1 ring-hair sm:p-9" aria-live="polite">
+      <div className="flex flex-col gap-6 rounded-[24px] bg-white p-7 ring-1 ring-hair sm:p-9 lg:self-start" aria-live="polite">
         <div>
           <p className="text-[14px] font-semibold tracking-[0.06em] text-mute uppercase">Each month</p>
-          <dl className="mt-3">
+          {/* The answer first, in the figure style; the working underneath. */}
+          <dl className="mt-4">
+            <dt className="text-[15px] font-semibold text-graphite">Kept by your deposit policy</dt>
+            <dd className="mt-1 font-serif text-display-3 text-graphite tabular-nums">{money(kept)}</dd>
+          </dl>
+          <dl className="mt-5 border-t border-hair">
             <ResultRow label="Sessions missed" value={missed.toFixed(1)} />
             <ResultRow label="Revenue lost with no deposit" value={money(lost)} />
             <ResultRow label="Still lost with your deposit" value={money(stillLost)} />
-            <ResultRow label="Kept by your deposit policy" value={money(kept)} strong />
           </dl>
         </div>
         <p className="rounded-[14px] bg-canvas px-4 py-3 text-[14px] leading-[1.55] text-graphite-soft">

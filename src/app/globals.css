@@ -8,47 +8,6 @@
   --font-serif: var(--font-serif);
   --font-sans: var(--font-sans);
 
-  --color-bone: #F7F7F5;
-  --color-bone-cream: #FAFAF8;
-  --color-bone-deep: #EFEEEA;
-  --color-paper: #FCFBF7;
-
-  --color-onyx: #0F0F0F;
-  /* --color-ink now lives in the design-system block below (#161715, the closing band's surface) */
-  --color-smoke: #232120;
-  --color-char: #2A2725;
-  --color-coal: #3A3633;
-
-  --color-stone-dark: #4B4842;
-  --color-stone: #787774;
-  --color-stone-light: #9A9792;
-  --color-stone-faint: #6B6863;
-  --color-border-ink: #3A3633;
-
-  --color-rust: #C8351F;
-  --color-rust-bright: #E8553F;
-  --color-rust-glow: #F26B4D;
-  --color-rust-soft: #FCE4DF;
-  --color-rust-wash: #FBEFEB;
-  --color-rust-deep: #7A1A0A;
-
-  --color-sage: #5C8A55;
-  --color-sage-soft: #DFEAD9;
-  --color-sage-wash: #EEF5E9;
-
-  --color-amber: #D89538;
-  --color-amber-soft: #F8E4C2;
-  --color-amber-wash: #FBEFD8;
-
-  --color-crimson: #C73838;
-  --color-crimson-soft: #FEEBEB;
-
-  --color-border: #E7E5E1;
-  --color-border-soft: #EFEEEA;
-
-  --color-background: #F7F7F5;
-  --color-foreground: #0F0F0F;
-
   /* Homepage system — one ember orange (the logo colour), warm canvas, graphite ink */
   --color-canvas: #FAF6F1;
   --color-canvas-deep: #F3ECE3;
@@ -132,8 +91,11 @@
   --text-kpi-value--letter-spacing: -0.02em;
   --text-kpi-value--font-weight: 800;
 
-  /* Rhythm: section padding 80px on phones to 112px at 1280px, fluid in between */
+  /* Rhythm: section padding 80px on phones to 112px at 1280px, fluid in between (the homepage's) */
   --spacing-section-y: clamp(5rem, 4.12rem + 3.6vw, 7rem);
+  /* Inner pages (system <Section>): 64px on phones, the same 112px from 1280px. Phones stack
+     more bands per page than the homepage, so each one gives back 32px of padding. */
+  --spacing-section-y-inner: clamp(4rem, 2.69rem + 5.39vw, 7rem);
   --spacing-section-y-tight: clamp(3.5rem, 2.84rem + 2.7vw, 5rem);
   --spacing-block-gap: clamp(2.5rem, 2.06rem + 1.8vw, 3.5rem);
 
@@ -175,9 +137,6 @@
 }
 
 :root {
-  --background: #F7F7F5;
-  --foreground: #0F0F0F;
-
   /* Responsive steps behind the type tokens (phone values; sm and lg below) */
   --ls-display-1: clamp(2.25rem, 11.6vw, 3.25rem);
   --ls-display-2: 2.75rem;
@@ -309,61 +268,123 @@ html.ls-motion .ls-reveal[data-revealed] {
   animation: ls-draw 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
 }
 
-/* Long-form text (system Prose): legal pages, posts. ~68ch measure is set by the container. */
-.ls-prose {
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  color: var(--color-graphite-soft);
-  text-wrap: pretty;
+/* Long-form text (system Prose) and the Callout, in the components layer so a utility on an
+   element inside the text (text-right on a money column, mt-* on a figure) wins over the
+   prose defaults, the way it does everywhere else. */
+@layer components {
+  /* Long-form text (system Prose): legal pages, posts. ~68ch measure is set by the container. */
+  .ls-prose {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-graphite-soft);
+    text-wrap: pretty;
 
-  & > :first-child { margin-top: 0; }
-  & h2 {
-    margin-top: 3rem;
-    scroll-margin-top: 7rem;
-    font-family: var(--font-serif);
-    font-size: 2rem;
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    color: var(--color-graphite);
-    text-wrap: balance;
+    & > :first-child { margin-top: 0; }
+    & h2 {
+      margin-top: 3rem;
+      scroll-margin-top: 7rem;
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--color-graphite);
+      text-wrap: balance;
+    }
+    & h3 {
+      margin-top: 2rem;
+      scroll-margin-top: 7rem;
+      font-size: 1.1875rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--color-graphite);
+    }
+    & p, & ul, & ol, & table, & blockquote { margin-top: 1rem; }
+    & h2 + p, & h3 + p { margin-top: 0.75rem; }
+    & ul { list-style: disc; padding-left: 1.25rem; }
+    & ol { list-style: decimal; padding-left: 1.25rem; }
+    & li { margin-top: 0.5rem; padding-left: 0.25rem; }
+    & li::marker { color: var(--color-ember-deep); }
+    & strong { font-weight: 600; color: var(--color-graphite); }
+    & a {
+      font-weight: 500;
+      color: var(--color-graphite);
+      text-decoration: underline;
+      text-decoration-color: var(--color-ember);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+    }
+    & a:hover { color: var(--color-ember-deep); }
+    & blockquote {
+      border-radius: 16px;
+      background: var(--color-canvas-deep);
+      padding: 1.25rem 1.5rem;
+      color: var(--color-graphite);
+    }
+    & blockquote footer, & blockquote cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      font-style: normal;
+      color: var(--color-mute);
+    }
+    & table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+    & th, & td { border-bottom: 1px solid var(--color-hair); padding: 0.625rem 0.75rem 0.625rem 0; text-align: left; vertical-align: top; }
+    & th { font-weight: 600; color: var(--color-graphite); }
+    & h4 {
+      margin-top: 1.5rem;
+      font-size: 1.0625rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--color-graphite);
+    }
+    & h3 + ul, & h3 + ol, & h4 + p { margin-top: 0.5rem; }
+    & hr { margin: 2.5rem 0; border: 0; border-top: 1px solid var(--color-hair-strong); }
+    & figure, & .ls-callout, & pre { margin-top: 1.5rem; }
+    & figure + *, & .ls-callout + *, & pre + * { margin-top: 1.5rem; }
+    & figcaption { margin-top: 0.625rem; font-size: 0.875rem; line-height: 1.5; color: var(--color-mute); }
+    & img { max-width: 100%; height: auto; border-radius: var(--radius-window); }
+    & :not(pre) > code {
+      border-radius: 6px;
+      background: var(--color-canvas-deep);
+      padding: 0.1em 0.35em;
+      font-size: 0.9em;
+      color: var(--color-graphite);
+    }
+    /* Code and preformatted text scroll inside their own box, never the page */
+    & pre {
+      overflow-x: auto;
+      border-radius: var(--radius-window);
+      background: var(--color-canvas-deep);
+      padding: 1rem 1.25rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--color-graphite);
+      white-space: pre;
+    }
   }
-  & h3 {
-    margin-top: 2rem;
-    scroll-margin-top: 7rem;
-    font-size: 1.1875rem;
-    font-weight: 600;
-    line-height: 1.35;
-    color: var(--color-graphite);
+  @media (width >= 40rem) {
+    .ls-prose h2 { font-size: 2.25rem; }
   }
-  & p, & ul, & ol, & table, & blockquote { margin-top: 1rem; }
-  & h2 + p, & h3 + p { margin-top: 0.75rem; }
-  & ul { list-style: disc; padding-left: 1.25rem; }
-  & ol { list-style: decimal; padding-left: 1.25rem; }
-  & li { margin-top: 0.5rem; padding-left: 0.25rem; }
-  & li::marker { color: var(--color-ember-deep); }
-  & strong { font-weight: 600; color: var(--color-graphite); }
-  & a {
-    font-weight: 500;
-    color: var(--color-graphite);
-    text-decoration: underline;
-    text-decoration-color: var(--color-ember);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 4px;
-  }
-  & a:hover { color: var(--color-ember-deep); }
-  & blockquote {
-    border-radius: 16px;
+
+  /* Callout (system Callout, and ArticlePage's callout blocks): a note set off on sand */
+  .ls-callout {
+    border-radius: var(--radius-window);
     background: var(--color-canvas-deep);
-    padding: 1.25rem 1.5rem;
+    padding: 1.125rem 1.25rem;
     color: var(--color-graphite);
+    font-size: 1rem;
+    line-height: 1.65;
+    text-wrap: pretty;
   }
-  & table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
-  & th, & td { border-bottom: 1px solid var(--color-hair); padding: 0.625rem 0.75rem 0.625rem 0; text-align: left; vertical-align: top; }
-  & th { font-weight: 600; color: var(--color-graphite); }
-}
-@media (width >= 40rem) {
-  .ls-prose h2 { font-size: 2.25rem; }
+  .ls-callout[data-tone="ember"] { box-shadow: inset 3px 0 0 var(--color-ember); }
+  .ls-callout > :first-child,
+  .ls-prose .ls-callout > :first-child { margin-top: 0; }
+  .ls-callout > * + *,
+  .ls-prose .ls-callout > * + * { margin-top: 0.5rem; }
+  @media (width >= 40rem) {
+    .ls-callout { padding: 1.375rem 1.5rem; }
+  }
 }
 
 /* ScrollStory frames cross-fade in place at lg */
@@ -381,21 +402,3 @@ html.ls-motion .ls-reveal[data-revealed] {
   50% { transform: translate(-6px, -4px); }
 }
 .ls-nudge { animation: ls-nudge 3.2s ease-in-out infinite; }
-
-/* Responsive grids used by inner pages */
-@media (max-width: 1024px) {
-  .v4-modules-grid { grid-template-columns: repeat(3, 1fr) !important; }
-  .v4-pricing-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .v4-stories-grid { grid-template-columns: 1fr !important; }
-  .v4-moat-grid { grid-template-columns: 1fr !important; }
-  .v4-polaroid-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .v6-photo-band { grid-template-columns: 1fr 1fr !important; }
-  .v6-photo-band > div:first-child { grid-column: 1 / -1; }
-}
-
-@media (max-width: 640px) {
-  .v4-modules-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .v4-pricing-grid { grid-template-columns: 1fr !important; }
-  .v4-hero-trust { grid-template-columns: repeat(2, 1fr) !important; gap: 24px !important; }
-  .v6-photo-band { grid-template-columns: 1fr !important; }
-}

@@ -45,7 +45,6 @@ export default function SoloArtistsPage() {
       }}
       beforeAfter={{
         title: "Consent done before the client sits down",
-        italicWord: "before",
         lead: "The form goes out with the booking. Elena R. notes her red ink reaction, signs on her phone at 9:42 and can download a PDF copy.",
         visual: {
           before: <ConsentSignPhone state="form" />,

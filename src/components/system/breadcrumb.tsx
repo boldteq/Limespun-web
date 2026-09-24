@@ -48,7 +48,8 @@ export function Breadcrumb({
               {c.href ? (
                 <Link
                   href={c.href}
-                  className="relative rounded-sm before:absolute before:-inset-x-1 before:-inset-y-3 before:content-[''] hover:text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite"
+                  // A 44px target without moving the trail: the padding is taken back by the negative margins
+                  className="-mx-2 -my-3 inline-flex min-h-11 items-center rounded-md px-2 hover:text-graphite focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-graphite"
                 >
                   {c.label}
                 </Link>

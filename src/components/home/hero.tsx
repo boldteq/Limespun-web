@@ -131,15 +131,19 @@ export function Hero() {
         {/* Copy — centered, stacked above the product */}
         <div className="mx-auto flex max-w-[920px] flex-col items-center text-center">
           {FOUNDING_OFFER_OPEN ? (
+            /* The link is a 44px-tall hit area (tap-target minimum); the visible pill inside keeps
+               its 35px height, and the negative top margin keeps it exactly where it sat. */
             <a
               href="#pricing-lifetime"
-              className="group mb-6 inline-flex items-center gap-2 rounded-full border border-hair bg-white/70 px-4 py-1.5 text-[14px] font-medium max-[359px]:gap-1.5 max-[359px]:px-3 max-[359px]:text-[13px] text-graphite-soft transition-colors hover:border-hair-strong hover:text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite"
+              className="group -mt-[5px] mb-5 inline-flex min-h-11 items-center rounded-full focus-visible:outline-none"
             >
-              <span className="h-2 w-2 rounded-full bg-ember" aria-hidden="true" />
-              <span className="font-semibold text-graphite">Founding offer</span>
-              <span className="hidden sm:inline">· Lifetime access for the first {FOUNDING_OFFER_SIZE} studios</span>
-              <span className="sm:hidden">· First {FOUNDING_OFFER_SIZE} studios</span>
-              <ArrowRight size={14} strokeWidth={2.2} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              <span className="inline-flex items-center gap-2 rounded-full border border-hair bg-white/70 px-4 py-1.5 text-[14px] font-medium text-graphite-soft transition-colors group-hover:border-hair-strong group-hover:text-graphite group-focus-visible:outline-2 group-focus-visible:outline-offset-2 group-focus-visible:outline-graphite max-[359px]:gap-1.5 max-[359px]:px-3 max-[359px]:text-[13px]">
+                <span className="h-2 w-2 rounded-full bg-ember" aria-hidden="true" />
+                <span className="font-semibold text-graphite">Founding offer</span>
+                <span className="hidden sm:inline">· Lifetime access for the first {FOUNDING_OFFER_SIZE} studios</span>
+                <span className="sm:hidden">· First {FOUNDING_OFFER_SIZE} studios</span>
+                <ArrowRight size={14} strokeWidth={2.2} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              </span>
             </a>
           ) : (
             <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-hair bg-white/70 px-4 py-1.5 text-[14px] font-medium text-graphite-soft">

@@ -1,249 +1,268 @@
-"use client";
-
 import React from "react";
-import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { ProductHero } from "@/components/product/product-hero";
-import { ProductPillars } from "@/components/product/product-pillars";
-import { ProductAnatomy } from "@/components/product/product-anatomy";
-import { ProductItemTypes } from "@/components/product/product-item-types";
-import { ProductDayInLife } from "@/components/product/product-day-in-life";
-import { ProductRelated } from "@/components/product/product-related";
-import { ProductCTA } from "@/components/product/product-cta";
-import { MONEY_BACK_DAYS } from "@/lib/data/plans";
-import { MarketingScreen } from "@/components/mockups";
-import { BRAND } from "@/lib/brand";
-import {
-  Megaphone,
-  Star,
-  RefreshCw,
-  Heart,
-  Users,
-  DollarSign,
-  BarChart3,
-} from "lucide-react";
+import { Send } from "lucide-react";
+import { cn } from "@/components/system";
+import { FeaturePage } from "@/components/templates/feature-page";
+import { AppFrame } from "@/components/mockups/app-frame";
+import { AppAvatar, AppButton, AppStatus, type AppStatusTone } from "@/components/mockups/app-parts";
+import { MarketingScreen } from "@/components/mockups/marketing";
+import { ToolbarPill } from "@/components/mockups/projects";
+import { ARTISTS, CAMPAIGNS, REFERRAL, SEGMENTS, WAITLIST, type WaitlistEntry } from "@/components/mockups/sample-data";
+import { getFeature } from "@/lib/data/features";
+import { PLAN_CAPS, PLANS } from "@/lib/data/plans";
+import { pageMetadata } from "@/lib/seo";
+
+const feature = getFeature("marketing");
+
+export const metadata = pageMetadata({
+  title: feature.seo.title,
+  description: feature.seo.description,
+  path: "/product/marketing",
+});
+
+/*
+ * Marketing (app: /marketing?tab=, marketing/_components/*):
+ *   hero      the Campaigns tab: open rate and bookings driven over 30 days, list hygiene,
+ *             recent campaigns
+ *   moment 1  the campaign editor (components/marketing/CampaignEditor.tsx and its four
+ *             sections) on the "Openings this month" draft to Inactive 90 days
+ *   moment 2  the Audience tab: preset segments and the custom "Healed, not rebooked" one
+ *   moment 3  the waitlist before and after Leo B.'s Friday slot frees up: Nadia H. is offered it
+ */
+
+/**
+ * A tall screen shows its top and fades into the stage: on phones so the moments swipe at
+ * one height, and from sm for the Audience tab, which stops after its segments.
+ */
+const CROP = {
+  phone: "max-sm:max-h-[636px] max-sm:overflow-hidden max-sm:[mask-image:linear-gradient(to_bottom,#000_calc(100%-90px),transparent)]",
+  all: "max-h-[636px] overflow-hidden [mask-image:linear-gradient(to_bottom,#000_calc(100%-90px),transparent)] sm:max-h-[700px]",
+} as const;
+
+function Crop({ all = false, children }: { all?: boolean; children: React.ReactNode }) {
+  return <div className={all ? CROP.all : CROP.phone}>{children}</div>;
+}
+
+/* ─── Moment 1: the campaign editor ─────────────────────────────────────────── */
+
+const DRAFT = CAMPAIGNS.find((c) => c.status === "Draft") ?? CAMPAIGNS[0];
+const DRAFT_SEGMENT = SEGMENTS.find((s) => s.label === DRAFT.audience);
+/** Mon, Oct 12 (Thu Oct 8 + 4). The editor's button reads "Schedule for <Mon D>". */
+const SEND_AT = { day: "Mon, Oct 12", time: "10:00 AM", short: "Oct 12" } as const;
+
+/** The editor's numbered section heads: an onyx number disc and an uppercase title. */
+function SectionHead({ n, title, aside }: { n: number; title: string; aside?: React.ReactNode }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="flex items-center gap-2">
+        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-app-text text-[10px] font-semibold text-white tabular-nums">
+          {n}
+        </span>
+        <span className="text-ui-sm font-semibold tracking-[0.08em] text-app-text uppercase">{title}</span>
+      </span>
+      {aside}
+    </div>
+  );
+}
+
+function Input({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex min-w-0 flex-col gap-1.5">
+      <span className="text-ui-sm font-medium text-app-text">{label}</span>
+      <span className="flex h-9 min-w-0 items-center rounded-app border border-app-border bg-app-surface px-2.5 text-ui-sm text-app-text">
+        <span className="truncate">{children}</span>
+      </span>
+    </div>
+  );
+}
+
+function Radio({ on, children }: { on: boolean; children: React.ReactNode }) {
+  return (
+    <span className="flex items-center gap-2 text-ui-sm text-app-text">
+      <span
+        className={cn(
+          "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border",
+          on ? "border-app-text" : "border-app-border",
+        )}
+      >
+        {on && <span className="h-2 w-2 rounded-full bg-app-text" />}
+      </span>
+      {children}
+    </span>
+  );
+}
+
+const EMAIL_BODY = `, it’s been a while. ${ARTISTS.mara.name} and ${ARTISTS.dev.name} have a few openings this month. Reply to this email and we’ll hold one for you.`;
+
+function MergeTag({ children }: { children: React.ReactNode }) {
+  return <span className="rounded-[4px] bg-app-active px-1 font-mono text-[11px] text-app-active-fg">{children}</span>;
+}
+
+function CampaignEditor() {
+  return (
+    <AppFrame active="marketing" sidebar={false} title="Edit campaign" className="shadow-none">
+      <div className="flex flex-col divide-y divide-app-border">
+        <div className="flex flex-col gap-3 px-4 py-3.5">
+          <SectionHead
+            n={1}
+            title="Details"
+            aside={
+              <span className="flex items-center gap-2 text-ui-xs text-app-mute">
+                Channel:
+                <span className="rounded-full border border-app-border px-2 py-0.5 font-semibold text-app-text">Email</span>
+              </span>
+            }
+          />
+          <Input label="Campaign name *">{DRAFT.name}</Input>
+        </div>
+
+        <div className="flex flex-col gap-3 px-4 py-3.5">
+          <SectionHead
+            n={2}
+            title="Audience"
+            aside={
+              <span className="text-ui-xs text-app-mute">
+                Sending to <span className="font-semibold text-app-text tabular-nums">{DRAFT_SEGMENT?.clients ?? DRAFT.recipients}</span>{" "}
+                recipients
+              </span>
+            }
+          />
+          <div className="flex flex-wrap gap-1.5">
+            {SEGMENTS.map((s, i) => (
+              <span key={s.label} className={cn(i >= 3 && "hidden @xl:contents")}>
+                <ToolbarPill active={s.label === DRAFT.audience}>{s.label}</ToolbarPill>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 px-4 py-3.5">
+          <SectionHead n={3} title="Template" />
+          <Input label="Email subject">A few openings this month, &#123;first_name&#125;</Input>
+          <div className="flex flex-col gap-1.5">
+            <span className="flex items-center justify-between gap-2">
+              <span className="text-ui-sm font-medium text-app-text">Email body</span>
+              <AppButton icon={Send} className="h-7">
+                Send test to me
+              </AppButton>
+            </span>
+            <p className="rounded-app border border-app-border bg-app-surface px-3 py-2.5 text-ui-sm leading-relaxed text-app-text">
+              Hi <MergeTag>&#123;first_name&#125;</MergeTag>
+              {EMAIL_BODY}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 px-4 py-3.5">
+          <SectionHead n={4} title="Schedule" />
+          <div className="grid gap-3 @lg:grid-cols-[auto_minmax(0,1fr)] @lg:items-end @lg:gap-6">
+            <div className="flex flex-wrap gap-x-5 gap-y-2 @lg:flex-col @lg:pb-0.5">
+              <Radio on={false}>Send now</Radio>
+              <Radio on>Schedule for later</Radio>
+            </div>
+            <Input label="Send at">
+              {SEND_AT.day}, {SEND_AT.time}
+            </Input>
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-2 px-4 py-3">
+          <AppButton>Cancel</AppButton>
+          <AppButton variant="primary">Schedule for {SEND_AT.short}</AppButton>
+        </div>
+      </div>
+    </AppFrame>
+  );
+}
+
+/* ─── Moment 3: the waitlist, before and after the offer ────────────────────── */
+
+const NADIA = WAITLIST.find((w) => w.status === "Offered");
+const WAITLIST_TONE: Record<WaitlistEntry["status"], AppStatusTone> = {
+  Active: "neutral",
+  Offered: "warning",
+  Booked: "success",
+  Expired: "neutral",
+  Cancelled: "neutral",
+};
+
+function WaitlistCard({ offered }: { offered: boolean }) {
+  const rows = WAITLIST.map((w) => (w === NADIA && !offered ? { ...w, status: "Active" as const } : w));
+  return (
+    <AppFrame active="waitlist" sidebar={false} title="Waitlist" className="shadow-none">
+      {rows.map((w, i) => {
+        const artist = ARTISTS[w.artist];
+        const isOffer = w.status === "Offered";
+        return (
+          <div
+            key={w.client}
+            className={cn("flex items-start gap-3 px-4 py-3", i < rows.length - 1 && "border-b border-app-border", isOffer && "bg-app-sidebar")}
+          >
+            <AppAvatar initials={w.client.replace(/[^A-Z]/g, "")} size="md" />
+            <div className="min-w-0 flex-1">
+              <span className="flex flex-wrap items-center gap-1.5">
+                <span className="text-ui font-semibold text-app-text">{w.client}</span>
+                <AppStatus tone={WAITLIST_TONE[w.status]} dot>
+                  {w.status}
+                </AppStatus>
+              </span>
+              <span className="mt-0.5 block text-ui-sm text-app-mute">
+                {w.wants} with {artist.name} · {w.when}
+              </span>
+              {isOffer && <span className="mt-0.5 block text-ui-xs font-medium text-app-warning">{w.note}</span>}
+            </div>
+          </div>
+        );
+      })}
+    </AppFrame>
+  );
+}
+
+/* ─── Plan facts ────────────────────────────────────────────────────────────── */
+
+const TEXTS = PLAN_CAPS.find((c) => c.label === "Texts a month")?.values;
 
 export default function MarketingPage() {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: BRAND.bone,
-        overflow: "hidden",
-      } as React.CSSProperties}
-    >
-      <Nav />
-      <main>
-        <ProductHero
-          feature="Marketing"
-          headline="Campaigns that book, not blast."
-          italicWord="not blast"
-          subhead="Campaigns to your own client list by text and email. Segments like 'healed, not rebooked' on Studio. A waitlist that fills cancellations, and referrals you can track. Studio marketing that sounds like the artist, not the spam folder."
-          dashboard={<MarketingScreen />}
-        />
-
-        <ProductPillars
-          eyebrow="How marketing works in Limespun"
-          heading="Three ways to fill quiet weeks."
-          italicWord="quiet weeks"
-          intro="Campaigns to your own list, a waitlist for cancellations, and referrals, all from the client records you already have."
-          pillars={[
-            {
-              icon: Megaphone,
-              accent: BRAND.rust,
-              eyebrow: "Campaigns",
-              title: "Send to the right clients, not everyone.",
-              desc: "Pick a segment of your client list and send a campaign by text or email. Build your own segments on Studio and up.",
-              bullets: [
-                "Text or email",
-                "Ready-made segments",
-                "Custom segments on Studio and up",
-                "Your own list, no rented audience",
-              ],
-            },
-            {
-              icon: RefreshCw,
-              accent: BRAND.amber,
-              eyebrow: "Waitlist",
-              title: "A cancellation, filled from the waitlist.",
-              desc: "Clients waiting for a gap sit on the waitlist. When a slot opens, offer it to the next person, or set rules to promote them for you.",
-              bullets: [
-                "Filter the waitlist",
-                "Offer an opened slot",
-                "Auto-promote rules",
-                "Waitlist numbers at a glance",
-              ],
-            },
-            {
-              icon: Heart,
-              accent: BRAND.sage,
-              eyebrow: "Referral program",
-              title: "Know who sent who.",
-              desc: "Clients refer friends, and you can see which bookings came from a referral. No points or tiers to manage.",
-              bullets: [
-                "On every plan, Solo included",
-                "Referred bookings tracked",
-                "No points to manage",
-              ],
-            },
-          ]}
-        />
-
-        <ProductAnatomy
-          eyebrow="Inside the campaign view"
-          heading="Everything a campaign needs, one screen."
-          italicWord="one screen"
-          intro="Tabs, the campaign list, the headline numbers and the waitlist, without leaving Marketing."
-          dashboard={<MarketingScreen tab="campaigns" />}
-          callouts={[
-            {
-              n: 1,
-              title: "Tab strip",
-              desc: "Audience, Campaigns, Waitlist and Referral.",
-              position: { top: "14%", left: "32%" },
-            },
-            {
-              n: 2,
-              title: "Campaign card",
-              desc: "Title, channel and who it went to, at a glance per row.",
-              position: { top: "34%", left: "36%" },
-            },
-            {
-              n: 3,
-              title: "Headline numbers",
-              desc: "The marketing KPIs at the top of the screen.",
-              position: { top: "50%", left: "36%" },
-            },
-            {
-              n: 4,
-              title: "Waitlist",
-              desc: "Clients waiting for a slot, ready to be offered a gap.",
-              position: { top: "74%", left: "40%" },
-            },
-            {
-              n: 5,
-              title: "Segments",
-              desc: "Ready-made segments, plus your own on Studio and up.",
-              position: { top: "90%", left: "42%" },
-            },
-          ]}
-        />
-
-        <ProductItemTypes
-          eyebrow="Campaign types"
-          heading="Six mechanics worth running."
-          italicWord="worth running"
-          intro="Campaigns that fit how tattoo studios actually work, not generic email blasts."
-          columns={3}
-          items={[
-            {
-              icon: RefreshCw,
-              accent: BRAND.rust,
-              severity: "Studio +",
-              title: "Healed, not rebooked",
-              desc: "Clients whose work has healed but who haven't booked again.",
-              example: '"Segment · text + email"',
-            },
-            {
-              icon: Star,
-              accent: BRAND.amber,
-              severity: "Waitlist",
-              title: "Waitlist fill",
-              desc: "A cancellation offered to the next client waiting.",
-              example: '"Saturday 1:00 opened · offered to the waitlist"',
-            },
-            {
-              icon: Heart,
-              accent: BRAND.sage,
-              severity: "Segment",
-              title: "Lapsed clients",
-              desc: "Clients who haven't booked in a while, sent one campaign.",
-              example: '"One text · one email"',
-            },
-            {
-              icon: Megaphone,
-              accent: BRAND.rust,
-              severity: "Everyone",
-              title: "Studio announcement",
-              desc: "New artist, new flash, holiday hours.",
-              example: '"Walk-in flash day · Rio\'s guest spot"',
-            },
-            {
-              icon: Users,
-              accent: BRAND.amber,
-              severity: "Studio +",
-              title: "By artist",
-              desc: "Just one artist's clients, or just multi-session projects.",
-              example: '"Mara\'s clients · fine-line"',
-            },
-            {
-              icon: DollarSign,
-              accent: BRAND.sage,
-              severity: "Referral",
-              title: "Referrals",
-              desc: "Track the bookings that came from a client's referral.",
-              example: '"Referred by Asha M."',
-            },
-          ]}
-        />
-
-        <ProductDayInLife
-          eyebrow="A cancellation"
-          heading="Tuesday, 11:42 AM. A quiet Saturday, filled."
-          italicWord="filled"
-          intro="Leo B. cancels Saturday's session late. His $150 deposit is kept under the studio's policy, and the chair is empty."
-          paragraphs={[
-            <React.Fragment key="p1">
-              <strong>11:42 AM.</strong> The slot opens on the calendar. Two clients are on the waitlist for a Saturday.
-            </React.Fragment>,
-            <React.Fragment key="p2">
-              <strong>11:45 AM.</strong> The owner offers the slot to the first one on the waitlist, by text.
-            </React.Fragment>,
-            <React.Fragment key="p3">
-              <strong>12:10 PM.</strong> She takes it and pays the deposit. The booking is Confirmed.
-            </React.Fragment>,
-            <React.Fragment key="p4">
-              Then one campaign for the rest of the week: the &ldquo;healed, not rebooked&rdquo; segment gets a text about Thursday&apos;s walk-in flash day with Rio.{" "}
-              <em>No mass blast, just the clients it fits.</em>
-            </React.Fragment>,
-          ]}
-          quote="Campaigns go to the clients they fit, from your own list. No twice-a-year mass blast."
-          takeawayLabel="The upshot"
-        />
-
-        <ProductRelated
-          eyebrow="Connects directly to"
-          heading="Marketing runs on the whole client record."
-          italicWord="the whole client record"
-          modules={[
-            {
-              icon: BarChart3,
-              label: "Today",
-              desc: "Where a cancellation shows up first.",
-              href: "/product/today",
-            },
-            {
-              icon: Users,
-              label: "Clients",
-              desc: "Segments pull from the client record: projects, artists, last visit.",
-              href: "/product/clients",
-            },
-            {
-              icon: RefreshCw,
-              label: "Analytics",
-              desc: "Lapsed and returning clients, counted.",
-              href: "/product/analytics",
-            },
-          ]}
-        />
-
-        <ProductCTA
-          headline="Speak like the artist, not the algorithm."
-          italicWord="the algorithm"
-          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Campaigns, a waitlist and referrals from day one; custom segments on Studio.`}
-        />
-      </main>
-      <Footer />
-    </div>
+    <FeaturePage
+      feature={feature}
+      headings={{
+        moments: "Campaigns, segments and the waitlist",
+        details: "What else Marketing does",
+        worksWith: "Joined to Messages and client records",
+        worksWithLead: "Campaigns go to the clients already on file, and a client who replies lands back in Messages.",
+      }}
+      visuals={{
+        hero: <MarketingScreen tab="campaigns" />,
+        heroCrop: true,
+        moments: [
+          <Crop key="editor">
+            <CampaignEditor />
+          </Crop>,
+          <Crop key="audience" all>
+            <MarketingScreen tab="audience" />
+          </Crop>,
+          {
+            before: <WaitlistCard offered={false} />,
+            after: <WaitlistCard offered />,
+            beforeLabel: "Friday 11:00 opens up",
+            afterLabel: `Offered to ${NADIA?.client ?? "the next client"}`,
+          },
+        ],
+        detailLabels: [
+          { label: "Campaigns", tone: "quiet" },
+          { label: "Offered", tone: "warning" },
+          { label: "Auto-promote", tone: "quiet" },
+          { label: REFERRAL.referrerReward, tone: "success" },
+          { label: "Review & remove", tone: "ember" },
+          { label: "Texts a month", tone: "quiet" },
+        ],
+      }}
+      planRows={[
+        { label: "Campaigns to segments of your clients", from: "solo" },
+        { label: "Waitlist and referral program", from: "solo" },
+        ...PLANS.map((p) => ({ label: `${TEXTS?.[p.tier] ?? ""} texts a month`, from: p.tier })),
+      ]}
+      inkBand={{ headline: "Quiet weeks, filled from your list.", italicWord: "list" }}
+    />
   );
 }

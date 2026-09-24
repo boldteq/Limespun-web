@@ -153,6 +153,12 @@ export interface AppColumn {
   align?: "left" | "right" | "center";
   /** Width or visibility classes for the column, e.g. "w-[28%]". */
   className?: string;
+  /**
+   * Tabular figures for the column's cells. Defaults to on for right- and
+   * centre-aligned (money, counts) and off for text, where Inter's tabular
+   * hyphen would spread "Fine-line" into "Fine - line".
+   */
+  numeric?: boolean;
 }
 
 export interface AppTableRow {
@@ -164,6 +170,9 @@ export interface AppTableRow {
 
 /** Minimum table widths, as literal classes: the table scrolls inside the frame below this. */
 const TABLE_MIN: Record<AppTableMinWidth, { table: string; fade: string }> = {
+  /* For tables whose columns hide by container width (className "hidden @min-[…]:table-cell"). */
+  200: { table: "min-w-[200px]", fade: "@min-[200px]:hidden" },
+  360: { table: "min-w-[360px]", fade: "@min-[360px]:hidden" },
   480: { table: "min-w-[480px]", fade: "@min-[480px]:hidden" },
   560: { table: "min-w-[560px]", fade: "@min-[560px]:hidden" },
   640: { table: "min-w-[640px]", fade: "@min-[640px]:hidden" },
@@ -171,9 +180,14 @@ const TABLE_MIN: Record<AppTableMinWidth, { table: string; fade: string }> = {
   840: { table: "min-w-[840px]", fade: "@min-[840px]:hidden" },
   960: { table: "min-w-[960px]", fade: "@min-[960px]:hidden" },
 };
-export type AppTableMinWidth = 480 | 560 | 640 | 720 | 840 | 960;
+export type AppTableMinWidth = 200 | 360 | 480 | 560 | 640 | 720 | 840 | 960;
 
 const ALIGN = { left: "text-left", right: "text-right", center: "text-center" } as const;
+
+function isNumeric(c: AppColumn | undefined): boolean {
+  if (!c) return false;
+  return c.numeric ?? (c.align === "right" || c.align === "center");
+}
 
 /**
  * A dense app table. Narrower than `minWidth`, it scrolls sideways inside its own
@@ -198,7 +212,7 @@ export function AppTable({
   return (
     <div className={cn("@container relative w-full max-w-full min-w-0", className)}>
       <div className="overflow-x-auto overscroll-x-contain" style={maxHeight ? { maxHeight } : undefined}>
-        <table className={cn("w-full border-collapse text-ui-sm text-app-text tabular-nums", min.table)}>
+        <table className={cn("w-full border-collapse text-ui-sm text-app-text", min.table)}>
           <thead>
             <tr>
               {columns.map((c) => (
@@ -232,6 +246,7 @@ export function AppTable({
                     className={cn(
                       "h-11 px-3 align-middle whitespace-nowrap first:pl-4 last:pr-4",
                       ALIGN[columns[i]?.align ?? "left"],
+                      isNumeric(columns[i]) && "tabular-nums",
                       columns[i]?.className,
                     )}
                   >
@@ -600,32 +615,69 @@ const PHOTO_ASPECT = {
   square: "aspect-square",
   portrait: "aspect-[4/5]",
   landscape: "aspect-[4/3]",
+  wide: "aspect-[3/2]",
 } as const;
 
 /**
- * Stands in for a photo of work: a canvas-deep block with a serif label ("S1",
- * "P2", "R3"). Never draws or suggests tattoo art. Children overlay the tile
- * (a Healed chip, a price).
+ * The tile label, letter and number apart: the letter stays in Instrument Serif,
+ * the number is set in Inter, because the serif's 1 reads as an l ("S1" as "Sl").
+ */
+const PHOTO_LABEL_SIZE = {
+  md: { letter: "text-[22px]", number: "text-[17px]" },
+  sm: { letter: "text-[12px]", number: "text-[10px]" },
+} as const;
+
+export function PhotoLabel({ label, size = "md" }: { label: string; size?: keyof typeof PHOTO_LABEL_SIZE }) {
+  const s = PHOTO_LABEL_SIZE[size];
+  const at = label.search(/\d/);
+  if (at < 0) return <span className={cn("font-serif", s.letter)}>{label}</span>;
+  return (
+    <span className="flex items-baseline leading-none">
+      <span className={cn("font-serif", s.letter)}>{label.slice(0, at)}</span>
+      <span className={cn("font-sans font-medium tracking-[-0.01em] tabular-nums", s.number)}>{label.slice(at)}</span>
+    </span>
+  );
+}
+
+/**
+ * Stands in for a photo of work: a canvas-deep block with a label ("S1", "P2",
+ * "R3": serif letter, Inter number). Never draws or suggests tattoo art.
+ * With `title` the tile prints the piece's name (and `subtitle`, e.g. its
+ * style) large instead of the code, so a sheet of flash reads as a list of
+ * named designs rather than blank squares. Children overlay the tile (a Healed
+ * chip, a price).
  */
 export function PhotoTile({
   label,
   caption,
+  title,
+  subtitle,
   aspect = "square",
   className,
   children,
 }: {
   label: string;
   caption?: string;
+  title?: string;
+  subtitle?: string;
   aspect?: keyof typeof PHOTO_ASPECT;
   className?: string;
   children?: React.ReactNode;
 }) {
   return (
     <div className={cn("relative overflow-hidden rounded-app bg-canvas-deep ring-1 ring-graphite/5 ring-inset", PHOTO_ASPECT[aspect], className)}>
-      {/* Solid mute on canvas-deep: 4.76:1. */}
-      <span className="absolute inset-0 flex items-center justify-center font-serif text-[22px] leading-none text-mute">
-        {label}
-      </span>
+      {title ? (
+        /* Bottom-left like a label on a flash sheet; the top edge stays free for a status chip. */
+        <span className="@container absolute inset-0 flex flex-col justify-end px-2.5 pt-8 pb-2.5 text-left">
+          <span className="font-serif text-[clamp(15px,12cqi,24px)] leading-[1.05] text-graphite">{title}</span>
+          {subtitle && <span className="mt-0.5 text-ui-xs font-medium text-graphite-soft">{subtitle}</span>}
+        </span>
+      ) : (
+        /* Solid mute on canvas-deep: 4.76:1. */
+        <span className="absolute inset-0 flex items-center justify-center leading-none text-mute">
+          <PhotoLabel label={label} />
+        </span>
+      )}
       {caption && (
         <span className="absolute inset-x-0 bottom-0 truncate bg-linear-to-t from-canvas-deep px-2 pt-4 pb-1.5 text-ui-xs font-medium text-graphite-soft">
           {caption}

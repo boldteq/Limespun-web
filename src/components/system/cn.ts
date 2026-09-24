@@ -27,7 +27,7 @@ const twMerge = extendTailwindMerge({
         "kpi-value",
       ],
       radius: ["inner", "window", "card", "tile", "field", "app", "app-lg"],
-      spacing: ["section-y", "section-y-tight", "block-gap"],
+      spacing: ["section-y", "section-y-inner", "section-y-tight", "block-gap"],
     },
   },
 });

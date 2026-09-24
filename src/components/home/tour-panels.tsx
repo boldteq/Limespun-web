@@ -1,5 +1,6 @@
 import React from "react";
 import { AlertTriangle, Check, PenLine } from "lucide-react";
+import { ASHA_PROJECT, ELENA_ALLERGY, PROJECTS } from "@/components/mockups/sample-data";
 import { AppWindow, Chip, SampleTag } from "./ui";
 
 /* Every panel shows the same sample studio on Thursday Oct 8: Dev and Mara (residents)
@@ -47,7 +48,7 @@ const blocks: {
   { col: 0, start: 0, span: 6, label: "Asha M.", sub: "Koi sleeve · session\u00a04\u00a0of\u00a05", short: "Koi sleeve · S4\u00a0of\u00a05", tone: "ember" },
   { col: 0, start: 7, span: 5, label: "Elena R.", sub: "Back piece · session\u00a02\u00a0of\u00a03", short: "Back piece · S2\u00a0of\u00a03", note: "Red ink allergy", tone: "flag" },
   { col: 1, start: 2, span: 2, label: "Jo K.", sub: "Consult", tone: "soft" },
-  { col: 1, start: 6, span: 4, label: "Priya S.", sub: "Fine-line florals", tone: "ember" },
+  { col: 1, start: 6, span: 4, label: "Priya S.", sub: "Fine-line wildflowers", tone: "ember" },
   { col: 1, start: 13, span: 1, label: "Sam T.", sub: "Touch-up", tone: "soft" },
   { col: 2, start: 4, span: 10, label: "Walk-in flash", sub: "Guest day · 3\u00a0slots", tone: "soft" },
 ];
@@ -121,13 +122,17 @@ export function CalendarPanel() {
 }
 
 /* ── Sleeves (projects) ───────────────────────────────────────────────── */
-const sessions = [
-  { n: 1, label: "Outline", date: "Jun 12", done: true },
-  { n: 2, label: "Koi + water", date: "Jul 3", done: true },
-  { n: 3, label: "Colour pack", date: "Jul 31", done: true },
-  { n: 4, label: "Background", date: "Today", done: false, now: true },
-  { n: 5, label: "Finish + heal check", date: "Sat Nov 7", done: false },
-];
+/** "Sat, Nov 7, 11:00" → "Sat, Nov 7": the day only, as the Projects list prints it. */
+const dayOnly = (date: string) => date.split(", ").slice(0, 2).join(", ");
+
+/** Asha's sessions, straight from the Projects mockup (sample-data ASHA_PROJECT). */
+const sessions = ASHA_PROJECT.sessions.map((s) => ({
+  n: s.n,
+  label: s.note ?? `Session ${s.n}`,
+  date: s.state === "today" ? "Today" : dayOnly(s.date),
+  done: s.state === "done",
+  now: s.state === "today",
+}));
 
 export function SleevePanel() {
   return (
@@ -169,8 +174,8 @@ export function SleevePanel() {
 const ledger: { client: string; piece: string; amount: string; status: React.ReactNode }[] = [
   { client: "Asha M.", piece: "Koi sleeve · S4", amount: "$240", status: <Chip tone="quiet">Held for S4–S5</Chip> },
   { client: "Jo K.", piece: "Consult", amount: "$100", status: <Chip tone="quiet">Held for tattoo</Chip> },
-  { client: "Leo B.", piece: "Chest panel · S1", amount: "$150", status: <Chip tone="ember">Late cancel · kept</Chip> },
-  { client: "Priya S.", piece: "Fine-line florals", amount: "$80", status: <Chip tone="paid">Applied today</Chip> },
+  { client: "Leo B.", piece: "Chest panel · S1", amount: "$150", status: <Chip tone="ember">Kept by studio</Chip> },
+  { client: "Priya S.", piece: "Fine-line wildflowers", amount: "$80", status: <Chip tone="paid">Applied today</Chip> },
 ];
 
 export function DepositsPanel() {
@@ -207,7 +212,7 @@ export function DepositsPanel() {
         </table>
       </div>
       <p className="border-t border-hair px-5 py-3 text-[12px] text-graphite-soft">
-        Policy: cancel inside 48 hours and the deposit stays with the studio.
+        On a cancel, you choose to keep or refund the deposit.
       </p>
     </AppWindow>
   );
@@ -219,10 +224,11 @@ export function ConsentPanel() {
     <AppWindow active="Consent forms">
       <PanelHeader title="Consent · Elena R." meta="Back piece · session 2 of 3" />
       <div className="flex flex-col gap-3 px-5 py-5">
+        {/* Checkbox fields of the app's Tattoo consent preset (forms/_proto PRESET_FIELDS) */}
         {[
-          ["I am over 18 and have shown photo ID", true],
-          ["I have eaten in the last 4 hours", true],
-          ["I understand aftercare instructions", true],
+          ["I confirm I am over 18", true],
+          ["Placement & design agreed", true],
+          ["Aftercare understood", true],
         ].map(([q, ok]) => (
           <label key={String(q)} className="flex items-center gap-3 text-[13px] text-graphite">
             <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-[6px] ${ok ? "bg-graphite text-white" : "border border-hair-strong"}`}>
@@ -234,14 +240,13 @@ export function ConsentPanel() {
         <div className="flex items-start gap-3 rounded-[12px] bg-flag-soft px-4 py-3">
           <AlertTriangle size={16} strokeWidth={2.2} className="mt-0.5 shrink-0 text-flag" />
           <p className="text-[13px] text-graphite">
-            <span className="font-semibold text-flag">Allergy: red ink.</span> Reacted after session 1. No red today;
-            patch test booked before session 3.
+            <span className="font-semibold text-flag">{ELENA_ALLERGY.flag}.</span> {ELENA_ALLERGY.note}
           </p>
         </div>
         <div className="mt-1 flex flex-wrap items-end justify-between gap-x-4 gap-y-2 border-t border-hair pt-4">
           <div>
             <p className="text-[11px] text-mute">Signature</p>
-            <p className="font-serif text-[26px] leading-none text-graphite">Elena Ruiz</p>
+            <p className="font-serif text-[26px] leading-none text-graphite">{ELENA_ALLERGY.client}</p>
           </div>
           <Chip tone="paid">
             <PenLine size={11} strokeWidth={2.4} /> Signed 9:42 on her phone
@@ -300,10 +305,20 @@ export function PayoutsPanel() {
 }
 
 /* ── Clients ──────────────────────────────────────────────────────────── */
+/** Elena's one project, newest session first (sample-data PROJECTS "elena-back"). */
+const ELENA_BACK = PROJECTS.find((p) => p.id === "elena-back");
+const ELENA_HISTORY: [string, string][] = (ELENA_BACK?.sessions ?? [])
+  .slice()
+  .reverse()
+  .map((s) => [
+    `${ELENA_BACK?.title ?? "Back piece"} · S${s.n}`,
+    s.state === "today" ? "Today" : s.state === "not-booked" ? "Not booked" : dayOnly(s.date),
+  ]);
+
 export function ClientsPanel() {
   return (
     <AppWindow active="Clients">
-      <PanelHeader title="Elena R." meta="Client since March · 2 projects" />
+      <PanelHeader title={ELENA_ALLERGY.client} meta="Client since August · 1 project" />
       <div className="grid gap-4 px-5 py-5 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <p className="text-[11px] font-medium text-mute">On file</p>
@@ -319,11 +334,7 @@ export function ClientsPanel() {
         </div>
         <div className="flex flex-col gap-2">
           <p className="text-[11px] font-medium text-mute">History</p>
-          {[
-            ["Back piece · S2", "Today"],
-            ["Back piece · S1", "Aug 21"],
-            ["Ankle script", "Mar 4"],
-          ].map(([what, when]) => (
+          {ELENA_HISTORY.map(([what, when]) => (
             <div key={what} className="flex items-center justify-between border-b border-hair pb-2 text-[13px] last:border-b-0">
               <span className="font-medium text-graphite">{what}</span>
               <span className="text-mute tabular-nums">{when}</span>

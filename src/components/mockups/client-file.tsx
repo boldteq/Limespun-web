@@ -3,6 +3,7 @@ import type { LucideIcon } from "lucide-react";
 import {
   CalendarClock,
   CalendarPlus,
+  Camera,
   ChevronLeft,
   ClipboardList,
   FileSignature,
@@ -18,7 +19,7 @@ import {
 import { cn } from "@/components/system/cn";
 import { AppFrame } from "./app-frame";
 import { AppAvatar, AppButton, AppLabel, AppStatus, AppTabs, PhotoTile } from "./app-parts";
-import { ARTISTS, CLIENTS, ELENA_ALLERGY, PROJECTS, SUBMISSIONS, THREADS, TODAY_SESSIONS, usd } from "./sample-data";
+import { ARTISTS, CLIENTS, ELENA_ALLERGY, ELENA_CONTACT, PROJECTS, SUBMISSIONS, THREADS, TODAY_SESSIONS, usd } from "./sample-data";
 
 /**
  * A client record (app route /clients, detail). Mirrors clients/_proto/ClientDetail.tsx:
@@ -380,12 +381,17 @@ export function ClientFileScreen({ tab = "overview", className }: { tab?: Client
                 Book
               </AppButton>
             </div>
-            <div className="flex w-full flex-wrap gap-x-4 gap-y-1 text-ui-sm text-app-mute">
-              <span className="inline-flex items-center gap-1.5">
-                <Phone size={12} strokeWidth={1.8} /> (555) 010-4417
+            {/* ClientDetail.tsx identity line: phone, email, Instagram handle. */}
+            <div className="flex w-full min-w-0 flex-wrap gap-x-4 gap-y-1 text-ui-sm text-app-mute">
+              <span className="inline-flex items-center gap-1.5 whitespace-nowrap tabular-nums">
+                <Phone size={12} strokeWidth={1.8} /> {ELENA_CONTACT.phone}
               </span>
-              <span className="inline-flex items-center gap-1.5">
-                <Mail size={12} strokeWidth={1.8} /> Prefers SMS
+              <span className="inline-flex min-w-0 items-center gap-1.5">
+                <Mail size={12} strokeWidth={1.8} className="shrink-0" />
+                <span className="truncate">{ELENA_CONTACT.email}</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                <Camera size={12} strokeWidth={1.8} /> @{ELENA_CONTACT.instagram}
               </span>
             </div>
           </div>

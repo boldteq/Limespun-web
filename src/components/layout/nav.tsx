@@ -14,18 +14,21 @@ import {
 } from "lucide-react";
 import { ACCOUNT, CTA } from "@/lib/brand";
 import { PLANS, formatPrice, type PlanTier } from "@/lib/data/plans";
-import { cn } from "@/lib/utils";
+// The system cn (keeps the text-* size tokens); by path so this client bundle skips the server-component barrel.
+import { cn } from "@/components/system/cn";
+import { COMPARE_INDEX } from "@/lib/site-links";
 import type { NavItem, NavColumn, NavColumnItem, NavFooter } from "@/types";
 
 // ─── Nav data ────────────────────────────────────────────────────────────────
 
 const planPrice = (tier: PlanTier): string => formatPrice(PLANS.find((p) => p.tier === tier)?.monthlyCents ?? 0);
-// Grouped by what a studio gets done, in plain words. Pages not listed here
-// (Today, Inbox, Marketing) stay reachable from /product and the footer.
+// Grouped by what a studio gets done, in plain words. 12 of the 13 feature pages; Marketing is
+// reachable from /product and the footer. Only live routes: never /product/today, /product/inbox
+// or /migrate/<vendor> (they redirect); switching links go to /compare/<vendor>. No demo booking.
 
 const navItems: NavItem[] = [
   {
-    label: "Product",
+    label: "Features",
     type: "mega",
     columns: [
       {
@@ -58,7 +61,7 @@ const navItems: NavItem[] = [
     ] satisfies NavColumn[],
     footer: {
       title: "One app for the whole shop",
-      desc: "Bookings, forms, payouts and stock in one place. One login instead of seven apps.",
+      desc: "Bookings, deposits, consent forms, payouts and stock in one place, under one login.",
       ctaLabel: "See all features",
       ctaHref: "/product",
     } satisfies NavFooter,
@@ -83,7 +86,7 @@ const navItems: NavItem[] = [
           { icon: ArrowLeftRight, name: "Square",      desc: "Side by side, and how we move you", href: "/compare/square" },
           { icon: ArrowLeftRight, name: "Fresha",      desc: "Side by side, and how we move you", href: "/compare/fresha" },
           { icon: ArrowLeftRight, name: "TattooGenda", desc: "Side by side, and how we move you", href: "/compare/tattoogenda" },
-          { icon: Layers,         name: "See all comparisons", desc: "Limespun next to 7 other tools", href: "/compare" },
+          { icon: Layers,         name: "See all comparisons", desc: `Limespun next to ${COMPARE_INDEX.length} other tools`, href: "/compare" },
         ],
       },
     ] satisfies NavColumn[],
@@ -119,13 +122,13 @@ const navItems: NavItem[] = [
       {
         title: "Get help",
         items: [
-          { icon: ArrowLeftRight, name: "Switching guide", desc: "Move over without losing a booking", href: "/migrate" },
+          { icon: ArrowLeftRight, name: "Switching guide", desc: "We move your data over for you", href: "/migrate" },
           { icon: Mail,           name: "Contact",         desc: "We reply within one business day",   href: "/contact" },
         ],
       },
     ] satisfies NavColumn[],
     footer: {
-      title: "What do no-shows cost you?",
+      title: "See what no-shows cost you",
       desc: "Put in your prices and see how much deposits would save each month. Free, no sign-up.",
       ctaLabel: "Try the calculator",
       ctaHref: "/tools/deposit-calculator",
@@ -136,7 +139,7 @@ const navItems: NavItem[] = [
 // ─── Mega menu grid column counts ────────────────────────────────────────────
 
 function megaGridCols(label: string): number {
-  if (label === "Product")      return 3;
+  if (label === "Features")     return 3;
   if (label === "Who it's for") return 2;
   if (label === "Resources")    return 3;
   return 1;
@@ -313,6 +316,16 @@ function MobileNavItem({ item, expanded, onToggle }: MobileNavItemProps) {
               })}
             </div>
           ))}
+          {/* The desktop panel's footer link, so /product and /migrate are reachable on phones too */}
+          {item.footer && (
+            <a
+              href={item.footer.ctaHref}
+              className={cn("-mt-1 flex min-h-11 items-center gap-1.5 rounded-lg px-1 text-[15px] font-semibold text-graphite", FOCUS)}
+            >
+              {item.footer.ctaLabel}
+              <ArrowRight size={15} strokeWidth={2.2} aria-hidden="true" />
+            </a>
+          )}
         </div>
       )}
     </div>
@@ -426,7 +439,7 @@ export function Nav() {
           )}
         >
           {/* Logo — the wordmark drops below 360px so the bar never overflows; 44px tall to tap */}
-          <Link href="/" aria-label="Limespun home" className={cn("flex min-h-11 items-center gap-2.5 rounded-lg max-[400px]:gap-2", FOCUS)}>
+          <Link href="/" aria-label="Limespun home" className={cn("flex min-h-11 min-w-11 items-center gap-2.5 rounded-lg max-[400px]:gap-2", FOCUS)}>
             <LimespunMark size={30} />
             <span className="text-[21px] font-bold leading-none tracking-[-0.03em] text-graphite max-[480px]:text-[18px] max-[359px]:hidden">
               Limespun

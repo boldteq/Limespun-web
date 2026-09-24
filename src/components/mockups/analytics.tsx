@@ -3,19 +3,29 @@ import { ArrowRight, Download } from "lucide-react";
 import { cn } from "@/components/system/cn";
 import { AppFrame } from "./app-frame";
 import { AppAvatar, AppButton, AppCard, AppKpiStrip, AppTable, AppTabs, type AppKpiItem } from "./app-parts";
-import { PAYMENTS_LEDGER, PAYROLL_TIPS_CENTS } from "./payments";
+import { PAYROLL_TIPS_CENTS } from "./payments";
 import { ToolbarSegmented } from "./projects";
 import {
   ARTIST_ORDER,
   ARTISTS,
+  BOOKINGS_30D,
+  BOOKINGS_BY_DAY_30D,
+  CANCELLED_30D,
   CLIENTS,
+  DAILY_REVENUE,
+  NEW_CLIENTS_30D,
+  NO_SHOWS_30D,
+  REVENUE_30D_BY_ARTIST,
+  REVENUE_30D_CENTS,
   SEGMENTS,
-  SESSIONS_BY_WEEKDAY,
-  TODAY_BOOKINGS,
+  SESSIONS_30D,
+  SESSIONS_30D_BY_ARTIST,
   usd,
-  WEEKLY_REVENUE,
   type ArtistId,
 } from "./sample-data";
+
+/** Daily revenue lives in sample-data so Analytics, Locations and Payments read one set of books. */
+export { DAILY_REVENUE, type RevenueDay } from "./sample-data";
 
 export type AnalyticsTab = "revenue" | "artists" | "clients" | "bookings";
 
@@ -34,108 +44,35 @@ const TAB_LABEL: Record<AnalyticsTab, string> = {
  * Wed, Sep 9 – Thu, Oct 8. Every figure below reads that window.
  */
 const RANGE_WORD = "last 30 days";
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-function dayLabel(d: Date): string {
-  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
-}
-
-/** Monday-first weekday weights: the studio's usual split of a week's work (sample-data). */
-const WEEKDAY_WEIGHT = SESSIONS_BY_WEEKDAY.map((d) => d.sessions);
-
-/**
- * A week's takings spread over the days each artist worked, in $10 steps, the
- * last working day taking the remainder so the week sums exactly. Rio's guest
- * spot began Fri, Oct 2, so Rio's week is Fri–Sun.
- */
-function splitWeek(id: ArtistId, weekCents: number): number[] {
-  const worked = id === "rio" ? [4, 5, 6] : [0, 1, 2, 3, 4, 5, 6];
-  const weight = worked.reduce((total, d) => total + (WEEKDAY_WEIGHT[d] ?? 0), 0);
-  const days = [0, 0, 0, 0, 0, 0, 0];
-  let left = weekCents;
-  worked.forEach((d, i) => {
-    const cents = i === worked.length - 1 ? left : Math.round((weekCents * (WEEKDAY_WEIGHT[d] ?? 0)) / weight / 1000) * 1000;
-    days[d] = cents;
-    left -= cents;
-  });
-  return days;
-}
-
-export interface RevenueDay {
-  /** "Sep 9" style. */
-  label: string;
-  cents: Record<ArtistId, number>;
-}
 
 /*
- * Daily revenue. Through Sun, Oct 4 it is the weekly takings (sample-data
- * WEEKLY_REVENUE; the Sep 28 week is the $7,630 payout week) spread by weekday.
- * From Mon, Oct 5 it is the Payments ledger itself: Leo B.'s deposit, Tuesday's
- * $1,480, Bea L.'s $500 yesterday and today's $250, as Today reports them.
+ * Daily revenue (sample-data DAILY_REVENUE): through Sun, Oct 4 the weekly
+ * takings spread by weekday (the Sep 28 week is the $7,630 payout week); from
+ * Mon, Oct 5 the Payments ledger itself. The KPI, the trend, the leaderboard
+ * and the Locations month all sum these days.
  */
-export const DAILY_REVENUE: RevenueDay[] = Array.from({ length: 30 }, (_, i) => {
-  const date = new Date(Date.UTC(2026, 8, 9 + i));
-  const label = dayLabel(date);
-  const dow = (date.getUTCDay() + 6) % 7;
-  const monday = dayLabel(new Date(Date.UTC(2026, 8, 9 + i - dow)));
-  const week = WEEKLY_REVENUE.find((w) => w.week === monday);
-  const cents = { dev: 0, mara: 0, rio: 0 } as Record<ArtistId, number>;
-  for (const id of ARTIST_ORDER) {
-    cents[id] = week
-      ? (splitWeek(id, week.cents[id])[dow] ?? 0)
-      : PAYMENTS_LEDGER.filter((t) => t.day === label && t.artist === id).reduce((total, t) => total + t.cents, 0);
-  }
-  return { label, cents };
-});
 const DAYS = DAILY_REVENUE;
 
 const DAY_TOTALS = DAYS.map((d) => ARTIST_ORDER.reduce((total, id) => total + d.cents[id], 0));
-const REVENUE_CENTS = DAY_TOTALS.reduce((total, c) => total + c, 0);
-const REVENUE_BY_ARTIST = ARTIST_ORDER.map((id) => ({ id, cents: DAYS.reduce((total, d) => total + d.cents[id], 0) }));
-const artistRevenue = (id: ArtistId) => REVENUE_BY_ARTIST.find((r) => r.id === id)?.cents ?? 0;
-const TOP_EARNER = REVENUE_BY_ARTIST.reduce((a, b) => (b.cents > a.cents ? b : a));
+const REVENUE_CENTS = REVENUE_30D_CENTS;
+const artistRevenue = (id: ArtistId) => REVENUE_30D_BY_ARTIST[id];
+const TOP_EARNER = ARTIST_ORDER.map((id) => ({ id, cents: artistRevenue(id) })).reduce((a, b) => (b.cents > a.cents ? b : a));
 
 /*
- * Completed sittings in the window: the payout week's 5 / 7 / 9 (Payments ›
- * Commissions), five each for Dev in the Sep 14 and Sep 21 weeks and seven for
- * Mara, four and five on Sep 9–13, then this week Tomás V. and Bea L. for Dev
- * and Rio's four walk-ins (13 for Rio, as on Guest artists). Today's five are
- * still open: Asha M. is in the chair and four are confirmed.
+ * Sittings, no-shows, cancellations and bookings by day in the window come
+ * from sample-data (SESSIONS_30D_BY_ARTIST, BOOKINGS_BY_DAY_30D …), so Forms and
+ * Marketing read the same 30 days. Today's five are still open.
  */
-const SESSIONS: Record<ArtistId, number> = { dev: 21, mara: 26, rio: 13 };
-const NO_SHOWS: Record<ArtistId, number> = { dev: 0, mara: 1, rio: 0 };
-const CANCELLED: Record<ArtistId, number> = { dev: 1, mara: 2, rio: 0 };
-const OPEN_TODAY: Record<ArtistId, number> = {
-  dev: TODAY_BOOKINGS.filter((b) => b.artist === "dev").length,
-  mara: TODAY_BOOKINGS.filter((b) => b.artist === "mara").length,
-  rio: TODAY_BOOKINGS.filter((b) => b.artist === "rio").length,
-};
-const bookingsFor = (id: ArtistId) => SESSIONS[id] + NO_SHOWS[id] + CANCELLED[id] + OPEN_TODAY[id];
+const SESSIONS = SESSIONS_30D_BY_ARTIST;
 const total = (r: Record<ArtistId, number>) => ARTIST_ORDER.reduce((t, id) => t + r[id], 0);
-
-const SESSIONS_30D = total(SESSIONS);
-const NO_SHOWS_30D = total(NO_SHOWS);
-const CANCELLED_30D = total(CANCELLED);
-const BOOKINGS_30D = ARTIST_ORDER.reduce((t, id) => t + bookingsFor(id), 0);
 /** Fill rate as the app defines it: completed ÷ all bookings in the range. */
 const FILL_PCT = Math.round((SESSIONS_30D / BOOKINGS_30D) * 100);
-const BOOKING_STATUS = [
-  { key: "completed", label: "Completed", count: SESSIONS_30D, fill: "bg-app-text" },
-  { key: "confirmed", label: "Confirmed", count: TODAY_BOOKINGS.filter((b) => b.status === "confirmed").length, fill: "bg-graphite/25" },
-  { key: "in-progress", label: "In progress", count: TODAY_BOOKINGS.filter((b) => b.status === "in_progress").length, fill: "bg-graphite/50" },
-  { key: "no-show", label: "No-show", count: NO_SHOWS_30D, fill: "bg-app-active-fg" },
-  { key: "cancelled", label: "Cancelled", count: CANCELLED_30D, fill: "bg-app-active-fg/45" },
-] as const;
-/** Bookings in the window by weekday, Mon–Sun (69; Thursday holds today's five). */
-const BOOKINGS_BY_WEEKDAY: { day: string; bookings: number }[] = [
-  { day: "Mon", bookings: 4 },
-  { day: "Tue", bookings: 8 },
-  { day: "Wed", bookings: 10 },
-  { day: "Thu", bookings: 14 },
-  { day: "Fri", bookings: 12 },
-  { day: "Sat", bookings: 15 },
-  { day: "Sun", bookings: 6 },
-];
+/** Bookings in the window by weekday, Mon–Sun, summed from the daily series (the window opens on a Wednesday). */
+const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const BOOKINGS_BY_WEEKDAY: { day: string; bookings: number }[] = WEEKDAYS.map((day, d) => ({
+  day,
+  bookings: BOOKINGS_BY_DAY_30D.filter((_, i) => (i + 2) % 7 === d).reduce((t, n) => t + n, 0),
+}));
 
 /*
  * Tips: the Sep 28 – Oct 4 payroll run's (Payments › Payroll, Rio's $180 among
@@ -159,12 +96,12 @@ const BY_SERVICE: { name: string; cents: number }[] = [
 ];
 
 /*
- * Clients: the app scopes only "New clients" to the range; Returning, Avg. LTV,
- * Lapsed and both cards read every client on file (412, sample-data SEGMENTS).
- * Referral (9) sits outside the top five, matching the referral program's 9.
+ * Clients: the app scopes only "New clients" to the range (sample-data, the same
+ * 23 as the "New (last 30 days)" segment); Returning, Avg. LTV, Lapsed and both
+ * cards read every client on file (412, sample-data SEGMENTS). Referral (9)
+ * sits outside the top five, matching the referral program's 9.
  */
 const ALL_CLIENTS = SEGMENTS.find((s) => s.label === "All clients")?.clients ?? 0;
-const NEW_CLIENTS_30D = 17;
 const RETURNING = 256;
 const RETURNING_PCT = Math.round((RETURNING / ALL_CLIENTS) * 100);
 const AVG_LTV_CENTS = Math.round(CLIENTS.reduce((t, c) => t + c.spendCents, 0) / CLIENTS.length);
@@ -196,13 +133,22 @@ function tickUsd(cents: number): string {
 const X_TICKS = [0, 7, 14, 21, DAYS.length - 1];
 const X_TICKS_NARROW = [0, 14, DAYS.length - 1];
 
-/** Daily revenue as a single-series line: 2px line, 10% wash, today's dot, its value called out above. */
-function RevenueLine() {
-  const step = 50000;
-  const max = Math.ceil(Math.max(...DAY_TOTALS) / step) * step;
+/** A daily single-series line: 2px line, 10% wash, today's dot, its value called out above. */
+function TrendLine({
+  values,
+  step,
+  tick,
+  format,
+}: {
+  values: number[];
+  step: number;
+  tick: (v: number) => string;
+  format: (v: number) => string;
+}) {
+  const max = Math.ceil(Math.max(...values) / step) * step;
   const ticks = Array.from({ length: max / step + 1 }, (_, i) => i * step);
-  const n = DAY_TOTALS.length;
-  const pts = DAY_TOTALS.map((c, i) => ({ x: (i / (n - 1)) * 100, y: 100 - (c / max) * 100 }));
+  const n = values.length;
+  const pts = values.map((c, i) => ({ x: (i / (n - 1)) * 100, y: 100 - (c / max) * 100 }));
   const line = pts.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ");
   const area = `${line} L100,100 L0,100 Z`;
   const last = pts[n - 1] ?? { x: 100, y: 100 };
@@ -213,7 +159,7 @@ function RevenueLine() {
       <div className="mb-2 flex items-center justify-end gap-1.5 text-ui-xs text-app-mute">
         <span className="h-2 w-2 rounded-full bg-app-active-fg" />
         Today, {DAYS[n - 1]?.label}
-        <span className="font-bold text-app-text tabular-nums">{usd(DAY_TOTALS[n - 1] ?? 0)}</span>
+        <span className="font-bold text-app-text tabular-nums">{format(values[n - 1] ?? 0)}</span>
       </div>
       <div className="flex items-start gap-2">
         <div className="relative h-[168px] w-9 shrink-0">
@@ -223,7 +169,7 @@ function RevenueLine() {
               className="absolute right-0 -translate-y-1/2 text-[10.5px] text-app-mute tabular-nums"
               style={{ top: `${100 - (t / max) * 100}%` }}
             >
-              {tickUsd(t)}
+              {tick(t)}
             </span>
           ))}
         </div>
@@ -408,7 +354,7 @@ function RevenueTab() {
           </>
         }
       >
-        <RevenueLine />
+        <TrendLine values={DAY_TOTALS} step={50000} tick={tickUsd} format={(v) => usd(v)} />
       </AppCard>
       <AppCard title="By service" meta={<NarrowMeta lead="Revenue · ">{RANGE_WORD}</NarrowMeta>}>
         <BarsList rows={BY_SERVICE.map((r) => ({ key: r.name, label: r.name, value: r.cents }))} format={(v) => usd(v)} accentFirst />
@@ -417,46 +363,53 @@ function RevenueTab() {
   );
 }
 
-/** Leaderboard: the full report's columns (ScrArtistsReport) plus the overview's share-of-busiest bar. */
+/**
+ * The overview's leaderboard (ScrAnalytics.tsx ArtistsOverview): # · Artist ·
+ * Revenue · Tips · Share of busiest, "Revenue + tips · last 30 days". The wider
+ * columns (sessions, average, no-show, tip %) live in the full report only.
+ */
 function ArtistsTab() {
   const busiest = Math.max(...ARTIST_ORDER.map((id) => SESSIONS[id]));
   return (
-    <AppCard title="Artist leaderboard" meta={<NarrowMeta>{RANGE_WORD}</NarrowMeta>} padded={false}>
+    <AppCard
+      title={
+        <span className="flex flex-col leading-tight">
+          <span>Artist leaderboard</span>
+          <span className="text-ui-xs font-normal text-app-mute">Revenue + tips · {RANGE_WORD}</span>
+        </span>
+      }
+      padded={false}
+    >
       <AppTable
+        /* Columns join as the card widens, so every one that shows is whole. */
         columns={[
-          { label: "#" },
+          { label: "#", className: "hidden @min-[360px]:table-cell" },
           { label: "Artist" },
-          { label: "Sessions", align: "right" },
           { label: "Revenue", align: "right" },
-          { label: "Avg session", align: "right" },
-          { label: "No-show", align: "right" },
-          { label: "Tip %", align: "right" },
-          { label: "Share of busiest" },
+          { label: "Tips", align: "right", className: "hidden @min-[300px]:table-cell" },
+          { label: "Share of busiest", className: "hidden @min-[520px]:table-cell" },
         ]}
         rows={[...ARTIST_ORDER]
           .sort((a, b) => artistRevenue(b) - artistRevenue(a))
           .map((id, i) => {
-            const rev = artistRevenue(id);
             const share = Math.round((SESSIONS[id] / busiest) * 100);
             return {
               key: id,
               cells: [
-                <span key="r" className="text-app-mute">
+                <span key="r" className={cn("font-serif text-[17px] italic", i === 0 ? "text-app-active-fg" : "text-app-mute")}>
                   {i + 1}
                 </span>,
-                <span key="a" className="flex items-center gap-1.5 font-semibold">
+                <span key="a" className="font-semibold">
                   <ArtistLabel id={id} />
-                  <span className="text-ui-xs font-normal text-app-mute">{ARTISTS[id].kind}</span>
                 </span>,
-                SESSIONS[id],
-                <span key="v" className="font-semibold">
-                  {usd(rev)}
+                <span key="v" className="font-bold">
+                  {usd(artistRevenue(id))}
                 </span>,
-                usd(Math.round(rev / SESSIONS[id])),
-                `${ratePct(NO_SHOWS[id], bookingsFor(id))}%`,
-                `${Math.round((TIPS_CENTS[id] / rev) * 100)}%`,
+                <span key="t" className="font-semibold text-app-success">
+                  +{usd(TIPS_CENTS[id])}
+                </span>,
                 <span key="b" className="flex items-center gap-2">
-                  <span className="h-1.5 w-20 overflow-hidden rounded-full bg-graphite/[0.07]">
+                  <span className="h-1.5 w-24 overflow-hidden rounded-full bg-graphite/[0.07]">
                     <span className="block h-full rounded-r-[4px] bg-app-active-fg" style={{ width: `${share}%` }} />
                   </span>
                   <span className="text-ui-xs text-app-mute tabular-nums">{share}%</span>
@@ -464,7 +417,7 @@ function ArtistsTab() {
               ],
             };
           })}
-        minWidth={720}
+        minWidth={200}
       />
     </AppCard>
   );
@@ -493,43 +446,28 @@ function ClientsTab() {
   );
 }
 
-/** Status breakdown (bookings/_proto/ScrBookingsReport.tsx StatusBar): one stacked bar plus its legend. */
-function StatusBreakdown() {
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex h-3 w-full gap-[2px] overflow-hidden rounded-full">
-        {BOOKING_STATUS.map((s) => (
-          <span key={s.key} className={cn("h-full", s.fill)} style={{ width: `${(s.count / BOOKINGS_30D) * 100}%` }} />
-        ))}
-      </div>
-      <div className="flex flex-col">
-        {BOOKING_STATUS.map((s) => (
-          <div
-            key={s.key}
-            className="flex items-center gap-2 border-b border-app-border py-2 text-ui-sm last:border-b-0 last:pb-0"
-          >
-            <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", s.fill)} />
-            <span className="min-w-0 flex-1 font-semibold text-app-text">{s.label}</span>
-            <span className="font-semibold text-app-text tabular-nums">{s.count}</span>
-            <span className="w-9 text-right text-app-mute tabular-nums">{Math.round((s.count / BOOKINGS_30D) * 100)}%</span>
-          </div>
-        ))}
-      </div>
-      <p className="text-ui-xs text-app-mute">
-        Fill rate: {SESSIONS_30D} completed of {BOOKINGS_30D} bookings. Today&rsquo;s {TODAY_BOOKINGS.length} are still open.
-      </p>
-    </div>
-  );
-}
-
+/** The overview's Bookings tab: "Booking trend" (Daily, the range's total at the right) and "By day of week". */
 function BookingsTab() {
   return (
-    <div className="grid gap-4 @3xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-      <AppCard title="By day of week" meta={<NarrowMeta lead="bookings, ">{RANGE_WORD}</NarrowMeta>}>
-        <Columns rows={BOOKINGS_BY_WEEKDAY.map((d) => ({ key: d.day, value: d.bookings }))} />
+    <div className="grid gap-4 @4xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+      <AppCard
+        title="Booking trend"
+        meta={
+          <>
+            <span className="hidden @min-[26rem]:inline">Daily · {RANGE_WORD}</span>
+            <span className="text-ui-sm font-bold text-app-text tabular-nums">{BOOKINGS_30D}</span>
+          </>
+        }
+      >
+        <TrendLine
+          values={BOOKINGS_BY_DAY_30D}
+          step={2}
+          tick={String}
+          format={(v) => `${v} booking${v === 1 ? "" : "s"}`}
+        />
       </AppCard>
-      <AppCard title="Status breakdown" meta={<NarrowMeta>{BOOKINGS_30D} bookings</NarrowMeta>}>
-        <StatusBreakdown />
+      <AppCard title="By day of week" meta={<NarrowMeta>{RANGE_WORD}</NarrowMeta>}>
+        <Columns rows={BOOKINGS_BY_WEEKDAY.map((d) => ({ key: d.day, value: d.bookings }))} />
       </AppCard>
     </div>
   );

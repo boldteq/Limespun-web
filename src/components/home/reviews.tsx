@@ -106,7 +106,7 @@ export function Reviews() {
             <span id="reviews-heading">Heard at the front desk</span>
           </Display>
           <p className="max-w-[420px] text-[18px] leading-[1.6] text-mute lg:justify-self-end">
-            Tattoo artists and studio owners on running their shop with Limespun, in their own words.
+            Tattoo artists and studio owners on running their shop with{"\u00a0"}Limespun.
           </p>
         </div>
 

@@ -233,54 +233,105 @@ function NavBadge({ r }: { r: NavRow }) {
 
 /**
  * Every nav item (row or group label) is one 28px slot plus a 1px gap, so the
- * list is a strict 29px grid. The scroller's height is rounded down to that
- * grid, so its top and bottom edges always fall between items: no half rows.
+ * list is a strict 29px grid.
  */
 const SLOT_PX = 29;
 
 type RailItem = { kind: "label"; label: string } | { kind: "row"; row: NavRow };
 
 /**
- * The rail's height as a CSS length: the parent's height rounded down to whole
- * slots, less one slot whenever that count would end the visible list on a
- * group label. The rail opens at slot `start` (the active group), so a label at
- * index L is the last whole slot when the rail holds L - start + 1 slots. Each
- * such count gets a term that is one slot tall at exactly that height and zero
- * at every other (heights are whole slots apart), so it needs no script. When
- * the list is scrolled to its end the last slot is always a row.
+ * One flex item of the rail. The rail is a column that wraps, and a unit that
+ * doesn't fit whole moves to a second column the rail clips out of view, so the
+ * list only ever ends on a whole unit: rows are cut at the bottom, whole, never
+ * half. A group label travels with its first row, so the list never ends on a
+ * label. `needPx` marks a group above the active one that gives way (collapses
+ * to nothing) when the rail is too short to show it and every slot down to the
+ * active row.
  */
-function railHeight(items: RailItem[], start: number): string {
-  const whole = `round(down, 100%, ${SLOT_PX}px)`;
-  const cuts = items.flatMap((it, i) => {
-    if (it.kind !== "label" || i <= start) return [];
-    const at = (i - start + 1) * SLOT_PX;
-    return [`max(0px, ${SLOT_PX}px - max(${whole} - ${at}px, ${at}px - ${whole}))`];
+interface RailUnit {
+  key: string;
+  items: RailItem[];
+  needPx?: number;
+}
+
+function railUnits(groups: NavGroup[], active: AppNavItem): RailUnit[] {
+  let at = 0;
+  let activeAt = -1;
+  const placed = groups.map((g) => {
+    const items: RailItem[] = [
+      ...(g.label ? [{ kind: "label" as const, label: g.label }] : []),
+      ...g.rows.map((row) => ({ kind: "row" as const, row })),
+    ];
+    const start = at;
+    const hit = items.findIndex((it) => it.kind === "row" && it.row.id === active);
+    if (hit >= 0) activeAt = start + hit;
+    at += items.length;
+    return { key: g.label ?? "daily", items, start };
   });
-  return cuts.length ? `calc(${whole} - ${cuts.join(" - ")})` : whole;
+  const activeGroup = placed.findIndex((g) => activeAt >= g.start && activeAt < g.start + g.items.length);
+
+  return placed.flatMap((g, gi): RailUnit[] => {
+    if (activeGroup > 0 && gi < activeGroup) {
+      return [{ key: g.key, items: g.items, needPx: (activeAt + 1 - g.start) * SLOT_PX }];
+    }
+    const lead = g.items[0]?.kind === "label" ? 2 : 1;
+    return [
+      { key: `${g.key}-0`, items: g.items.slice(0, lead) },
+      ...g.items.slice(lead).map((it, i) => ({ key: `${g.key}-${i + lead}`, items: [it] })),
+    ];
+  });
+}
+
+/**
+ * A group above the active one: its full height while the rail (rounded down to
+ * whole slots) has room for it and everything down to the active row, zero once
+ * it doesn't. `clamp(0, need − rail, slot)` is 0 or exactly one slot, because
+ * both sides are whole slots. Pure CSS, no scrolling and no script.
+ */
+function collapseHeight(slots: number, needPx: number): string {
+  const rail = `round(down, 100%, ${SLOT_PX}px)`;
+  return `calc(${slots * SLOT_PX}px - ${slots} * clamp(0px, ${needPx}px - ${rail}, ${SLOT_PX}px))`;
+}
+
+function RailSlot({ it, active }: { it: RailItem; active: AppNavItem }) {
+  if (it.kind === "label") {
+    return (
+      <span
+        data-rail-item
+        className="mb-px flex h-[28px] items-end px-2 pb-1.5 text-kpi-label font-bold tracking-[0.1em] text-app-mute uppercase"
+      >
+        {it.label}
+      </span>
+    );
+  }
+  const r = it.row;
+  const on = r.id === active;
+  const Icon = r.icon;
+  return (
+    <span
+      data-rail-item={on ? "active" : ""}
+      className={cn(
+        "mb-px flex h-[28px] items-center gap-2.5 rounded-app px-2 text-ui-sm whitespace-nowrap",
+        on ? "bg-app-active font-semibold text-app-text" : "font-medium",
+      )}
+    >
+      <Icon size={15} strokeWidth={1.8} className={cn("shrink-0", on ? "text-app-active-fg" : "text-app-mute")} />
+      {r.label}
+      <NavBadge r={r} />
+    </span>
+  );
 }
 
 /**
  * Hidden below sm: phone-width mockups show the work area only, as the app does
- * behind its drawer. Fills its parent's height and never sets it; items past the
- * bottom are clipped whole. The active row is the one mandatory scroll-snap
- * target, aligned so its group's label sits at the top edge (scroll-margin =
- * the slots between them), so a rail too short for the whole list opens
- * scrolled to the active group, the way the app looks after scrolling down to
- * Analytics. Snap positions and the scroll range are whole slots, so the top
- * edge is always a clean item boundary. No script; without snapping or
- * round() the rail shows its top.
+ * behind its drawer. Fills its parent's height and never sets it. The list reads
+ * from the top and is clipped at the bottom, whole rows only. When the rail is
+ * too short to reach the active row, the groups above the active one give way,
+ * whole, from the top, so the active row always shows without the list ever
+ * scrolling, the way the app looks scrolled down to that group.
  */
 export function AppSidebar({ active, lens = "studio" }: { active: AppNavItem; lens?: AppLens }) {
-  const items: RailItem[] = LENSES[lens].flatMap((g) => [
-    ...(g.label ? [{ kind: "label" as const, label: g.label }] : []),
-    ...g.rows.map((row) => ({ kind: "row" as const, row })),
-  ]);
-  const activeAt = items.findIndex((it) => it.kind === "row" && it.row.id === active);
-  // The active group's label, or the first row for the unlabelled daily queue.
-  let groupAt = activeAt;
-  while (groupAt > 0 && items[groupAt].kind === "row") groupAt -= 1;
-  const snapMargin = activeAt > 0 ? (activeAt - groupAt) * SLOT_PX : 0;
-  const height = railHeight(items, Math.max(0, groupAt));
+  const units = railUnits(LENSES[lens], active);
 
   return (
     <div className="relative hidden w-[188px] shrink-0 border-r border-app-border bg-app-sidebar sm:block">
@@ -317,43 +368,21 @@ export function AppSidebar({ active, lens = "studio" }: { active: AppNavItem; le
           </div>
         </div>
 
-        <div className="min-h-0 flex-1">
-          <div
-            data-rail="nav"
-            className="flex h-full snap-y snap-mandatory flex-col gap-px overflow-hidden px-2 pb-px"
-            style={{ height }}
-          >
-            {items.map((it) => {
-              if (it.kind === "label") {
-                return (
-                  <span
-                    key={`label-${it.label}`}
-                    data-rail-item
-                    className="flex h-[28px] shrink-0 items-end px-2 pb-1.5 text-kpi-label font-bold tracking-[0.1em] text-app-mute uppercase"
-                  >
-                    {it.label}
-                  </span>
-                );
-              }
-              const r = it.row;
-              const on = r.id === active;
-              const Icon = r.icon;
-              return (
-                <span
-                  key={r.id}
-                  data-rail-item={on ? "active" : ""}
-                  className={cn(
-                    "flex h-[28px] shrink-0 items-center gap-2.5 rounded-app px-2 text-ui-sm whitespace-nowrap",
-                    on ? "snap-start bg-app-active font-semibold text-app-text" : "font-medium",
-                  )}
-                  style={on ? { scrollMarginTop: `${snapMargin}px` } : undefined}
-                >
-                  <Icon size={15} strokeWidth={1.8} className={cn("shrink-0", on ? "text-app-active-fg" : "text-app-mute")} />
-                  {r.label}
-                  <NavBadge r={r} />
-                </span>
-              );
-            })}
+        {/* The padding sits outside the wrapping column, so a unit pushed to the second column
+            starts past the clip edge and never peeks in at the right. */}
+        <div className="min-h-0 flex-1 px-2">
+          <div data-rail="nav" className="flex h-full w-full flex-col flex-wrap content-start overflow-hidden">
+            {units.map((u) => (
+              <div
+                key={u.key}
+                className={cn("flex w-full shrink-0 flex-col", u.needPx !== undefined && "overflow-hidden")}
+                style={u.needPx !== undefined ? { height: collapseHeight(u.items.length, u.needPx) } : undefined}
+              >
+                {u.items.map((it) => (
+                  <RailSlot key={it.kind === "label" ? `label-${it.label}` : it.row.id} it={it} active={active} />
+                ))}
+              </div>
+            ))}
           </div>
         </div>
 

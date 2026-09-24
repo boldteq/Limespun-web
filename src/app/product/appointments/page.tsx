@@ -1,266 +1,349 @@
-"use client";
-
 import React from "react";
-import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { ProductHero } from "@/components/product/product-hero";
-import { ProductPillars } from "@/components/product/product-pillars";
-import { ProductAnatomy } from "@/components/product/product-anatomy";
-import { ProductItemTypes } from "@/components/product/product-item-types";
-import { ProductDayInLife } from "@/components/product/product-day-in-life";
-import { ProductRelated } from "@/components/product/product-related";
-import { ProductCTA } from "@/components/product/product-cta";
-import { MONEY_BACK_DAYS } from "@/lib/data/plans";
-import { AppointmentsScreen, CalendarScreen } from "@/components/mockups";
-import { BRAND } from "@/lib/brand";
+import { Check, Clock, Link2, Mail, MessageSquare } from "lucide-react";
+import { AppShellPhone, SampleTag, cn } from "@/components/system";
+import { FeaturePage } from "@/components/templates/feature-page";
 import {
-  Lock,
-  LayoutGrid,
-  AlertCircle,
-  Calendar,
-  Heart,
-  DollarSign,
-  RefreshCw,
-  Sparkles,
-  Users,
-} from "lucide-react";
+  AppAvatar,
+  AppButton,
+  AppFrame,
+  AppLabel,
+  AppStatus,
+  AppointmentsScreen,
+  ARTISTS,
+  DEPOSITS,
+  TODAY_SESSIONS,
+  usd,
+} from "@/components/mockups";
+import { getFeature } from "@/lib/data/features";
+import { PLAN_CAPS } from "@/lib/data/plans";
+import { pageMetadata } from "@/lib/seo";
+
+const feature = getFeature("appointments");
+
+export const metadata = pageMetadata({
+  title: feature.seo.title,
+  description: feature.seo.description,
+  path: "/product/appointments",
+});
+
+const BOOKINGS_ON_SOLO = PLAN_CAPS.find((c) => c.label === "Bookings a month")?.values.solo ?? "";
+
+/* ─── Moment 1: Kira N. books on the studio's page ──────────────────────────
+   Kira is new: a fine-line wrist piece with Mara, Sat, Nov 14, 12:00, and the
+   service asks for a $150 deposit (she paid it at 8:05 this morning). The words
+   are the public funnel's: the "$150 deposit" badge under the service name, the
+   "Deposit required" notice with "You'll be prompted to pay the deposit on the
+   confirmation page", then "You're booked" and "Pay deposit — $150.00"
+   (app/book/[studioSlug]/[serviceId], confirmation/[token]). */
+const KIRA = DEPOSITS.find((d) => d.client === "Kira N.");
+const KIRA_PIECE = KIRA?.booking.split(" · ")[0] ?? "";
+const KIRA_ARTIST = ARTISTS[KIRA?.artist ?? "mara"].name;
+const KIRA_DEPOSIT = usd(KIRA?.cents ?? 0);
+const KIRA_WHEN = "Sat, Nov 14 · 12:00 PM";
+const STEPS = ["Artist", "Time", "Details", "Intake"] as const;
+
+function StepDots({ step }: { step: number }) {
+  return (
+    <div className="flex items-start justify-between px-1">
+      {STEPS.map((label, i) => {
+        const n = i + 1;
+        const done = n < step;
+        const active = n === step;
+        return (
+          <div key={label} className="flex flex-1 flex-col items-center gap-1">
+            <div className="flex w-full items-center">
+              <span className={cn("h-px flex-1", i === 0 ? "bg-transparent" : n <= step ? "bg-app-text" : "bg-app-border")} />
+              <span
+                className={cn(
+                  "flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold",
+                  done && "bg-app-text text-white",
+                  active && "border-[1.5px] border-app-text text-app-text",
+                  !done && !active && "border-[1.5px] border-app-border text-app-mute",
+                )}
+              >
+                {done ? <Check size={11} strokeWidth={3} /> : n}
+              </span>
+              <span className={cn("h-px flex-1", i === STEPS.length - 1 ? "bg-transparent" : n < step ? "bg-app-text" : "bg-app-border")} />
+            </div>
+            <span className={cn("text-[10px] font-medium", active ? "text-app-text" : "text-app-mute")}>{label}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function PhoneTop({ left }: { left: string }) {
+  return (
+    <div className="flex items-center justify-between gap-2">
+      <p className="text-[10px] text-app-mute">{left}</p>
+      <SampleTag className="px-1.5 text-[10px]" />
+    </div>
+  );
+}
+
+function KiraDetails() {
+  return (
+    <AppShellPhone>
+      <div className="flex h-[440px] flex-col gap-3 px-3.5 pt-3 pb-4 text-left">
+        <div>
+          <PhoneTop left={`Book with ${KIRA_ARTIST}`} />
+          <div className="flex items-center gap-1.5">
+            <p className="truncate text-[13px] font-semibold text-app-text">{KIRA_PIECE}</p>
+            <span className="shrink-0 rounded-app bg-app-warning-bg px-1.5 py-px text-[10px] font-semibold text-app-warning tabular-nums">
+              {KIRA_DEPOSIT} deposit
+            </span>
+          </div>
+        </div>
+        <StepDots step={3} />
+        <p className="font-serif text-[21px] leading-[1.1] text-app-text">Your details</p>
+        <div className="rounded-app px-2.5 py-2 ring-1 ring-app-border">
+          <p className="text-[10px] font-bold tracking-[0.08em] text-app-mute uppercase">Summary</p>
+          <p className="text-[12px] font-semibold text-app-text">{KIRA_PIECE}</p>
+          <p className="text-[11px] text-app-mute tabular-nums">
+            {KIRA_WHEN} · {KIRA_ARTIST}
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-1.5">
+          {[
+            ["First name", "Kira"],
+            ["Last name", "N."],
+          ].map(([label, value]) => (
+            <div key={label}>
+              <p className="mb-1 text-[10px] font-medium text-app-soft">{label}</p>
+              <p className="flex h-8 items-center rounded-app px-2.5 text-[12px] text-app-text ring-1 ring-app-border">{value}</p>
+            </div>
+          ))}
+        </div>
+        <div className="rounded-app border border-app-warning/25 bg-app-warning-bg/60 px-2.5 py-2">
+          <p className="text-[12px] font-semibold text-app-warning tabular-nums">Deposit required: {KIRA_DEPOSIT}</p>
+          <p className="mt-0.5 text-[10px] leading-snug text-app-soft">You’ll be prompted to pay the deposit on the confirmation page.</p>
+        </div>
+        <span className="mt-auto flex h-9 shrink-0 items-center justify-center rounded-app bg-app-text text-[12px] font-semibold text-white">
+          Continue
+        </span>
+      </div>
+    </AppShellPhone>
+  );
+}
+
+function KiraConfirmation({ className }: { className?: string }) {
+  const rows: [string, string][] = [
+    ["Service", KIRA_PIECE],
+    ["Date & time", KIRA_WHEN],
+    ["Artist", KIRA_ARTIST],
+  ];
+  return (
+    <AppShellPhone className={className}>
+      <div className="flex h-[440px] flex-col gap-3 px-3.5 pt-3 pb-4 text-left">
+        <PhoneTop left="Booking" />
+        <div className="flex flex-col items-center pt-2 text-center">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-app-success-bg text-app-success">
+            <Check size={17} strokeWidth={2.6} />
+          </span>
+          <p className="mt-2.5 font-serif text-[24px] leading-none text-app-text">You’re booked</p>
+          <p className="mt-1.5 text-[11px] text-app-mute">We’ve received your booking request.</p>
+        </div>
+        <div className="rounded-[12px] px-3 py-2 ring-1 ring-app-border">
+          <p className="pb-1 text-[10px] font-bold tracking-[0.08em] text-app-mute uppercase">Booking details</p>
+          {rows.map(([label, value]) => (
+            <div key={label} className="border-b border-app-border py-1.5 last:border-b-0">
+              <p className="text-[10px] leading-tight text-app-mute">{label}</p>
+              <p className="text-[11px] leading-snug font-semibold text-app-text tabular-nums">{value}</p>
+            </div>
+          ))}
+          <div className="border-t border-app-border py-1.5">
+            <p className="text-[10px] leading-tight text-app-mute">Deposit</p>
+            <p className="text-[11px] leading-snug font-semibold text-app-warning tabular-nums">{KIRA_DEPOSIT} due</p>
+          </div>
+        </div>
+        <span className="mt-auto flex h-9 shrink-0 items-center justify-center rounded-app bg-app-text text-[12px] font-semibold text-white tabular-nums">
+          Pay deposit — {usd(KIRA?.cents ?? 0, true)}
+        </span>
+      </div>
+    </AppShellPhone>
+  );
+}
+
+/** Phones and narrow stages show the details step; wide stages add the confirmation beside it. */
+function KiraBooking() {
+  return (
+    <div className="flex items-start justify-center gap-6 @xl:gap-10">
+      <KiraDetails />
+      <KiraConfirmation className="mt-10 hidden @xl:flex" />
+    </div>
+  );
+}
+
+/* ─── Moment 2: Owen P.'s deposit, due tonight ───────────────────────────────
+   Requested Wed, Oct 7, 7:30 PM; under the 24-hour default it's due today at
+   7:30 PM, so the 12-hour reminder went at 7:30 this morning (text and email)
+   and the 4-hour one goes at 3:30. The card uses the appointment screen's words:
+   the Unpaid chip, "Awaiting payment", the deadline line with "cancels
+   automatically if unpaid", Copy pay link and Extend deadline
+   (appointments/[id]/_proto/sections.tsx, lib/deposits/deadline.ts). The text is
+   the deposit reminder's own body (workers/cron/deposit-deadline-reminders.ts). */
+const OWEN = DEPOSITS.find((d) => d.client === "Owen P." && d.state === "Pending");
+const OWEN_PIECE = OWEN?.booking.split(" · ")[0] ?? "";
+
+function OwenDeadline() {
+  return (
+    <div className="flex flex-col">
+      <AppFrame active="appointments" sidebar={false} title="Appointment" meta="Sat, Oct 10 · 1:00 PM" className="shadow-none">
+        <div className="flex flex-col gap-3 p-4 @lg:p-5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <AppAvatar initials="OP" size="md" />
+              <div className="min-w-0">
+                <p className="truncate text-ui font-semibold text-app-text">Owen P.</p>
+                <p className="truncate text-ui-xs text-app-mute">
+                  {OWEN_PIECE} · {ARTISTS.dev.name}
+                </p>
+              </div>
+            </div>
+            <AppStatus tone="warning" dot>
+              Pending
+            </AppStatus>
+          </div>
+          <div className="rounded-app bg-graphite/[0.03] p-3.5">
+            <div className="flex items-center justify-between gap-2">
+              <AppLabel>Deposit</AppLabel>
+              <AppStatus tone="warning">Unpaid</AppStatus>
+            </div>
+            <p className="mt-1 text-[24px] leading-tight font-extrabold text-app-text tabular-nums">{usd(OWEN?.cents ?? 0)}</p>
+            <p className="text-ui-xs font-semibold text-app-warning">Awaiting payment</p>
+            <p className="mt-1 text-ui-xs leading-snug text-app-mute">
+              Deposit due by {OWEN?.dueAt} · the studio’s standard deposit window · cancels automatically if unpaid
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <AppButton icon={Link2}>Copy pay link</AppButton>
+            <AppButton icon={Clock}>Extend deadline</AppButton>
+          </div>
+        </div>
+      </AppFrame>
+      {/* The client's comms log row for the 12-hour reminder, lifted over the frame's foot like a toast. */}
+      <div
+        aria-hidden="true"
+        className="relative z-10 mx-auto -mt-3 w-[calc(100%-1.5rem)] rounded-[16px] bg-white p-3.5 text-left shadow-[var(--shadow-lift)] ring-1 ring-graphite/5 @xl:mr-5 @xl:ml-auto @xl:w-[330px]"
+      >
+        <p className="flex items-center gap-1.5 text-ui-xs text-app-mute">
+          <MessageSquare size={12} strokeWidth={1.9} /> SMS · Sent · Today, 7:30 AM
+        </p>
+        <p className="mt-1 text-ui-sm leading-snug text-app-text">
+          Hi Owen, just a reminder: your deposit for {OWEN_PIECE} at Sample studio is due in 12 hours. Please pay to keep your slot.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Moment 3: Asha M.'s two reminders ──────────────────────────────────────
+   Session 4 of her koi sleeve is today at 10:00, three hours. The reminder emails
+   go 24 hours and 2 hours before (workers/cron/appointment-reminders.ts), so
+   Wed 10:00 AM and today 8:00 AM, both before 10:40. Subjects, headings and rows
+   are the templates' own (lib/email/resend.ts, templates/reminder-24h.tsx and
+   reminder-2h.tsx). */
+const ASHA = TODAY_SESSIONS.find((s) => s.id === "asha-s4");
+const ASHA_SERVICE = `${ASHA?.piece ?? ""} · session ${ASHA?.session?.n ?? 4}`;
+const ASHA_MINUTES = (ASHA?.endMin ?? 0) - (ASHA?.startMin ?? 0);
+
+function ReminderEmail({ kind }: { kind: "24h" | "2h" }) {
+  const day = kind === "24h";
+  const rows: [string, string][] = day
+    ? [
+        ["Service", ASHA_SERVICE],
+        ["Artist", ARTISTS.dev.name],
+        ["Date", "Thursday, Oct 8"],
+        ["Time", `10:00 AM – 1:00 PM (${ASHA_MINUTES} min)`],
+      ]
+    : [
+        ["Service", ASHA_SERVICE],
+        ["Artist", ARTISTS.dev.name],
+        ["Time", `10:00 AM (${ASHA_MINUTES} min)`],
+      ];
+  return (
+    <div aria-hidden="true" className="overflow-hidden rounded-window bg-app-surface text-left ring-1 ring-graphite/5">
+      <div className="flex items-center gap-2.5 border-b border-app-border px-4 py-3">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-app bg-graphite/[0.05] text-app-mute">
+          <Mail size={14} strokeWidth={1.8} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-ui-sm leading-snug font-semibold text-app-text">
+            {day ? "Reminder: Your appointment is tomorrow" : "Reminder: Your appointment is in 2 hours"}
+          </p>
+          <p className="truncate text-ui-xs text-app-mute">To Asha M. · {day ? "Wed, Oct 7, 10:00 AM" : "Today, 8:00 AM"}</p>
+        </div>
+      </div>
+      <div className="px-4 pt-3.5 pb-4">
+        <p className="text-[17px] leading-snug font-semibold text-app-text">
+          {day ? "See you tomorrow, Asha!" : "Starting in 2 hours, Asha!"}
+        </p>
+        {/* Narrow stages keep the heading and the rows; the intro line joins from @md. */}
+        <p className="mt-1 hidden text-ui-sm leading-snug text-app-mute @md:block">
+          {day ? "Just a reminder that your appointment is coming up tomorrow." : "Your appointment is coming up soon — here’s your quick summary."}
+        </p>
+        <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 border-t border-app-border pt-3 text-ui-sm">
+          {rows.map(([label, value]) => (
+            <React.Fragment key={label}>
+              <dt className="text-app-mute">{label}</dt>
+              <dd className="min-w-0 text-app-text tabular-nums">{value}</dd>
+            </React.Fragment>
+          ))}
+        </dl>
+        <SampleTag className="mt-3 inline-block" />
+      </div>
+    </div>
+  );
+}
 
 export default function AppointmentsPage() {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: BRAND.bone,
-        overflow: "hidden",
-      } as React.CSSProperties}
-    >
-      <Nav />
-      <main>
-        {/* ── Hero ────────────────────────────────────────────────────────── */}
-        <ProductHero
-          feature="Appointments"
-          headline="Booking and deposit, finally one tap."
-          italicWord="one tap"
-          subhead="Salon software books an appointment. Limespun books an appointment AND a deposit AND an allergy check AND a multi-session link — all locked at the same moment. The chair only commits when the money does."
-          dashboard={<AppointmentsScreen />}
-        />
-
-        {/* ── Pillars ─────────────────────────────────────────────────────── */}
-        <ProductPillars
-          eyebrow="The mechanics"
-          heading="Three locks, one tap."
-          italicWord="one tap"
-          intro="Most booking tools treat the appointment and the deposit as separate steps. Limespun treats them as one action: the booking is confirmed when the deposit is paid."
-          pillars={[
-            {
-              icon: Lock,
-              accent: BRAND.rust,
-              eyebrow: "Deposit-required gating",
-              title: "No deposit, no lock.",
-              desc: "The booking stays Pending until the deposit is paid, then flips to Confirmed. Your Booking policies set the amount and what happens on a late cancel.",
-              bullets: [
-                "Pending until the deposit is paid",
-                "Confirmed the moment it clears",
-                "Late-cancel rules from your Booking policies",
-                "Deposit added to the project's pool",
-              ],
-            },
-            {
-              icon: LayoutGrid,
-              accent: BRAND.amber,
-              eyebrow: "Multi-session linking",
-              title: "Session 4 of 5, automatic.",
-              desc: "When a client with an active project books a new slot, Limespun offers to link it. One tap chains the booking to the project, and the deposit pool and artist notes carry forward.",
-              bullets: [
-                "Link to the active project",
-                "Draws on the deposit pool",
-                "Carries artist notes",
-                "Session counter moves on (4 of 5)",
-              ],
-            },
-            {
-              icon: AlertCircle,
-              accent: BRAND.sage,
-              eyebrow: "Allergy + medical at booking",
-              title: "See the allergy before you book.",
-              desc: "Allergy and medical notes surface when you book, not after the appointment is already in the calendar.",
-              bullets: [
-                "Allergy notes shown at booking",
-                "Allergy flag on the booking card",
-                "Medical history form before the session",
-                "Shown again on Today",
-              ],
-            },
-          ]}
-        />
-
-        {/* ── Anatomy ─────────────────────────────────────────────────────── */}
-        <ProductAnatomy
-          eyebrow="Inside the booking flow"
-          heading="Five checks, one slot."
-          italicWord="one slot"
-          intro="The calendar mockup above shows a live appointment grid. Here's what happens behind every slot before it's confirmed."
-          dashboard={<CalendarScreen view="day" />}
-          callouts={[
-            {
-              n: 1,
-              title: "Time selection",
-              desc: "Day, Week and Agenda views. Slot height matches the length of the service.",
-              position: { top: "15%", left: "70%" },
-            },
-            {
-              n: 2,
-              title: "Multi-session prompt",
-              desc: "If client has an active project, a banner offers to link this booking as the next session.",
-              position: { top: "28%", left: "34%" },
-            },
-            {
-              n: 3,
-              title: "Deposit gating",
-              desc: "The booking stays Pending until the deposit is paid, then flips to Confirmed.",
-              position: { top: "38%", left: "52%" },
-            },
-            {
-              n: 4,
-              title: "Clash check",
-              desc: "Two bookings on one chair are blocked before they save. Studio plan and up.",
-              position: { top: "52%", left: "24%" },
-            },
-            {
-              n: 5,
-              title: "Confirm sequence",
-              desc: "Email and text confirmations once the deposit clears, in your studio's words. Merge tags fill in the details.",
-              position: { top: "60%", left: "50%" },
-            },
-          ]}
-        />
-
-        {/* ── Item Types ──────────────────────────────────────────────────── */}
-        <ProductItemTypes
-          eyebrow="Booking flow"
-          heading="Five steps before a chair is held."
-          italicWord="Five steps"
-          intro="A booked slot in Limespun passes five steps, in order, before it's confirmed."
-          columns={3}
-          items={[
-            {
-              icon: Calendar,
-              accent: BRAND.rust,
-              severity: "Step 1",
-              title: "Slot selection",
-              desc: "Client picks a time. Times already taken don't show.",
-              example: '"Sat Nov 7 · 11:00 · Dev"',
-            },
-            {
-              icon: Heart,
-              accent: BRAND.amber,
-              severity: "Step 2",
-              title: "Project link prompt",
-              desc: "An active project is found and offered as the link for this session.",
-              example:
-                '"Asha M. · Koi sleeve · link as session 5 of 5"',
-            },
-            {
-              icon: AlertCircle,
-              accent: BRAND.danger,
-              severity: "Step 3",
-              title: "Medical check",
-              desc: "Allergy and medical notes shown to the artist on the booking.",
-              example:
-                '"Elena R. · red ink allergy on file · patch test first"',
-            },
-            {
-              icon: DollarSign,
-              accent: BRAND.amber,
-              severity: "Step 4",
-              title: "Deposit collection",
-              desc: "Client pays the deposit by card. The booking stays Pending until it clears.",
-              example: '"$300 deposit · added to the project\'s deposit pool"',
-            },
-            {
-              icon: Lock,
-              accent: BRAND.success,
-              severity: "Step 5",
-              title: "Confirmed",
-              desc: "The booking flips to Confirmed. Email and text confirmations go out.",
-              example: '"Confirmed · Sat Nov 7 · 11:00"',
-            },
-            {
-              icon: RefreshCw,
-              accent: BRAND.stoneDark,
-              severity: "Lifecycle",
-              title: "Reschedule + refund",
-              desc: "Drag to a new time and the deposit moves with it. Late cancels follow your policy.",
-              example: '"Leo B. · late cancel · $150 deposit kept"',
-            },
-          ]}
-        />
-
-        {/* ── Day in Life ─────────────────────────────────────────────────── */}
-        <ProductDayInLife
-          eyebrow="A booking, confirmed"
-          heading="Tuesday, 2:14 PM. From a text to a confirmed session."
-          italicWord="a confirmed session"
-          intro="Asha M. texts the studio: 'When can we book the last session of the koi sleeve?' The owner replies with the booking link from a saved reply."
-          paragraphs={[
-            <React.Fragment key="p1">
-              <strong>Asha picks Sat Nov 7, 11:00.</strong> The booking page only shows times Dev has free, sized to his sleeve sessions.
-            </React.Fragment>,
-            <React.Fragment key="p2">
-              <strong>Limespun recognises Asha&apos;s active project.</strong> The booking links to Koi sleeve as session 5 of 5. Her deposit pool still holds $240 of the $300 she paid in, set aside for the last two sessions.
-            </React.Fragment>,
-            <React.Fragment key="p3">
-              <strong>Dev sees the notes before the day.</strong> Anything on her medical form shows on the booking card, not buried in a file.
-            </React.Fragment>,
-            <React.Fragment key="p4">
-              <strong>The pool already covers it, so the booking is Confirmed.</strong> Email and text confirmations go out, and Dev&apos;s calendar updates. <em>A few minutes, one tap on each side.</em>
-            </React.Fragment>,
-          ]}
-          quote="One tap books the slot, takes the deposit, and brings the project, allergy and payment history along with it."
-          takeawayLabel="What changes"
-        />
-
-        {/* ── Related ─────────────────────────────────────────────────────── */}
-        <ProductRelated
-          eyebrow="Works with"
-          heading="Appointments connect everything."
-          italicWord="everything"
-          modules={[
-            {
-              icon: Sparkles,
-              label: "Today",
-              desc: "Your booked appointments surface in the Today view — deposit status, allergy flags, and session counters at a glance.",
-              href: "/product/today",
-            },
-            {
-              icon: Calendar,
-              label: "Calendar",
-              desc: "Every booking lives on the multi-chair calendar. Drag to reschedule; the deposit stays with it.",
-              href: "/product/calendar",
-            },
-            {
-              icon: LayoutGrid,
-              label: "Projects",
-              desc: "Linked appointments chain to their project automatically. Session counter increments, deposit pool draws down.",
-              href: "/product/projects",
-            },
-            {
-              icon: Users,
-              label: "Payments",
-              desc: "Deposits are taken by card when the client books. No Limespun fee on bookings or deposits.",
-              href: "/product/payments",
-            },
-          ]}
-        />
-
-        {/* ── CTA ─────────────────────────────────────────────────────────── */}
-        <ProductCTA
-          headline="Lock the chair. Lock the money."
-          italicWord="the money"
-          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Deposits lock at booking, so a no-show stops being a free cancellation.`}
-        />
-      </main>
-      <Footer />
-    </div>
+    <FeaturePage
+      feature={feature}
+      headings={{
+        moments: "From the booking page to the chair",
+        details: "What else it does",
+        worksWith: "Joined to projects and payments",
+        worksWithLead: "A deposit is taken once and shows up wherever it’s needed, so nobody types it twice.",
+      }}
+      visuals={{
+        hero: (
+          <>
+            {/* Phones get the Needs action tab, where the stacked rows name the deposit that's due,
+                whole (it's two rows, so no crop); wider frames get the week's table with its Deposit column. */}
+            <AppointmentsScreen tab="needs-action" className="sm:hidden" />
+            <AppointmentsScreen tab="this-week" className="hidden sm:flex" />
+          </>
+        ),
+        moments: [
+          <KiraBooking key="book" />,
+          <OwenDeadline key="deadline" />,
+          {
+            before: <ReminderEmail kind="24h" />,
+            after: <ReminderEmail kind="2h" />,
+            beforeLabel: "24 hours before",
+            afterLabel: "2 hours before",
+          },
+        ],
+        detailLabels: [
+          { label: `${KIRA_DEPOSIT} deposit`, tone: "warning" },
+          { label: "Deposit due by", tone: "quiet" },
+          { label: "Pending", tone: "warning" },
+          { label: "Deposits pending", tone: "ember" },
+          { label: "Booking page", tone: "quiet" },
+          { label: "Request deposit", tone: "quiet" },
+        ],
+      }}
+      planRows={[
+        { label: "Booking page with a deposit per service", from: "solo" },
+        { label: "Unpaid deposits cancel on your deadline", from: "solo" },
+        { label: "Reminder emails before each session", from: "solo" },
+        { label: `${BOOKINGS_ON_SOLO} bookings a month`, from: "solo" },
+        { label: "Unlimited bookings", from: "studio" },
+        { label: "White-label booking page", from: "pro" },
+      ]}
+      inkBand={{ headline: "Hold the chair with a deposit.", italicWord: "deposit" }}
+    />
   );
 }

@@ -8,11 +8,15 @@ import {
   Container,
   Display,
   Eyebrow,
+  InkBand,
   Lead,
   PlanChip,
+  RelatedGrid,
   Section,
   Title,
   cn,
+  lastSpansTwo,
+  lgRowSpan,
   type ChipTone,
   type RelatedItem,
   type SectionTone,
@@ -28,25 +32,46 @@ const planOf = (t: PlanTier) => PLANS.find((p) => p.tier === t) ?? PLANS[0];
 const linkClass =
   "font-semibold text-graphite underline decoration-ember decoration-2 underline-offset-4 hover:text-ember-deep focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite";
 
+/* ─── Closing band copy ────────────────────────────────────────────────────── */
+
+/**
+ * What a template page may set on its closing band: a page-specific headline with one italic
+ * word, the reassurance line, an eyebrow, and the contextual second link (null hides it).
+ * The primary is always Create account.
+ */
+export type TemplateInkBand = Pick<
+  React.ComponentProps<typeof InkBand>,
+  "headline" | "italicWord" | "sub" | "eyebrow" | "secondary"
+>;
+
 /* ─── Section header ───────────────────────────────────────────────────────── */
 
-/** Serif h2 + optional lead, left-aligned with the lead beside it from lg (the homepage's section header). */
+/**
+ * Serif h2 + optional lead, left-aligned with the lead beside it from lg (the homepage's
+ * section header). Without a lead the heading keeps the full row.
+ */
 export function SectionHeader({
   id,
   title,
-  italicWord,
   lead,
   className,
 }: {
   id: string;
   title: string;
+  /** @deprecated Section headings never carry the ember italic (only the page H1 and InkBand). Ignored. */
   italicWord?: string;
   lead?: React.ReactNode;
   className?: string;
 }) {
   return (
-    <div className={cn("grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-end lg:gap-16", className)}>
-      <Display id={id} italicWord={italicWord} className="max-w-[640px]">
+    <div
+      className={cn(
+        "grid gap-4 sm:gap-5",
+        lead && "lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-end lg:gap-16",
+        className,
+      )}
+    >
+      <Display id={id} className="max-w-[640px]">
         {title}
       </Display>
       {lead && <Lead className="text-mute lg:justify-self-end lg:pb-1 lg:text-[18px]">{lead}</Lead>}
@@ -71,13 +96,16 @@ export function isBeforeAfter(v: MomentVisual): v is BeforeAfterVisual {
 
 /**
  * The sand stage a cropped app screen sits on (the homepage's detail tiles). Before/after
- * visuals sit side by side from sm, each under a small state label.
+ * visuals sit side by side once the stage is @xl (36rem) wide, each under a small state
+ * label; narrower stages stack them. The stage is the named container `stage`, so a pair's
+ * screens can compact themselves while stacked with `@max-xl/stage:` variants (a shorter
+ * list, a hidden secondary row) and keep their full form side by side.
  */
 export function ProductStage({ visual, className }: { visual: MomentVisual; className?: string }) {
   return (
-    <div className={cn("@container min-w-0 rounded-tile bg-canvas-deep p-3 sm:p-5 lg:p-6", className)}>
+    <div className={cn("@container/stage min-w-0 rounded-tile bg-canvas-deep p-3 sm:p-5 lg:p-6", className)}>
       {isBeforeAfter(visual) ? (
-        <div className="grid gap-3.5 @xl:grid-cols-2 @xl:gap-5">
+        <div className="grid gap-3.5 @xl/stage:grid-cols-2 @xl/stage:gap-5">
           {(
             [
               { label: visual.beforeLabel ?? "Before", tone: "quiet" as ChipTone, node: visual.before, chip: "bg-white" },
@@ -112,24 +140,36 @@ export interface MiniFeature {
 }
 
 /**
- * Six details, each headed by the app label it lives behind. No icons: the label is the
- * proof that the thing exists on a screen. From sm a hairline grid; phones get a row of
- * cards that swipes (the next one peeks in), so six details cost one card of height.
+ * The details, each headed by the app label it lives behind. No icons: the label is the
+ * proof that the thing exists on a screen. From sm a hairline grid whose rows always fill
+ * (any count from one to eight: an odd last detail spans two columns at sm, a short last row
+ * shares the width at lg); phones get a row of cards that swipes (the next one peeks in), so
+ * six details cost one card of height. A single detail is one full-width card.
  */
 export function MiniGrid({ items, label, className }: { items: MiniFeature[]; label: string; className?: string }) {
+  const n = items.length;
+  if (n === 0) return null;
+  const swipes = n > 1;
   return (
     <ul
       aria-label={label}
-      tabIndex={0}
+      tabIndex={swipes ? 0 : undefined}
       className={cn(
-        "-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-px sm:overflow-hidden sm:rounded-card sm:bg-hair-strong/60 sm:px-0 sm:pb-0 sm:ring-1 sm:ring-hair-strong/60 lg:grid-cols-3 [&::-webkit-scrollbar]:hidden",
+        "flex gap-3 sm:grid sm:gap-px sm:overflow-hidden sm:rounded-card sm:bg-hair-strong/60 sm:ring-1 sm:ring-hair-strong/60 [&::-webkit-scrollbar]:hidden",
+        swipes &&
+          "-mx-5 snap-x snap-mandatory scroll-px-5 overflow-x-auto px-5 pb-1 [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite sm:mx-0 sm:snap-none sm:px-0 sm:pb-0",
+        n > 1 && "sm:grid-cols-2 lg:grid-cols-12",
         className,
       )}
     >
-      {items.map((m) => (
+      {items.map((m, i) => (
         <li
           key={m.title}
-          className="flex w-[min(calc(100%-3.5rem),18.5rem)] shrink-0 snap-start flex-col rounded-card bg-white p-5 ring-1 ring-hair sm:w-auto sm:rounded-none sm:bg-canvas sm:p-7 sm:ring-0"
+          className={cn(
+            "flex shrink-0 snap-start flex-col rounded-card bg-white p-5 ring-1 ring-hair sm:w-auto sm:rounded-none sm:bg-canvas sm:p-7 sm:ring-0",
+            swipes ? "w-[min(calc(100%-3.5rem),18.5rem)]" : "w-full",
+            n > 1 && [lastSpansTwo(n, i, "sm:"), lgRowSpan(n, i)],
+          )}
         >
           {(m.label || m.plan) && (
             <div
@@ -164,61 +204,38 @@ export interface NeighbourLink {
 }
 
 /**
- * The three features as nodes on one hairline: a diagram, not controls. Neighbours are
- * hollow nodes with muted labels; this page's feature is the ember node.
+ * The neighbouring features (one or two): heading and lead, then one row each saying how
+ * the two connect. Renders nothing without a neighbour.
  */
-function JoinDiagram({ nodes }: { nodes: [string, string, string] }) {
-  return (
-    <div aria-hidden="true" className="relative mt-12 hidden max-w-[460px] sm:block">
-      <span className="absolute inset-x-[16.67%] top-[6px] h-px bg-hair-strong" />
-      <div className="relative grid grid-cols-3">
-        {nodes.map((n, i) => (
-          <div key={n} className="flex min-w-0 flex-col items-center gap-3 px-2 text-center">
-            {i === 1 ? (
-              <span className="h-[13px] w-[13px] rounded-full bg-ember ring-4 ring-ember-soft" />
-            ) : (
-              <span className="h-[13px] w-[13px] rounded-full bg-canvas ring-1 ring-hair-strong ring-inset" />
-            )}
-            <span className={cn("text-[13px] leading-snug text-balance", i === 1 ? "font-semibold text-graphite" : "text-mute")}>
-              {n}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/** Two neighbouring features: a line drawing of the three joined up, then one row each. */
 export function WorksWith({
-  current,
   title,
-  italicWord,
   lead,
   items,
   tone = "white",
 }: {
-  current: string;
+  /** @deprecated The joined-up node diagram is gone; the rows say how the features connect. Ignored. */
+  current?: string;
   title: string;
+  /** @deprecated Section headings never carry the ember italic. Ignored. */
   italicWord?: string;
   lead: React.ReactNode;
-  items: [NeighbourLink, NeighbourLink];
+  items: NeighbourLink[];
   tone?: SectionTone;
 }) {
-  const [a, b] = items;
+  const rows = items.slice(0, 2);
+  if (rows.length === 0) return null;
   return (
     <Section tone={tone} labelledBy="works-with-heading">
       <Container className="grid gap-9 sm:gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-20">
         <div>
-          <Display id="works-with-heading" italicWord={italicWord} className="max-w-[520px]">
+          <Display id="works-with-heading" className="max-w-[520px]">
             {title}
           </Display>
-          {/* Phones go straight from the heading to the two rows, which say the same thing in detail */}
+          {/* Phones go straight from the heading to the rows, which say the same thing in detail */}
           <Lead className="mt-5 hidden max-w-[480px] text-mute sm:block">{lead}</Lead>
-          <JoinDiagram nodes={[a.name, current, b.name]} />
         </div>
         <ul className="border-t border-hair-strong lg:self-center">
-          {items.map((it) => (
+          {rows.map((it) => (
             <li key={it.href} className="border-b border-hair-strong">
               <Link
                 href={it.href}
@@ -251,30 +268,55 @@ export function WorksWith({
 
 /** The tools studios most often move from (the homepage's "We move you over" tile). */
 const SWITCH_SOURCES = ["Vagaro", "Fresha", "Square", "DaySmart", "TattooGenda", "Spreadsheets"];
-const SWITCH_MOVES = ["Clients and their history", "Upcoming bookings", "Deposits you hold", "Signed consent forms"];
+const SWITCH_MOVES = ["Clients and their notes", "Upcoming bookings", "Deposits you hold", "Signed consent forms"];
+const SWITCH_TITLE = "We move your studio over for you";
+const SWITCH_LINE =
+  "Coming from Vagaro, Fresha or a spreadsheet? We move your clients, bookings, deposits and signed forms on every plan.";
 
 /**
- * Proof band: we move the studio over, on every plan. `compare` adds up to two comparison
- * links under the copy (segment pages).
+ * Page-specific copy for the switching band. What moves is fixed by the migration (clients
+ * and their notes, upcoming bookings, deposits held, signed consent PDFs, project notes and
+ * photos); a page says which of those its readers care about. No italic in the heading.
+ */
+export interface SwitchingCopy {
+  /** The h2. Defaults to "We move your studio over for you". */
+  title?: string;
+  /** One or two sentences under the heading, about what this page's reader brings across. */
+  line?: string;
+  /** The card's checklist, the page's own item first (it is set bold). Up to four read best. */
+  moves?: string[];
+  /** The source chips on the card: the tools this reader is most likely leaving. */
+  sources?: string[];
+}
+
+/**
+ * Proof band: we move the studio over, on every plan. Pages pass their own heading, line and
+ * checklist (SwitchingCopy) so the band never repeats word for word; with none it keeps the
+ * general copy (/compare). `compare` adds comparison links under the copy.
  */
 export function SwitchingBand({
   tone = "deep",
   compare,
-}: {
+  title,
+  line,
+  moves,
+  sources,
+}: SwitchingCopy & {
   tone?: SectionTone;
   compare?: { label: string; href: string }[];
 }) {
+  const moveList = moves && moves.length > 0 ? moves : SWITCH_MOVES;
+  const lead = Boolean(moves && moves.length > 0);
   return (
     <Section tone={tone} density="proof" labelledBy="switching-heading">
       <Container className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-center lg:gap-20">
         <div>
           <Eyebrow>Switching</Eyebrow>
-          <Title as="h2" size="lg" id="switching-heading" className="mt-3 max-w-[560px]">
-            We move your studio over for you
+          <Title as="h2" size="lg" id="switching-heading" className="mt-3 max-w-[560px] text-balance">
+            {title ?? SWITCH_TITLE}
           </Title>
           <p className="mt-4 max-w-[560px] text-[16px] leading-[1.6] text-pretty text-graphite-soft sm:text-[17px]">
-            Coming from Vagaro, Fresha or a spreadsheet? We move your clients, bookings, deposits and signed forms on
-            every plan.
+            {line ?? SWITCH_LINE}
           </p>
           <div className="mt-7 flex flex-col gap-4 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8">
             <Button href="/migrate" variant="secondary" arrow>
@@ -299,7 +341,7 @@ export function SwitchingBand({
         {/* What moves: decorative restatement of the copy, so phones skip it */}
         <div aria-hidden="true" className="hidden rounded-card bg-white p-5 ring-1 ring-hair sm:block sm:p-7">
           <div className="flex flex-wrap gap-1.5">
-            {SWITCH_SOURCES.map((s) => (
+            {(sources && sources.length > 0 ? sources : SWITCH_SOURCES).map((s) => (
               <span key={s} className="rounded-full bg-canvas px-3 py-1 text-[13px] font-medium text-graphite-soft ring-1 ring-hair">
                 {s}
               </span>
@@ -311,8 +353,14 @@ export function SwitchingBand({
             <LimespunMark size={28} />
           </div>
           <ul className="grid gap-x-6 gap-y-2.5 sm:grid-cols-2">
-            {SWITCH_MOVES.map((m) => (
-              <li key={m} className="flex items-center gap-2 text-[15px] text-graphite">
+            {moveList.map((m, i) => (
+              <li
+                key={m}
+                className={cn(
+                  "flex items-center gap-2 text-[15px]",
+                  !lead ? "text-graphite" : i === 0 ? "font-semibold text-graphite" : "text-graphite-soft",
+                )}
+              >
                 <Check size={16} strokeWidth={2.6} className="shrink-0 text-ember" />
                 {m}
               </li>
@@ -350,8 +398,91 @@ function CapsLine({ tier }: { tier: PlanTier }) {
 }
 
 /**
+ * The same on every plan it's on: the rows once, then the four plans with their prices and
+ * a tick (or "Not on {plan}" below the first plan). Used when no higher plan adds anything,
+ * where a four-column ladder would be three columns of "Everything in …".
+ */
+function FlatPlans({
+  title,
+  lead,
+  rows,
+  start,
+  tone,
+}: {
+  title: string;
+  lead?: React.ReactNode;
+  rows: PlanRow[];
+  start: PlanTier;
+  tone: SectionTone;
+}) {
+  const compare = (
+    <Button href="/pricing" variant="ghost" arrow>
+      Compare every plan
+    </Button>
+  );
+  return (
+    <Section tone={tone} density="proof" labelledBy="plan-heading">
+      <Container className="grid gap-7 sm:gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-20">
+        <div>
+          <Display id="plan-heading" className="max-w-[520px]">
+            {title}
+          </Display>
+          {lead && <p className="mt-4 max-w-[520px] text-[17px] leading-[1.6] text-pretty text-mute">{lead}</p>}
+          <div className="mt-3 max-lg:hidden">{compare}</div>
+        </div>
+        <div>
+          <div className="overflow-hidden rounded-card bg-white ring-1 ring-hair">
+            <ul
+              aria-label="What you get"
+              className={cn("grid gap-x-8 gap-y-2.5 p-5 sm:p-7", rows.length % 2 === 0 && "sm:grid-cols-2")}
+            >
+              {rows.map((r) => (
+                <li key={r.label} className="flex gap-2.5 text-[15px] leading-snug text-pretty text-graphite sm:text-[16px]">
+                  <Check size={16} strokeWidth={2.6} className="mt-0.5 shrink-0 text-ember" aria-hidden="true" />
+                  {r.label}
+                </li>
+              ))}
+            </ul>
+            {/* Four across wherever a cell fits "Multi-Location" on one line; two by two on
+                phones and while the card sits beside the heading at lg */}
+            <ol
+              aria-label="Plans"
+              className="grid grid-cols-2 gap-px border-t border-hair bg-hair sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4"
+            >
+              {TIER_ORDER.map((tier) => {
+                const plan = planOf(tier);
+                const on = tierIndex(tier) >= tierIndex(start);
+                return (
+                  <li key={tier} className={cn("flex min-w-0 flex-col px-4 py-3.5 sm:py-4 lg:px-5", on ? "bg-white" : "bg-canvas")}>
+                    <span className="text-[15px] font-semibold whitespace-nowrap text-graphite">{plan.name}</span>
+                    <span className="text-[13px] whitespace-nowrap text-mute tabular-nums">
+                      {formatPrice(plan.monthlyCents)}/mo
+                    </span>
+                    {on ? (
+                      <span className="mt-2 flex items-center gap-1.5 text-[13px] font-medium text-graphite">
+                        <Check size={15} strokeWidth={2.6} className="shrink-0 text-ember" aria-hidden="true" />
+                        Included
+                      </span>
+                    ) : (
+                      <span className="mt-2 text-[13px] text-mute">Not on {plan.name}</span>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+          <div className="mt-3 lg:hidden">{compare}</div>
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+/**
  * What this feature gives you on each plan, left to right: caps from PLAN_CAPS, then the
  * rows that start on that plan. Plans below the feature's first plan read "Not on {plan}".
+ * When every row starts on the first plan (no higher plan adds anything), it renders the
+ * compact FlatPlans instead.
  */
 export function PlanLadder({
   title,
@@ -366,6 +497,9 @@ export function PlanLadder({
   start: PlanTier;
   tone?: SectionTone;
 }) {
+  if (rows.length > 0 && rows.every((r) => r.from === start)) {
+    return <FlatPlans title={title} lead={lead} rows={rows} start={start} tone={tone} />;
+  }
   return (
     <Section tone={tone} density="proof" labelledBy="plan-heading">
       <Container>
@@ -438,9 +572,8 @@ export function PlanLadder({
 /* ─── Related ──────────────────────────────────────────────────────────────── */
 
 /**
- * The link mesh before the closing band: the system RelatedGrid's cards. Phones get them
- * two across, eyebrow and title only (the one-line summaries join from sm, where the cards
- * have room), so four links cost two short rows.
+ * The link mesh before the closing band. Kept for the templates' callers; it is the system
+ * RelatedGrid (two across on phones with eyebrow and title only, rows that always fill).
  */
 export function RelatedLinks({
   heading = "Related",
@@ -451,40 +584,7 @@ export function RelatedLinks({
   items: RelatedItem[];
   tone?: "canvas" | "white";
 }) {
-  return (
-    <section aria-labelledby="related-heading" className={cn("py-section-y-tight", tone === "white" ? "bg-white" : "bg-canvas")}>
-      <Container>
-        <Title as="h2" size="lg" id="related-heading">
-          {heading}
-        </Title>
-        <ul className="mt-5 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-4 lg:grid-cols-4">
-          {items.map((it) => (
-            <li key={it.href} className="min-w-0">
-              <Link
-                href={it.href}
-                className={cn(
-                  "group flex h-full flex-col rounded-card p-4 ring-1 ring-hair transition-[box-shadow] duration-200 hover:shadow-[var(--shadow-lift)] hover:ring-hair-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite sm:p-6",
-                  tone === "white" ? "bg-canvas" : "bg-white",
-                )}
-              >
-                <span className="flex min-w-0 flex-1 flex-col">
-                  {it.eyebrow && <span className="text-label text-mute uppercase">{it.eyebrow}</span>}
-                  <span className={cn("text-title-sm text-balance text-graphite", it.eyebrow && "mt-1.5 sm:mt-2")}>{it.title}</span>
-                  <span className="mt-2 hidden text-[15px] leading-[1.55] text-pretty text-mute sm:block">{it.body}</span>
-                </span>
-                <ArrowRight
-                  size={17}
-                  strokeWidth={2.2}
-                  aria-hidden="true"
-                  className="mt-3 text-graphite transition-transform duration-200 group-hover:translate-x-1 sm:mt-5"
-                />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Container>
-    </section>
-  );
+  return <RelatedGrid heading={heading} items={items} tone={tone} />;
 }
 
 /* ─── Before / after ───────────────────────────────────────────────────────── */

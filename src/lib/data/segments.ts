@@ -41,8 +41,12 @@ export interface Segment {
   heroScreen: SegmentHeroScreen;
   /** The state the hero mockup should show. */
   heroNote: string;
-  /** Heading for the "Your week" section; italicWord is a word of title. */
-  week: { title: string; italicWord: string; lead: string };
+  /**
+   * Heading for the "Your week" section. It is an H2, so it carries no italic word:
+   * italic ember is for the page H1 and the InkBand only. The lead's last two words are
+   * joined with a no-break space (\u00A0) so an 18px lead never ends on one word.
+   */
+  week: { title: string; lead: string };
   /** "Your week": three jobs, each tied to the feature page that does it. */
   jobs: [SegmentJob, SegmentJob, SegmentJob];
   /** Beside the plan card: why this plan fits. */
@@ -87,8 +91,7 @@ const CONTENT: Record<SegmentSlug, Omit<Segment, "slug" | "href">> = {
     heroNote: "Public booking page on the Time step, with the deposit that holds the slot.",
     week: {
       title: "A week with one chair",
-      italicWord: "one",
-      lead: "The work between sessions, taken care of by your booking page, your consent forms and the deposit pool.",
+      lead: "The work between sessions, taken care of by your booking page, your consent forms and the deposit\u00A0pool.",
     },
     jobs: [
       {
@@ -118,7 +121,7 @@ const CONTENT: Record<SegmentSlug, Omit<Segment, "slug" | "href">> = {
     faqs: [
       {
         q: `Is ${planName("solo")} a cut-down version?`,
-        a: `No. It has everything a one-artist studio uses: booking page, deposits, consent forms, projects, inventory with EU REACH, reports and marketing. What it leaves out is mostly for teams. ${planName("studio")} adds commission and booth-rent splits, advanced marketing segments and AI reply suggestions. ${planName("pro")} adds payroll, guest seats, roles, AI drafts, aftercare and consult summaries and removing Limespun branding.`,
+        a: `No. It has everything a one-artist studio uses: booking page, deposits, consent forms, projects, inventory with EU REACH, reports and marketing. What it leaves out is mostly for teams. ${planName("studio")} adds every artist on one calendar with clash checks, commission and booth-rent splits and AI reply suggestions in Messages. ${planName("pro")} adds guest-artist seats, roles and permissions, payroll and 1099s, AI reply drafts, aftercare and consult summaries, and removing Limespun branding.`,
       },
       {
         q: `How many bookings does ${planName("solo")} include?`,
@@ -147,8 +150,7 @@ const CONTENT: Record<SegmentSlug, Omit<Segment, "slug" | "href">> = {
     heroNote: "Week view with every artist’s column and a move refused because the chair is taken.",
     week: {
       title: "A week with the whole team",
-      italicWord: "whole",
-      lead: "Bookings, splits and client threads shared by the whole team, without a group chat or a spreadsheet.",
+      lead: "Bookings, splits and client threads shared by the whole team, without a group chat or a\u00A0spreadsheet.",
     },
     jobs: [
       {
@@ -158,7 +160,7 @@ const CONTENT: Record<SegmentSlug, Omit<Segment, "slug" | "href">> = {
       },
       {
         title: "Commission and booth rent, per session",
-        body: "Set each artist’s commission rate or flat fee once. What’s owed builds up as sessions finish and waits on Today for approval.",
+        body: "Set each artist’s commission rate or flat fee once. What’s owed builds up as sessions finish, shows on Today, and you approve it on the Commissions tab.",
         feature: "payments",
       },
       {
@@ -171,7 +173,7 @@ const CONTENT: Record<SegmentSlug, Omit<Segment, "slug" | "href">> = {
       title: `${planName("studio")}, ${monthly("studio")} a month`,
       body: `${cap("Artists", "studio")} artists, ${lower(cap("Bookings a month", "studio"))} bookings and ${cap("Texts a month", "studio")} texts a month, with every artist on one calendar and commission or booth rent worked out per session.`,
     },
-    outgrow: `When guest artists start visiting, ${planName("pro")} adds unlimited guest-artist seats, payroll and roles for ${monthly("pro")} a month.`,
+    outgrow: `When guest artists start visiting, ${planName("pro")} adds unlimited guest-artist seats, payroll and 1099s, and roles and permissions for ${monthly("pro")} a month.`,
     subSegmentsHeading: "For shops of two to five artists",
     subSegments: ["Walk-in heavy shops", "Custom-only private studios", "Shops mixing commission and booth rent"],
     compare: ["vagaro", "fresha"],
@@ -200,15 +202,15 @@ const CONTENT: Record<SegmentSlug, Omit<Segment, "slug" | "href">> = {
     card: priced(`${cap("Artists", "pro")} artists, plus guests`, "pro"),
     plan: "pro",
     eyebrow: "For busy shops",
-    h1: "Fifteen chairs, guest spots and payday, handled.",
+    // The cap as sold (artists, not chairs), so the 5-row roster below doesn't read as a contradiction.
+    h1: "Up to fifteen artists, guests and payday, handled.",
     italicWord: "payday",
     sub: `${planName("pro")} runs ${lower(cap("Artists", "pro"))} artists with unlimited guest-artist seats, roles and permissions for the front desk, and payroll with 1099s. ${monthly("pro")} a month, with ${cap("Locations", "pro")} locations included.`,
     heroScreen: "TeamScreen",
     heroNote: "Roster with residents, the front desk and a guest artist whose spot has an end date.",
     week: {
       title: "A week on a full floor",
-      italicWord: "full",
-      lead: "Residents, guests and the front desk working from the same book, each seeing what their role allows.",
+      lead: "Residents, guests and the front desk working from the same book, each seeing what their role\u00A0allows.",
     },
     jobs: [
       {
@@ -218,18 +220,18 @@ const CONTENT: Record<SegmentSlug, Omit<Segment, "slug" | "href">> = {
       },
       {
         title: "Payday from one payroll run",
-        body: "A payroll run totals commission, tips and what the studio keeps for each artist, with artist summaries and 1099s alongside.",
+        body: "A payroll run adds up each artist’s commission and tips for the pay period. Review it, approve it and mark it paid, with 1099-K forms on the same screen.",
         feature: "payments",
       },
       {
         title: "Replies drafted, consults summarized",
-        body: "AI drafts replies, aftercare notes and consult summaries for an artist to check. Nothing goes out until a person presses send.",
+        body: "AI drafts replies, aftercare and consult summaries for an artist to check. No AI draft goes out until a person presses send.",
         feature: "messages",
       },
     ],
     planPitch: {
       title: `${planName("pro")}, ${monthly("pro")} a month`,
-      body: `${cap("Artists", "pro")} artists and ${cap("Locations", "pro")} locations, unlimited guest-artist seats, payroll and 1099s, AI drafts, and roles and permissions. ${cap("Texts a month", "pro")} texts a month.`,
+      body: `${cap("Artists", "pro")} artists and ${cap("Locations", "pro")} locations, unlimited guest-artist seats, payroll and 1099s, AI reply drafts, aftercare and consult summaries, and roles and permissions. ${cap("Texts a month", "pro")} texts a month.`,
     },
     outgrow: `Past ${cap("Artists", "pro").replace("Up to ", "")} artists or ${cap("Locations", "pro")} locations, ${planName("enterprise")} is ${monthly("enterprise")} a month flat, with no cap on either.`,
     subSegmentsHeading: "For shops with a busy floor",
@@ -238,7 +240,7 @@ const CONTENT: Record<SegmentSlug, Omit<Segment, "slug" | "href">> = {
     faqs: [
       {
         q: `What does ${planName("pro")} add to ${planName("studio")}?`,
-        a: `${cap("Artists", "pro")} artists and ${cap("Locations", "pro")} locations, unlimited guest-artist seats, payroll and 1099s, AI replies, aftercare and consult summaries, roles and permissions, your branding in place of ours and priority support.`,
+        a: `${cap("Artists", "pro")} artists and ${cap("Locations", "pro")} locations, unlimited guest-artist seats, roles and permissions, payroll and 1099s, AI reply drafts, aftercare and consult summaries, reports across locations, removing Limespun branding and priority support. ${cap("Texts a month", "pro")} texts a month.`,
       },
       {
         q: "What can the front desk see?",
@@ -260,15 +262,14 @@ const CONTENT: Record<SegmentSlug, Omit<Segment, "slug" | "href">> = {
     card: priced("Every shop in one account", "enterprise"),
     plan: "enterprise",
     eyebrow: "For multiple locations",
-    h1: "Every shop in one account, one flat price.",
+    h1: "Unlimited shops for one flat price.",
     italicWord: "flat",
     sub: `${planName("enterprise")} is ${monthly("enterprise")} a month flat, with unlimited artists and locations, reports across every shop and a dedicated account manager.`,
     heroScreen: "LocationsScreen",
     heroNote: "Locations with each shop’s artists, bookings and revenue for the month, and totals across all sites.",
     week: {
       title: "A week across every shop",
-      italicWord: "every",
-      lead: "Each location runs its own day. You see all of them from one account.",
+      lead: "Each location runs its own day. You see all of them from one\u00A0account.",
     },
     jobs: [
       {

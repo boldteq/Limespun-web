@@ -11,7 +11,17 @@ import type { TOOLS_INDEX } from "@/lib/site-links";
  *   - labels:        InkOS app/(app)/<screen>/_proto/*, same words as the app
  *   - prices, caps:  read from PLANS / PLAN_CAPS below, never typed by hand
  * Things the app does not have stay out: no-show fee, points schemes, calendar
- * sync (the app exports a .ics snapshot only), AI that draws.
+ * sync (the app exports a .ics snapshot only), AI that draws, AI-drafted design
+ * briefs (coming; InkOS app/(app)/ai-design says "Moodboard generation isn't
+ * connected yet"), an API or webhooks, enforced cancellation windows, min-notice
+ * or buffer enforcement, stock that deducts itself when a session completes (InkOS has
+ * no booking-completion trigger; stock moves by delivery, adjustment, waste, return and
+ * stocktake), or a consent disclosure filled from the ink registry (the REACH ink
+ * disclosure is the studio's own wording; the artist adds the batch record after the
+ * session), or a payroll run that includes the studio's share (InkOS calculate_payroll_run()
+ * sums artist commission and tips only). AI plan claims follow PLAN_MATRIX: reply
+ * suggestions in Messages from Studio; reply drafts, aftercare and consult summaries on Pro.
+ * Commissions show as a total on Today; they are approved per artist on Payments › Commissions.
  *
  * Voice: outcome first in the studio’s nouns, h1 ≤ 8 words with one italic word,
  * bodies ≤ 45 words, no question headlines. Banned words: .design-audit/banned.json.
@@ -40,6 +50,11 @@ type ToolSlug = (typeof TOOLS_INDEX)[number]["slug"];
 export interface FeatureMoment {
   title: string;
   body: string;
+  /**
+   * Set when the moment needs a higher plan than the page's own plan.min, so the page can put a
+   * PlanChip ("Studio and up") over the moment title. The body also names the plan in words.
+   */
+  plan?: PlanTier;
   /** Suggested mockup and props from src/components/mockups, e.g. "CalendarScreen view=day". */
   screen?: string;
 }
@@ -58,9 +73,12 @@ export interface Feature {
   slug: FeatureSlug;
   /** "/product/<slug>" */
   href: string;
-  /** Page name, used in breadcrumbs and cards. */
+  /**
+   * The nav noun, as the footer and the app's sidebar say it (Deposits, Clients, Payments,
+   * Team). Used for breadcrumbs, Related titles, "Works with" rows and section headings.
+   */
   name: string;
-  /** Name in the nav’s Product menu. */
+  /** Name in the nav’s Product menu, which can be longer ("Client records"). */
   navLabel: string;
   /** One line for link cards (RelatedGrid, /product). */
   card: string;
@@ -149,7 +167,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
     segments: ["small-studios", "multi-chair"],
     faqs: [
       {
-        q: "Can a chair get double-booked?",
+        q: "Can two bookings land on one chair?",
         a: `No. A booking or a move that overlaps another booking for the same artist is refused, and the booking stays where it was. Every artist on one calendar with clash checks comes with ${planName("studio")} and up.`,
       },
       {
@@ -168,7 +186,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
   },
 
   appointments: {
-    name: "Deposits & booking",
+    name: "Deposits",
     navLabel: "Deposits",
     card: "Deposits taken before the chair is held.",
     eyebrow: "Deposits & booking",
@@ -198,7 +216,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
     ],
     miniFeatures: [
       { title: "Deposit per service", body: "Set the amount on the service. A consult, a half day and a flash piece can each ask for a different deposit." },
-      { title: "Unpaid deposits auto-cancel", body: "A pending booking whose deposit isn’t paid by the deadline is cancelled automatically, but only once the client has actually been asked to pay." },
+      { title: "Unpaid deposits auto-cancel", body: "A pending booking whose deposit isn’t paid by the deadline is canceled automatically, but only once the client has actually been asked to pay." },
       { title: "Six statuses", body: "Pending, Confirmed, In progress, Completed, Cancelled and No-show, the same on the calendar, the Appointments list and Today." },
       { title: "Deposits pending on Today", body: "Today totals the deposits still owed and marks the ones at risk, so the desk can chase them before the day starts." },
       { title: "Your own booking domain", body: "Run the booking page on your studio’s own domain, with your logo, intro and accent color." },
@@ -236,12 +254,12 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
     navLabel: "Client messages",
     card: "Texts and email in one inbox.",
     eyebrow: "Messages",
-    h1: "Every client thread in one inbox.",
-    italicWord: "inbox",
+    h1: "Answer clients with their booking in view.",
+    italicWord: "booking",
     sub: "SMS and email land beside the client’s bookings, deposit and forms. Ask for a deposit or send a consent form without leaving the thread. Instagram and WhatsApp are coming next.",
     plan: {
       min: "solo",
-      note: `AI reply suggestions from ${planName("studio")}. AI drafts, aftercare notes and consult summaries on ${planName("pro")}.`,
+      note: `AI reply suggestions from ${planName("studio")}. AI reply drafts, aftercare and consult summaries on ${planName("pro")}.`,
     },
     moments: [
       {
@@ -256,7 +274,8 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
       },
       {
         title: "Suggested replies you approve",
-        body: "Reply suggestions appear above the composer. Tap one, edit it, send it. Nothing sends by itself except the keyword auto-replies you write yourself.",
+        body: `From ${planName("studio")}, reply suggestions appear above the composer. Tap one, edit it, send it. AI never sends a reply for you; only the auto-reply rules you set up send on their own.`,
+        plan: "studio",
         screen: "MessagesScreen",
       },
     ],
@@ -266,7 +285,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
       { title: "Internal notes", body: "Leave a note in the thread for the team. The client never sees it." },
       { title: "Assign and label", body: "Assign a conversation to an artist or the front desk, and label it so the right person picks it up." },
       { title: "All, Unread, Starred, Archived", body: "Filter the inbox down to what needs a reply, what you’ve starred and what’s done." },
-      { title: "Keyword auto-replies", body: "Match a keyword like “price” to one of your quick responses. It sends on its own, at most once per conversation in the window you set." },
+      { title: "Auto-replies you set up", body: "Pick when a rule fires, a new inquiry, a keyword like “price”, a missed call or a paid deposit, and which quick response it sends. Each rule answers at most once per conversation in the window you set." },
     ],
     worksWith: [
       { slug: "clients", line: "Every thread is tied to the client record, so past sessions and allergy notes are one click away." },
@@ -285,7 +304,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
       },
       {
         q: "Do AI replies send by themselves?",
-        a: `No. Suggestions wait above the composer until someone picks one and presses send. AI reply suggestions come with ${planName("studio")}; AI drafts and consult summaries with ${planName("pro")}.`,
+        a: `No. AI suggestions and drafts wait above the composer until someone picks one and presses send. The only replies that send by themselves are the auto-reply rules you set up. AI reply suggestions come with ${planName("studio")}; AI reply drafts, aftercare and consult summaries with ${planName("pro")}.`,
       },
     ],
     seo: {
@@ -295,7 +314,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
   },
 
   clients: {
-    name: "Client records",
+    name: "Clients",
     navLabel: "Client records",
     card: "History, photos and allergy alerts.",
     eyebrow: "Client records",
@@ -371,7 +390,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
       },
       {
         title: "Kiosk on the studio tablet",
-        body: "Start kiosk on the front-desk tablet and walk-ins sign there. The kiosk includes the ink disclosure, read from your ink registry.",
+        body: "Start kiosk on the front-desk tablet and walk-ins fill in and sign the same form there. Add a REACH ink disclosure in your own wording, and each client acknowledges it before signing.",
         screen: "FormsScreen tab=kiosk",
       },
       {
@@ -390,7 +409,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
     ],
     worksWith: [
       { slug: "clients", line: "Signed forms file under the Consent tab of the client’s record." },
-      { slug: "inventory", line: "The ink disclosure reads brand, color and batch from your ink registry." },
+      { slug: "inventory", line: "After the session, the artist adds the ink batch record to the signed form: brand, color and batch of each ink used." },
     ],
     related: ["clients", "inventory", "messages", "projects"],
     segments: ["solo-artists", "small-studios"],
@@ -447,7 +466,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
       { title: "In deposit pools", body: "The Projects screen totals what’s held across every open project, so you know how much work is already paid for." },
       { title: "Stalled projects flagged", body: "A project that sits active with no confirmed session gets flagged, so a half-finished piece doesn’t drift." },
       { title: "Healed photo reminders", body: "When a healed photo is overdue, a reminder lands in Needs attention." },
-      { title: "Moodboard tab", body: "The client’s references and the design brief live on the project, next to its sessions." },
+      { title: "Moodboard tab", body: "The client’s reference images and links, with placement, size and style notes, live on the project next to its sessions." },
     ],
     worksWith: [
       { slug: "appointments", line: "The client pays the project deposit once; each session draws from it." },
@@ -536,67 +555,67 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
   },
 
   "ai-design": {
-    name: "AI design briefs",
-    navLabel: "AI design briefs",
-    card: "Turn a client’s idea into a clear brief.",
-    eyebrow: "AI design briefs",
-    h1: "Turn a client’s idea into a clear brief.",
-    italicWord: "brief",
-    sub: "The client’s description and reference photos go onto a moodboard. Limespun drafts placement, size, style and a suggested palette for the artist to edit. It never draws the tattoo.",
-    plan: { min: "solo", note: `AI design briefs on every plan, ${planName("solo")} included.` },
+    name: "Design moodboards",
+    navLabel: "Design moodboards",
+    card: "References and notes for every piece.",
+    eyebrow: "Design moodboards",
+    h1: "Client references, pinned to the project.",
+    italicWord: "pinned",
+    sub: "Upload the images a client sends or paste their links onto the project’s moodboard, with placement, size, style and color notes beside them. The artist writes the brief. Limespun never draws the tattoo.",
+    plan: { min: "solo", note: `Design moodboards on every plan, ${planName("solo")} included.` },
     moments: [
       {
-        title: "Start from what they asked for",
-        body: "Open a new design request for the client and add what they want, in their words, with the reference photos they sent.",
-        screen: "AiMoodboardScreen",
+        title: "References onto the moodboard",
+        body: "Upload the images a client sends, or paste links to them. They sit on the project’s Moodboard tab, beside its sessions, deposit pool and notes.",
+        screen: "ProjectsScreen view=detail",
       },
       {
-        title: "References on the moodboard",
-        body: "The client’s own references sit on the moodboard. Generate the moodboard analysis and Limespun reads them for style, placement and palette.",
-        screen: "AiMoodboardScreen",
+        title: "Placement, size, style and color",
+        body: "Note where the piece goes and how big it is, tag the style, and mark it color or black and grey. Reference notes keep everything else the client said about the idea.",
+        screen: "ProjectsScreen view=detail",
       },
       {
-        title: "A brief the artist edits",
-        body: "The draft lists Placement, Size, Style and a Suggested palette. The artist rewrites what’s wrong and saves it, and earlier directions stay on the request to compare.",
+        title: "The artist writes the brief",
+        body: "On the AI screen, the artist writes the brief for a client, picks style, placement and size, and saves it as a draft. The design is the artist’s work, start to finish.",
         screen: "AiMoodboardScreen",
       },
     ],
     miniFeatures: [
-      { title: "Placement and size", body: "Choose where it goes, from forearm to full back, and how big it is." },
-      { title: "Style", body: "Blackwork, Japanese, Neo Traditional, Geometric, Lettering and more, so the brief speaks the artist’s language." },
-      { title: "Suggested palette", body: "Colors drawn from the current moodboard, as swatches the artist can keep or ignore." },
-      { title: "Earlier directions", body: "Every earlier draft stays on the request, so you can go back to the one the client preferred." },
-      { title: "Approve or reject", body: "Mark each draft approved or rejected, and rate it." },
-      { title: "Client on file", body: "Link the request to a client, so the brief sits with their record." },
+      { title: "Upload or paste a link", body: "Add reference images from your phone or computer, or paste links to them. Limespun fetches a thumbnail for each link." },
+      { title: "Placement and size", body: "Write where it goes, a forearm or a back, and pick a size, from small to a full sleeve or full back." },
+      { title: "Style tags", body: "Traditional, Japanese, Fine line, Blackwork, Neo-traditional and more, up to ten per piece, so the notes speak the artist’s language." },
+      { title: "Color or black and grey", body: "Mark the piece Color, Black & Grey or both, and keep the client’s palette wishes in the reference notes, in their own words." },
+      { title: "Reference notes", body: "What the client said about the idea stays with the images, not scattered across a message thread." },
+      { title: "Client on file", body: "Every project belongs to a client, so the references are there when you open their record before the consult." },
     ],
     worksWith: [
-      { slug: "projects", line: "The Moodboard tab on a project keeps the references beside its sessions." },
-      { slug: "clients", line: "Linked to the client, the brief is there when you open their record before the consult." },
+      { slug: "projects", line: "The Moodboard tab sits on the project, beside its sessions and deposit pool." },
+      { slug: "clients", line: "Linked to the client, the references are there when you open their record before the consult." },
     ],
     related: ["projects", "messages", "clients", "portfolio"],
     segments: ["solo-artists", "small-studios"],
     faqs: [
       {
-        q: "Does the AI draw the tattoo?",
-        a: "No. Limespun never generates tattoo art. It reads the client’s references and drafts a written brief. The design is the artist’s work, start to finish.",
+        q: "Does Limespun draw the tattoo?",
+        a: "No. Limespun never generates tattoo art. The moodboard holds the client’s own references and your notes. The design is the artist’s work, start to finish.",
       },
       {
-        q: "Who sees the brief?",
-        a: "Your studio. The moodboard and brief are working notes for the artist. Nothing is published or sent to the client unless you send it yourself.",
+        q: "Does AI write the brief?",
+        a: "Not yet. Today the artist writes the brief from the moodboard and notes. AI-drafted briefs are coming. They will be written notes the artist edits, never artwork.",
       },
       {
         q: "Is it on the Solo plan?",
-        a: `Yes. AI design briefs are on every plan, ${planName("solo")} included. AI drafts for replies, aftercare and consult summaries are a separate ${planName("pro")} feature.`,
+        a: `Yes. Design moodboards are on every plan, ${planName("solo")} included. AI reply drafts, aftercare and consult summaries in Messages are a separate ${planName("pro")} feature.`,
       },
     ],
     seo: {
-      title: "AI tattoo design briefs, not AI art",
-      description: "AI turns a client’s references into a written brief: placement, size, style and palette for the artist to edit. It never draws the tattoo. On every plan.",
+      title: "Tattoo design moodboards for every project",
+      description: "Pin a client’s reference images, placement, size, style and color notes to the project. The artist writes the brief. Limespun never draws the tattoo.",
     },
   },
 
   payments: {
-    name: "Payments & payouts",
+    name: "Payments",
     navLabel: "Payments & payouts",
     card: "Card payments and artist splits.",
     eyebrow: "Payments & payouts",
@@ -614,13 +633,15 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
         screen: "PaymentsScreen tab=transactions",
       },
       {
-        title: "Commissions owed, on Today",
-        body: "Set each artist’s commission rate, or a flat fee per service. What’s owed builds up session by session and waits on Today for approval.",
+        title: "Commissions owed, approved in one tap",
+        body: `From ${planName("studio")}, set each artist’s commission rate, or a flat fee per service. What’s owed builds up session by session on the Commissions tab, and you approve each artist’s total there.`,
+        plan: "studio",
         screen: "PaymentsScreen tab=commissions",
       },
       {
         title: "Payroll and 1099s",
-        body: `On ${planName("pro")}, a payroll run totals commission, tips and what the studio keeps for each artist. Artist summaries and 1099 forms sit alongside every run.`,
+        body: `On ${planName("pro")}, a payroll run adds up each artist’s commission and tips for the pay period. Review it, approve it and mark it paid, with artist summaries and 1099-K forms beside every run.`,
+        plan: "pro",
         screen: "PaymentsScreen tab=payroll",
       },
     ],
@@ -650,7 +671,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
       },
       {
         q: "Does it run payroll?",
-        a: `On ${planName("pro")} and ${planName("enterprise")}. A payroll run totals commission, tips and what the studio keeps, with artist summaries and 1099s. On ${planName("studio")}, the Commissions tab shows what each artist is owed.`,
+        a: `On ${planName("pro")} and ${planName("enterprise")}. A payroll run adds up each artist’s commission and tips for the pay period, with artist summaries and 1099-K forms. On ${planName("studio")}, the Commissions tab shows what each artist is owed.`,
       },
     ],
     seo: {
@@ -660,7 +681,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
   },
 
   team: {
-    name: "Team & guest artists",
+    name: "Team",
     navLabel: "Team & guest artists",
     card: "Residents, front desk and guests on one roster.",
     eyebrow: "Team & guest artists",
@@ -679,7 +700,8 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
       },
       {
         title: "A guest spot with an end date",
-        body: "Add a guest with start and end dates, a split and whether clients can book them online. Their split and their access end with the spot.",
+        body: `On ${planName("pro")}, add a guest with start and end dates, a split and whether clients can book them online. Their split and their access end with the spot.`,
+        plan: "pro",
         screen: "GuestArtistsScreen",
       },
       {
@@ -729,23 +751,23 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
     card: "Ink, needles and EU REACH.",
     eyebrow: "Inventory",
     h1: "Every bottle, batch and REACH record.",
-    italicWord: "REACH",
-    sub: "Track ink, needles and supplies with batch numbers and suppliers. Stock drops as sessions complete, low items become a draft purchase order, and the consent form’s ink disclosure reads the same registry.",
+    italicWord: "batch",
+    sub: "Track ink, needles and supplies with suppliers and par levels, and keep each ink’s batch in the Ink registry. Every stock movement is logged with who and when, and Reorder turns low items into a draft purchase order.",
     plan: { min: "solo", note: "Inventory and EU REACH ink tracking on every plan." },
     moments: [
       {
         title: "Register the ink",
-        body: "Add each ink with brand, color, product code, batch number and whether it’s REACH compliant. Needles, aftercare and supplies go in the same list.",
+        body: "Add each ink to the Ink registry in Settings with its brand, color, product code and batch, and mark whether it’s REACH compliant. Inventory counts those inks beside your needles and supplies.",
         screen: "InventoryScreen tab=items",
       },
       {
-        title: "Stock drops as sessions finish",
-        body: "Stock is logged as Used in session when a booking completes. When an item falls below par, Reorder creates a draft purchase order for its supplier.",
+        title: "Logged, counted, reordered",
+        body: "Deliveries, adjustments, waste, returns and stocktakes are each logged with who and when. When an item falls below par, Reorder drafts a purchase order for its supplier.",
         screen: "InventoryScreen tab=movements",
       },
       {
-        title: "Disclosure pulls the batch",
-        body: "The consent kiosk’s ink disclosure step lists inks from your registry, so the client sees what’s going into their skin.",
+        title: "Batch added after the session",
+        body: "Clients acknowledge a REACH ink disclosure in your wording before they sign. After the session, the artist adds the brand, color and batch of each ink to the signed form.",
         screen: "ConsentSignPhone",
       },
     ],
@@ -754,12 +776,12 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
       { title: "REACH-registered count", body: "The Inventory screen counts REACH-registered inks beside items tracked, low or out, and stock value." },
       { title: "Par levels", body: "Set a par level per item. Anything under it shows as low." },
       { title: "Stocktake", body: "Count the shelf and correct the numbers in one pass." },
-      { title: "Every movement logged", body: "Received PO, Used in session, Waste, Return and Stocktake, each with who and when." },
+      { title: "Stock movements logged", body: "Received PO, Stock adjustment, Waste, Return and Stocktake, each with who and when." },
       { title: "Categories", body: "Ink, Needles, Supplies, Aftercare, Equipment and Apparel." },
     ],
     worksWith: [
-      { slug: "forms", line: "The ink disclosure on the consent form reads from the same registry." },
-      { slug: "analytics", line: "The inventory report shows stock value by category and units used." },
+      { slug: "forms", line: "Clients acknowledge the REACH ink disclosure on the consent form; the artist adds the batch record after the session." },
+      { slug: "analytics", line: "The inventory report shows stock value by category, items tracked and what’s running low." },
     ],
     related: ["forms", "analytics", "payments", "calendar"],
     segments: ["solo-artists", "small-studios"],
@@ -779,7 +801,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
     ],
     seo: {
       title: "Tattoo ink inventory with EU REACH tracking",
-      description: "Track tattoo ink, needles and supplies with batch numbers, par levels and purchase orders. EU REACH ink tracking is included on every plan, Solo too.",
+      description: "Track tattoo ink, needles and supplies with par levels and purchase orders, and each ink’s batch in the Ink registry. EU REACH ink tracking on every plan.",
     },
   },
 
@@ -813,7 +835,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
       { title: "7, 30 or 90 days", body: "Pick a range and compare it with the period before." },
       { title: "Acquisition source", body: "Where new clients came from." },
       { title: "Artist leaderboard", body: "Sessions, revenue, no-shows and tips per artist, residents and guests side by side. Open an artist for the detail." },
-      { title: "Inventory report", body: "Stock value by category, units used and what’s running low." },
+      { title: "Inventory report", body: "Stock value by category, items tracked and what’s running low." },
       { title: "Export CSV", body: "Download any report as a CSV for your accountant." },
       { title: "Across locations", body: `On ${planName("pro")}, filter by location or see every shop together.` },
     ],
@@ -853,7 +875,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
     sub: "Send campaigns by text or email to segments of your own clients, fill cancellations from the waitlist, and reward clients who send a friend. It all runs on the list you already have.",
     plan: {
       min: "solo",
-      note: `Campaigns, segments, waitlist and referrals on every plan. Advanced marketing, including bulk messages from the inbox, starts on ${planName("studio")}.`,
+      note: `Campaigns, segments, waitlist and referrals on every plan, ${planName("solo")} included.`,
     },
     moments: [
       {
@@ -875,7 +897,7 @@ const CONTENT: Record<FeatureSlug, Omit<Feature, "slug" | "href">> = {
     miniFeatures: [
       { title: "Audience, Campaigns, Waitlist, Referral program", body: "Four tabs working from the same client list." },
       { title: "Waitlist statuses", body: "Active, Offered, Booked, Expired and Cancelled, so you can see who took the slot." },
-      { title: "Auto-promote on cancellation", body: "Choose how soon after a cancellation the offer goes out, and only for slots cancelled far enough ahead." },
+      { title: "Auto-promote on cancellation", body: "Choose how soon after a cancellation the offer goes out, and only for slots canceled far enough ahead." },
       { title: "Referral rewards", body: "Reward the referrer with credit, a percentage or a free session, and give their friend a discount." },
       { title: "List hygiene", body: "Unsubscribes are honored, and a hygiene check finds contacts to review and remove." },
       { title: "Monthly texts", body: "Campaign texts count toward your plan’s monthly texts. When those run out, campaigns pause; client replies and reminders still send." },

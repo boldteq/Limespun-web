@@ -1,11 +1,16 @@
 import React from "react";
 import Link from "next/link";
-import { Download, KeyRound, Lock, Mail, ShieldCheck } from "lucide-react";
+import { ChevronDown, Download, KeyRound, Lock, Mail, ShieldCheck } from "lucide-react";
 import { LimespunMark } from "@/components/brand/limespun-mark";
 import { NewsletterForm } from "@/components/forms/newsletter-form";
 import { CONTACT_EMAIL, SOCIAL } from "@/lib/brand";
-import { ASK_AI_LINKS, FOOTER_GROUPS, LEGAL_LINKS } from "@/lib/site-links";
+import { ASK_AI_LINKS, FOOTER_GROUPS, LEGAL_LINKS, type LinkGroup } from "@/lib/site-links";
 import { SystemStatus } from "@/components/layout/system-status";
+// The system's cn (knows the text-* size tokens); imported by path because error.tsx renders this footer on the client.
+import { cn } from "@/components/system/cn";
+
+/** Keyboard focus ring used across the site: graphite, never the browser's blue. */
+const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite";
 
 function InstagramIcon() {
   return (
@@ -52,9 +57,15 @@ const SOCIAL_LINKS = [
 const SECURITY_FACTS = [
   { icon: Lock, text: "Encrypted in transit and at rest" },
   { icon: ShieldCheck, text: "Each studio's data kept separate" },
-  { icon: KeyRound, text: "Two-factor sign-in available on every account" },
-  { icon: Download, text: "Export your clients and signed forms any time" },
+  { icon: KeyRound, text: "Optional two-factor sign-in on every plan" },
+  { icon: Download, text: "Export clients and signed forms any time" },
 ];
+
+/** Every footer link is a 44px target, text left-aligned so the columns read as lists. */
+const LINK = cn(
+  "inline-flex min-h-11 min-w-11 items-center rounded-md text-[15px] text-graphite transition-colors hover:text-ember-deep",
+  FOCUS,
+);
 
 const isExternal = (href: string) => href.startsWith("http");
 
@@ -70,23 +81,41 @@ function FooterLink({ href, children, className }: { href: string; children: Rea
   );
 }
 
+function LinkList({ group, className }: { group: LinkGroup; className?: string }) {
+  return (
+    <ul className={className}>
+      {group.links.map((l) => (
+        <li key={`${group.heading}-${l.href}`} className="min-w-0">
+          <FooterLink href={l.href} className={LINK}>
+            {l.label}
+          </FooterLink>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function Footer() {
   return (
     <footer className="bg-white">
       <div className="border-t border-hair">
-        <div className="mx-auto max-w-[1280px] px-5 pt-14 pb-10 sm:px-8">
+        <div className="mx-auto max-w-[1280px] px-5 pt-9 pb-6 sm:px-8 sm:pt-14 sm:pb-10">
           {/* Brand + newsletter */}
-          <div className="flex flex-col gap-10 border-b border-hair pb-12 lg:flex-row lg:items-stretch lg:justify-between">
+          <div className="flex flex-col gap-8 border-b border-hair pb-8 sm:gap-10 sm:pb-12 lg:flex-row lg:items-stretch lg:justify-between">
             <div className="max-w-[420px]">
-              <Link href="/" className="inline-flex items-center gap-2.5" aria-label="Limespun home">
+              <Link
+                href="/"
+                className={cn("-my-[5px] inline-flex min-h-11 items-center gap-2.5 rounded-lg", FOCUS)}
+                aria-label="Limespun home"
+              >
                 <LimespunMark size={34} />
                 <span className="text-[25px] leading-none font-bold tracking-[-0.03em] text-graphite">Limespun</span>
               </Link>
-              <p className="mt-5 text-[17px] leading-[1.55] text-graphite-soft">
-                Software for tattoo studios: bookings, deposits, consent forms and artist payouts. Built with tattoo
-                artists, for the studios they run.
+              <p className="mt-4 text-[15px] leading-[1.55] text-pretty text-graphite-soft sm:mt-5 sm:text-[17px]">
+                Studio software built only for tattoo: bookings, deposits, consent forms and artist payouts. Flat
+                monthly price, no cut of your bookings.
               </p>
-              <div className="mt-6 flex flex-wrap items-center gap-2">
+              <div className="mt-5 flex flex-wrap items-center gap-2 sm:mt-6">
                 {SOCIAL_LINKS.map((sl) => (
                   <a
                     key={sl.label}
@@ -94,14 +123,20 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Limespun on ${sl.label}`}
-                    className="flex h-11 w-11 items-center justify-center rounded-full text-graphite ring-1 ring-hair transition-colors hover:bg-canvas hover:text-ember-deep"
+                    className={cn(
+                      "flex h-11 w-11 items-center justify-center rounded-full text-graphite ring-1 ring-hair transition-colors hover:bg-canvas hover:text-ember-deep",
+                      FOCUS,
+                    )}
                   >
                     {sl.icon}
                   </a>
                 ))}
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="ml-1 inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-[14px] font-medium text-graphite ring-1 ring-hair transition-colors hover:bg-canvas"
+                  className={cn(
+                    "inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-[14px] font-medium text-graphite ring-1 ring-hair transition-colors hover:bg-canvas sm:ml-1",
+                    FOCUS,
+                  )}
                 >
                   <Mail size={15} strokeWidth={2} aria-hidden="true" /> {CONTACT_EMAIL}
                 </a>
@@ -110,56 +145,80 @@ export function Footer() {
             <NewsletterForm />
           </div>
 
-          {/* Link columns */}
-          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-10 pt-12 sm:grid-cols-3 lg:grid-cols-6">
-            {FOOTER_GROUPS.map((group) => (
-              <div key={group.heading}>
-                <h2 className="text-[13px] font-semibold tracking-[0.06em] text-mute uppercase">{group.heading}</h2>
-                <ul className="mt-4 flex flex-col">
-                  {group.links.map((l) => (
-                    <li key={`${group.heading}-${l.href}`}>
-                      <FooterLink
-                        href={l.href}
-                        className="inline-flex min-h-10 items-center text-[15px] text-graphite transition-colors hover:text-ember-deep"
-                      >
-                        {l.label}
-                      </FooterLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <nav aria-label="Footer">
+            {/* Phones: each column folds into a disclosure; opening one closes the others */}
+            <div className="sm:hidden">
+              {FOOTER_GROUPS.map((group) => (
+                <details key={group.heading} name="footer-links" className="group border-b border-hair">
+                  <summary
+                    className={cn(
+                      "flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 rounded-md text-[15px] font-semibold text-graphite [&::-webkit-details-marker]:hidden",
+                      FOCUS,
+                    )}
+                  >
+                    {group.heading}
+                    <ChevronDown
+                      size={18}
+                      strokeWidth={2}
+                      aria-hidden="true"
+                      className="shrink-0 text-mute transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
+                    />
+                  </summary>
+                  <LinkList group={group} className="grid grid-cols-2 gap-x-4 pb-3" />
+                </details>
+              ))}
+            </div>
+
+            {/* sm and up: every column open */}
+            <div className="hidden gap-x-6 gap-y-10 pt-12 sm:grid sm:grid-cols-3 lg:grid-cols-6">
+              {FOOTER_GROUPS.map((group) => (
+                <div key={group.heading}>
+                  <h2 className="text-[13px] font-semibold tracking-[0.06em] text-mute uppercase">{group.heading}</h2>
+                  <LinkList group={group} className="mt-3 flex flex-col" />
+                </div>
+              ))}
+            </div>
           </nav>
 
           {/* Security facts — each one verified against the app — plus live status */}
-          <div className="mt-12 rounded-[20px] bg-canvas px-6 py-6 sm:px-8">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="mt-8 rounded-[20px] bg-canvas px-5 py-4 sm:mt-12 sm:px-8 sm:py-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-4">
               <Link
                 href="/legal/security"
-                className="inline-flex items-center gap-2.5 text-[15px] font-semibold text-graphite hover:text-ember-deep"
+                className={cn(
+                  "inline-flex min-h-11 items-center gap-2.5 self-start rounded-md text-[15px] font-semibold text-graphite hover:text-ember-deep",
+                  FOCUS,
+                )}
               >
                 <ShieldCheck size={18} strokeWidth={2} className="shrink-0 text-paid" aria-hidden="true" />
-                How we protect your studio&apos;s data <span aria-hidden="true">→</span>
+                <span>
+                  How we protect your studio&apos;s data <span aria-hidden="true">→</span>
+                </span>
               </Link>
               <SystemStatus />
             </div>
-            <ul className="mt-5 grid gap-x-6 gap-y-3 border-t border-hair pt-5 sm:grid-cols-2 lg:grid-cols-4">
+            <ul className="mt-2 grid gap-x-6 gap-y-2.5 border-t border-hair pt-3.5 sm:mt-4 sm:grid-cols-2 sm:gap-y-3 sm:pt-5 lg:grid-cols-4">
               {SECURITY_FACTS.map(({ icon: Icon, text }) => (
-                <li key={text} className="flex items-start gap-2.5 text-[14px] leading-snug text-graphite-soft">
+                <li key={text} className="flex items-start gap-2.5 text-[14px] leading-snug text-balance text-graphite-soft">
                   <Icon size={16} strokeWidth={2} className="mt-0.5 shrink-0 text-graphite" aria-hidden="true" />
                   {text}
                 </li>
               ))}
             </ul>
-            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-hair pt-4 text-[14px]">
-              <span className="text-mute">Ask AI about Limespun:</span>
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 border-t border-hair pt-1 text-[14px] sm:mt-5 sm:pt-3">
+              <span className="text-mute">
+                Ask AI<span className="max-sm:sr-only"> about Limespun</span>:
+              </span>
               {ASK_AI_LINKS.map((l) => (
                 <a
                   key={l.label}
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium text-graphite underline decoration-hair-strong underline-offset-4 hover:decoration-ember"
+                  className={cn(
+                    "inline-flex min-h-11 min-w-11 items-center rounded-sm font-medium text-graphite underline decoration-hair-strong underline-offset-4 hover:decoration-ember",
+                    FOCUS,
+                  )}
                 >
                   {l.label}
                 </a>
@@ -168,11 +227,17 @@ export function Footer() {
           </div>
 
           {/* Legal */}
-          <div className="mt-10 flex flex-col gap-4 border-t border-hair pt-8 sm:flex-row sm:items-center sm:justify-between">
-            <ul className="flex flex-wrap gap-x-6 gap-y-2">
+          <div className="mt-6 flex flex-col gap-1 border-t border-hair pt-3 sm:mt-10 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pt-6">
+            <ul className="flex flex-wrap gap-x-5 sm:gap-x-6">
               {LEGAL_LINKS.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-[14px] text-graphite-soft transition-colors hover:text-graphite">
+                  <Link
+                    href={l.href}
+                    className={cn(
+                      "inline-flex min-h-11 min-w-11 items-center rounded-sm text-[14px] text-graphite-soft transition-colors hover:text-graphite",
+                      FOCUS,
+                    )}
+                  >
                     {l.label}
                   </Link>
                 </li>

@@ -31,6 +31,7 @@ const sections: LegalSection[] = [
     heading: "Plans and billing",
     body: [
       "Monthly plans renew each month and annual plans each year, on the date you started. Fees are paid in advance.",
+      "The account owner can change plans at any time. An upgrade applies straight away and the prorated difference is charged then; on a downgrade, the difference is credited to your next renewal.",
       "A founding lifetime plan is paid once. You keep that plan without a monthly bill.",
       "If a payment fails, paid features may be paused until it goes through. Your studio's data stays in place in the meantime.",
     ],
@@ -74,7 +75,7 @@ const sections: LegalSection[] = [
   },
   {
     heading: "Intellectual property",
-    body: "Boldteq Holdings Ltd owns the Limespun software, design and brand. Your subscription gives your studio a non-exclusive, non-transferable licence to use the software. It gives no rights to the source code or trademarks.",
+    body: "Boldteq Holdings Ltd owns the Limespun software, design and brand. Your subscription gives your studio a non-exclusive, non-transferable license to use the software. It gives no rights to the source code or trademarks.",
   },
   {
     heading: "Availability",

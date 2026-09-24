@@ -1,418 +1,270 @@
-"use client";
+import React from "react";
+import { ArrowDown, ChevronDown } from "lucide-react";
+import { Button, Chip, Container, Section, Title, cn, type ChipTone, type RelatedItem } from "@/components/system";
+import { ContentPage } from "@/components/templates/content-page";
+import { NewsletterForm } from "@/components/forms/newsletter-form";
+import { CalendarScreen } from "@/components/mockups/calendar";
+import { FormsScreen } from "@/components/mockups/forms";
+import { InventoryScreen } from "@/components/mockups/inventory";
+import { ProjectsScreen } from "@/components/mockups/projects";
+import {
+  CHANGELOG_KIND_LABEL,
+  changelogEntries,
+  formatChangelogDate,
+  type ChangelogEntry,
+  type ChangelogKind,
+  type ChangelogScreen,
+} from "@/lib/data/changelog";
+import { PLANS, formatPrice } from "@/lib/data/plans";
+import { roadmapItems } from "@/lib/data/roadmap";
+import { pageMetadata } from "@/lib/seo";
+import { ChangelogFeed, type FeedEntry } from "./changelog-feed";
+import { MessagesPhotoThread } from "./messages-photo-thread";
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Check } from "lucide-react";
-import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { HeroSection } from "@/components/shared/hero-section";
-import { CTASection } from "@/components/shared/cta-section";
-import { ACCOUNT, BRAND, FONT, SHADOW, fadeUp, stagger } from "@/lib/brand";
-import { changelogEntries, type ChangelogEntry } from "@/lib/data/changelog";
-import { MONEY_BACK_DAYS } from "@/lib/data/plans";
+export const metadata = pageMetadata({
+  title: "Changelog: what’s new in Limespun",
+  description:
+    "Every change to Limespun, dated and in plain words: new features, improvements and fixes to the tattoo studio app, newest first. Nothing to install.",
+  path: "/changelog",
+});
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-type TypeFilter = "all" | ChangelogEntry["type"];
+/** Entries shown open on All; the rest fold into "Earlier updates" (keeps the phone page short). */
+const RECENT = 7;
 
-const TYPE_FILTER_OPTIONS: { key: TypeFilter; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "release", label: "Release" },
-  { key: "improvement", label: "Improvement" },
-  { key: "fix", label: "Fix" },
-];
-
-// ─── Type badge colors ────────────────────────────────────────────────────────
-const TYPE_STYLES: Record<
-  ChangelogEntry["type"],
-  { bg: string; color: string; dotColor: string }
-> = {
-  release: {
-    bg: BRAND.rustWash,
-    color: BRAND.rust,
-    dotColor: BRAND.rust,
-  },
-  improvement: {
-    bg: BRAND.amberWash,
-    color: BRAND.amber,
-    dotColor: BRAND.amber,
-  },
-  fix: {
-    bg: BRAND.sageWash,
-    color: BRAND.sage,
-    dotColor: BRAND.sage,
-  },
+const KIND_TONE: Record<ChangelogKind, ChipTone> = {
+  feature: "ember",
+  improvement: "quiet",
+  fix: "success",
 };
 
-// ─── Module pill ──────────────────────────────────────────────────────────────
-function ModulePill({ label }: { label: string }) {
-  return (
-    <span
-      style={{
-        fontFamily: FONT.sans,
-        fontSize: 11,
-        fontWeight: 600,
-        color: BRAND.stoneDark,
-        background: BRAND.boneDeep,
-        padding: "4px 10px",
-        borderRadius: 100,
-        display: "inline-block",
-      } as React.CSSProperties}
-    >
-      {label}
-    </span>
-  );
+/* ─── Screens ─────────────────────────────────────────────────────────────────
+   The screen each entry changed, from the mockup library (sample studio, Thu Oct 8). */
+function Screen({ screen }: { screen: ChangelogScreen }) {
+  switch (screen) {
+    case "messages":
+      return <MessagesPhotoThread />;
+    case "inventory":
+      return <InventoryScreen tab="purchase-orders" />;
+    case "calendar":
+      return <CalendarScreen view="week" />;
+    case "kiosk":
+      return <FormsScreen tab="kiosk" />;
+    case "project":
+      return <ProjectsScreen view="detail" />;
+  }
 }
 
-// ─── Filter chip ──────────────────────────────────────────────────────────────
-function FilterChip({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        fontFamily: FONT.sans,
-        fontSize: 13,
-        fontWeight: active ? 600 : 400,
-        color: active ? BRAND.white : BRAND.stoneDark,
-        background: active ? BRAND.onyx : BRAND.white,
-        border: `1px solid ${active ? BRAND.onyx : BRAND.border}`,
-        borderRadius: 100,
-        padding: "8px 18px",
-        cursor: "pointer",
-        transition: "all 0.18s ease",
-      } as React.CSSProperties}
-    >
-      {label}
-    </button>
-  );
-}
+/**
+ * Crops that run deeper than the default: Inventory's purchase orders sit under the KPI tiles
+ * and tabs; the Messages crop keeps the whole stencil photo and the text under it in view.
+ */
+const CROP_HEIGHT: Partial<Record<ChangelogScreen, string>> = {
+  inventory: "max-h-[290px] sm:max-h-[520px]",
+  messages: "max-h-[340px] sm:max-h-[440px]",
+};
 
-// ─── Changelog entry card ─────────────────────────────────────────────────────
-function ChangelogCard({
-  entry,
-  index,
-  isLast,
-}: {
-  entry: ChangelogEntry;
-  index: number;
-  isLast: boolean;
-}) {
-  const typeStyle = TYPE_STYLES[entry.type];
-  const formattedDate = new Date(entry.date).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-
+/**
+ * A crop of the screen on the sand stage: the top of it, fading into the stage. Phones show
+ * only the newest entry's screen, so the list stays a list.
+ */
+function ScreenCrop({ screen, phone }: { screen: ChangelogScreen; phone: boolean }) {
   return (
-    <motion.div
-      variants={fadeUp}
-      custom={index}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, delay: index * 0.05 }}
-      style={{
-        display: "flex",
-        gap: 24,
-        position: "relative",
-      } as React.CSSProperties}
-    >
-      {/* Left rail */}
+    <div className={cn("mt-6 min-w-0 rounded-tile bg-canvas-deep p-3 sm:mt-8 sm:p-5", !phone && "hidden sm:block")}>
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          flexShrink: 0,
-          width: 20,
-        } as React.CSSProperties}
-      >
-        {/* Dot */}
-        <div
-          style={{
-            width: 12,
-            height: 12,
-            borderRadius: "50%",
-            background: typeStyle.dotColor,
-            flexShrink: 0,
-            marginTop: 6,
-            boxShadow: `0 0 0 3px ${typeStyle.bg}`,
-          } as React.CSSProperties}
-        />
-        {/* Connector line */}
-        {!isLast && (
-          <div
-            style={{
-              flex: 1,
-              width: 1,
-              background: BRAND.borderSoft,
-              marginTop: 8,
-              marginBottom: 0,
-              minHeight: 24,
-            } as React.CSSProperties}
-          />
+        className={cn(
+          "overflow-hidden [mask-image:linear-gradient(to_bottom,#000_calc(100%-72px),transparent)]",
+          CROP_HEIGHT[screen] ?? "max-h-[290px] sm:max-h-[400px]",
         )}
-      </div>
-
-      {/* Card */}
-      <div
-        style={{
-          flex: 1,
-          background: BRAND.white,
-          borderRadius: 14,
-          padding: 24,
-          boxShadow: SHADOW.soft,
-          border: `1px solid ${BRAND.borderSoft}`,
-          marginBottom: isLast ? 0 : 18,
-        } as React.CSSProperties}
       >
-        {/* Top row: version + date + type badge */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            marginBottom: 12,
-            flexWrap: "wrap",
-          } as React.CSSProperties}
-        >
-          <span
-            style={{
-              fontFamily: FONT.mono,
-              fontSize: 13,
-              fontWeight: 700,
-              color: BRAND.onyx,
-            } as React.CSSProperties}
-          >
-            {entry.version}
-          </span>
-
-          <span
-            style={{
-              fontFamily: FONT.mono,
-              fontSize: 12,
-              color: BRAND.stoneFaint,
-            } as React.CSSProperties}
-          >
-            {formattedDate}
-          </span>
-
-          <span
-            style={{
-              fontFamily: FONT.mono,
-              fontSize: 10,
-              fontWeight: 600,
-              color: typeStyle.color,
-              background: typeStyle.bg,
-              padding: "3px 9px",
-              borderRadius: 100,
-              textTransform: "uppercase",
-              letterSpacing: "0.06em",
-            } as React.CSSProperties}
-          >
-            {entry.type}
-          </span>
-        </div>
-
-        {/* Title */}
-        <h3
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 19,
-            fontWeight: 600,
-            color: BRAND.onyx,
-            letterSpacing: "-0.015em",
-            lineHeight: 1.3,
-            marginBottom: 14,
-          } as React.CSSProperties}
-        >
-          {entry.title}
-        </h3>
-
-        {/* Highlights list */}
-        <ul
-          style={{
-            listStyle: "none",
-            padding: 0,
-            margin: "0 0 16px 0",
-            display: "flex",
-            flexDirection: "column",
-            gap: 8,
-          } as React.CSSProperties}
-        >
-          {entry.highlights.map((highlight, hi) => (
-            <li
-              key={hi}
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: 8,
-              } as React.CSSProperties}
-            >
-              <Check
-                size={14}
-                color={BRAND.sage}
-                style={{ flexShrink: 0, marginTop: 3 } as React.CSSProperties}
-              />
-              <span
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 14,
-                  lineHeight: 1.55,
-                  color: BRAND.stoneDark,
-                } as React.CSSProperties}
-              >
-                {highlight}
-              </span>
-            </li>
-          ))}
-        </ul>
-
-        {/* Module tags */}
-        <div
-          style={{
-            display: "flex",
-            gap: 6,
-            flexWrap: "wrap",
-          } as React.CSSProperties}
-        >
-          {entry.modules.map((mod) => (
-            <ModulePill key={mod} label={mod} />
-          ))}
-        </div>
+        <Screen screen={screen} />
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-export default function ChangelogPage() {
-  const [activeFilter, setActiveFilter] = useState<TypeFilter>("all");
+/* ─── Entry ─────────────────────────────────────────────────────────────────── */
 
-  const filtered =
-    activeFilter === "all"
-      ? changelogEntries
-      : changelogEntries.filter((e) => e.type === activeFilter);
+function HighlightList({ entry }: { entry: ChangelogEntry }) {
+  return (
+    <>
+      <ul className="flex flex-col gap-2.5">
+        {entry.highlights.map((h) => (
+          <li key={h} className="flex gap-3 text-[15px] leading-[1.55] text-pretty text-graphite sm:text-[16px]">
+            <span className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-ember" aria-hidden="true" />
+            {h}
+          </li>
+        ))}
+      </ul>
+      {entry.feature && (
+        <Button href={entry.feature.href} variant="ghost" arrow className="mt-3 sm:mt-4">
+          {entry.feature.label}
+        </Button>
+      )}
+    </>
+  );
+}
+
+/**
+ * Date and type, then the title, the one-line summary, the screen and what changed. From xl the
+ * date and type sit in their own column and stay in view while the entry scrolls. Phones fold
+ * the highlights under "What changed", so the list reads as a list.
+ */
+function Entry({ entry, first }: { entry: ChangelogEntry; first: boolean }) {
+  const titleId = `${entry.id}-title`;
+  return (
+    <article
+      id={entry.id}
+      aria-labelledby={titleId}
+      className="scroll-mt-28 py-8 sm:py-12 xl:grid xl:grid-cols-[128px_minmax(0,1fr)] xl:gap-10"
+    >
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 xl:sticky xl:top-28 xl:flex-col xl:items-start xl:self-start xl:pt-1">
+        <time dateTime={entry.date} className="text-[14px] font-medium whitespace-nowrap text-mute tabular-nums">
+          {formatChangelogDate(entry.date)}
+        </time>
+        <Chip tone={KIND_TONE[entry.kind]} className="px-2.5 py-1 text-[12px]">
+          {CHANGELOG_KIND_LABEL[entry.kind]}
+        </Chip>
+      </div>
+      <div className="mt-3 min-w-0 xl:mt-0">
+        <Title as="h3" size="md" id={titleId} className="max-w-[680px]">
+          {entry.title}
+        </Title>
+        <p className="mt-2 max-w-[640px] text-[16px] leading-[1.6] text-pretty text-graphite-soft sm:mt-2.5 sm:text-[17px]">
+          {entry.summary}
+        </p>
+        {entry.screen && <ScreenCrop screen={entry.screen} phone={first} />}
+
+        <div className="mt-6 hidden max-w-[680px] sm:block">
+          <HighlightList entry={entry} />
+        </div>
+        <details className="group/hl mt-2 sm:hidden">
+          <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-2 text-[15px] font-semibold text-graphite focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite [&::-webkit-details-marker]:hidden">
+            What changed
+            <span className="font-medium text-mute tabular-nums">{entry.highlights.length}</span>
+            <ChevronDown
+              size={16}
+              strokeWidth={2.2}
+              aria-hidden="true"
+              className="text-mute transition-transform duration-200 group-open/hl:rotate-180"
+            />
+          </summary>
+          <div className="pt-1 pb-1">
+            <HighlightList entry={entry} />
+          </div>
+        </details>
+      </div>
+    </article>
+  );
+}
+
+/* ─── Around the feed ───────────────────────────────────────────────────────── */
+
+const monthYear = (iso: string) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+
+const latest = changelogEntries[0];
+const oldest = changelogEntries[changelogEntries.length - 1];
+const earlierCount = Math.max(0, changelogEntries.length - RECENT);
+const buildingNow = roadmapItems.filter((r) => r.stage === "now");
+const fromPrice = formatPrice(Math.min(...PLANS.map((p) => p.monthlyCents)));
+
+function RailLinks() {
+  return (
+    <ul className="flex flex-col gap-1">
+      <li>
+        <Button href="/roadmap" variant="ghost" arrow>
+          Roadmap
+        </Button>
+      </li>
+      <li>
+        <a
+          href="#subscribe"
+          className="inline-flex min-h-11 items-center gap-1.5 text-[16px] font-semibold text-graphite underline decoration-ember decoration-2 underline-offset-[6px] transition-colors hover:text-ember-deep focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-graphite"
+        >
+          Updates by email
+          <ArrowDown size={16} strokeWidth={2.4} aria-hidden="true" />
+        </a>
+      </li>
+    </ul>
+  );
+}
+
+/** Subscribe (the footer's Studio notes list) beside what's being built now. */
+function Subscribe() {
+  return (
+    <div
+      id="subscribe"
+      className="grid scroll-mt-28 gap-8 rounded-card bg-canvas p-5 ring-1 ring-hair sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] md:gap-12 lg:p-10"
+    >
+      <NewsletterForm
+        eyebrow="Studio notes · free"
+        title="Get the changelog by email."
+        hint="What shipped, in plain words, in Studio notes. At most one email a month."
+      />
+      <div className="hidden min-w-0 flex-col justify-between gap-5 border-l border-hair pl-12 md:flex">
+        <div>
+          <p className="text-label text-mute uppercase">Building now</p>
+          <ul className="mt-3 flex flex-col gap-2">
+            {buildingNow.map((r) => (
+              <li key={r.title} className="flex gap-2.5 text-[16px] leading-snug font-medium text-graphite">
+                <span className="mt-[0.45em] h-2 w-2 shrink-0 rounded-full bg-ember" aria-hidden="true" />
+                {r.title}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <Button href="/roadmap" variant="ghost" arrow className="self-start">
+          See the roadmap
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+const RELATED: RelatedItem[] = [
+  { eyebrow: "Updates", title: "Roadmap", body: "What we’re building now, what’s next and what’s later.", href: "/roadmap" },
+  { eyebrow: "Product", title: "All features", body: "Bookings, deposits, consent forms, projects and artist payouts.", href: "/product" },
+  { eyebrow: "Feature", title: "Messages", body: "SMS and email in one inbox, beside the client’s record.", href: "/product/messages" },
+  { eyebrow: "Feature", title: "Consent forms", body: "Signed on the client’s phone or the studio tablet, kept as PDFs.", href: "/product/forms" },
+  { eyebrow: "Plans", title: "Pricing", body: `Flat monthly plans from ${fromPrice}. No cut of bookings or deposits.`, href: "/pricing" },
+  { eyebrow: "Company", title: "Contact", body: "Found something broken, or want something built? Write to us.", href: "/contact?topic=feature-request" },
+];
+
+export default function ChangelogPage() {
+  const entries: FeedEntry[] = changelogEntries.map((entry, i) => ({
+    id: entry.id,
+    kind: entry.kind,
+    year: entry.date.slice(0, 4),
+    node: <Entry entry={entry} first={i === 0} />,
+  }));
 
   return (
-    <div>
-      <Nav />
-      <main>
-        <HeroSection
-          variant="centered"
-          eyebrow="Changelog"
-          eyebrowAccent="amber"
-          headline="What's shipped, when, and why."
-          italicWord="why"
-          subhead="What changed in Limespun, most recent first. Releases, improvements and fixes, in plain words."
-          primaryCTA={{
-            label: ACCOUNT.signUpLabel,
-            href: ACCOUNT.signUpHref,
-          }}
-          secondaryCTA={{ label: "See roadmap", href: "/roadmap" }}
-        />
-
-        {/* Timeline section */}
-        <section
-          style={{
-            background: BRAND.bone,
-            paddingTop: 100,
-            paddingBottom: 100,
-          } as React.CSSProperties}
-        >
-          <div
-            style={{
-              maxWidth: 920,
-              margin: "0 auto",
-              padding: "0 32px",
-            } as React.CSSProperties}
-          >
-            {/* Filter chips */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                flexWrap: "wrap",
-                marginBottom: 56,
-              } as React.CSSProperties}
-            >
-              {TYPE_FILTER_OPTIONS.map((opt) => (
-                <FilterChip
-                  key={opt.key}
-                  label={opt.label}
-                  active={activeFilter === opt.key}
-                  onClick={() => setActiveFilter(opt.key)}
-                />
-              ))}
-            </div>
-
-            {/* Timeline entries */}
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              animate="visible"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-              } as React.CSSProperties}
-            >
-              {filtered.map((entry, i) => (
-                <ChangelogCard
-                  key={`${entry.version}-${entry.date}`}
-                  entry={entry}
-                  index={i}
-                  isLast={i === filtered.length - 1}
-                />
-              ))}
-            </motion.div>
-
-            {filtered.length === 0 && (
-              <div
-                style={{
-                  textAlign: "center",
-                  paddingTop: 80,
-                  paddingBottom: 80,
-                } as React.CSSProperties}
-              >
-                <p
-                  style={{
-                    fontFamily: FONT.sans,
-                    fontSize: 16,
-                    color: BRAND.stoneLight,
-                  } as React.CSSProperties}
-                >
-                  No entries in this category yet.
-                </p>
-              </div>
-            )}
-          </div>
-        </section>
-
-        <CTASection
-          badge="Always shipping"
-          headline="Try the latest."
-          italicWord="latest"
-          subhead={`Every plan gets every update, so you're always on the latest. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
-          primaryCTA={{
-            label: ACCOUNT.signUpLabel,
-            href: ACCOUNT.signUpHref,
-          }}
-          secondaryCTA={{
-            label: "See roadmap",
-            href: "/roadmap",
-          }}
-        />
-      </main>
-      <Footer />
-    </div>
+    <ContentPage
+      layout="sections"
+      crumbs={[{ label: "Home", href: "/" }, { label: "Changelog" }]}
+      title="What changed in Limespun, and when."
+      italicWord="when"
+      lead="What changed in the app, newest first: features, improvements and fixes, in the words you’d use at the desk. There’s nothing to install; every studio gets each update as it lands."
+      meta={
+        <>
+          Latest update <time dateTime={latest.date}>{formatChangelogDate(latest.date)}</time> · {changelogEntries.length}{" "}
+          updates since {monthYear(oldest.date)}
+        </>
+      }
+      related={{ items: RELATED }}
+      inkBand={{ headline: "Try the latest.", italicWord: "latest", secondary: { label: "See the roadmap", href: "/roadmap" } }}
+    >
+      <Section tone="white" density="proof" labelledBy={`year-${latest.date.slice(0, 4)}`} className="border-t border-hair">
+        <Container>
+          <ChangelogFeed
+            entries={entries}
+            recent={RECENT}
+            earlierLabel={`${earlierCount} more, back to ${monthYear(oldest.date)}`}
+            aside={<RailLinks />}
+            after={<Subscribe />}
+          />
+        </Container>
+      </Section>
+    </ContentPage>
   );
 }

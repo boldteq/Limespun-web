@@ -4,8 +4,10 @@
  * rounded-card/tile/window, bg-ink / ink-glow, bg-app-* …). Server components unless noted.
  */
 export { cn, isInternalHref } from "./cn";
+export { lgPerRow, lgRowSpan, lastSpansTwo } from "./grid";
 export { Section, Container, type SectionTone, type SectionDensity } from "./section";
 export { Eyebrow, Display, Title, Lead, Prose, Underlined } from "./type";
+export { Callout } from "./callout";
 export {
   Button,
   PrimaryButton,

@@ -1,357 +1,275 @@
 "use client";
 
-import React, { useActionState, useState } from "react";
-import { ArrowRight, Check } from "lucide-react";
-import { BRAND, FONT, SHADOW } from "@/lib/brand";
+import React, { useActionState, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { ArrowRight, Check, Loader2 } from "lucide-react";
+import { Field, Input, Textarea, Title, buttonClass, cn } from "@/components/system";
 import { submitContact, type ContactFormState } from "@/app/contact/actions";
+import { CONTACT_TOPICS, topicFromParam, type ContactTopic } from "@/app/contact/topics";
 
 const initialState: ContactFormState = { status: "idle" };
 
-// ─── Shared styles ────────────────────────────────────────────────────────────
-const labelStyle: React.CSSProperties = {
-  fontFamily: FONT.sans,
-  fontSize: 12,
-  fontWeight: 600,
-  color: BRAND.stoneDark,
-  textTransform: "uppercase",
-  letterSpacing: "0.04em",
-  marginBottom: 6,
-  display: "block",
-};
+const CARD = "rounded-card bg-white p-5 ring-1 ring-hair shadow-[var(--shadow-lift)] sm:p-8 lg:p-10";
+const MESSAGE_MAX = 2000;
 
-function inputBase(focused: boolean): React.CSSProperties {
-  return {
-    width: "100%",
-    padding: "11px 14px",
-    fontFamily: FONT.sans,
-    fontSize: 14,
-    color: BRAND.ink,
-    background: BRAND.white,
-    border: `1px solid ${focused ? BRAND.rust : BRAND.border}`,
-    borderRadius: 10,
-    outline: "none",
-    boxSizing: "border-box",
-    transition: "border-color 0.15s ease, box-shadow 0.15s ease",
-    boxShadow: focused ? "0 0 0 3px rgba(200,53,31,0.10)" : "none",
-  };
-}
+const inlineLink =
+  "font-medium text-graphite underline decoration-hair-strong underline-offset-4 hover:decoration-ember focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite";
 
-const errorStyle: React.CSSProperties = {
-  fontFamily: FONT.sans,
-  fontSize: 11,
-  color: BRAND.crimson,
-  marginTop: 4,
-};
-
-const wrapperStyle: React.CSSProperties = { marginBottom: 16 };
-
-// ─── FormField ────────────────────────────────────────────────────────────────
-interface FormFieldProps {
-  label: string;
-  name: string;
-  type: "text" | "email";
-  placeholder?: string;
+/**
+ * The topic as a row of pills (native radios, so it posts and works before JS). The chosen
+ * pill fills graphite with a tick; the keyboard ring sits on the pill, not the hidden radio.
+ * A radiogroup rather than a fieldset: it is the group role that can carry aria-invalid.
+ */
+function TopicChips({
+  defaultTopic,
+  error,
+  onPick,
+}: {
+  defaultTopic?: string;
   error?: string;
-  required?: boolean;
-}
-
-function FormField({ label, name, type, placeholder, error, required }: FormFieldProps) {
-  const [focused, setFocused] = useState(false);
+  onPick: (t: ContactTopic) => void;
+}) {
+  const errorId = error ? "contact-topic-error" : undefined;
   return (
-    <div style={wrapperStyle}>
-      <label htmlFor={name} style={labelStyle}>
-        {label}
-        {required && (
-          <span style={{ color: BRAND.rust, marginLeft: 2 }} aria-hidden="true">
-            *
-          </span>
-        )}
-      </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        required={required}
-        aria-invalid={!!error}
-        aria-describedby={error ? `${name}-error` : undefined}
-        style={inputBase(focused)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-      />
-      {error && (
-        <p id={`${name}-error`} style={errorStyle} role="alert">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
-// ─── FormSelect ───────────────────────────────────────────────────────────────
-interface FormSelectOption {
-  value: string;
-  label: string;
-  disabled?: boolean;
-}
-
-interface FormSelectProps {
-  label: string;
-  name: string;
-  options: FormSelectOption[];
-  error?: string;
-  required?: boolean;
-}
-
-function FormSelect({ label, name, options, error, required }: FormSelectProps) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <div style={wrapperStyle}>
-      <label htmlFor={name} style={labelStyle}>
-        {label}
-        {required && (
-          <span style={{ color: BRAND.rust, marginLeft: 2 }} aria-hidden="true">
-            *
-          </span>
-        )}
-      </label>
-      <select
-        id={name}
-        name={name}
-        required={required}
-        aria-invalid={!!error}
-        aria-describedby={error ? `${name}-error` : undefined}
-        style={{
-          ...inputBase(focused),
-          appearance: "none",
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234B4842' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "right 14px center",
-          paddingRight: 36,
-          cursor: "pointer",
-        }}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+    <div>
+      <p id="contact-topic-label" className="text-[14px] font-semibold text-graphite">
+        Topic
+      </p>
+      <div
+        role="radiogroup"
+        aria-labelledby="contact-topic-label"
+        aria-describedby={errorId}
+        aria-invalid={error ? true : undefined}
+        aria-required="true"
+        className="mt-3 flex flex-wrap gap-2"
       >
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value} disabled={opt.disabled}>
-            {opt.label}
-          </option>
+        {CONTACT_TOPICS.map((t) => (
+          <label
+            key={t.value}
+            className={cn(
+              "group relative inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full bg-white px-4 text-[15px] font-medium text-graphite-soft ring-1 ring-hair transition-[background-color,color,box-shadow] duration-200 select-none hover:ring-graphite/40",
+              "has-[:checked]:bg-graphite has-[:checked]:text-white has-[:checked]:ring-graphite",
+              "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-graphite",
+              error && "ring-flag/50",
+            )}
+          >
+            <input
+              type="radio"
+              name="topic"
+              value={t.value}
+              defaultChecked={t.value === defaultTopic}
+              onChange={() => onPick(t.value)}
+              className="sr-only"
+            />
+            <Check
+              size={15}
+              strokeWidth={2.6}
+              aria-hidden="true"
+              className="-ml-0.5 hidden shrink-0 group-has-[:checked]:block"
+            />
+            {t.label}
+          </label>
         ))}
-      </select>
-      {error && (
-        <p id={`${name}-error`} style={errorStyle} role="alert">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
-// ─── FormTextarea ─────────────────────────────────────────────────────────────
-interface FormTextareaProps {
-  label: string;
-  name: string;
-  placeholder?: string;
-  error?: string;
-  rows?: number;
-}
-
-function FormTextarea({ label, name, placeholder, error, rows = 3 }: FormTextareaProps) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <div style={wrapperStyle}>
-      <label htmlFor={name} style={labelStyle}>
-        {label}
-      </label>
-      <textarea
-        id={name}
-        name={name}
-        placeholder={placeholder}
-        rows={rows}
-        aria-invalid={!!error}
-        aria-describedby={error ? `${name}-error` : undefined}
-        style={{
-          ...inputBase(focused),
-          resize: "vertical",
-          minHeight: 80,
-        }}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-      />
-      {error && (
-        <p id={`${name}-error`} style={errorStyle} role="alert">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
-// ─── Topic options ────────────────────────────────────────────────────────────
-const TOPIC_OPTIONS: FormSelectOption[] = [
-  { value: "", label: "Select a topic…", disabled: true },
-  { value: "sales", label: "Sales inquiry" },
-  { value: "support", label: "Product support" },
-  { value: "press", label: "Press / media" },
-  { value: "partnership", label: "Partnership" },
-  { value: "feature-request", label: "Feature request" },
-  { value: "other", label: "Something else" },
-];
-
-// ─── ContactForm ──────────────────────────────────────────────────────────────
-export function ContactForm() {
-  const [state, formAction, isPending] = useActionState(submitContact, initialState);
-
-  const cardStyle: React.CSSProperties = {
-    background: BRAND.white,
-    borderRadius: 18,
-    padding: "32px 28px",
-    boxShadow: SHADOW.card,
-    border: `1px solid ${BRAND.borderSoft}`,
-  };
-
-  // ─── Success state ────────────────────────────────────────────────────────
-  if (state.status === "success") {
-    return (
-      <div style={{ ...cardStyle, textAlign: "center" }}>
-        <div
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: "50%",
-            background: BRAND.sageWash,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "0 auto 20px",
-          }}
-          aria-hidden="true"
-        >
-          <Check size={24} color={BRAND.sage} strokeWidth={2.5} />
-        </div>
-        <h3
-          style={{
-            fontFamily: FONT.serif,
-            fontSize: 28,
-            color: BRAND.onyx,
-            fontWeight: 400,
-            marginBottom: 12,
-          }}
-        >
-          Message sent.
-        </h3>
-        <p
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 15,
-            color: BRAND.stoneDark,
-            lineHeight: 1.6,
-            maxWidth: 380,
-            margin: "0 auto",
-          }}
-        >
-          {state.message}
-        </p>
       </div>
+      {error && (
+        <p id={errorId} className="mt-2 text-[13px] font-medium text-flag">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function SentCard({ email, onAgain }: { email?: string; onAgain: () => void }) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+  return (
+    <div className={CARD} role="status">
+      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-paid-soft text-paid">
+        <Check size={20} strokeWidth={2.6} aria-hidden="true" />
+      </span>
+      <h2
+        ref={headingRef}
+        tabIndex={-1}
+        className="mt-5 text-title-md text-graphite focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-graphite"
+      >
+        Message sent
+      </h2>
+      <p className="mt-2 max-w-[460px] text-[16px] leading-[1.6] text-pretty text-graphite-soft">
+        {email ? (
+          <>
+            We&apos;ll reply to <span className="font-semibold break-all text-graphite">{email}</span> within one
+            business day.
+          </>
+        ) : (
+          "We'll reply within one business day."
+        )}
+      </p>
+      <button type="button" onClick={onAgain} className={cn(buttonClass("secondary"), "mt-7 w-full sm:w-auto")}>
+        Send another message
+      </button>
+    </div>
+  );
+}
+
+/** Name, email, topic chips and message on the system fields, posting to the contact server action. */
+export function ContactForm({ initialTopic }: { initialTopic?: ContactTopic }) {
+  const [state, formAction, isPending] = useActionState(submitContact, initialState);
+  // A sent message shows the card until "Send another message" hides that state.
+  const [dismissed, setDismissed] = useState<ContactFormState | null>(null);
+  const [round, setRound] = useState(0);
+  const [topic, setTopic] = useState<string | undefined>(initialTopic);
+  const formRef = useRef<HTMLFormElement>(null);
+  const alertRef = useRef<HTMLDivElement>(null);
+
+  const sent = state.status === "success" && state !== dismissed;
+  const failed = state.status === "error" && state !== dismissed;
+  const errors = failed ? (state.errors ?? {}) : {};
+  const values = failed ? state.values : undefined;
+  const defaultTopic = values?.topic || initialTopic;
+
+  // After a failed send, focus the first field to fix (or the message when no field is at fault).
+  useEffect(() => {
+    if (state.status !== "error") return;
+    const firstInvalid = formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
+    // The topic group itself can't take focus; its chosen (or first) radio can.
+    const target =
+      firstInvalid?.getAttribute("role") === "radiogroup"
+        ? (firstInvalid.querySelector<HTMLElement>("input:checked") ?? firstInvalid.querySelector<HTMLElement>("input"))
+        : firstInvalid;
+    (target ?? alertRef.current)?.focus();
+  }, [state]);
+
+  if (sent) {
+    return (
+      <SentCard
+        email={state.email}
+        onAgain={() => {
+          setDismissed(state);
+          setTopic(initialTopic);
+          setRound((r) => r + 1);
+        }}
+      />
     );
   }
 
-  // ─── Form ─────────────────────────────────────────────────────────────────
-  const errors = state.errors ?? {};
+  const placeholder =
+    CONTACT_TOPICS.find((t) => t.value === topic)?.placeholder ?? "Tell us what you need, in a line or two.";
 
   return (
-    <div style={cardStyle}>
-      {state.status === "error" && state.message && (
+    <div className={CARD}>
+      <Title as="h2" size="md" id="contact-form-heading">
+        Send a message
+      </Title>
+      <p className="mt-1.5 text-[15px] leading-[1.55] text-mute">It goes to the same inbox as email.</p>
+
+      {failed && state.message && (
         <div
+          ref={alertRef}
           role="alert"
-          style={{
-            padding: "10px 14px",
-            background: BRAND.crimsonSoft,
-            color: BRAND.crimson,
-            borderRadius: 8,
-            fontFamily: FONT.sans,
-            fontSize: 13,
-            marginBottom: 16,
-          }}
+          tabIndex={-1}
+          className="mt-6 rounded-[12px] bg-flag-soft px-4 py-3 text-[14px] leading-[1.5] font-medium text-app-danger focus:outline-none"
         >
           {state.message}
         </div>
       )}
 
-      <form action={formAction} noValidate>
-        <FormField
-          label="Your name"
-          name="name"
-          type="text"
-          placeholder="Jane Doe"
-          error={errors.name}
-          required
-        />
-        <FormField
-          label="Email"
-          name="email"
-          type="email"
-          placeholder="jane@yourstudio.com"
-          error={errors.email}
-          required
-        />
-        <FormSelect
-          label="Topic"
-          name="topic"
-          options={TOPIC_OPTIONS}
-          error={errors.topic}
-          required
-        />
-        <FormTextarea
-          label="Message"
-          name="message"
-          placeholder="Tell us what's on your mind…"
-          error={errors.message}
-          rows={5}
-        />
+      <form
+        key={round}
+        ref={formRef}
+        action={formAction}
+        noValidate
+        aria-labelledby="contact-form-heading"
+        className="mt-6 flex flex-col gap-6 sm:mt-8"
+      >
+        <div className="grid gap-5 sm:grid-cols-2">
+          <Field label="Your name" htmlFor="contact-name" error={errors.name}>
+            <Input
+              id="contact-name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              required
+              maxLength={100}
+              defaultValue={values?.name}
+            />
+          </Field>
+          <Field label="Email" htmlFor="contact-email" error={errors.email}>
+            <Input
+              id="contact-email"
+              name="email"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              spellCheck={false}
+              required
+              maxLength={254}
+              defaultValue={values?.email}
+            />
+          </Field>
+        </div>
 
-        <button
-          type="submit"
-          disabled={isPending}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            width: "100%",
-            padding: "14px 20px",
-            borderRadius: 100,
-            background: isPending ? BRAND.coal : BRAND.onyx,
-            color: BRAND.bone,
-            fontFamily: FONT.sans,
-            fontSize: 15,
-            fontWeight: 600,
-            border: "none",
-            cursor: isPending ? "wait" : "pointer",
-            opacity: isPending ? 0.7 : 1,
-            transition: "opacity 0.15s ease, background 0.15s ease",
-            marginTop: 8,
-          }}
-          aria-busy={isPending}
-        >
-          {isPending ? "Sending…" : "Send message"}
-          {!isPending && <ArrowRight size={15} strokeWidth={2} />}
-        </button>
+        <TopicChips defaultTopic={defaultTopic} error={errors.topic} onPick={setTopic} />
 
-        <p
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 12,
-            color: BRAND.stoneFaint,
-            textAlign: "center",
-            marginTop: 12,
-            marginBottom: 0,
-          }}
-        >
-          We respond within one business day.
-        </p>
+        <Field label="Message" htmlFor="contact-message" error={errors.message}>
+          <Textarea
+            id="contact-message"
+            name="message"
+            required
+            rows={5}
+            maxLength={MESSAGE_MAX}
+            placeholder={placeholder}
+            defaultValue={values?.message}
+          />
+        </Field>
+
+        {/* Honeypot: people never see it; a filled one is dropped by the action */}
+        <div aria-hidden="true" className="hidden">
+          <label htmlFor="contact-website">Website</label>
+          <input id="contact-website" type="text" name="website" tabIndex={-1} autoComplete="off" />
+        </div>
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+          <button
+            type="submit"
+            disabled={isPending}
+            className={cn("group", buttonClass("primary"), "w-full shrink-0 disabled:cursor-wait disabled:opacity-70 sm:w-auto")}
+          >
+            {isPending ? (
+              <>
+                <Loader2 size={16} strokeWidth={2.4} aria-hidden="true" className="animate-spin" />
+                Sending
+              </>
+            ) : (
+              <>
+                Send message
+                <ArrowRight
+                  size={16}
+                  strokeWidth={2.4}
+                  aria-hidden="true"
+                  className="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
+                />
+              </>
+            )}
+          </button>
+          <p className="text-[14px] leading-[1.5] text-pretty text-mute">
+            We reply within one business day and use your details only to answer you.{" "}
+            <Link href="/legal/privacy" className={inlineLink}>
+              Privacy Policy
+            </Link>
+          </p>
+        </div>
       </form>
     </div>
   );
+}
+
+/** The form with `?topic=` preselected (the switching hub links to `/contact?topic=switching`). */
+export function ContactFormFromUrl() {
+  const params = useSearchParams();
+  const topic = topicFromParam(params.get("topic"));
+  return <ContactForm key={topic ?? "none"} initialTopic={topic} />;
 }

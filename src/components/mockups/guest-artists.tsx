@@ -9,12 +9,10 @@ const RIO = ARTISTS.rio;
 const SPOT = RIO.guestSpot ?? { from: "", to: "" };
 const ARTIST_PCT = RIO.pay.kind === "guest-split" ? RIO.pay.artistPercent : 0;
 
-/** Rio's engagement so far: the Oct 2–4 weekend (analytics) plus this week's paid walk-ins. */
+/** Rio's engagement so far: the Oct 2–4 weekend (analytics) plus this week's paid walk-ins, one payment each. */
 const RIO_TXNS = TRANSACTIONS.filter((t) => t.artist === "rio" && t.status === "Paid");
 const REVENUE_CENTS = artistRevenueCents("rio") + RIO_TXNS.reduce((total, t) => total + t.cents, 0);
-/** "Walk-ins (4)" → 4 sessions. */
-const TXN_SESSIONS = RIO_TXNS.reduce((total, t) => total + Number(/\((\d+)\)/.exec(t.client)?.[1] ?? 1), 0);
-const BOOKINGS = (ARTIST_STATS.find((s) => s.artist === "rio")?.sessions ?? 0) + TXN_SESSIONS;
+const BOOKINGS = (ARTIST_STATS.find((s) => s.artist === "rio")?.sessions ?? 0) + RIO_TXNS.length;
 const EARNED_CENTS = Math.round((REVENUE_CENTS * ARTIST_PCT) / 100);
 
 /** The guest spot, day by day (Fri, Oct 2 – Fri, Oct 9). Today is Thu, Oct 8. */

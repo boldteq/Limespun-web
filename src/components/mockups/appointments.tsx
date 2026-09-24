@@ -8,6 +8,7 @@ import {
   DEPOSITS,
   LATE_CANCEL,
   TODAY_BOOKINGS,
+  TRANSACTIONS,
   usd,
   type ArtistId,
   type BookingStatus,
@@ -15,20 +16,22 @@ import {
 
 /**
  * Appointments (app route /appointments). Mirrors appointments/_proto/Appointments.tsx:
- * board tabs Today · Needs action · This week · Pending · Completed with counts,
+ * board tabs Today · Needs action · This week · Pending · Completed · All,
  * the search + Artist / Status / Deposit filter bar, and the table
  * When · Client · Artist · Service · Status · Deposit · Price.
  * Columns fold away as the table narrows; under 480px it scrolls inside the frame, never the page.
  */
 
-export type AppointmentsTab = "today" | "needs-action" | "this-week" | "pending" | "completed";
+export type AppointmentsTab = "today" | "needs-action" | "this-week" | "pending" | "completed" | "all";
 
 /**
- * The board's deposit words (appointments/_proto/data.ts DEPOSIT_STANDING_WORD:
- * Held · Due), plus Applied for a deposit already taken into a session, so
- * Priya's $80 never reads as held.
+ * The board's deposit words, exactly (appointments/_proto/data.ts
+ * DEPOSIT_STANDING_WORD): Held · Due · Not collected. A paid deposit reads Held
+ * on the board whether or not it has gone toward the session (Priya's $80, Bea
+ * L.'s $100); Due is one still owed; Not collected is one nobody can collect any
+ * more (none this week).
  */
-type DepositCell = { kind: "held" | "due" | "applied"; cents: number } | { kind: "none" };
+type DepositCell = { kind: "held" | "due" | "closed"; cents: number } | { kind: "none" };
 
 interface Appt {
   id: string;
@@ -51,9 +54,8 @@ function depositFor(client: string): DepositCell {
   const d = DEPOSITS.find((x) => x.client === client);
   if (!d) return { kind: "none" };
   if (d.state === "Pending") return { kind: "due", cents: d.cents };
-  if (d.state === "Applied") return { kind: "applied", cents: d.cents };
-  // Held, and Leo's kept late-cancel deposit: paid money the studio holds, which
-  // the board writes as Held beside the Cancelled status.
+  // Held, Priya's applied $80 and Leo's kept late-cancel deposit: all paid money,
+  // which the board writes as Held (beside Cancelled, for Leo).
   return { kind: "held", cents: d.cents };
 }
 
@@ -78,7 +80,7 @@ const OWEN_DEPOSIT_CENTS = DEPOSITS.find((d) => d.client === "Owen P.")?.cents ?
 
 const TODAY_ROWS: Appt[] = TODAY_BOOKINGS.map((s) => {
   const client = s.client ?? "";
-  // Asha's $240 is her pool, held for sessions 4–5; Priya's $80 is applied today.
+  // Asha's $240 is her pool, held for sessions 4–5; Priya's $80 is paid, so Held too.
   const deposit = depositFor(client);
   return {
     id: s.id,
@@ -91,13 +93,43 @@ const TODAY_ROWS: Appt[] = TODAY_BOOKINGS.map((s) => {
     status: s.status,
     deposit,
     priceCents: PRICE[client] ?? null,
-    reasons: s.consent === "not-signed" ? ["Consent form outstanding"] : undefined,
+    // needsActionReasons: `${formKey} outstanding`, the form key being "Consent".
+    reasons: s.consent === "not-signed" ? ["Consent outstanding"] : undefined,
   };
 });
 
-const WEEK_ROWS: Appt[] = [
+/**
+ * Rio's four walk-ins on Tue, Oct 6: each is a booking in the app (a walk-in
+ * gets its own booking, then its payment), with no client on file, so the row
+ * reads "Walk-in" as the Payments ledger does. Prices are the ledger's; each
+ * starts about 45 minutes before its payment went through.
+ */
+const WALK_IN_STARTS = [720, 765, 810, 855];
+const WALK_IN_ROWS: Appt[] = TRANSACTIONS.filter((t) => t.type === "Walk-in")
+  .slice()
+  .reverse()
+  .map(
+    (t, i): Appt => ({
+      id: `walk-in-${i + 1}`,
+      day: "Tue, Oct 6",
+      today: false,
+      startMin: WALK_IN_STARTS[i] ?? 720,
+      client: "Walk-in",
+      artist: t.artist,
+      service: "Walk-in flash",
+      status: "completed",
+      deposit: { kind: "none" },
+      priceCents: t.cents,
+    }),
+  );
+
+/** Oct date of a row ("Today" is the 8th), to keep the board in time order. */
+const dateOf = (a: Appt) => (a.today ? 8 : Number(/Oct (\d+)/.exec(a.day)?.[1] ?? 0));
+
+const BOARD: Appt[] = [
+  ...WALK_IN_ROWS,
   { id: "tomas-s1", day: "Tue, Oct 6", today: false, startMin: 780, client: "Tomás V.", artist: "dev", service: "Chest panel · session 1", status: "completed", deposit: { kind: "none" }, priceCents: PRICE["Tomás V."] },
-  { id: "bea-s2", day: "Wed, Oct 7", today: false, startMin: 720, client: "Bea L.", artist: "dev", service: "Botanical half sleeve · session 2", status: "completed", deposit: { kind: "applied", cents: 10000 }, priceCents: PRICE["Bea L."] },
+  { id: "bea-s2", day: "Wed, Oct 7", today: false, startMin: 720, client: "Bea L.", artist: "dev", service: "Botanical half sleeve · session 2", status: "completed", deposit: { kind: "held", cents: 10000 }, priceCents: PRICE["Bea L."] },
   ...TODAY_ROWS,
   {
     id: "leo",
@@ -126,12 +158,15 @@ const WEEK_ROWS: Appt[] = [
   },
 ];
 
+const WEEK_ROWS = [...BOARD].sort((x, y) => dateOf(x) - dateOf(y) || x.startMin - y.startMin);
+
 const FILTER: Record<AppointmentsTab, (a: Appt) => boolean> = {
   today: (a) => a.today,
   "needs-action": (a) => Boolean(a.reasons?.length),
   "this-week": () => true,
   pending: (a) => a.status === "pending",
   completed: (a) => a.status === "completed",
+  all: () => true,
 };
 
 const TAB_LABEL: Record<AppointmentsTab, string> = {
@@ -140,6 +175,7 @@ const TAB_LABEL: Record<AppointmentsTab, string> = {
   "this-week": "This week",
   pending: "Pending",
   completed: "Completed",
+  all: "All",
 };
 
 function clock(min: number): string {
@@ -149,6 +185,7 @@ function clock(min: number): string {
 }
 
 function initials(name: string): string {
+  if (name === "Walk-in") return "W";
   return name
     .split(" ")
     .map((p) => p[0])
@@ -160,8 +197,8 @@ function initials(name: string): string {
    advances to ink at bold. No second hue; the word carries the meaning. */
 const DEPOSIT_TEXT: Record<Exclude<DepositCell["kind"], "none">, { label: string; dot: string; text: string }> = {
   held: { label: "Held", dot: "bg-app-mute", text: "text-app-mute" },
-  applied: { label: "Applied", dot: "border border-app-mute", text: "text-app-mute" },
   due: { label: "Due", dot: "bg-app-text", text: "text-app-text font-bold" },
+  closed: { label: "Not collected", dot: "border border-app-mute", text: "text-app-mute" },
 };
 
 function Deposit({ d }: { d: DepositCell }) {
@@ -245,8 +282,8 @@ export function AppointmentsScreen({ tab = "today", className }: { tab?: Appoint
 
   const tabs: { label: string; count?: number }[] = (Object.keys(TAB_LABEL) as AppointmentsTab[]).map((t) => ({
     label: TAB_LABEL[t],
-    // Completed is all-time in the app; the sample only knows this week, so it shows no count.
-    count: t === "completed" ? undefined : count(t),
+    // Completed and All reach 30 days back in the app; the sample only knows this week, so they show no count.
+    count: t === "completed" || t === "all" ? undefined : count(t),
   }));
 
   return (
@@ -295,7 +332,7 @@ export function AppointmentsScreen({ tab = "today", className }: { tab?: Appoint
                   <span className="flex min-w-0 flex-1 flex-col items-start leading-tight">
                     <span className={cn("text-ui-sm font-semibold", cancelled ? "text-app-soft" : "text-app-text")}>{a.client}</span>
                     <span className={cn("text-ui-xs", tab === "needs-action" ? "font-medium text-app-warning" : "text-app-mute")}>
-                      {tab === "needs-action" && a.reasons ? a.reasons[0] : `${a.service} · ${ARTISTS[a.artist].name}`}
+                      {tab === "needs-action" && a.reasons ? a.reasons.join(" · ") : `${a.service} · ${ARTISTS[a.artist].name}`}
                     </span>
                     <AppBookingStatus status={a.status} className="mt-1.5 @sm:hidden" />
                   </span>

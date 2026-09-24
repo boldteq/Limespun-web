@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import {
   Button,
   Container,
@@ -7,7 +8,6 @@ import {
   PageIntro,
   Prose,
   StatGrid,
-  TOC,
   type StatItem,
   type TocItem,
 } from "@/components/system";
@@ -39,7 +39,7 @@ export interface LegalPageProps {
   /** Kept for pages written against v1; the eyebrow is always "Legal" now. */
   eyebrow?: string;
   title: string;
-  /** ISO date (YYYY-MM-DD). Shown as "Effective 23 September 2026". */
+  /** ISO date (YYYY-MM-DD). Shown as "Effective September 23, 2026" (US format, site-wide). */
   effectiveDate: string;
   intro: string;
   sections: LegalSection[];
@@ -68,9 +68,9 @@ function sectionIds(sections: LegalSection[]): string[] {
   });
 }
 
-const EFFECTIVE_FORMAT = new Intl.DateTimeFormat("en-GB", {
-  day: "numeric",
+const EFFECTIVE_FORMAT = new Intl.DateTimeFormat("en-US", {
   month: "long",
+  day: "numeric",
   year: "numeric",
   timeZone: "UTC",
 });
@@ -84,6 +84,50 @@ const INK_LINK =
   "rounded-sm font-medium text-ink-text underline decoration-ember decoration-2 underline-offset-4 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-canvas";
 
 const asList = (body: LegalText | LegalText[]): LegalText[] => (Array.isArray(body) ? body : [body]);
+
+// Every row is a 44px target at every width, the sticky desktop list included.
+const TOC_LINK =
+  "flex min-h-11 items-center rounded-sm py-1.5 text-[15px] leading-snug text-graphite-soft transition-colors hover:text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite";
+
+/**
+ * "On this page" for legal documents: the system TOC's layout (a <details> below lg, a sticky
+ * list from lg) with 44px rows at lg too. The sticky list scrolls inside itself when a
+ * document has more sections than the viewport holds.
+ */
+function LegalToc({ items }: { items: TocItem[] }) {
+  if (items.length === 0) return null;
+  const list = (
+    <ol className="flex flex-col">
+      {items.map((it) => (
+        <li key={it.id}>
+          <a href={`#${it.id}`} className={TOC_LINK}>
+            {it.label}
+          </a>
+        </li>
+      ))}
+    </ol>
+  );
+  return (
+    <div className="min-w-0">
+      <details className="group rounded-field bg-white ring-1 ring-hair lg:hidden">
+        <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 px-4 text-[15px] font-semibold text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite [&::-webkit-details-marker]:hidden">
+          On this page
+          <ChevronDown size={18} aria-hidden="true" className="transition-transform duration-200 group-open:rotate-180" />
+        </summary>
+        <nav aria-label="On this page" className="border-t border-hair px-4 py-2">
+          {list}
+        </nav>
+      </details>
+      <nav
+        aria-label="On this page"
+        className="hidden lg:sticky lg:top-28 lg:block lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto lg:pr-1 lg:pb-1"
+      >
+        <p className="text-label text-mute uppercase">On this page</p>
+        <div className="mt-3 border-l border-hair-strong pl-4">{list}</div>
+      </nav>
+    </div>
+  );
+}
 
 const EMAIL = /([a-z0-9._%+-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})/gi;
 
@@ -141,10 +185,16 @@ export function LegalPage({
       <section aria-label={title} className="bg-canvas pb-section-y">
         <Container className="max-w-[1040px]">
           {highlights && highlights.length > 0 && (
-            <StatGrid items={highlights} cols={4} tone="white" className="mb-12 sm:mb-16" />
+            // Word values ("Encrypted") need the room: a smaller figure on phones, one column under 380px.
+            <StatGrid
+              items={highlights}
+              cols={4}
+              tone="white"
+              className="mb-12 max-sm:[&_dd]:text-[26px] max-[379px]:grid-cols-1 sm:mb-16"
+            />
           )}
           <div className="grid gap-8 border-t border-hair pt-10 sm:pt-14 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-16">
-            <TOC items={toc} />
+            <LegalToc items={toc} />
 
             <div className="min-w-0 max-w-[68ch]">
               <Prose>
@@ -208,7 +258,7 @@ export function LegalPage({
                         <li key={l.href}>
                           <Link
                             href={l.href}
-                            className="inline-flex min-h-10 items-center rounded-sm text-[15px] text-graphite-soft transition-colors hover:text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite"
+                            className="flex min-h-11 min-w-11 items-center rounded-sm text-[15px] text-graphite-soft transition-colors hover:text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite"
                           >
                             {l.label}
                           </Link>

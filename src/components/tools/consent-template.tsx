@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Check, Copy, Printer } from "lucide-react";
+import { Callout } from "@/components/system";
 
 interface Section {
   title: string;
@@ -27,7 +28,7 @@ function buildSections(studio: string): Section[] {
         "Please answer yes or no. Tell your artist about anything that could affect your tattoo or healing.",
         "Allergies (inks, pigments, latex, adhesives, soaps, medication): Yes / No — details: ____________",
         "Skin conditions at or near the tattoo area (eczema, psoriasis, keloids): Yes / No",
-        "Diabetes, heart condition, epilepsy, haemophilia or a blood-borne condition: Yes / No",
+        "Diabetes, heart condition, epilepsy, hemophilia or a blood-borne condition: Yes / No",
         "Taking blood thinners or medication that affects healing: Yes / No",
         "Pregnant or breastfeeding: Yes / No",
         "Had alcohol or recreational drugs in the last 24 hours: Yes / No",
@@ -46,7 +47,7 @@ function buildSections(studio: string): Section[] {
       title: "I understand that",
       lines: [
         "A tattoo is a permanent change to my skin, and removal is difficult, costly and may not be complete.",
-        "Colours can look different on my skin and will change over time and as it heals.",
+        "Colors can look different on my skin and will change over time and as it heals.",
         "There is a risk of infection, allergic reaction and scarring, even when aftercare is followed.",
         "I have received aftercare instructions and will follow them. Healing is my responsibility.",
         `${s} uses single-use needles and follows hygiene practices required by local regulations.`,
@@ -104,7 +105,7 @@ export function ConsentTemplate() {
             id="studio-name"
             value={studio}
             onChange={(e) => setStudio(e.target.value.slice(0, 80))}
-            placeholder="e.g. North Star Tattoo"
+            placeholder="e.g. Sample studio"
             className="mt-2 min-h-12 w-full rounded-[14px] border border-hair bg-white px-4 text-[16px] text-graphite focus:border-graphite/50 focus:outline-none focus:ring-2 focus:ring-graphite/10"
           />
         </div>
@@ -125,21 +126,21 @@ export function ConsentTemplate() {
             <Printer size={16} aria-hidden="true" /> Print
           </button>
         </div>
-        <p className="rounded-[14px] bg-flag-soft/70 px-4 py-3 text-[13px] leading-[1.55] text-graphite-soft">
+        <Callout as="div" className="text-[14px] leading-[1.55] text-graphite-soft">
           A starting point, not legal advice. Consent and age rules differ by country, state and city, so check this
           form against your local regulations before you use it.
-        </p>
+        </Callout>
       </div>
 
-      <article className="rounded-[20px] bg-white p-7 ring-1 ring-hair sm:p-10 print:rounded-none print:p-0 print:ring-0">
-        <h2 className="font-serif text-[30px] leading-[1.15] text-graphite">{title}</h2>
-        <div className="mt-6 flex flex-col gap-7">
+      <article className="rounded-card bg-white p-5 ring-1 ring-hair sm:p-10 print:rounded-none print:p-0 print:ring-0">
+        <h2 className="font-serif text-[26px] leading-[1.15] text-balance text-graphite sm:text-[30px]">{title}</h2>
+        <div className="mt-5 flex flex-col gap-6 sm:mt-6 sm:gap-7">
           {sections.map((sec) => (
             <section key={sec.title}>
               <h3 className="text-[13px] font-semibold tracking-[0.08em] text-mute uppercase">{sec.title}</h3>
-              <ul className="mt-3 flex flex-col gap-2">
+              <ul className="mt-2.5 flex flex-col gap-1.5 sm:mt-3 sm:gap-2">
                 {sec.lines.map((line) => (
-                  <li key={line} className="text-[15px] leading-[1.6] text-graphite">
+                  <li key={line} className="text-[14px] leading-[1.55] text-graphite sm:text-[15px] sm:leading-[1.6]">
                     {line}
                   </li>
                 ))}

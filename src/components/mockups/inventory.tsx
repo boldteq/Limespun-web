@@ -1,12 +1,13 @@
-import { Plus, ScanLine, ShieldCheck } from "lucide-react";
+import { ArrowUpDown, Columns3, ListFilter, Plus, ScanLine, ShieldCheck } from "lucide-react";
 import { AppFrame } from "./app-frame";
 import { AppButton, AppCard, AppKpiStrip, AppStatus, AppTable, AppTabs, type AppStatusTone, type AppTableRow } from "./app-parts";
-import { ToolbarListRow, ToolbarPill, ToolbarSearch } from "./projects";
+import { ToolbarListRow, ToolbarPill, ToolbarSearch, ToolbarSelect } from "./projects";
 import {
   INVENTORY,
   INVENTORY_INKS,
   INVENTORY_LOW,
   INVENTORY_REACH,
+  INVENTORY_SKU,
   INVENTORY_VALUE_CENTS,
   usd,
   type InventoryItem,
@@ -14,17 +15,8 @@ import {
 
 export type InventoryTab = "items" | "movements" | "purchase-orders";
 
-/** SKUs and suppliers as this studio set them up. Suppliers are named by what they sell. */
-const SKU: Record<string, string> = {
-  "Black lining ink, 8 oz": "INK-BLK-L8",
-  "Black shading ink, 4 oz": "INK-BLK-S4",
-  "Red, 1 oz": "INK-RED-1",
-  "White highlight, 1 oz": "INK-WHT-1",
-  "Sky blue, 1 oz": "INK-BLU-1",
-  "Cartridges 3RL": "NDL-3RL",
-  "Cartridges 9RM": "NDL-9RM",
-  "Nitrile gloves, M": "SUP-GLV-M",
-};
+/** SKUs from sample-data; suppliers as this studio set them up, named by what they sell. */
+const SKU = INVENTORY_SKU;
 const SUPPLIER: Record<InventoryItem["category"], string> = {
   Ink: "Ink distributor",
   Needles: "Needle supplier",
@@ -84,7 +76,7 @@ function Items() {
             </span>
           )}
         </span>,
-        <span key="s" className="text-ui-xs tracking-[0.02em] text-app-soft tabular-nums">
+        <span key="s" className="text-ui-xs tracking-[0.02em] text-app-soft">
           {SKU[i.name]}
         </span>,
         i.category,
@@ -104,12 +96,14 @@ function Items() {
   });
   return (
     <>
-      <div className="flex flex-wrap items-center gap-2">
-        <ToolbarSearch placeholder="Search items" className="w-full @xl:w-[220px]" />
-        <span className="hidden flex-wrap gap-2 @xl:flex">
-          <ToolbarPill active>All</ToolbarPill>
-          <ToolbarPill count={INVENTORY_LOW.length}>Low &amp; out</ToolbarPill>
-          <ToolbarPill count={INVENTORY_REACH.length}>REACH-registered</ToolbarPill>
+      {/* ItemsTab toolbar: the search, then Filter · Sort · Columns (no preset pills). */}
+      <div className="flex items-center gap-2">
+        {/* The app's full placeholder, a size smaller in phone frames so it reads whole. */}
+        <ToolbarSearch placeholder="Search by name, SKU, or supplier…" className="min-w-0 flex-1 text-[11px] @sm:text-ui-sm @xl:max-w-[320px]" />
+        <span className="ml-auto hidden items-center gap-1.5 @xl:flex">
+          <ToolbarSelect icon={ListFilter} label="Filter" />
+          <ToolbarSelect icon={ArrowUpDown} label="Sort" />
+          <ToolbarSelect icon={Columns3} label="Columns" />
         </span>
       </div>
       <AppCard padded={false}>
@@ -119,7 +113,8 @@ function Items() {
             return (
               <ToolbarListRow
                 key={i.name}
-                title={i.name}
+                /* The name wraps rather than cut beside the quantity in a phone frame. */
+                title={<span className="whitespace-normal">{i.name}</span>}
                 sub={`${i.category} · par ${i.reorderAt}${i.reach ? " · REACH" : ""}`}
                 value={`${i.onHand} ${i.onHand === 1 ? i.unit : `${i.unit}${i.unit === "box" ? "es" : "s"}`}`}
                 status={
@@ -151,6 +146,9 @@ function Items() {
   );
 }
 
+const MOVEMENT_TONE: Record<(typeof MOVEMENTS)[number]["type"], AppStatusTone> = { Received: "success", Used: "neutral", Adjustment: "info" };
+const qtyLabel = (qty: number) => (qty > 0 ? `+${qty}` : `−${Math.abs(qty)}`);
+
 function Movements() {
   return (
     <>
@@ -161,7 +159,22 @@ function Movements() {
         <ToolbarPill>Adjustments</ToolbarPill>
       </div>
       <AppCard padded={false}>
+        {/* Narrow frames: a stacked list, as the Items tab has, so no Type pill is cut. */}
+        <div className="@xl:hidden">
+          {MOVEMENTS.map((m, i) => (
+            <ToolbarListRow
+              key={`${m.item}-${m.when}`}
+              /* The item wraps rather than cut beside a long chip ("Received") at 320. */
+              title={<span className="whitespace-normal">{m.item}</span>}
+              sub={`${m.by} · ${m.when}`}
+              value={<span className={m.qty > 0 ? "text-app-success" : undefined}>{qtyLabel(m.qty)}</span>}
+              status={<AppStatus tone={MOVEMENT_TONE[m.type]}>{m.type}</AppStatus>}
+              last={i === MOVEMENTS.length - 1}
+            />
+          ))}
+        </div>
         <AppTable
+          className="hidden @xl:block"
           columns={[{ label: "Item" }, { label: "Type" }, { label: "By" }, { label: "Quantity", align: "right" }, { label: "When", align: "right" }]}
           rows={MOVEMENTS.map((m) => ({
             key: `${m.item}-${m.when}`,
@@ -169,12 +182,12 @@ function Movements() {
               <span key="i" className="font-semibold">
                 {m.item}
               </span>,
-              <AppStatus key="t" tone={m.type === "Received" ? "success" : m.type === "Used" ? "neutral" : "info"}>
+              <AppStatus key="t" tone={MOVEMENT_TONE[m.type]}>
                 {m.type}
               </AppStatus>,
               m.by,
               <span key="q" className={m.qty > 0 ? "font-semibold text-app-success" : "font-semibold"}>
-                {m.qty > 0 ? `+${m.qty}` : `−${Math.abs(m.qty)}`}
+                {qtyLabel(m.qty)}
               </span>,
               <span key="w" className="text-app-mute">
                 {m.when}
@@ -188,35 +201,57 @@ function Movements() {
   );
 }
 
+/**
+ * POsTab: Reference · Supplier (with "N items" under it) · Status · Total. Four
+ * columns that fit a 360px table; narrow frames get the same rows stacked.
+ */
 function PurchaseOrders() {
+  const itemsLine = (po: (typeof PURCHASE_ORDERS)[number]) => `${po.lines.length} item${po.lines.length === 1 ? "" : "s"}`;
+  const supplierOf = (po: (typeof PURCHASE_ORDERS)[number]) => {
+    const first = byName(po.lines[0]?.item ?? "");
+    return first ? SUPPLIER[first.category] : "—";
+  };
   return (
     <AppCard padded={false}>
-      <AppTable
-        columns={[{ label: "Reference" }, { label: "Supplier" }, { label: "Items" }, { label: "Status" }, { label: "Total", align: "right" }]}
-        rows={PURCHASE_ORDERS.map((po) => {
-          const first = byName(po.lines[0]?.item ?? "");
-          return {
-            key: po.ref,
-            tone: po.state === "Draft" ? "active" : "default",
-            cells: [
-              <span key="r" className="text-ui-xs font-semibold tracking-[0.02em] tabular-nums">
-                {po.ref}
-              </span>,
-              first ? SUPPLIER[first.category] : "—",
-              <span key="l" className="min-w-0">
-                <span className="block">{po.lines.map((l) => `${l.item} × ${l.qty}`).join(", ")}</span>
-                <span className="block text-ui-xs text-app-mute">{po.eta}</span>
-              </span>,
-              <AppStatus key="s" tone={PO_TONE[po.state]} dot>
+      <div className="@md:hidden">
+        {PURCHASE_ORDERS.map((po, i) => (
+          <ToolbarListRow
+            key={po.ref}
+            title={supplierOf(po)}
+            sub={`${po.ref} · ${itemsLine(po)}`}
+            value={usd(poTotalCents(po.lines))}
+            status={
+              <AppStatus tone={PO_TONE[po.state]} dot>
                 {po.state}
-              </AppStatus>,
-              <span key="t" className="font-semibold">
-                {usd(poTotalCents(po.lines))}
-              </span>,
-            ],
-          };
-        })}
-        minWidth={640}
+              </AppStatus>
+            }
+            last={i === PURCHASE_ORDERS.length - 1}
+          />
+        ))}
+      </div>
+      <AppTable
+        className="hidden @md:block"
+        columns={[{ label: "Reference" }, { label: "Supplier" }, { label: "Status" }, { label: "Total", align: "right" }]}
+        rows={PURCHASE_ORDERS.map((po) => ({
+          key: po.ref,
+          tone: po.state === "Draft" ? "active" : "default",
+          cells: [
+            <span key="r" className="text-ui-xs tracking-[0.02em] text-app-soft">
+              {po.ref}
+            </span>,
+            <span key="s" className="flex flex-col leading-tight">
+              <span className="font-semibold text-app-text">{supplierOf(po)}</span>
+              <span className="text-ui-xs text-app-mute">{itemsLine(po)}</span>
+            </span>,
+            <AppStatus key="st" tone={PO_TONE[po.state]} dot>
+              {po.state}
+            </AppStatus>,
+            <span key="t" className="font-bold">
+              {usd(poTotalCents(po.lines))}
+            </span>,
+          ],
+        }))}
+        minWidth={360}
       />
     </AppCard>
   );

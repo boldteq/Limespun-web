@@ -2,12 +2,13 @@ import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { LimespunMark } from "@/components/brand/limespun-mark";
 import { AppShellPhone, SampleTag } from "@/components/system";
 import { cn } from "@/components/system/cn";
-import { ARTISTS, ASHA_PROJECT, CLIENTS, usd } from "./sample-data";
+import { ARTISTS, ASHA_PROJECT, CLIENTS, PROJECT_STATUS_LABEL, PROJECTS, usd, type Project } from "./sample-data";
 
 /**
  * The client portal on the client's phone (app route /portal, then
- * /portal/[projectId]), reached by a magic link. Mirrors app/portal and
- * components/portal/FinancialSection: "Your projects", the project page
+ * /portal/[projectId]), reached by a magic link. Mirrors app/portal/page.tsx
+ * ("Hello, Asha.", the "Your history" summary, the Projects list, Sign out in
+ * the top bar) and components/portal/FinancialSection: the project page
  * (serif title, status line) and "The numbers." with the deposit pool
  * (In · Applied · Forfeited · Available) and receipts. Asha M.'s koi sleeve:
  * session 4 today, session 5 on Sat, Nov 7; $240 of her $300 deposit available.
@@ -17,67 +18,67 @@ export type ClientPortalView = "projects" | "project";
 
 const P = ASHA_PROJECT;
 const ARTIST = ARTISTS[P.artist];
-const DONE = P.sessions.filter((s) => s.state === "done").length;
 const ASHA = CLIENTS.find((c) => c.name === P.client);
-/** The one receipt on the pool: the $300 deposit, paid Thu, Aug 13. */
-const DEPOSIT_RECEIPT = { date: "Thu, Aug 13", label: "Deposit", cents: P.pool.paidInCents };
+const FIRST_NAME = P.client.split(" ")[0];
+/** Asha's projects: the koi sleeve is her only one, still active, so none completed yet. */
+const ASHA_PROJECTS = PROJECTS.filter((p) => p.client === P.client);
+const COMPLETED = ASHA_PROJECTS.filter((p) => p.status === "completed").length;
+/** Portal status line (app/portal/page.tsx projectStatusCopy). */
+const STATUS_COPY: Partial<Record<Project["status"], string>> = {
+  active: "Active project",
+  completed: "Completed",
+  on_hold: "On hold",
+  cancelled: "Cancelled",
+};
+/** The one receipt on the pool: the $300 deposit, paid before session 1. */
+const DEPOSIT_RECEIPT = { date: P.poolPaidOn ?? "", label: "Deposit", cents: P.pool.paidInCents };
 
-function Top({ back }: { back?: string }) {
+function Top({ back, signOut = false }: { back?: string; signOut?: boolean }) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between gap-2">
       {back ? (
-        <span className="inline-flex items-center gap-1 text-[10px] text-app-mute">
+        <span className="inline-flex items-center gap-1 text-[10px] whitespace-nowrap text-app-mute">
           <ChevronLeft size={11} strokeWidth={2} /> {back}
         </span>
       ) : (
         <LimespunMark size={18} />
       )}
-      <SampleTag className="px-1.5 text-[10px]" />
+      <span className="flex items-center gap-2">
+        {signOut && <span className="text-[10px] font-medium text-app-soft">Sign out</span>}
+        <SampleTag className="px-1.5 text-[10px]" />
+      </span>
     </div>
   );
 }
 
+/** app/portal/page.tsx: greeting, the "Your history" summary, then the Projects list (name and status line). */
 function ProjectsList() {
   return (
     <>
-      <Top />
-      <div>
-        <p className="font-serif text-[24px] leading-none text-app-text">Your projects</p>
-        <p className="mt-1 text-[10px] text-app-mute">Signed in with your link and a code by text.</p>
+      <Top signOut />
+      <div className="mt-1">
+        <p className="font-serif text-[26px] leading-none text-app-text">Hello, {FIRST_NAME}.</p>
+        <p className="mt-1.5 text-[11px] leading-snug text-app-mute">Sessions, photos, receipts. All in one place.</p>
       </div>
       <div className="rounded-[12px] p-3 ring-1 ring-app-border">
-        <div className="flex items-center justify-between gap-2">
-          <p className="text-[13px] font-semibold text-app-text">{P.title}</p>
-          <ChevronRight size={14} strokeWidth={1.8} className="text-app-mute" />
-        </div>
-        <p className="text-[10px] text-app-mute">
-          With {ARTIST.name} · {P.placement.toLowerCase()}
+        <p className="text-[10px] font-bold tracking-[0.08em] text-app-mute uppercase">Your history</p>
+        <p className="mt-1 text-[18px] leading-tight font-bold text-app-text tabular-nums">
+          {usd(ASHA?.spendCents ?? 0)}
+          <span className="ml-1.5 text-[11px] font-normal text-app-mute">· {COMPLETED} completed</span>
         </p>
-        <div className="mt-2.5 flex gap-1">
-          {P.sessions.map((s) => (
-            <span
-              key={s.n}
-              className={cn(
-                "h-1.5 flex-1 rounded-full",
-                s.state === "done" ? "bg-app-text" : s.state === "today" ? "bg-app-active-fg" : "bg-graphite/[0.1]",
-              )}
-            />
-          ))}
-        </div>
-        <div className="mt-2.5 flex items-baseline justify-between text-[11px]">
-          <span className="text-app-mute">
-            {DONE} of {P.sessions.length} done
-          </span>
-          <span className="font-semibold text-app-success tabular-nums">{usd(P.pool.availableCents)} available</span>
-        </div>
       </div>
-      <div className="rounded-[12px] bg-graphite/[0.04] p-3">
-        <p className="text-[10px] font-bold tracking-[0.08em] text-app-mute uppercase">Lifetime paid</p>
-        <p className="mt-0.5 text-[18px] font-bold text-app-text tabular-nums">{usd(ASHA?.spendCents ?? 0)}</p>
+      <div className="flex flex-col gap-2">
+        <p className="text-[10px] font-bold tracking-[0.08em] text-app-mute uppercase">Projects</p>
+        {ASHA_PROJECTS.map((p) => (
+          <div key={p.id} className="flex items-center gap-3 rounded-[12px] p-3 ring-1 ring-app-border">
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13px] leading-tight font-medium text-app-text">{p.title}</p>
+              <p className="mt-1 text-[10px] leading-tight text-app-mute">{STATUS_COPY[p.status] ?? PROJECT_STATUS_LABEL[p.status]}</p>
+            </div>
+            <ChevronRight size={14} strokeWidth={1.8} className="shrink-0 text-app-mute" />
+          </div>
+        ))}
       </div>
-      <span className="mt-auto flex h-9 shrink-0 items-center justify-center rounded-app text-[12px] font-medium text-app-text ring-1 ring-app-border">
-        Sign out
-      </span>
     </>
   );
 }

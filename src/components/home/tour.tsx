@@ -70,11 +70,11 @@ const tabs: Tab[] = [
     icon: HandCoins,
     title: "Deposits that protect your time",
     points: [
-      { name: "Taken at booking", text: "No deposit, no slot. Clients pay when they book." },
-      { name: "Your policy", text: "Late cancels and no-shows handled the way you set them." },
+      { name: "Taken at booking", text: "Clients pay when they book. Unpaid by your deadline, the slot opens again." },
+      { name: "Your call", text: "If a client cancels, you decide whether the deposit is kept or refunded." },
       { name: "Clear balances", text: "See what's held, what's applied and what's kept." },
     ],
-    toast: { icon: HandCoins, title: "$150 deposit kept · Leo B.", body: "Late cancel, inside 48 hours", tone: "ember" },
+    toast: { icon: HandCoins, title: "$150 deposit kept · Leo B.", body: "Studio kept it · Wed 6:12 PM", tone: "ember" },
     panel: <DepositsPanel />,
   },
   {
@@ -111,7 +111,7 @@ const tabs: Tab[] = [
     points: [
       { name: "Health notes", text: "Allergies and skin notes pinned where artists see them." },
       { name: "Full history", text: "Every piece, session and photo in one timeline." },
-      { name: "Preferences", text: "Favourite artist, style notes and aftercare replies." },
+      { name: "Preferences", text: "Favorite artist, style notes and aftercare replies." },
     ],
     toast: { icon: AlertTriangle, title: "Allergy pinned to Elena’s file", body: "Red ink · shows on her bookings", tone: "flag" },
     panel: <ClientsPanel />,

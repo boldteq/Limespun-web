@@ -1,6 +1,8 @@
 import React from "react";
 import { Check, Minus } from "lucide-react";
+import { cn } from "@/components/system";
 import { CHECK, DASH, PLAN_MATRIX, PLANS, formatPrice, type MatrixCell } from "@/lib/data/plans";
+import { MatrixDisclosure } from "./matrix-disclosure";
 
 function Cell({ value }: { value: MatrixCell }) {
   if (value === CHECK) {
@@ -22,60 +24,116 @@ function Cell({ value }: { value: MatrixCell }) {
   return <span className="text-[14px] font-semibold text-graphite tabular-nums">{value}</span>;
 }
 
-/** Every plan, every feature — mirrors the app's own comparison. Scrolls sideways on a phone. */
-export function PlanMatrix() {
+/*
+ * The feature column is sticky, so the names stay put while the plans slide under them. On
+ * phones it is 128px (150px from 380px) and each plan column is a fixed share of the rest, so
+ * Solo sits whole beside it and part of Studio shows at the right edge: the cut column is the
+ * cue that the table swipes. From sm the column is 34% of a table at least 760px wide.
+ */
+const STICKY = "sticky left-0 z-[1] bg-white max-sm:shadow-[inset_-1px_0_0_var(--color-hair)]";
+const tint = (recommended?: boolean) => (recommended ? "bg-ember-soft/40" : "");
+
+/*
+ * Phones show the first groups (the caps, then who can work on each plan) and a button for the
+ * rest, so the table costs about a screen of scroll instead of three. The plan cards above
+ * already list what each plan adds. From sm every row shows and the button is gone.
+ */
+const PHONE_GROUPS = 2;
+const COLLAPSIBLE = "max-sm:group-data-[open=false]/matrix:hidden";
+const TABLE_ID = "plan-matrix";
+const TOTAL_ROWS = PLAN_MATRIX.reduce((n, g) => n + g.rows.length, 0);
+
+/** Every plan, every feature — mirrors the app's own comparison. Swipes sideways on a phone. */
+export function PlanMatrix({ className }: { className?: string }) {
   return (
-    <div
-      className="relative overflow-x-auto rounded-[20px] bg-white ring-1 ring-hair focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
-      tabIndex={0}
-      role="region"
-      aria-label="Plan comparison table, scrolls sideways"
+    <MatrixDisclosure
+      controls={TABLE_ID}
+      moreLabel={`Show all ${TOTAL_ROWS} rows`}
+      className={cn("overflow-hidden rounded-[20px] bg-white ring-1 ring-hair", className)}
     >
-      <table className="w-full min-w-[760px] border-collapse text-left">
-        <caption className="sr-only">Limespun plans compared</caption>
-        <thead>
-          <tr className="border-b border-hair">
-            <th scope="col" className="w-[34%] px-6 py-5 text-[13px] font-semibold text-mute">
-              Feature
-            </th>
+      <div
+        className="relative overflow-x-auto focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ember"
+        tabIndex={0}
+        role="region"
+        aria-label="Plan comparison table, scrolls sideways"
+      >
+        <table
+          id={TABLE_ID}
+          className="w-full min-w-[568px] table-fixed border-separate border-spacing-0 text-left min-[380px]:min-w-[670px] sm:min-w-[760px]"
+        >
+          <caption className="sr-only">Limespun plans compared</caption>
+          <colgroup>
+            <col className="w-[128px] min-[380px]:w-[150px] sm:w-[34%]" />
             {PLANS.map((p) => (
-              <th key={p.tier} scope="col" className={`px-4 py-5 text-center ${p.recommended ? "bg-ember-soft/40" : ""}`}>
-                <span className="block text-[16px] font-semibold text-graphite">{p.name}</span>
-                <span className="mt-0.5 block text-[13px] font-normal text-mute tabular-nums">
-                  {formatPrice(p.monthlyCents)}/mo
-                </span>
-              </th>
+              <col key={p.tier} />
             ))}
-          </tr>
-        </thead>
-        {PLAN_MATRIX.map((g) => (
-          <tbody key={g.label}>
+          </colgroup>
+          <thead>
             <tr>
               <th
-                scope="rowgroup"
-                className="px-6 pt-7 pb-2 text-[12px] font-semibold tracking-[0.08em] text-ember-deep uppercase"
+                scope="col"
+                className={cn(STICKY, "border-b border-hair px-3 py-4 text-[13px] font-semibold text-mute sm:px-6 sm:py-5")}
               >
-                {g.label}
+                Feature
               </th>
               {PLANS.map((p) => (
-                <td key={p.tier} aria-hidden="true" className={p.recommended ? "bg-ember-soft/40" : ""} />
+                <th
+                  key={p.tier}
+                  scope="col"
+                  className={cn("border-b border-hair px-2 py-4 text-center sm:px-4 sm:py-5", tint(p.recommended))}
+                >
+                  <span className="block text-[15px] leading-tight font-semibold text-graphite sm:text-[16px]">{p.name}</span>
+                  <span className="mt-0.5 block text-[13px] font-normal text-mute tabular-nums">
+                    {formatPrice(p.monthlyCents)}/mo
+                  </span>
+                </th>
               ))}
             </tr>
-            {g.rows.map((r) => (
-              <tr key={r.label} className="border-t border-hair">
-                <th scope="row" className="px-6 py-3.5 text-[15px] font-normal text-graphite-soft">
-                  {r.label}
+          </thead>
+          {PLAN_MATRIX.map((g, gi) => (
+            <tbody key={g.label} className={gi >= PHONE_GROUPS ? COLLAPSIBLE : undefined}>
+              <tr>
+                <th
+                  scope="rowgroup"
+                  className={cn(
+                    STICKY,
+                    "px-3 pt-5 pb-2 text-[12px] font-semibold tracking-[0.08em] text-ember-deep uppercase sm:px-6 sm:pt-7",
+                  )}
+                >
+                  {g.label}
                 </th>
                 {PLANS.map((p) => (
-                  <td key={p.tier} className={`px-4 py-3.5 text-center ${p.recommended ? "bg-ember-soft/40" : ""}`}>
-                    <Cell value={r.cells[p.tier]} />
-                  </td>
+                  <td key={p.tier} aria-hidden="true" className={tint(p.recommended)} />
                 ))}
               </tr>
-            ))}
-          </tbody>
-        ))}
-      </table>
-    </div>
+              {g.rows.map((r) => (
+                <tr key={r.label}>
+                  <th
+                    scope="row"
+                    className={cn(
+                      STICKY,
+                      "border-t border-hair px-3 py-2 text-[14px] leading-snug font-normal text-graphite-soft sm:px-6 sm:py-3.5 sm:text-[15px]",
+                    )}
+                  >
+                    {r.label}
+                  </th>
+                  {PLANS.map((p) => (
+                    <td
+                      key={p.tier}
+                      className={cn(
+                        "border-t border-hair px-2 py-2 text-center sm:px-4 sm:py-3.5",
+                        tint(p.recommended),
+                      )}
+                    >
+                      <Cell value={r.cells[p.tier]} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          ))}
+        </table>
+      </div>
+    </MatrixDisclosure>
   );
 }

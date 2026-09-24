@@ -93,15 +93,18 @@ const VIEWS: { id: CalendarView | "month"; label: string; icon: LucideIcon }[] =
 ];
 
 function Toolbar({ view }: { view: CalendarView }) {
-  /* Narrow frames get the short date and drop the Today pill, so the date never clips. */
-  const heading = view === "week" ? { short: "Oct 5 – 11", full: "Oct 5 – 11, 2026" } : { short: "Thu, Oct 8", full: TODAY_DATE_LINE };
+  /* The short date ("Thu, Oct 8") until the frame has room for the long one beside the pager
+     (@xl), so the date never truncates; narrow frames also drop the Today pill. The title is
+     set in Inter as the app sets it (ScrCalendar.tsx cal-toolbar-title): Instrument Serif's 1
+     reads as an l, and "Oct 5 – 11" must not read "ll". Week titles are the app's "Oct 5 – Oct 11". */
+  const heading = view === "week" ? { short: "Oct 5 – 11", full: "Oct 5 – Oct 11" } : { short: "Thu, Oct 8", full: TODAY_DATE_LINE };
   const pagerBtn = "flex h-7 w-7 items-center justify-center rounded-app border border-app-border text-app-mute @sm:h-8 @sm:w-8";
   return (
     <div className="flex flex-col gap-3 px-3 pt-4 pb-3 @sm:px-4 @lg:px-5">
       <div className="flex items-center gap-2">
-        <span className="min-w-0 flex-1 truncate font-serif text-[22px] leading-none text-app-text italic @sm:order-last @sm:ml-1.5">
-          <span className="@md:hidden">{heading.short}</span>
-          <span className="hidden @md:inline">{heading.full}</span>
+        <span className="min-w-0 flex-1 truncate text-[16px] leading-tight font-semibold tracking-[-0.01em] text-app-text @sm:order-last @sm:ml-1.5 @md:text-[18px]">
+          <span className="@xl:hidden">{heading.short}</span>
+          <span className="hidden @xl:inline">{heading.full}</span>
         </span>
         <span className="flex shrink-0 items-center gap-1.5 @sm:gap-2">
           <span className={pagerBtn}>
@@ -259,12 +262,16 @@ function DayView() {
       <div className={cn("relative grid", DAY_COLS)} style={{ height: HOURS.length * HOUR_PX }}>
         <div className="relative">
           {HOURS.map((h, i) => (
+            // The top row's label sits just inside the grid instead of centred on its edge.
             <span
               key={h}
-              className="absolute right-1 -translate-y-1/2 text-[10px] whitespace-nowrap text-app-mute tabular-nums first:translate-y-0 @sm:right-1.5"
-              style={{ top: i * HOUR_PX }}
+              className={cn(
+                "absolute right-1 text-[10px] whitespace-nowrap text-app-mute tabular-nums @sm:right-1.5",
+                i === 0 ? "top-1" : "-translate-y-1/2",
+              )}
+              style={i === 0 ? undefined : { top: i * HOUR_PX }}
             >
-              {i === 0 ? "" : hourLabel(h)}
+              {hourLabel(h)}
             </span>
           ))}
         </div>
@@ -293,13 +300,21 @@ interface WeekCard {
   to: number;
   state: CalState;
   flag?: boolean;
+  /**
+   * Rio's walk-in flash block. Open walk-in slots aren't bookings yet (today's
+   * and Friday's), so they stay out of the day's count; a walk-in who sat gets a
+   * booking in the app, so a past block carries `bookings` (Tuesday's four).
+   */
+  walkIn?: boolean;
+  bookings?: number;
 }
 
 /**
- * The week of Mon, Oct 5. Tuesday and Wednesday match the Payments ledger
- * (Tomás V. on Tue, Bea L. on Wed); Thursday is today;
- * Friday is the last day of Rio's guest spot; Owen P.'s Saturday booking waits
- * on its deposit, so it's Pending.
+ * The week of Mon, Oct 5. Tuesday and Wednesday match the Payments ledger and
+ * Appointments (Tomás V. and Rio's four walk-ins, paid 12:50–3:05 PM, on Tue:
+ * five bookings; Bea L. on Wed);
+ * Thursday is today; Friday is the last day of Rio's guest spot; Owen P.'s
+ * Saturday booking waits on its deposit, so it's Pending.
  */
 const WEEK: { label: string; day: string; num: number; today?: boolean; cards: WeekCard[] }[] = [
   { label: "Mon", day: "Monday", num: 5, cards: [] },
@@ -307,7 +322,10 @@ const WEEK: { label: string; day: string; num: number; today?: boolean; cards: W
     label: "Tue",
     day: "Tuesday",
     num: 6,
-    cards: [{ client: "Tomás V.", artist: "dev", from: 780, to: 1020, state: "completed" }],
+    cards: [
+      { client: "4 walk-ins", artist: "rio", from: 720, to: 900, state: "completed", walkIn: true, bookings: 4 },
+      { client: "Tomás V.", artist: "dev", from: 780, to: 1020, state: "completed" },
+    ],
   },
   { label: "Wed", day: "Wednesday", num: 7, cards: [{ client: "Bea L.", artist: "dev", from: 720, to: 990, state: "completed" }] },
   {
@@ -317,9 +335,17 @@ const WEEK: { label: string; day: string; num: number; today?: boolean; cards: W
     today: true,
     cards: [...TODAY_SESSIONS]
       .sort((a, b) => a.startMin - b.startMin)
-      .map((s) => ({ client: s.client ?? "Walk-in flash", artist: s.artist, from: s.startMin, to: s.endMin, state: stateOf(s), flag: Boolean(s.flag) })),
+      .map((s) => ({
+        client: s.client ?? "Walk-in flash",
+        artist: s.artist,
+        from: s.startMin,
+        to: s.endMin,
+        state: stateOf(s),
+        flag: Boolean(s.flag),
+        walkIn: s.kind === "walk-in",
+      })),
   },
-  { label: "Fri", day: "Friday", num: 9, cards: [{ client: "Walk-in flash", artist: "rio", from: 720, to: 1020, state: "hold" }] },
+  { label: "Fri", day: "Friday", num: 9, cards: [{ client: "Walk-in flash", artist: "rio", from: 720, to: 1020, state: "hold", walkIn: true }] },
   { label: "Sat", day: "Saturday", num: 10, cards: [{ client: "Owen P.", artist: "dev", from: 780, to: 960, state: "pending" }] },
   { label: "Sun", day: "Sunday", num: 11, cards: [] },
 ];
@@ -344,7 +370,7 @@ function WeekView() {
     <div className="mx-3 mb-3 overflow-hidden rounded-app-lg ring-1 ring-app-border @sm:mx-4 @sm:mb-4 @lg:mx-5 @lg:mb-5">
       <div className="grid grid-cols-3 @md:grid-cols-5 @3xl:grid-cols-7">
         {WEEK.map((d, i) => {
-          const bookings = d.cards.filter((c) => c.state !== "hold").length;
+          const bookings = d.cards.reduce((total, c) => total + (c.bookings ?? (c.walkIn ? 0 : 1)), 0);
           return (
             <div key={d.num} className={cn("min-h-[300px] min-w-0 flex-col border-app-border", WEEK_WINDOW[i].show, WEEK_WINDOW[i].edge)}>
               <div className={cn("border-b border-app-border px-1.5 py-2.5 text-center", d.today && "bg-app-active")}>

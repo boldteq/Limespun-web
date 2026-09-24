@@ -57,9 +57,9 @@ export function PageIntro({
           >
             {title}
           </Display>
-          <p className="mt-6 max-w-[640px] text-lead text-graphite-soft">{lead}</p>
+          <p className="mt-6 max-w-[640px] text-lead text-pretty text-graphite-soft">{lead}</p>
           {(primary || secondary) && (
-            <div className="mt-9 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <div className="mt-8 flex w-full flex-col gap-3 sm:mt-9 sm:w-auto sm:flex-row">
               {primary && (
                 <Button href={primary.href} arrow>
                   {primary.label}
@@ -74,7 +74,7 @@ export function PageIntro({
           )}
           {children}
         </div>
-        {visual && <div className="mt-14 min-w-0 lg:mt-16">{visual}</div>}
+        {visual && <div className="mt-10 min-w-0 sm:mt-14 lg:mt-16">{visual}</div>}
       </Container>
     </section>
   );

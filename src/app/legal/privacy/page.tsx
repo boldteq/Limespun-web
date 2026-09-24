@@ -42,7 +42,7 @@ const sections: LegalSection[] = [
     body: "We use personal data for these purposes only:",
     list: [
       "Website data: to answer your message and to send the newsletter you asked for. You can ask us to take you off the list at any time.",
-      "App data: to run Limespun for your studio. That includes storing its records, sending the texts and emails it sends, taking card and subscription payments, and preparing the AI drafts and summaries your team asks for.",
+      "App data: to run Limespun for your studio. That includes storing its records, sending the texts and emails it sends, taking card and subscription payments, preparing the AI replies, aftercare and consult summaries your team asks for, and tagging the style of flash images you upload.",
     ],
   },
   {
@@ -75,7 +75,7 @@ const sections: LegalSection[] = [
     heading: "Retention",
     body: [
       "We keep messages sent through this website for as long as we need to answer them and follow up. Newsletter addresses stay on the list until you ask to be removed.",
-      "Studio data is kept while the studio's account is open. After an account closes, we delete the studio's data, except records the law requires us to keep, such as invoices.",
+      "While a studio's account is open, we keep its data. After the account closes, we delete it, except records such as invoices that the law requires us to keep.",
     ],
   },
   {

@@ -3,32 +3,11 @@ import { cn } from "@/components/system/cn";
 import { PLAN_CAPS } from "@/lib/data/plans";
 import { AppFrame } from "./app-frame";
 import { AppButton, AppKpiStrip, AppLabel, AppStatus } from "./app-parts";
-import { DAILY_REVENUE } from "./analytics";
-import { PAYMENTS_LEDGER } from "./payments";
-import { ARTIST_ORDER, SAMPLE_PLAN, usd, VIEWER } from "./sample-data";
+import { LOCATIONS as LOCATION_ROWS, SAMPLE_PLAN, usd, VIEWER } from "./sample-data";
 
 const PLAN_LOCATIONS = PLAN_CAPS.find((c) => c.label === "Locations")?.values[SAMPLE_PLAN] ?? "";
+/** The app's caption (ScrLocations): the rollup is the calendar month, October. */
 const MONTH_NOTE = "This calendar month";
-
-/*
- * October so far, the way the app's rollup counts it (lib/locations/queries.ts:
- * the current calendar month). Revenue is succeeded payments on October
- * bookings: Analytics' daily revenue from Thu, Oct 1 (Dev and Mara's share of
- * the payout week's last four days, all of Rio's guest weekend, then the
- * Payments ledger from Mon, Oct 5), less today's two deposits for November
- * bookings. Bookings are every October booking at the location, today's and
- * those still ahead.
- */
-const NOVEMBER_DEPOSITS_CENTS = PAYMENTS_LEDGER.filter((t) => t.day === "Oct 8" && ["Kira N.", "Bea L."].includes(t.client)).reduce(
-  (total, t) => total + t.cents,
-  0,
-);
-const MONTH_REVENUE_CENTS =
-  DAILY_REVENUE.filter((d) => d.label.startsWith("Oct ")).reduce(
-    (total, d) => total + ARTIST_ORDER.reduce((t, id) => t + d.cents[id], 0),
-    0,
-  ) - NOVEMBER_DEPOSITS_CENTS;
-const MONTH_BOOKINGS = 51;
 
 interface LocationCardData {
   name: string;
@@ -38,12 +17,30 @@ interface LocationCardData {
   primary: boolean;
   artists: number;
   bookings: number;
+  revenueCents: number;
 }
 
-const LOCATIONS: LocationCardData[] = [
-  { name: "Downtown", address: "118 Market St", status: "Active", primary: true, artists: ARTIST_ORDER.length, bookings: MONTH_BOOKINGS },
-  { name: "Eastside", address: "2240 East Ave, Unit B", status: "Setting up", primary: false, artists: 0, bookings: 0 },
-];
+/** Street lines this sample studio set up (reserved-looking, no real address). */
+const ADDRESS: Record<string, string> = {
+  Downtown: "118 Market St",
+  Eastside: "2240 East Ave, Unit B",
+};
+
+/*
+ * October so far, the way the app's rollup counts it (lib/locations/queries.ts:
+ * the current calendar month): every October booking at the location and the
+ * succeeded payments on them. Both figures are sample-data's (BOOKINGS_MONTH,
+ * REVENUE_MONTH_CENTS), built from the same daily books as Analytics.
+ */
+const LOCATIONS: LocationCardData[] = LOCATION_ROWS.map((l, i) => ({
+  name: l.name,
+  address: ADDRESS[l.name] ?? "",
+  status: l.status === "Open" ? "Active" : "Setting up",
+  primary: i === 0,
+  artists: l.artists,
+  bookings: l.bookings,
+  revenueCents: l.revenueCents,
+}));
 
 /** Status chip (locations/_proto/adapt.ts STATUS_CONFIG): the primary location shows Primary instead. */
 function statusChip(loc: LocationCardData) {
@@ -130,6 +127,7 @@ function LocationCard({ loc }: { loc: LocationCardData }) {
 export function LocationsScreen({ className }: { className?: string }) {
   const artists = LOCATIONS.reduce((total, l) => total + l.artists, 0);
   const bookings = LOCATIONS.reduce((total, l) => total + l.bookings, 0);
+  const revenueCents = LOCATIONS.reduce((total, l) => total + l.revenueCents, 0);
   return (
     <AppFrame
       active="locations"
@@ -147,7 +145,7 @@ export function LocationsScreen({ className }: { className?: string }) {
             { label: "Total locations", value: String(LOCATIONS.length), note: "Across all sites" },
             { label: "Total artists", value: String(artists), note: "Assigned to locations" },
             { label: "Bookings (month)", value: String(bookings), note: MONTH_NOTE },
-            { label: "Revenue (month)", value: usd(MONTH_REVENUE_CENTS), note: MONTH_NOTE, accent: true },
+            { label: "Revenue (month)", value: usd(revenueCents), note: MONTH_NOTE, accent: true },
           ]}
         />
         <div className="grid gap-4 @xl:grid-cols-2">

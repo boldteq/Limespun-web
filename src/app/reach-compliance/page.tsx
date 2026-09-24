@@ -1,577 +1,346 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
-import { Shield, FileText, Droplet, BarChart3 } from "lucide-react";
-import { ACCOUNT, BRAND, CTA, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
-import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { HeroSection } from "@/components/shared/hero-section";
-import { FAQAccordion } from "@/components/shared/faq-accordion";
-import { CTASection } from "@/components/shared/cta-section";
-import { StatStrip } from "@/components/shared/stat-strip";
-import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { SectionHeading } from "@/components/shared/section-heading";
+import { Check } from "lucide-react";
+import {
+  Button,
+  Chip,
+  Container,
+  Display,
+  Eyebrow,
+  FAQ,
+  Lead,
+  PlanChip,
+  Reveal,
+  Section,
+  StripedFrame,
+  Title,
+  cn,
+  type FaqItem,
+  type RelatedItem,
+} from "@/components/system";
+import { ContentPage } from "@/components/templates/content-page";
+import { ACCOUNT } from "@/lib/brand";
+import { MONEY_BACK_DAYS, PLANS, formatPrice } from "@/lib/data/plans";
+import { featureHref, getFeature } from "@/lib/data/features";
+import { TOOLS_INDEX } from "@/lib/site-links";
+import { pageMetadata } from "@/lib/seo";
+import { InkRegistryScreen, ReachDisclosurePhone, ReachInventory, RegisterInkPanel } from "./reach-screens";
 
-// ── MoatCardBright (local — lifted from work.tsx) ────────────────────────────
+export const metadata = pageMetadata({
+  title: "EU REACH ink tracking for tattoo studios",
+  description:
+    "EU REACH ink records for tattoo studios: an Ink registry in Settings, a REACH-registered count on Inventory and a disclosure on the consent form. Every plan.",
+  path: "/reach-compliance",
+});
 
-const accentMap = {
-  rust:  { color: BRAND.rust,  bg: BRAND.rustWash,  glow: GRADIENT.cardRust  },
-  amber: { color: BRAND.amber, bg: BRAND.amberWash, glow: GRADIENT.cardAmber },
-  sage:  { color: BRAND.sage,  bg: BRAND.sageWash,  glow: GRADIENT.cardSage  },
-} as const;
+const SOLO = PLANS.find((p) => p.tier === "solo") ?? PLANS[0];
+const SOLO_PRICE = formatPrice(SOLO.monthlyCents);
+const REACH_POST = "/blog/eu-reach-2022-what-tattoo-studios-need-to-know";
 
-type AccentKey = keyof typeof accentMap;
-
-interface MoatCardBrightProps {
-  accent: AccentKey;
-  icon: React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }>;
+/* ─── What the restriction asks ───────────────────────────────────────────────
+   Three plain obligations, each paired with the app label that covers it. No fines,
+   no legal advice; the note under the heading says so. */
+interface Obligation {
   title: string;
   body: string;
-  detail: [string, string][];
+  /** Where Limespun keeps it, as the app labels it. */
+  where: string;
 }
 
-function MoatCardBright({ accent, icon: Icon, title, body, detail }: MoatCardBrightProps) {
-  const a = accentMap[accent];
+const OBLIGATIONS: Obligation[] = [
+  {
+    title: "Use only inks that meet it",
+    body: "A compliant bottle lists its ingredients on the label. If a supplier can’t say what’s in a color, leave it on the shelf.",
+    where: "Ink registry",
+  },
+  {
+    title: "Tell the client what’s in it",
+    body: "The information on the ink’s label goes to the person being tattooed, and the form they sign before the session is the place for it.",
+    where: "REACH ink disclosure",
+  },
+  {
+    title: "Keep the batch on record",
+    body: "Note which ink and batch went into each session, so a recall or a reaction leads you to the right clients.",
+    where: "Ink batch record",
+  },
+];
+
+/* ─── How Limespun does it ────────────────────────────────────────────────────
+   A real order: an ink is registered before Inventory counts it or a form discloses it. */
+interface Step {
+  where: string;
+  title: string;
+  body: string;
+  visual: React.ReactNode;
+}
+
+const STEPS: Step[] = [
+  {
+    where: "Settings › Ink registry",
+    title: "Register each ink",
+    body: "Brand, color, product code and batch number. Switch on REACH compliant once you’ve confirmed the bottle; until then it stays Pending.",
+    visual: <RegisterInkPanel />,
+  },
+  {
+    where: "Inventory",
+    title: "See the compliant inks",
+    body: "Inventory’s REACH-registered count takes only the inks your registry marks compliant, and one filter lists them. Pending inks stay out.",
+    visual: <ReachInventory />,
+  },
+  {
+    where: "Forms › consent form",
+    title: "Disclose it before they sign",
+    body: "Add the REACH ink disclosure to your consent form. The client acknowledges it before signing; the artist adds the batch record after.",
+    visual: <ReachDisclosurePhone />,
+  },
+];
+
+const FAQS: FaqItem[] = [
+  {
+    q: "Does Limespun make me REACH compliant?",
+    a: "No software can do that for you. The restriction is about what’s in the ink, so it rests on the inks you buy and use. Limespun keeps the record: the inks in your registry, the count on Inventory and the disclosure your clients acknowledge. It doesn’t test or certify inks, and it isn’t legal advice; your national authority has the rules for your country.",
+  },
+  {
+    q: "What does the client see on the form?",
+    a: "A REACH ink disclosure section in your own wording, which they acknowledge before they sign. The artist fills in the ink batch record, with the brand, color and batch of each ink, after the session. Signed copies can’t be edited and are stored as PDFs.",
+  },
+  {
+    q: "Does Limespun warn me about recalls?",
+    a: "No. Limespun doesn’t match supplier recalls for you. Keep your supplier’s notices and check their batch numbers against your Ink registry.",
+  },
+];
+
+const inventory = getFeature("inventory");
+const forms = getFeature("forms");
+const consentTool = TOOLS_INDEX.find((t) => t.slug === "consent-form-template");
+
+const RELATED: RelatedItem[] = [
+  { eyebrow: "Feature", title: inventory.name, body: inventory.card, href: featureHref("inventory") },
+  { eyebrow: "Feature", title: forms.name, body: forms.card, href: featureHref("forms") },
+  ...(consentTool
+    ? [{ eyebrow: "Free tool", title: consentTool.short, body: consentTool.blurb, href: `/tools/${consentTool.slug}` }]
+    : []),
+  {
+    eyebrow: "Blog",
+    title: "EU REACH guide",
+    body: "A plain checklist: ingredient lists, safety data sheets and batch records.",
+    href: REACH_POST,
+  },
+];
+
+/* ─── Sections ────────────────────────────────────────────────────────────── */
+
+/** Settings › Ink registry: every ink with its batch and a Compliant or Pending chip. Phones show
+    the top of the list and fade into the frame. */
+function Hero() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ y: -4, boxShadow: SHADOW.card }}
-      style={{
-        background: BRAND.white,
-        borderRadius: 18,
-        padding: 28,
-        boxShadow: SHADOW.soft,
-        display: "flex",
-        flexDirection: "column",
-        gap: 18,
-        position: "relative",
-        overflow: "hidden",
-        transition: "transform 0.25s, box-shadow 0.25s",
-      } as React.CSSProperties}
-    >
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          background: a.color,
-        } as React.CSSProperties}
-      />
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          width: 120,
-          height: 120,
-          background: `radial-gradient(circle at 100% 0%, ${a.bg} 0%, transparent 70%)`,
-          pointerEvents: "none",
-        } as React.CSSProperties}
-      />
-      <div style={{ position: "relative" } as React.CSSProperties}>
-        <div
-          style={{
-            width: 48,
-            height: 48,
-            borderRadius: 12,
-            background: a.glow,
-            border: `1px solid ${a.color}25`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          } as React.CSSProperties}
-        >
-          <Icon size={20} color={a.color} strokeWidth={2} />
-        </div>
+    <StripedFrame inset="md" className="max-sm:px-2.5 max-sm:py-6 max-sm:pb-0">
+      <div className="mx-auto max-w-[1040px] max-sm:max-h-[312px] max-sm:overflow-hidden max-sm:[mask-image:linear-gradient(to_bottom,#000_calc(100%-30px),transparent_calc(100%-2px))]">
+        <InkRegistryScreen />
       </div>
-      <div style={{ position: "relative" } as React.CSSProperties}>
-        <h3
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 19,
-            fontWeight: 600,
-            color: BRAND.onyx,
-            letterSpacing: "-0.015em",
-            marginBottom: 10,
-            lineHeight: 1.25,
-          } as React.CSSProperties}
-        >
-          {title}
-        </h3>
-        <p
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 14,
-            fontWeight: 400,
-            lineHeight: 1.6,
-            color: BRAND.stoneDark,
-          } as React.CSSProperties}
-        >
-          {body}
-        </p>
-      </div>
-      <div
-        style={{
-          background: a.bg,
-          borderRadius: 12,
-          padding: "4px 16px",
-          marginTop: "auto",
-          position: "relative",
-        } as React.CSSProperties}
-      >
-        {detail.map((row, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              padding: "10px 0",
-              borderBottom:
-                i < detail.length - 1 ? `1px dashed ${a.color}25` : "none",
-              gap: 12,
-            } as React.CSSProperties}
-          >
-            <span
-              style={{
-                fontFamily: FONT.sans,
-                fontSize: 11.5,
-                fontWeight: 500,
-                color: BRAND.stoneDark,
-              } as React.CSSProperties}
-            >
-              {row[0]}
-            </span>
-            <span
-              style={{
-                fontFamily: FONT.sans,
-                fontSize: 12,
-                fontWeight: 600,
-                color: BRAND.onyx,
-                textAlign: "right",
-              } as React.CSSProperties}
-            >
-              {row[1]}
-            </span>
-          </div>
-        ))}
-      </div>
-    </motion.div>
+    </StripedFrame>
   );
 }
 
-// ── Page ─────────────────────────────────────────────────────────────────────
+function Obligations() {
+  return (
+    <Section tone="canvas" labelledBy="asks-heading" className="border-t border-hair">
+      <Container className="grid gap-8 sm:gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20">
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <Eyebrow className="max-sm:hidden">EU REACH, in plain words</Eyebrow>
+          <Display id="asks-heading" className="max-w-[520px] sm:mt-4">
+            What the restriction asks of a studio
+          </Display>
+          <Lead className="mt-4 max-w-[460px] text-mute sm:mt-5">
+            Your supplier makes the ink. Three things sit with the studio that uses it.
+          </Lead>
+          <p className="mt-4 max-w-[440px] text-[14px] leading-[1.55] text-pretty text-mute sm:mt-6">
+            A plain summary, not legal advice.
+          </p>
+        </div>
+        <ul className="border-t border-hair-strong">
+          {OBLIGATIONS.map((o, i) => (
+            <Reveal
+              as="li"
+              key={o.title}
+              index={i}
+              className="grid gap-x-10 gap-y-3 border-b border-hair-strong py-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:py-8"
+            >
+              <div className="min-w-0">
+                <Title as="h3" size="md">
+                  {o.title}
+                </Title>
+                <p className="mt-1.5 max-w-[520px] text-[16px] leading-[1.55] text-pretty text-mute sm:mt-2 sm:text-[17px] sm:leading-[1.6]">{o.body}</p>
+              </div>
+              {/* The app label that covers it; the next section shows the screens, so phones skip it */}
+              <p className="hidden items-center gap-2 self-start text-[13px] text-mute sm:flex sm:flex-col sm:items-end sm:pt-1.5">
+                <span>In Limespun</span>
+                <Chip tone="ember" className="px-2.5 py-1 text-[12px]">
+                  {o.where}
+                </Chip>
+              </p>
+            </Reveal>
+          ))}
+        </ul>
+      </Container>
+    </Section>
+  );
+}
+
+function HowItWorks() {
+  return (
+    <Section tone="white" labelledBy="how-heading">
+      <Container>
+        <div className="grid gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-end lg:gap-16">
+          <Display id="how-heading" className="max-w-[640px]">
+            Where it lives in Limespun
+          </Display>
+          {/* Phones go straight from the heading to the steps, which say the same thing in detail */}
+          <Lead className="hidden text-mute sm:block lg:justify-self-end lg:pb-1 lg:text-[18px]">
+            Register an ink once in Settings. Inventory counts it, and the consent form tells the client.
+          </Lead>
+        </div>
+
+        {/* A real sequence, so it earns numerals. Phones swipe (the next step peeks in); from sm
+            each step is a row, screen beside its copy; at lg they sit three across. The list is
+            positioned so the sr-only step numbers are clipped by the swipe row, not the page. */}
+        <div
+          role="region"
+          aria-label="Three steps, from registry to consent form"
+          tabIndex={0}
+          className="mt-block-gap -mx-5 snap-x snap-mandatory scroll-px-5 overflow-x-auto px-5 pb-1 [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite sm:mx-0 sm:snap-none sm:overflow-visible sm:px-0 sm:pb-0 [&::-webkit-scrollbar]:hidden"
+        >
+          <ol className="relative flex gap-4 max-sm:after:block max-sm:after:w-1 max-sm:after:shrink-0 max-sm:after:content-[''] sm:flex-col sm:gap-12 lg:grid lg:grid-cols-3 lg:gap-8">
+            {STEPS.map((s, n) => (
+              <li
+                key={s.title}
+                className={cn(
+                  "flex w-[calc(100vw-4.75rem)] max-w-[360px] shrink-0 snap-start flex-col sm:grid sm:w-auto sm:max-w-none sm:items-center sm:gap-10 lg:flex lg:items-stretch lg:gap-0",
+                  n % 2 === 1 ? "sm:grid-cols-[minmax(0,1fr)_320px]" : "sm:grid-cols-[320px_minmax(0,1fr)]",
+                )}
+              >
+                <div
+                  className={cn(
+                    "@container flex min-w-0 items-center justify-center rounded-tile bg-canvas-deep p-3 max-sm:min-h-[426px] sm:p-5 lg:h-[480px] lg:p-3.5 xl:p-5",
+                    n % 2 === 1 && "sm:order-last lg:order-none",
+                  )}
+                >
+                  <div className="w-full min-w-0">{s.visual}</div>
+                </div>
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <div className="mt-5 flex items-center gap-3 sm:mt-0 lg:mt-6">
+                    <span className="font-serif text-[34px] leading-none text-ember-deep tabular-nums" aria-hidden="true">
+                      {n + 1}
+                    </span>
+                    <span className="text-label text-mute uppercase">{s.where}</span>
+                  </div>
+                  <Title as="h3" size="sm" className="mt-3">
+                    <span className="sr-only">Step {n + 1}: </span>
+                    {s.title}
+                  </Title>
+                  <p className="mt-2 max-w-[440px] text-[16px] leading-[1.6] text-pretty text-mute">{s.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+function EveryPlan() {
+  return (
+    <Section tone="deep" density="proof" labelledBy="plans-heading">
+      <Container className="grid gap-6 sm:gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-20">
+        <div>
+          <Display id="plans-heading" className="max-w-[520px]">
+            On every plan, Solo included
+          </Display>
+          <p className="mt-4 max-w-[520px] text-[17px] leading-[1.6] text-pretty text-graphite-soft">
+            REACH applies to a one-chair studio as much as a busy shop, so it isn’t sold as an upgrade.
+          </p>
+          <Button href="/pricing" variant="ghost" arrow className="mt-3 max-sm:hidden">
+            Compare every plan
+          </Button>
+        </div>
+        <div>
+          {/* Phones: one chip per plan. From sm: the plans as rows, each with who it suits,
+              its price and the same tick, which is the point: nothing changes from plan to plan. */}
+          <ul aria-label="EU REACH ink tracking by plan" className="flex flex-wrap gap-2 sm:hidden">
+            {PLANS.map((p) => (
+              <li
+                key={p.tier}
+                className="flex min-w-0 items-center gap-1.5 rounded-full bg-white py-1.5 pr-3 pl-2.5 ring-1 ring-hair"
+              >
+                <Check size={14} strokeWidth={2.6} className="shrink-0 text-ember" aria-hidden="true" />
+                <span className="text-[14px] font-semibold text-graphite">{p.name}</span>
+                <span className="text-[13px] whitespace-nowrap text-mute tabular-nums">{formatPrice(p.monthlyCents)}/mo</span>
+              </li>
+            ))}
+          </ul>
+          <ul
+            aria-label="EU REACH ink tracking by plan"
+            className="hidden divide-y divide-hair overflow-hidden rounded-card bg-white ring-1 ring-hair sm:block"
+          >
+            {PLANS.map((p) => (
+              <li key={p.tier} className="flex items-center gap-6 px-6 py-4">
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[16px] font-semibold text-graphite">{p.name}</span>
+                  <span className="block text-[14px] text-mute">{p.fit}</span>
+                </span>
+                <span className="text-[15px] whitespace-nowrap text-graphite-soft tabular-nums">
+                  {formatPrice(p.monthlyCents)}/mo
+                </span>
+                <span className="flex w-[104px] shrink-0 items-center gap-1.5 text-[14px] font-medium text-graphite">
+                  <Check size={16} strokeWidth={2.6} className="shrink-0 text-ember" aria-hidden="true" />
+                  Included
+                </span>
+              </li>
+            ))}
+          </ul>
+          <Button href="/pricing" variant="ghost" arrow className="mt-3 sm:hidden">
+            Compare every plan
+          </Button>
+        </div>
+      </Container>
+    </Section>
+  );
+}
 
 export default function ReachCompliancePage() {
   return (
-    <div>
-      <Nav />
-      <main>
-        {/* ── Hero ─────────────────────────────────────────────────────── */}
-        <HeroSection
-          eyebrow="EU REACH ink tracking"
-          eyebrowAccent="amber"
-          headline="Your REACH ink records, built into the studio."
-          italicWord="built"
-          subhead="The EU REACH restriction on tattoo inks, in force since January 2022, limits what can be in the bottle. Limespun keeps your records in three places: the Ink registry in Settings, a REACH-registered count on Inventory and a REACH ink disclosure on the consent form. On every plan, Solo included."
-          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
-          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
-        />
-
-        {/* ── What is REACH ─────────────────────────────────────────────── */}
-        <section
-          style={{
-            background: GRADIENT.sectionWarm,
-            paddingTop: 100,
-            paddingBottom: 100,
-            position: "relative",
-            overflow: "hidden",
-          } as React.CSSProperties}
-        >
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: 520,
-              height: 520,
-              background: `radial-gradient(circle at 0% 0%, ${BRAND.amberWash} 0%, transparent 60%)`,
-              pointerEvents: "none",
-            } as React.CSSProperties}
-          />
-          <div
-            style={{
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "0 32px",
-              position: "relative",
-              zIndex: 2,
-            } as React.CSSProperties}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6 }}
-              style={{ marginBottom: 48, maxWidth: 760 } as React.CSSProperties}
-            >
-              <SectionEyebrow label="Background" accent="rust" />
-              <SectionHeading size="sm">
-                What the REACH restriction means for your studio.
-              </SectionHeading>
-            </motion.div>
-
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              style={{
-                maxWidth: 720,
-                background: BRAND.white,
-                borderRadius: 20,
-                padding: 32,
-                boxShadow: SHADOW.soft,
-                position: "relative",
-                overflow: "hidden",
-              } as React.CSSProperties}
-            >
-              {/* Top gradient strip */}
-              <div
-                aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: 3,
-                  background: `linear-gradient(90deg, ${BRAND.rust} 0%, ${BRAND.amber} 100%)`,
-                } as React.CSSProperties}
-              />
-              <p
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 15,
-                  lineHeight: 1.7,
-                  color: BRAND.stoneDark,
-                  marginBottom: 20,
-                } as React.CSSProperties}
-              >
-                REACH is the EU regulation on chemical substances. The EU REACH
-                restriction on tattoo inks (Annex XVII, entry 75), in force since January
-                2022, restricts specific pigments and additives in tattoo and permanent
-                makeup inks.
-              </p>
-              <p
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 15,
-                  lineHeight: 1.7,
-                  color: BRAND.stoneDark,
-                  marginBottom: 20,
-                } as React.CSSProperties}
-              >
-                In plain terms, three things fall on a studio in the EU: use inks that meet
-                the restriction, know which ink and batch went into each client, and share
-                the label information with the client. Your supplier formulates the ink;
-                the record of what you used is yours.
-              </p>
-              <p
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 15,
-                  lineHeight: 1.7,
-                  color: BRAND.stoneDark,
-                  marginBottom: 0,
-                } as React.CSSProperties}
-              >
-                Limespun keeps that record in one place. The Ink registry in Settings holds
-                each ink&apos;s brand, color, product code and batch number, and whether
-                you&apos;ve confirmed it&apos;s REACH compliant. Inventory shows how many of
-                your inks are REACH-registered. The consent form carries a REACH ink
-                disclosure, so the client signs with the ink details in front of them.
-              </p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── Four pillars ──────────────────────────────────────────────── */}
-        <section
-          style={{
-            background: BRAND.bone,
-            paddingTop: 100,
-            paddingBottom: 100,
-            position: "relative",
-            overflow: "hidden",
-          } as React.CSSProperties}
-        >
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              width: 600,
-              height: 500,
-              background: `radial-gradient(ellipse at 100% 0%, ${BRAND.rustWash} 0%, transparent 60%)`,
-              pointerEvents: "none",
-            } as React.CSSProperties}
-          />
-          <div
-            style={{
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "0 32px",
-              position: "relative",
-              zIndex: 2,
-            } as React.CSSProperties}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6 }}
-              style={{ marginBottom: 48, maxWidth: 760 } as React.CSSProperties}
-            >
-              <SectionEyebrow label="How Limespun does it" accent="amber" />
-              <SectionHeading size="sm">Three screens, one ink record.</SectionHeading>
-            </motion.div>
-
-            <style>{`
-              @media (max-width: 1024px) {
-                .reach-pillars-grid { grid-template-columns: 1fr !important; }
-              }
-            `}</style>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: 18,
-              } as React.CSSProperties}
-              className="reach-pillars-grid"
-            >
-              <MoatCardBright
-                accent="rust"
-                icon={Droplet}
-                title="Ink registry"
-                body="Register each ink in Settings: brand, color, product code and batch number, with a switch for whether its REACH compliance is confirmed."
-                detail={[
-                  ["Where", "Settings"],
-                  ["Per ink", "Brand, color, batch"],
-                  ["REACH compliant", "Confirmed by you"],
-                ]}
-              />
-              <MoatCardBright
-                accent="amber"
-                icon={BarChart3}
-                title="REACH-registered on Inventory"
-                body="Inventory counts the inks linked to a registry record and lets you filter to them, so a gap shows up before a client asks."
-                detail={[
-                  ["Where", "Inventory"],
-                  ["Shows", "REACH-registered"],
-                  ["Filter", "Yes"],
-                ]}
-              />
-              <MoatCardBright
-                accent="sage"
-                icon={FileText}
-                title="REACH ink disclosure"
-                body="Add the REACH ink disclosure section to your consent form. The client reads the ink details and signs, and the signed form is stored with the session."
-                detail={[
-                  ["Where", "Consent form"],
-                  ["Section", "REACH ink disclosure"],
-                  ["Signed", "With the form"],
-                ]}
-              />
-              <MoatCardBright
-                accent="rust"
-                icon={Shield}
-                title="On every plan"
-                body="EU REACH ink tracking is on Solo, Studio, Pro and Multi-Location. It isn't an add-on, and your ink list moves over with the rest of your data."
-                detail={[
-                  ["Solo", "Included"],
-                  ["Add-on", "None"],
-                  ["Your ink list", "Moved for you"],
-                ]}
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* ── Stats ─────────────────────────────────────────────────────── */}
-        <section
-          style={{
-            background: BRAND.boneDeep,
-            paddingTop: 56,
-            paddingBottom: 56,
-          } as React.CSSProperties}
-        >
-          <div
-            style={{
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "0 32px",
-            } as React.CSSProperties}
-          >
-            <StatStrip
-              items={[
-                { stat: "Settings", label: "Ink registry for every ink" },
-                { stat: "Inventory", label: "REACH-registered count" },
-                { stat: "Consent form", label: "REACH ink disclosure" },
-                { stat: "Every plan", label: "Solo included" },
-              ]}
-            />
-          </div>
-        </section>
-
-        {/* ── Early-days note ───────────────────────────────────────────── */}
-        <section
-          style={{
-            background: BRAND.bone,
-            paddingTop: 80,
-            paddingBottom: 80,
-          } as React.CSSProperties}
-        >
-          <div
-            style={{
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "0 32px",
-              display: "flex",
-              justifyContent: "center",
-            } as React.CSSProperties}
-          >
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              style={{ maxWidth: 560, width: "100%" } as React.CSSProperties}
-            >
-              <div
-                style={{
-                  background: BRAND.white,
-                  borderRadius: 18,
-                  padding: 32,
-                  boxShadow: SHADOW.soft,
-                  border: `1px solid ${BRAND.borderSoft}`,
-                } as React.CSSProperties}
-              >
-                <SectionEyebrow label="Early days" accent="sage" />
-                <p
-                  style={{
-                    fontFamily: FONT.serif,
-                    fontStyle: "italic",
-                    fontSize: 24,
-                    lineHeight: 1.3,
-                    color: BRAND.onyx,
-                    margin: "0 0 16px",
-                  } as React.CSSProperties}
-                >
-                  We&apos;d rather show you the registry than quote a customer we made up.
-                </p>
-                <p
-                  style={{
-                    fontFamily: FONT.sans,
-                    fontSize: 15,
-                    lineHeight: 1.65,
-                    color: BRAND.stoneDark,
-                    margin: 0,
-                  } as React.CSSProperties}
-                >
-                  Limespun is new, so there are no compliance case studies yet. Create an
-                  account and register your first ink in Settings, or send us your ink list
-                  and we&apos;ll move it over &mdash; then judge it on the work.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── FAQ ───────────────────────────────────────────────────────── */}
-        <section
-          style={{
-            background: BRAND.boneDeep,
-            paddingTop: 80,
-            paddingBottom: 80,
-          } as React.CSSProperties}
-        >
-          <div
-            style={{
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "0 32px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            } as React.CSSProperties}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              style={{ marginBottom: 40, textAlign: "center" } as React.CSSProperties}
-            >
-              <SectionEyebrow label="Common questions" accent="rust" />
-              <SectionHeading size="sm">On REACH compliance.</SectionHeading>
-            </motion.div>
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              style={{ width: "100%" } as React.CSSProperties}
-            >
-              <FAQAccordion
-                accent="rust"
-                items={[
-                  {
-                    q: "Do I need REACH compliance if I'm not in the EU?",
-                    a: "The restriction applies to studios in the EU. Outside it, these records aren't a legal requirement, but knowing which ink and batch went into each client is still good practice. Limespun works the same either way.",
-                  },
-                  {
-                    q: "What do I show an inspector?",
-                    a: "Open the Ink registry in Settings: every registered ink with its brand, color, product code, batch number and REACH status. Each client's signed consent form carries the REACH ink disclosure.",
-                  },
-                  {
-                    q: "Can I import my existing ink list?",
-                    a: "Yes. Send us your list and we move it over for you as part of migration, on every plan.",
-                  },
-                  {
-                    q: "Is the REACH module on every plan?",
-                    a: "Yes. EU REACH ink tracking is on every plan, Solo included. It isn't an add-on or a Pro-only feature.",
-                  },
-                  {
-                    q: "Does Limespun check my inks against the restricted substances list?",
-                    a: "No. The Ink registry records what you use and whether you've confirmed it's REACH compliant; your supplier's documentation is what confirms it. Limespun keeps that record in one place and puts it on the consent form.",
-                  },
-                ]}
-              />
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── CTA ───────────────────────────────────────────────────────── */}
-        <CTASection
-          badge="On every plan"
-          headline="Stop keeping ink records on a spreadsheet."
-          italicWord="spreadsheet"
-          subhead="EU REACH ink tracking is on every plan, Solo included. Register your inks in Settings, or send us your list and we'll move it over."
-          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
-          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
-        />
-      </main>
-      <Footer />
-    </div>
+    <ContentPage
+      layout="sections"
+      crumbs={[{ label: "Home", href: "/" }, { label: "EU REACH" }]}
+      eyebrow={
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <Eyebrow>EU REACH ink tracking</Eyebrow>
+          {/* Phones keep one line; the plan band says it further down */}
+          <PlanChip plan="solo" andUp price className="max-sm:hidden" />
+        </div>
+      }
+      title="Your inks registered, your clients told."
+      italicWord="told"
+      lead="The EU REACH restriction on tattoo inks, in force since January 2022, limits what goes in the bottle. Limespun keeps your side of it, from the ink shelf to the consent form."
+      primary={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+      secondary={{ label: "Read the REACH guide", href: REACH_POST }}
+      visual={<Hero />}
+      related={{ items: RELATED }}
+      inkBand={{
+        headline: "Your ink shelf, on record.",
+        italicWord: "record",
+        sub: (
+          <>
+            On every plan from {SOLO_PRICE} a month. We move your data over for you.{" "}
+            <span className="whitespace-nowrap">{MONEY_BACK_DAYS}-day money-back</span> guarantee.
+          </>
+        ),
+      }}
+    >
+      <Obligations />
+      <HowItWorks />
+      <EveryPlan />
+      <FAQ items={FAQS} title="REACH questions" tone="white" compact />
+    </ContentPage>
   );
 }

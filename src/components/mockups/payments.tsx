@@ -1,4 +1,5 @@
 import { Check, Download, ListFilter, Scale, Settings2 } from "lucide-react";
+import { cn } from "@/components/system/cn";
 import { AppFrame } from "./app-frame";
 import {
   AppAvatar,
@@ -18,10 +19,8 @@ import {
   ARTISTS,
   COMMISSIONS,
   COMMISSIONS_OWED_CENTS,
-  DEPOSITS,
   DEPOSITS_PENDING,
   DEPOSITS_PENDING_CENTS,
-  LATE_CANCEL,
   PAYOUT_WEEK,
   REVENUE_TODAY_CENTS,
   TRANSACTIONS,
@@ -58,49 +57,18 @@ function ArtistCell({ id, sub }: { id: ArtistId; sub?: string }) {
 /* ─── Transactions ────────────────────────────────────────────────────────── */
 
 /**
- * The payments ledger, newest first, dated by when each payment went through.
- * Leo B.'s $150 deposit was paid Mon, Oct 5 and kept when he cancelled late on
- * Wed, so it sits at its payment date and reads as kept, not as a Wednesday
- * charge (Today's "vs $500 yesterday" is Bea L.'s balance alone). Jo K.'s $100
- * consult deposit went through Tue, Oct 6 (sample-data DEPOSITS). Analytics
- * builds Oct 5 – today's daily revenue from these rows.
+ * The payments ledger (sample-data TRANSACTIONS), newest first, one row per
+ * payment, dated by when it went through. Leo B.'s $150 deposit was paid Mon,
+ * Oct 5 and kept by the studio when he cancelled late on Wed, so it sits at its
+ * payment date as a Deposit, not as a Wednesday charge (Today's "vs $500
+ * yesterday" is Bea L.'s balance alone).
  */
 export interface LedgerRow extends Transaction {
-  /** Day of the payment, "Oct 6" style. */
-  day: string;
-  /** Kept after a late cancel. */
+  /** Kept by the studio after a late cancel. */
   kept?: boolean;
 }
 
-const JO_DEPOSIT = DEPOSITS.find((d) => d.client === "Jo K.");
-
-export const PAYMENTS_LEDGER: LedgerRow[] = [
-  ...TRANSACTIONS.filter((t) => t.status !== "Kept").map((t) => ({
-    ...t,
-    day: t.when.startsWith("Today") ? "Oct 8" : (/Oct \d+/.exec(t.when)?.[0] ?? ""),
-  })),
-  {
-    when: "Tue, Oct 6, 11:20 AM",
-    day: "Oct 6",
-    client: "Jo K.",
-    type: "Deposit" as const,
-    artist: "mara" as const,
-    cents: JO_DEPOSIT?.cents ?? 0,
-    status: "Paid" as const,
-    method: "Card" as const,
-  },
-  {
-    when: "Mon, Oct 5, 1:20 PM",
-    day: "Oct 5",
-    client: LATE_CANCEL.client,
-    type: "Deposit" as const,
-    artist: LATE_CANCEL.artist,
-    cents: LATE_CANCEL.cents,
-    status: "Paid" as const,
-    method: "Card" as const,
-    kept: true,
-  },
-];
+export const PAYMENTS_LEDGER: LedgerRow[] = TRANSACTIONS.map((t) => ({ ...t, kept: t.status === "Kept" }));
 
 /** Payment state chips (components/ui/status-badge.tsx). */
 function TxnStatus({ status }: { status: Transaction["status"] }) {
@@ -115,8 +83,9 @@ function TxnStatus({ status }: { status: Transaction["status"] }) {
   );
 }
 
+/** The Type column is the app's TYPE_LABEL word alone, with no annotation (Leo B.'s kept deposit reads "Deposit"). */
 function txnType(t: LedgerRow): string {
-  return t.kept ? "Deposit, kept after late cancel" : t.type;
+  return t.method;
 }
 
 const TXN_COLUMNS = [
@@ -164,14 +133,7 @@ function Transactions({ view }: { view: "all" | "pending-deposits" }) {
               {usd(t.cents)}
             </span>,
             <span key="t" className="text-app-soft">
-              {t.kept ? (
-                <>
-                  Deposit · {t.method}
-                  <span className="block text-ui-xs text-app-mute">Kept · late cancel {LATE_CANCEL.cancelledAt.split(",")[0]}</span>
-                </>
-              ) : (
-                `${t.type} · ${t.method}`
-              )}
+              {txnType(t)}
             </span>,
             <TxnStatus key="s" status={t.status} />,
           ],
@@ -241,51 +203,83 @@ function Transactions({ view }: { view: "all" | "pending-deposits" }) {
 /* ─── Commissions ─────────────────────────────────────────────────────────── */
 
 /**
- * Sessions each artist ran in the payout week. Rio's guest spot began Fri, Oct 2,
- * so all nine of Rio's weekend sessions fall in this week.
+ * "Artist commissions" as ScrPayments draws it (adapt.ts adaptCommissions): one
+ * row per artist across the whole commission ledger (the query has no date
+ * filter), Sessions · Gross · Commission · Status, and an Approve button on a
+ * row that still has records pending. A row reads Pending while any of its
+ * records is (Dev: Tomás V. and Bea L.; Rio: his four Tuesday walk-ins) and
+ * Paid once all are. The paid history is every week on record, Aug 10 – Oct 4,
+ * settled by its payroll run (the last went out Tue, Oct 6). Card KPIs derive
+ * from these rows, as the app's do: "Paid to date" sums only the rows that are
+ * wholly paid.
  */
-const PAYOUT_WEEK_SESSIONS: Record<ArtistId, number> = {
-  dev: 5,
-  mara: 7,
+type CommissionState = "Pending" | "Paid";
+
+interface ArtistCommissionRow {
+  artist: ArtistId;
+  sessions: number;
+  grossCents: number;
+  commissionCents: number;
+  owedCents: number;
+  state: CommissionState;
+}
+
+const PAID_SESSIONS: Record<ArtistId, number> = {
+  dev: ARTIST_STATS.find((s) => s.artist === "dev")?.sessions ?? 0,
+  mara: ARTIST_STATS.find((s) => s.artist === "mara")?.sessions ?? 0,
   rio: ARTIST_STATS.find((s) => s.artist === "rio")?.sessions ?? 0,
 };
 
-/**
- * The studio lens reads the whole commission ledger, as the app does (its
- * commission_records query has no date filter): every week on record, Aug 10 –
- * Oct 4, each settled by its payroll run, plus the three records this week
- * still pending approval. Nothing is approved and unpaid: the last run went out
- * Tue, Oct 6.
- */
-const PAID_RECORDS = WEEKLY_REVENUE.flatMap((w) =>
-  ARTIST_ORDER.filter((id) => w.cents[id] > 0).map((id) => ({
+const COMMISSION_ROWS: ArtistCommissionRow[] = ARTIST_ORDER.map((id) => {
+  const paidGross = WEEKLY_REVENUE.reduce((total, w) => total + w.cents[id], 0);
+  const paidCommission = WEEKLY_REVENUE.reduce((total, w) => total + (w.cents[id] > 0 ? artistPayoutCents(ARTISTS[id].pay, w.cents[id]) : 0), 0);
+  const pending = COMMISSIONS.filter((c) => c.artist === id && c.status === "Pending approval");
+  const owedCents = pending.reduce((total, c) => total + c.artistCents, 0);
+  return {
     artist: id,
-    grossCents: w.cents[id],
-    paidCents: artistPayoutCents(ARTISTS[id].pay, w.cents[id]),
-  })),
-);
-const PAID_TO_DATE_CENTS = PAID_RECORDS.reduce((total, r) => total + r.paidCents, 0);
-const PAID_ARTISTS = new Set(PAID_RECORDS.map((r) => r.artist)).size;
-const APPROVED_CENTS = COMMISSIONS.filter((c) => c.status === "Approved").reduce((total, c) => total + c.artistCents, 0);
-const STUDIO_RETAINS_CENTS =
-  PAID_RECORDS.reduce((total, r) => total + r.grossCents - r.paidCents, 0) +
-  COMMISSIONS.reduce((total, c) => total + c.serviceCents - c.artistCents, 0);
+    sessions: PAID_SESSIONS[id] + pending.length,
+    grossCents: paidGross + pending.reduce((total, c) => total + c.serviceCents, 0),
+    commissionCents: paidCommission + owedCents,
+    owedCents,
+    state: pending.length > 0 ? ("Pending" as const) : ("Paid" as const),
+  };
+}).sort((a, b) => b.commissionCents - a.commissionCents);
+
+const PENDING_RECORDS = COMMISSIONS.filter((c) => c.status === "Pending approval").length;
+const PAID_ROWS = COMMISSION_ROWS.filter((r) => r.state === "Paid");
+const PAID_TO_DATE_CENTS = PAID_ROWS.reduce((total, r) => total + r.commissionCents, 0);
+const STUDIO_RETAINS_CENTS = COMMISSION_ROWS.reduce((total, r) => total + r.grossCents - r.commissionCents, 0);
+
+function CommissionStatus({ state }: { state: CommissionState }) {
+  return (
+    <AppStatus tone={state === "Paid" ? "success" : "warning"} dot>
+      {state}
+    </AppStatus>
+  );
+}
+
+function ApproveButton({ className }: { className?: string }) {
+  return (
+    <AppButton icon={Check} className={cn("h-7 px-2.5 text-ui-xs", className)}>
+      Approve
+    </AppButton>
+  );
+}
 
 function Commissions() {
-  const pending = COMMISSIONS.filter((c) => c.status === "Pending approval");
-  const rows: AppTableRow[] = WEEK_PAYOUTS.map((p) => ({
-    key: p.artist,
+  const rows: AppTableRow[] = COMMISSION_ROWS.map((r) => ({
+    key: r.artist,
     cells: [
-      <ArtistCell key="a" id={p.artist} sub={`${ARTISTS[p.artist].kind} · ${p.rule}`} />,
-      PAYOUT_WEEK_SESSIONS[p.artist],
-      usd(p.grossCents),
-      <span key="c">
-        <span className="block font-semibold">{usd(p.payoutCents)}</span>
-        <span className="block text-ui-xs text-app-mute">{p.math}</span>
+      <ArtistCell key="a" id={r.artist} />,
+      r.sessions,
+      <span key="g" className="text-app-soft">
+        {usd(r.grossCents)}
       </span>,
-      <AppStatus key="s" tone="success" dot>
-        Paid
-      </AppStatus>,
+      <span key="c" className="font-bold">
+        {usd(r.commissionCents)}
+      </span>,
+      <CommissionStatus key="s" state={r.state} />,
+      r.state === "Pending" ? <ApproveButton key="x" /> : null,
     ],
   }));
 
@@ -296,58 +290,44 @@ function Commissions() {
           {
             label: "Commissions owed",
             value: usd(COMMISSIONS_OWED_CENTS),
-            note: `${pending.length} pending approval`,
+            // Records awaiting approval, the count Today's tile carries, so the two agree.
+            note: `${PENDING_RECORDS} pending approval`,
             accent: true,
           },
-          { label: "Approved", value: usd(APPROVED_CENTS), note: "ready to pay" },
-          { label: "Paid to date", value: usd(PAID_TO_DATE_CENTS), note: `${PAID_ARTISTS} artists` },
+          { label: "Approved", value: usd(0), note: "ready to pay" },
+          { label: "Paid to date", value: usd(PAID_TO_DATE_CENTS), note: `${PAID_ROWS.length} artist${PAID_ROWS.length === 1 ? "" : "s"}` },
           { label: "Studio retains", value: usd(STUDIO_RETAINS_CENTS), note: "after commission" },
         ]}
       />
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-app-lg bg-app-sidebar px-4 py-3 ring-1 ring-app-border">
-        <span className="min-w-0 flex-1 text-ui-sm text-app-text">
-          <span className="font-semibold">
-            {pending.length} commissions pending approval · {usd(COMMISSIONS_OWED_CENTS)}
-          </span>
-          <span className="text-app-mute"> · {pending.map((c) => c.client).join(", ")}</span>
-        </span>
-        <AppButton variant="primary" icon={Check} className="h-7">
-          Approve
-        </AppButton>
-      </div>
       <AppCard
         padded={false}
         title={
-          <>
-            <span className="hidden @min-[20rem]:inline">Artist commissions</span>
-            <span className="@min-[20rem]:hidden">Commissions</span>
-          </>
+          <span className="flex flex-col leading-tight">
+            <span>
+              <span className="hidden @min-[20rem]:inline">Artist commissions</span>
+              <span className="@min-[20rem]:hidden">Commissions</span>
+            </span>
+            <span className="text-ui-xs font-normal whitespace-normal text-app-mute">
+              {COMMISSION_ROWS.length} records · gross vs commission
+            </span>
+          </span>
         }
         meta={
-          <>
-            <span className="hidden @xl:inline">
-              {PAYOUT_WEEK.label} · paid {PAYOUT_WEEK.paidOn}
-            </span>
-            <AppButton variant="ghost" icon={Settings2} className="h-7 px-2">
-              Rules
-            </AppButton>
-          </>
+          <AppButton variant="ghost" icon={Settings2} className="h-7 px-2">
+            Rules
+          </AppButton>
         }
       >
         <div className="@xl:hidden">
-          {WEEK_PAYOUTS.map((p, i) => (
+          {COMMISSION_ROWS.map((r, i) => (
             <ToolbarListRow
-              key={p.artist}
-              lead={<AppAvatar initials={ARTISTS[p.artist].initials} tone={ARTISTS[p.artist].tone} size="md" />}
-              title={ARTISTS[p.artist].name}
-              sub={p.math}
-              value={usd(p.payoutCents)}
-              status={
-                <AppStatus tone="success" dot>
-                  Paid
-                </AppStatus>
-              }
-              last={i === WEEK_PAYOUTS.length - 1}
+              key={r.artist}
+              lead={<AppAvatar initials={ARTISTS[r.artist].initials} tone={ARTISTS[r.artist].tone} size="md" />}
+              title={ARTISTS[r.artist].name}
+              sub={`${r.sessions} sessions`}
+              value={usd(r.commissionCents)}
+              status={r.state === "Pending" ? <ApproveButton className="h-6" /> : <CommissionStatus state={r.state} />}
+              last={i === COMMISSION_ROWS.length - 1}
             />
           ))}
         </div>
@@ -359,9 +339,10 @@ function Commissions() {
             { label: "Gross", align: "right" },
             { label: "Commission", align: "right" },
             { label: "Status" },
+            { label: "", align: "right" },
           ]}
           rows={rows}
-          minWidth={640}
+          minWidth={560}
         />
       </AppCard>
     </>

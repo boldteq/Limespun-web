@@ -1,558 +1,723 @@
-import { BRAND } from "@/lib/brand";
+import type { ArticleBlock } from "@/components/templates/article-page";
 
-export type BlogContentBlock =
-  | { type: 'p'; text: string }
-  | { type: 'h2'; text: string }
-  | { type: 'h3'; text: string }
-  | { type: 'ul'; items: string[] }
-  | { type: 'quote'; text: string; attribution?: string }
-  | { type: 'code'; lang?: string; text: string }
-  | { type: 'callout'; tone: 'rust' | 'amber' | 'sage'; text: string };
+/**
+ * Blog posts as data, rendered by src/app/blog/[slug] on the ArticlePage template.
+ *
+ * Rules every post follows (audited 2026-09-24):
+ * - US English, US dollars.
+ * - Product claims match the app (InkOS) and src/lib/data/plans.ts. Nothing about an API,
+ *   an enforced cancellation window or AI-drafted briefs.
+ * - No quotes, people, studios or statistics we can’t point to. Worked examples use the
+ *   canonical Sample studio (src/components/mockups/sample-data.ts) and say so; any other
+ *   example is labeled as one.
+ * - Competitor facts only from src/lib/data/competitors.ts, and a post that cites a check
+ *   is never dated before that check.
+ * - Dates are real. Every post was rewritten from scratch on September 24, 2026 and is dated
+ *   that day: the older dates predated the site and the features the posts describe (Projects,
+ *   April 20; the photo slots, July 12; the four plans, July 22, 2026; see changelog.ts). A post
+ *   is never dated before a feature, plan or check it cites. Set `updatedAt` on a later
+ *   substantive edit, so the Article JSON-LD's dateModified stays true.
+ * - Sample studio examples read as sample data, in the present tense and without calendar
+ *   dates: its "today" is Thursday, October 8, 2026, after every post's date, so a post never
+ *   says what happened on a Sample studio day. (The mockups show their own sample dates.)
+ *
+ * Text is plain. `[label](/path)` inside a paragraph, list item or callout becomes a link.
+ */
+
+/** A small table inside a post (worked examples). Cells are plain text. */
+export interface PostTable {
+  type: "table";
+  /** What the table shows, for screen readers and as the caption. */
+  caption: string;
+  head: string[];
+  rows: string[][];
+  /** A totals row, set apart. */
+  foot?: string[];
+  /** Columns that hold money: right-aligned, tabular figures. */
+  figureColumns?: number[];
+}
+
+/** Quotes and code blocks are left out on purpose: no invented quotes, no developer boxes. */
+export type PostBlock = Exclude<ArticleBlock, { type: "quote" | "code" }> | PostTable;
+
+export type PostCategory = "operations" | "money" | "compliance" | "craft";
+
+export const categoryLabels: Record<PostCategory, string> = {
+  operations: "Studio operations",
+  money: "Deposits & pay",
+  compliance: "Compliance",
+  craft: "Craft",
+};
+
+/** The product screen a post is about: its figure, and the cover when it’s the latest post. */
+export type PostScreen = "today" | "deposit-pool" | "inventory" | "guest-artists" | "commissions" | "photo-timeline";
 
 export interface BlogPost {
   slug: string;
+  /** The page H1. */
   title: string;
-  excerpt: string;
+  /** One word of the title set in the ember italic. */
+  italicWord: string;
+  /** Short label for the breadcrumb. */
+  crumb: string;
+  /** <title> before " | Limespun": 49 characters at most. */
+  seoTitle: string;
+  /** Meta description and the dek under the title: 120–160 characters. */
+  description: string;
+  /** One line for the cards on /blog. */
+  summary: string;
+  /** ISO date. */
   publishedAt: string;
-  readTime: string;
-  author: { name: string; role: string };
-  category: "ops" | "compliance" | "craft" | "product";
-  gradient: string;
-  content: BlogContentBlock[];
+  /** ISO date of the last substantive edit, when there was one. */
+  updatedAt?: string;
+  category: PostCategory;
+  screen: PostScreen;
+  /** Caption under the post’s product screen. */
+  screenCaption: string;
+  /** The one product page this post is about. */
+  feature: { title: string; body: string; href: string };
+  /** Closing band: headline with one italic word, and the contextual second link. */
+  inkBand: { headline: string; italicWord: string; secondary: { label: string; href: string } };
+  blocks: PostBlock[];
 }
 
-/**
- * Posts describe only what the app does today and follow src/lib/data/plans.ts for plan limits.
- * Worked examples use the canonical Sample studio (Dev, Mara, Rio; Asha M., Jo K., Elena R., Sam T.).
- */
-export const blogPosts: BlogPost[] = [
+const posts: BlogPost[] = [
   {
-    slug: "the-90-second-morning-triage",
-    title: "The 90-second morning triage that runs a tattoo studio",
-    excerpt:
-      "How a tattoo studio can open the shop in 90 seconds, and why it so often takes forty minutes instead.",
-    publishedAt: "2026-04-15",
-    readTime: "6 min",
-    author: { name: "The Limespun team", role: "Limespun" },
-    category: "ops",
-    gradient: `linear-gradient(135deg, ${BRAND.rust} 0%, ${BRAND.amber} 100%)`,
-    content: [
+    slug: "deposit-pools-vs-per-booking-deposits",
+    // Pool last: at 320 the h1 then ends on "deposit pools", never on one word
+    title: "Per-booking deposits vs deposit pools",
+    italicWord: "pools",
+    crumb: "Deposit pools",
+    seoTitle: "Deposit pools vs per-booking deposits",
+    description:
+      "Why a multi-session tattoo should hold one deposit on the project instead of one per booking, worked through on a sleeve, and what happens if a client stops.",
+    summary: "One deposit on the project instead of one per booking, worked through on a sleeve.",
+    // The comparison below cites a check of competitors’ public pages made on September 22.
+    publishedAt: "2026-09-24",
+    category: "money",
+    screen: "deposit-pool",
+    screenCaption: "Asha M.’s koi sleeve in the Sample studio: one deposit pool across five sessions.",
+    feature: {
+      title: "Projects",
+      body: "A sleeve is one project: its sessions, photos and one deposit pool.",
+      href: "/product/projects",
+    },
+    inkBand: {
+      headline: "One deposit for the whole piece.",
+      italicWord: "piece",
+      secondary: { label: "Deposit calculator", href: "/tools/deposit-calculator" },
+    },
+    blocks: [
       {
-        type: 'h2',
-        text: 'Forty minutes to open a shop that fits in one screen.',
+        type: "p",
+        text: "Most booking software ties a deposit to one appointment. That works for a single-session piece. It gets messy on a sleeve, where the client thinks of the work as one piece and your records hold a separate deposit for every booking.",
+      },
+      { type: "h2", text: "Five bookings, five deposits" },
+      {
+        type: "p",
+        text: "Take a five-session sleeve with a $100 deposit on each booking. Five deposits arrive at five different times, some by card and some by bank transfer, and each one belongs to its own appointment. Then the artist is out sick for session 3.",
       },
       {
-        type: 'p',
-        text: 'For a lot of studio owners, the morning goes like this: open up, make coffee, open four browser tabs, check the booking spreadsheet, check the group chat, text the artist who has a 10am, discover the 10am messaged at 11pm to reschedule, panic. Forty minutes gone before anyone picks up a machine.',
-      },
-      {
-        type: 'h3',
-        text: 'The Today screen does one job',
-      },
-      {
-        type: 'p',
-        text: "The Today screen in Limespun is deliberately narrow. It shows today's appointments in time order, the artist on each, the deposit status, and a line of project context. No three-month calendar. Just today.",
-      },
-      {
-        type: 'ul',
-        items: [
-          '10:00 · Dev · Asha M. · Koi sleeve, session 4 of 5 · $240 held in the deposit pool',
-          '11:00 · Mara · Jo K. · Consult, fine-line florals · $100 deposit paid',
-          '1:30 · Dev · Elena R. · Back piece, session 2 of 3 · red ink allergy flagged',
-          '4:30 · Mara · Sam T. · Touch-up, forearm script · consent signed',
+        type: "table",
+        caption: "An example sleeve with a deposit on every booking (not a real client)",
+        head: ["Booking", "Deposit", "What happened"],
+        rows: [
+          ["Session 1", "$100, card", "Applied at checkout"],
+          ["Session 2", "$100, transfer", "Applied at checkout"],
+          ["Session 3", "$100, card", "Artist out sick, rebooked"],
+          ["Session 4", "$100, card", "Taken again for the new date?"],
+          ["Session 5", "None yet", "Not booked"],
         ],
       },
       {
-        type: 'h3',
-        text: 'The numbers across the top',
+        type: "p",
+        text: "By session 4 the client asks how much they’ve paid so far, and the answer is spread across a card processor, a bank statement and whatever note was made when session 3 moved. Nobody did anything wrong. The records are shaped differently from the work.",
+      },
+      { type: "h2", text: "One pool for the whole piece" },
+      {
+        type: "p",
+        text: "A deposit pool sits on the project, not on a booking. The client pays into it, and each session draws from it. Move a session and the money stays where it is. It’s applied when a session is completed, or when you apply it by hand, and until then it’s simply available.",
       },
       {
-        type: 'p',
-        text: "Above the list sit the numbers that matter this morning: revenue, bookings, deposits pending and, on Studio and up, commissions owed. The idea is a four-second glance. If deposits pending is climbing, deal with those before anything else. If the week has gaps, that's the cue to work the waitlist.",
+        type: "p",
+        text: "Here is the Sample studio’s koi sleeve for Asha M., five sessions with Dev:",
       },
       {
-        type: 'h3',
-        text: 'The allergy flag',
+        type: "table",
+        caption: "Asha M.’s deposit pool in the Sample studio (sample data)",
+        head: ["Entry", "What for", "Amount"],
+        rows: [
+          ["Paid in", "Deposit for the sleeve", "+$300"],
+          ["Applied", "Session 3, at checkout", "−$60"],
+        ],
+        foot: ["Available", "Sessions 4 and 5", "$240"],
+        figureColumns: [2],
       },
       {
-        type: 'p',
-        text: "Allergy near-misses tend to happen at moments of change: a client mentions a red ink reaction on their intake form, the studio switches ink brands, and the note sits three taps deep in a tab nobody opens. That's why, in Limespun, a client with a noted allergy gets a flag on every booking, not a buried note in a tab. It's the first thing you see when you open the booking.",
+        type: "p",
+        text: "The project shows four figures: Paid in, Applied, Available and Refundable. Asha’s reads $300 paid in, $60 applied and $240 available. When she asks what she’s paid, that’s the answer, on one screen, and her own project page shows her the same Applied and Available figures.",
       },
       {
-        type: 'callout',
-        tone: 'amber',
-        text: "Note the allergy once on the client record and it shows on every booking after that. No copying it into each appointment.",
+        type: "callout",
+        label: "In Limespun",
+        tone: "note",
+        text: "Deposit pools come with [Projects](/product/projects), on every plan from Solo. Single-session bookings keep their own [per-booking deposit](/product/appointments).",
+      },
+      { type: "h2", text: "How other booking tools handle it" },
+      {
+        type: "p",
+        text: "We read what other booking tools publish about this on September 22, 2026. Mangomint describes collecting a card on file, and DaySmart Body Art describes online deposits on all its plans. Neither describes a deposit that follows a piece across sessions. TattooGenda, which is also built for tattoo, does: it applies a project deposit to any appointment in the project.",
       },
       {
-        type: 'h3',
-        text: 'Project pulse in 30 seconds',
+        type: "p",
+        text: "The full side-by-side, with sources, is on [the compare pages](/compare).",
+      },
+      { type: "h2", text: "When a client stops halfway" },
+      {
+        type: "p",
+        text: "The case every studio worries about is the client who stops halfway through. With a deposit per booking, you end up working out which deposits were used. With a pool, the project already shows what’s been applied and what’s still available, so the conversation starts from the same numbers. Whether you keep the rest or refund it is your decision, and your written policy is what you point to.",
+      },
+      { type: "h2", text: "When a deposit per booking is fine" },
+      {
+        type: "p",
+        text: "If most of your work is single-session (walk-ins, flash, small pieces), a deposit per booking is simpler and you don’t need a pool. The pool earns its place on anything longer than two sessions, where a deposit would otherwise be split, carried forward or taken twice.",
       },
       {
-        type: 'p',
-        text: "For the owner, the Project pulse panel on Today lists multi-session projects by status: planning, active, healing, on hold. It's the catch-all for the things that fall through the cracks in a busy studio: the sleeve waiting on its next session, the back piece that's healing and due a photo.",
-      },
-      {
-        type: 'h3',
-        text: 'Building the habit',
-      },
-      {
-        type: 'p',
-        text: "The 90-second triage only works if the data going in is clean. That means consent forms signed before arrival, deposits requested at booking (not chased later), and artists adding their healed photos. The discipline is a studio culture question as much as a software question. Limespun makes it easier, but someone still has to decide it matters.",
-      },
-      {
-        type: 'callout',
-        tone: 'rust',
-        text: "Today, Project pulse and allergy flags are on every plan, Solo included. Commissions owed appears from Studio, where artist splits start.",
-      },
-      {
-        type: 'p',
-        text: "To set this up for your studio, create an account. There's no free trial; you get a 30-day money-back guarantee, and we move your existing clients and bookings over for you.",
+        type: "p",
+        text: "To try it, create an account and set up your next multi-session piece as a project. If you’re switching tools, we move the deposits you already hold over for you.",
       },
     ],
   },
   {
-    slug: "deposit-pools-vs-per-booking-deposits",
-    title: "Deposit pools vs per-booking deposits: a comparison",
-    excerpt:
-      "Why holding the deposit on the project (not the session) ends the Friday afternoon reconciling.",
-    publishedAt: "2026-04-08",
-    readTime: "8 min",
-    author: { name: "The Limespun team", role: "Limespun" },
-    category: "product",
-    gradient: `linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.sage} 100%)`,
-    content: [
+    slug: "the-90-second-morning-triage",
+    title: "The 90-second morning triage",
+    italicWord: "triage",
+    crumb: "Morning triage",
+    seoTitle: "The 90-second morning triage for tattoo studios",
+    description:
+      "What a tattoo studio needs to know before the first client walks in, and how the Today screen puts deposits, consent forms and allergies on one page.",
+    summary: "What to check before the first client walks in, and where Today puts it.",
+    publishedAt: "2026-09-24",
+    category: "operations",
+    screen: "today",
+    screenCaption: "Today in the Sample studio, as Dev, the owner, sees it.",
+    feature: {
+      title: "Product",
+      body: "Today, Needs attention, Messages and the screens behind them.",
+      href: "/product",
+    },
+    inkBand: {
+      headline: "Open the shop at a glance.",
+      italicWord: "glance",
+      secondary: { label: "See the product", href: "/product" },
+    },
+    blocks: [
       {
-        type: 'h2',
-        text: "The reconciliation problem nobody talks about until it's 5pm on Friday.",
+        type: "p",
+        text: "Most studios open the same way: coffee, then four tabs. The booking app, the group chat, the card reader’s dashboard and the spreadsheet with the deposits on it. Somewhere in there is the 10:00 client who texted at 11 last night to move, and a consent form nobody sent. It’s easy for the first half hour to go before anyone sets up a station.",
       },
       {
-        type: 'p',
-        text: "Most booking software attaches a deposit to a session. You book three sessions for a sleeve, you collect three deposits. Straightforward on the way in, painful on the way out, because now you have three separate payment records to reconcile against one project that the client thinks of as a single piece of work.",
+        type: "p",
+        text: "A morning check should take about as long as the kettle. That needs one screen, and a short list of questions it has to answer.",
       },
+      { type: "h2", text: "Four things to know before opening" },
       {
-        type: 'h3',
-        text: 'How per-session deposits create Friday problems',
-      },
-      {
-        type: 'p',
-        text: "Consider a realistic sleeve project: six sessions at $200 each, with a 25% deposit per session. That's six $50 deposits collected at six different points: some by card, some by bank transfer, possibly by two different artists if the project changed hands mid-sleeve. By session four, the client is asking 'how much have I paid so far?' and you're opening your card processor, your bank statement and a notes app to piece it together.",
-      },
-      {
-        type: 'ul',
+        type: "ol",
         items: [
-          'Session 1 deposit: $50 by card, Jan 14',
-          'Session 2 deposit: $50 by bank transfer, Jan 28 (client paid manually)',
-          'Session 3 deposit: $50 by card, Feb 12',
-          'Session 4: artist was sick, rescheduled. Was this deposit carried forward or charged again?',
-          'Session 5 deposit: $50 by card, Mar 3',
-          'Session 6: not booked yet',
+          "Who is in the chair today, with which artist, and when.",
+          "Which deposits are still unpaid, and whose booking they hold.",
+          "Which clients haven’t signed their consent form yet.",
+          "Anything about a client that changes the session, like an allergy.",
         ],
       },
       {
-        type: 'p',
-        text: 'Total held: somewhere between $200 and $250. Time to figure it out: 20 minutes on a Friday afternoon when you should be wrapping up for the weekend.',
+        type: "p",
+        text: "Everything else (next month’s gaps, last week’s revenue, the stock order) can wait until the first session has started.",
+      },
+      { type: "h2", text: "The Today screen" },
+      {
+        type: "p",
+        text: "Today in Limespun answers those four in order. Here is a Thursday in the Sample studio:",
       },
       {
-        type: 'h3',
-        text: 'The deposit pool model',
+        type: "table",
+        caption: "A Thursday’s bookings in the Sample studio (sample data)",
+        head: ["Time", "Artist", "Client", "What to know"],
+        rows: [
+          ["10:00", "Dev", "Asha M.", "Koi sleeve, session 4 of 5; $240 in the deposit pool"],
+          ["11:00", "Mara", "Jo K.", "Consult; $100 deposit paid"],
+          ["12:00", "Rio", "Walk-ins", "Guest day, 3 slots"],
+          ["1:00", "Mara", "Priya S.", "Consent form not signed yet"],
+          ["1:30", "Dev", "Elena R.", "Red ink allergy; no red today"],
+          ["4:30", "Mara", "Sam T.", "Touch-up; consent signed"],
+        ],
       },
       {
-        type: 'p',
-        text: "A deposit pool attaches to the project, not the session. When a client books a sleeve with Limespun, you take a project deposit, say $150, roughly one session's value. That amount is held against the whole project. Each session then draws from the pool as it's paid. If the client reschedules session 4, the deposit doesn't move. It stays in the pool until it's applied or refunded.",
+        type: "p",
+        text: "Above the list is a strip of numbers: revenue expected today, bookings, deposits pending and, from the Studio plan, commissions owed. Below it are the lists that need a hand: deposits still pending, consent forms still out, low stock and the waitlist.",
+      },
+      { type: "h2", text: "The allergy note, where you’ll see it" },
+      {
+        type: "p",
+        text: "Allergy near-misses tend to happen when a note lives in one place and the session happens somewhere else. In Limespun you note an allergy once, on the client record. It shows on every booking for that client and across the top of Today on the day they’re in. In the Sample studio, on a day Elena R. is booked, her red ink allergy is the first thing on Today, above the numbers.",
       },
       {
-        type: 'code',
-        lang: 'text',
-        text: `Project: Left arm sleeve
-Deposit pool: $150 paid in
-─────────────────────────────────────
-Session 1  Jan 14  $200  $150 applied from pool   $50 paid
-Session 2  Jan 28  $200  pool empty               $200 paid
-Session 3  Feb 12  $200  pool empty               $200 paid
-Session 4  —       rescheduled, pool unchanged
-─────────────────────────────────────
-Available in pool: $0
-Total received to date: $600`,
+        type: "callout",
+        tone: "note",
+        text: "Note it once on the [client record](/product/clients). There’s no copying it into each appointment.",
+      },
+      { type: "h2", text: "What each person sees" },
+      {
+        type: "p",
+        text: "Owners and admins get the whole studio. An artist’s Today shows their own sessions, their own payout and their own projects, so they aren’t reading everyone’s day to find theirs. The front desk gets the schedule, deposits, consent forms and stock, without the commission figures.",
+      },
+      { type: "h2", text: "Making it a habit" },
+      {
+        type: "p",
+        text: "The morning check is only quick if what goes in is clean: consent forms sent before the day, deposits requested when the booking is made rather than chased later, and allergies written down the first time a client mentions one. That’s a studio habit as much as a software setting. Limespun makes it easier, but someone still has to decide it matters.",
       },
       {
-        type: 'h3',
-        text: 'How Limespun compares to Mangomint and DaySmart',
-      },
-      {
-        type: 'p',
-        text: "Mangomint publishes card-on-file collection and DaySmart Body Art publishes online deposits; neither describes a deposit that follows a multi-session piece (their public pages, checked September 22, 2026). Limespun's deposit pool does that for you: when a session is paid, the pool is checked first, whatever is available is applied, and the rest is the balance due. The project shows what's been paid in, applied, still available and refundable.",
-      },
-      {
-        type: 'h3',
-        text: 'Partial refunds and cancellations',
-      },
-      {
-        type: 'p',
-        text: "The edge case every studio worries about: the client cancels mid-project. With per-session deposits, you have a dispute over which sessions were 'used' and which deposits should be returned. With a pool, the project shows what's refundable at any point, and your booking policies set what you keep on a late cancel.",
-      },
-      {
-        type: 'callout',
-        tone: 'sage',
-        text: "Deposit pools are on every plan, alongside per-session deposits for studios that prefer that model.",
-      },
-      {
-        type: 'p',
-        text: "The deposit pool model won't fit every studio. If you do mostly single-session walk-ins, per-booking deposits are simpler. But if you run projects longer than two sessions, the reconciliation time saved alone is worth the switch. Create an account to set up your first project; we move the deposits you're holding over for you.",
+        type: "p",
+        text: "Today is on every plan. There’s no free trial; you get a 30-day money-back guarantee, and we move your existing clients and bookings over for you.",
       },
     ],
   },
   {
     slug: "eu-reach-2022-what-tattoo-studios-need-to-know",
-    title: "EU REACH 2022: what tattoo studios need to know",
-    excerpt:
-      "A plain checklist for the EU REACH restriction on tattoo inks: ingredient lists, safety data sheets, batch records and reactions, and what Limespun keeps for you.",
-    publishedAt: "2026-04-01",
-    readTime: "10 min",
-    author: { name: "The Limespun team", role: "Limespun" },
+    title: "EU REACH: the records a tattoo studio keeps",
+    italicWord: "records",
+    crumb: "EU REACH",
+    seoTitle: "EU REACH for tattoo studios: what to keep",
+    description:
+      "A plain checklist for the EU REACH restriction on tattoo inks: ingredient lists, safety data sheets, batch records and reactions, and what Limespun keeps.",
+    summary: "Ingredient lists, safety data sheets, batch records and reactions, in plain terms.",
+    publishedAt: "2026-09-24",
     category: "compliance",
-    gradient: `linear-gradient(135deg, ${BRAND.sage} 0%, ${BRAND.amber} 100%)`,
-    content: [
+    screen: "inventory",
+    screenCaption: "Inventory in the Sample studio, with the REACH-registered count beside stock.",
+    feature: {
+      title: "Inventory",
+      body: "Every bottle, batch and REACH record, with low stock flagged on Today.",
+      href: "/product/inventory",
+    },
+    inkBand: {
+      headline: "Add your inks to the registry.",
+      italicWord: "registry",
+      secondary: { label: "EU REACH hub", href: "/reach-compliance" },
+    },
+    blocks: [
       {
-        type: 'h2',
-        text: 'What changed in January 2022, and what it means at the station.',
+        type: "p",
+        text: "The EU REACH restriction on tattoo inks and permanent makeup (Annex XVII, entry 75) has applied since January 4, 2022. It limits a long list of substances in the ink itself, so most of the work sits with manufacturers. The studio’s part is the records: knowing what’s in each ink you use, which batch went into which client, and being able to show both.",
       },
       {
-        type: 'p',
-        text: "The EU REACH restriction on tattoo inks (Annex XVII, entry 75) has been in force since January 4, 2022. It restricts a long list of substances in inks used for tattooing and permanent makeup, and the paperwork on the studio side is real, even if you're not the one formulating the ink.",
+        type: "p",
+        text: "This is a practical checklist, not legal advice. Your national authority’s guidance is the last word for your country.",
+      },
+      { type: "h2", text: "Know what is in every color" },
+      {
+        type: "p",
+        text: "Compliant inks carry an ingredient list on the label. Ask your supplier for the full list for every color, including each pigment’s Color Index (CI) number.",
       },
       {
-        type: 'h3',
-        text: 'Know what is in every color',
-      },
-      {
-        type: 'p',
-        text: "Compliant inks carry an ingredient list on the label. Ask your supplier for the full ingredient list for every color, including each pigment's CI (Color Index) number. If a supplier can't tell you what's in a color, don't use it, however long you've used it.",
-      },
-      {
-        type: 'ul',
+        type: "ul",
         items: [
-          'Request a full ingredient breakdown from your supplier, not just the safety data sheet',
-          'Cross-reference it against the restricted substances list in Annex XVII, entry 75',
-          'Flag any ink where the supplier cannot confirm the absence of restricted amines, PAHs or heavy metals above the concentration limits',
-          "Don't assume a brand is compliant because it was compliant before January 2022; reformulations happen and relabeling lags",
+          "Get the full ingredient list from your supplier, not only the safety data sheet.",
+          "Check it against the restricted substances in Annex XVII, entry 75.",
+          "Set aside any ink where the supplier can’t confirm restricted amines, PAHs or heavy metals are under the limits.",
+          "Don’t assume a brand is still compliant because it was in 2022. Formulas change, and labels can lag behind.",
         ],
       },
       {
-        type: 'h3',
-        text: 'Safety data sheets: what to check',
+        type: "p",
+        text: "If a supplier can’t tell you what’s in a color, stop using it, however long you’ve had it.",
+      },
+      { type: "h2", text: "Safety data sheets: where to look" },
+      {
+        type: "p",
+        text: "A safety data sheet (SDS) has 16 sections. For tattoo ink, three matter most: section 3 (composition: the ingredients and their identifiers), section 11 (toxicological information) and section 15 (regulatory information, where REACH is referenced).",
       },
       {
-        type: 'p',
-        text: "A safety data sheet (SDS) follows a 16-section format. For tattoo ink, look at section 3 (composition: the ingredients and their identifiers), section 11 (toxicological information) and section 15 (regulatory information, where REACH is referenced).",
+        type: "p",
+        text: "Keep them where you can find one in a minute, not in a folder under the counter.",
+      },
+      { type: "h2", text: "Batch records" },
+      {
+        type: "p",
+        text: "A batch record means knowing which batch of which ink went into which client. It sounds like admin until a supplier recalls a batch. With a record, you can find the clients who had ink from that batch and contact them. Without one, you can’t.",
       },
       {
-        type: 'callout',
-        tone: 'sage',
-        text: "Keep safety data sheets where you can find them fast, not in a folder under the counter. In Limespun, the Ink registry in Settings holds each ink's brand, color, product code, batch number and REACH status, so the record is one screen away.",
+        type: "p",
+        text: "In Limespun, each ink in the Ink registry (in Settings) has its brand, color, product code, batch number and REACH status. Your consent form carries a REACH ink disclosure in your own wording, which the client acknowledges before signing. After the session, the artist adds the brand, color and batch of each ink to the signed form, so the record stays with that session.",
       },
       {
-        type: 'h3',
-        text: 'Batch records in practice',
+        type: "callout",
+        label: "What Limespun doesn’t do",
+        tone: "note",
+        text: "It doesn’t watch for recalls. Keep your supplier’s notices and check them against the batch numbers in your registry.",
+      },
+      { type: "h2", text: "Log reactions, even small ones" },
+      {
+        type: "p",
+        text: "Report serious reactions to your supplier and, where your country runs one, to the national reporting scheme. For your own records, set the bar lower: note anything the client mentions, even redness that settles by itself.",
       },
       {
-        type: 'p',
-        text: "A batch record means knowing which batch of which ink went into each client. It sounds like administrative overhead until a supplier issues a batch recall. With a batch record, you can find the clients who received ink from that batch and contact them. Without it, you're hoping nothing goes wrong.",
-      },
-      {
-        type: 'p',
-        text: "In Limespun, each ink in the Ink registry carries its batch number, and the REACH ink disclosure section on the consent form puts the ink details in front of the client when they sign. Limespun doesn't match recalls for you: keep your supplier's notices and check them against the registry.",
-      },
-      {
-        type: 'h3',
-        text: 'Reaction logging',
-      },
-      {
-        type: 'p',
-        text: "Serious reactions to tattoo ink are worth reporting to your supplier and, where your country runs one, to the national reporting scheme. The bar for your own records should be lower. Log everything. A client who mentions unusual redness at week three is worth noting, even if it resolves.",
-      },
-      {
-        type: 'ul',
+        type: "ul",
         items: [
-          'Date of the reaction report',
-          'Ink and batch used in the session',
-          'Body location',
-          "Description of the reaction (the client's own words)",
-          'Resolution, or referral to a doctor or dermatologist',
-          'Whether the reaction was reported to the ink supplier',
+          "The date the client told you",
+          "The ink and batch used in the session",
+          "Where on the body",
+          "What happened, in the client’s own words",
+          "How it resolved, or who you referred them to",
+          "Whether you told the ink supplier",
         ],
       },
       {
-        type: 'h3',
-        text: 'Enforcement varies by country',
+        type: "p",
+        text: "In Limespun, note it on the client’s record. An allergy noted there shows on every booking after that, which is how Elena R.’s red ink allergy reaches Dev before her next session in the Sample studio.",
+      },
+      { type: "h2", text: "Ready for an inspection" },
+      {
+        type: "p",
+        text: "Enforcement differs from country to country. Being ready doesn’t mean perfect paperwork. It means you can quickly produce three things: the safety data sheet for an ink you’re using, the ink and batch behind a given session, and the disclosure the client acknowledged before it.",
       },
       {
-        type: 'p',
-        text: "Enforcement across EU member states has been uneven. Don't mistake slow enforcement for no enforcement: the liability is yours when a client has a reaction and asks what was in the ink.",
+        type: "callout",
+        label: "In Limespun",
+        tone: "ember",
+        text: "EU REACH ink tracking is on every plan, Solo included: the Ink registry in Settings, a REACH-registered count on [Inventory](/product/inventory) and the REACH ink disclosure on your [consent forms](/product/forms).",
       },
       {
-        type: 'h3',
-        text: 'Ready for an inspection',
-      },
-      {
-        type: 'p',
-        text: "Being ready for an inspection doesn't mean having perfect paperwork. It means being able to produce the right record quickly: the safety data sheet for an ink in use, which ink and batch went into a given session, and proof the client was told what was in it.",
-      },
-      {
-        type: 'callout',
-        tone: 'rust',
-        text: "In Limespun, EU REACH ink tracking is on every plan, Solo included: the Ink registry in Settings, a REACH-registered count on Inventory and a REACH ink disclosure section for your consent form. Allergies noted on the client record show on every booking.",
-      },
-      {
-        type: 'p',
-        text: "The ink record is the least glamorous part of Limespun and the one that matters most when things go wrong. Create an account and register your inks in Settings, or send us your ink list and we'll move it over as part of migration.",
+        type: "p",
+        text: "Create an account and add your inks in Settings, or send us your ink list and we’ll bring it over when we move your studio.",
       },
     ],
   },
   {
     slug: "guest-residency-bookings-that-actually-work",
-    title: "Guest residency bookings that actually work",
-    excerpt:
-      "How to run a guest spot without a spreadsheet: dates, a booking link and the split, set once.",
-    publishedAt: "2026-03-25",
-    readTime: "4 min",
-    author: { name: "The Limespun team", role: "Limespun" },
-    category: "ops",
-    gradient: `linear-gradient(135deg, ${BRAND.amber} 0%, ${BRAND.rust} 100%)`,
-    content: [
+    title: "Guest spots without the spreadsheet",
+    italicWord: "spreadsheet",
+    crumb: "Guest spots",
+    seoTitle: "Guest artist spots without the spreadsheet",
+    description:
+      "How to host a guest artist without a spreadsheet: set the dates and the split once, show them on your booking page, and settle up when the guest spot ends.",
+    summary: "Dates, split and booking page set once; access ends with the guest spot.",
+    publishedAt: "2026-09-24",
+    category: "operations",
+    screen: "guest-artists",
+    screenCaption: "Rio’s guest spot in the Sample studio: a week, split 70/30.",
+    feature: {
+      title: "Team & guest artists",
+      body: "Residents, front desk and guests on one roster.",
+      href: "/product/team",
+    },
+    inkBand: {
+      headline: "Host the guest, not the admin.",
+      italicWord: "guest",
+      secondary: { label: "See pricing", href: "/pricing" },
+    },
+    blocks: [
       {
-        type: 'h2',
-        text: 'A busy guest calendar used to mean a round of setup for every residency.',
+        type: "p",
+        text: "Hosting a guest artist usually comes with a round of setup: add them somewhere, give their clients a way to book, watch the calendar so nothing double-books, work out the split at the end, then remember to take their access away. Do that for every guest spot and it adds up.",
+      },
+      { type: "h2", text: "Set it up once" },
+      {
+        type: "p",
+        text: "In Limespun a guest spot has its own dates and its own split. You set it up in three steps:",
       },
       {
-        type: 'p',
-        text: "Studios that host guest artists regularly know the manual routine: make a temporary booking link, email it to the guest, watch their calendar so nothing double-books, chase the split at the end of the week, then archive everything. Multiply that by ten or more guest spots a year and it's a part-time job.",
-      },
-      {
-        type: 'h3',
-        text: 'Set it up once',
-      },
-      {
-        type: 'p',
-        text: "In Limespun, a guest artist gets their own dates, booking link and split. Add the guest, set the dates of the guest spot and the split, and send them the link. Their access ends when the guest spot does.",
-      },
-      {
-        type: 'ul',
+        type: "ol",
         items: [
-          'Add the guest artist to your team',
-          'Set the dates of the guest spot',
-          'Set the split, 70/30 for example',
-          'Share their booking link',
+          "Add the guest and their dates. In the Sample studio, Rio is in for a week, Friday to Friday.",
+          "Set the split. It starts at 70/30 to the artist; change it to what you agreed.",
+          "Choose what they can see, and whether they show on your booking page.",
         ],
       },
       {
-        type: 'h3',
-        text: 'One calendar, the same clash checks',
+        type: "p",
+        text: "When the dates end, their access ends with them. There’s nothing to remember to switch off.",
+      },
+      { type: "h2", text: "One calendar, the same clash checks" },
+      {
+        type: "p",
+        text: "A guest’s bookings sit on the same calendar as everyone else’s, with the same clash checks, and Today shows who is guesting that week. Nobody has to ask when Rio’s in.",
+      },
+      { type: "h2", text: "Settling up" },
+      {
+        type: "p",
+        text: "The split is worked out on each session the guest finishes, so at the end you can see what they took and what they’re owed without rebuilding it from a spreadsheet. Say Rio takes $1,300 in a payout week in the Sample studio: at 70/30, $910 is Rio’s and $390 stays with the studio.",
+      },
+      { type: "h2", text: "Before the guest arrives" },
+      {
+        type: "ul",
+        items: [
+          "Agree the split, and who takes the deposits, before you announce the dates.",
+          "Decide which consent form their clients sign, and where the signed copies are kept.",
+          "Share your aftercare instructions, so clients hear one version.",
+          "Tell your regulars the dates, so the guest’s books fill from your list as well as theirs.",
+        ],
       },
       {
-        type: 'p',
-        text: "Guest artists are prolific bookers, which is great for revenue and occasionally hard on the studio's schedule. In Limespun, a guest's bookings sit on the same calendar as everyone else's, with the same clash checks, and the guest spot's dates are on the calendar for the whole team to see. When Rio's guest spot runs Oct 2–9, nobody has to ask when Rio's in.",
+        type: "callout",
+        label: "Plan",
+        tone: "note",
+        text: "Guest artists are on Pro and Multi-Location, with unlimited guest-artist seats. [Compare the plans](/pricing).",
       },
       {
-        type: 'h3',
-        text: 'Settling up at the end',
-      },
-      {
-        type: 'p',
-        text: "The guest's split is worked out on each session they do, so at the end of the guest spot you can see what they took and what they're owed, without rebuilding it from a spreadsheet. Rio took $1,300 over the week; at 70/30, $910 is Rio's.",
-      },
-      {
-        type: 'callout',
-        tone: 'amber',
-        text: "Guest artists are on the Pro plan and up, with unlimited guest-artist seats.",
-      },
-      {
-        type: 'p',
-        text: "If you host guests more than a few times a year, the time adds up. Guest artists are on Pro; create an account and set up your next guest spot.",
+        type: "p",
+        text: "If you host guests more than a couple of times a year, the setup you skip adds up. Create an account and set up your next guest spot.",
       },
     ],
   },
   {
     slug: "commission-splits-the-friday-afternoon-fix",
     title: "Commission splits: the Friday afternoon fix",
-    excerpt:
-      "Why paying eight artists by spreadsheet at 5pm on Friday is the most expensive bug in your studio.",
-    publishedAt: "2026-03-18",
-    readTime: "6 min",
-    author: { name: "The Limespun team", role: "Limespun" },
-    category: "ops",
-    gradient: `linear-gradient(135deg, ${BRAND.rust} 0%, ${BRAND.rustDeep} 50%, ${BRAND.amber} 100%)`,
-    content: [
+    italicWord: "Friday",
+    crumb: "Commission splits",
+    seoTitle: "Commission splits for tattoo studios",
+    description:
+      "How to stop working out artist pay by spreadsheet on Friday: a split for each artist, booth rent for renters, and commissions worked out as sessions are paid.",
+    summary: "A rate for each artist, booth rent for renters, and pay worked out as sessions are paid.",
+    publishedAt: "2026-09-24",
+    category: "money",
+    screen: "commissions",
+    screenCaption: "The Commissions tab in Payments for the Sample studio.",
+    feature: {
+      title: "Payments & payouts",
+      body: "Card payments in, artist splits out, payroll and 1099s on Pro.",
+      href: "/product/payments",
+    },
+    inkBand: {
+      headline: "Payday, already worked out.",
+      italicWord: "worked",
+      secondary: { label: "Payout calculator", href: "/tools/payout-calculator" },
+    },
+    blocks: [
       {
-        type: 'h2',
-        text: 'Every Friday at 4:45pm, the studio owner becomes a part-time accountant.',
+        type: "p",
+        text: "In a lot of studios, Friday at 4:45 is when the owner turns accountant: pull the week’s sessions, apply each artist’s rate, take off booth rent, and send the transfers before everyone leaves. With a few artists on different arrangements it can take a couple of hours, and one wrong rate means a correction and an awkward conversation.",
+      },
+      { type: "h2", text: "What the spreadsheet costs" },
+      {
+        type: "p",
+        text: "If Friday pay takes you two hours and your time is worth $50 an hour, that’s $100 a week, or $5,200 over a year. The bigger cost is mistakes. Every manual sum is a chance to use last month’s rate, miss a session or count a deposit twice, and pay is the one number every artist checks.",
+      },
+      { type: "h2", text: "A rate for each artist" },
+      {
+        type: "p",
+        text: "In Limespun each artist has their own arrangement: a commission split for residents, or weekly booth rent for renters. There’s no single studio-wide rate that quietly applies to everyone, so a senior artist on a negotiated split keeps it.",
       },
       {
-        type: 'p',
-        text: "Picture a studio with eight resident artists on different arrangements: some on 50/50, two senior artists on 60/40, one renting a booth by the week. Run pay by spreadsheet and Friday afternoon becomes the most stressful two hours of the week: pulling session data, applying the right rate for each artist, and sending eight bank transfers before people leave for the weekend.",
+        type: "p",
+        text: "As sessions are paid, each artist’s share is worked out, and the total owed shows as Commissions owed on Today. Here is one payout week in the Sample studio:",
       },
       {
-        type: 'h3',
-        text: 'The real cost of manual commission',
+        type: "table",
+        caption: "Artist pay for one week in the Sample studio (sample data)",
+        head: ["Artist", "Arrangement", "Took", "Owed"],
+        rows: [
+          ["Dev", "60% commission", "$3,420", "$2,052"],
+          ["Mara", "Booth rent, $250 a week", "$2,910", "$2,660"],
+          ["Rio", "Guest, 70/30", "$1,300", "$910"],
+        ],
+        foot: ["Week", "", "$7,630", "$5,622"],
+        figureColumns: [2, 3],
       },
       {
-        type: 'p',
-        text: "Two hours of owner time, every week. At a conservative $50 an hour, that's $100 a week, or $5,200 a year. Then add the errors. One wrong rate applied to one payout means a correction, an awkward conversation and a dent in trust with an artist you want to keep.",
+        type: "p",
+        text: "Mara rents her booth, so nothing is split: her $250 rent comes off what she took, and the rest is hers.",
+      },
+      { type: "h2", text: "Agree the terms in writing" },
+      {
+        type: "p",
+        text: "Software can only apply the arrangement you agreed. Before an artist’s first week, write down:",
       },
       {
-        type: 'ul',
+        type: "ul",
         items: [
-          '$5,200 a year in owner time, at two hours a week and $50 an hour',
-          'Every manual calculation is a chance to apply the wrong rate',
-          'Every correction costs time, and a conversation nobody enjoys',
-          'Pay disputes are a real artist-retention risk',
+          "The split or the rent, and what would change it.",
+          "Whether the split is worked out before or after card fees.",
+          "How tips are paid out.",
+          "Who pays for needles, ink and other supplies.",
+          "What happens to a deposit a client forfeits.",
         ],
       },
       {
-        type: 'h3',
-        text: 'How splits work in Limespun',
+        type: "p",
+        text: "Then set the same numbers on each artist in Limespun, so what it works out is what you agreed.",
+      },
+      { type: "h2", text: "What artists see" },
+      {
+        type: "p",
+        text: "Artists see their own payout on their Today screen as the week goes, instead of finding out on Friday. Fewer questions for the owner, fewer surprises for the artist.",
+      },
+      { type: "h2", text: "Friday, after" },
+      {
+        type: "p",
+        text: "With splits worked out as sessions are paid, Friday becomes a check rather than a calculation. The breakdown for any artist is on the Commissions tab in Payments.",
       },
       {
-        type: 'p',
-        text: "Each artist has their own arrangement: a commission split for residents, or weekly booth rent for renters. As sessions are paid, Limespun works out each artist's share, and Today shows the commissions owed. There's no rebuilding the week from bank statements on Friday.",
+        type: "callout",
+        label: "Plans",
+        tone: "ember",
+        text: "Commission and booth-rent splits are on Studio and up. Payroll and 1099s are on Pro.",
       },
       {
-        type: 'code',
-        lang: 'text',
-        text: `Session: chest piece, $320
-Artist: Dev · 60% commission
-─────────────────────────────────
-Dev's share:    $192 (60%)
-Studio keeps:   $128 (40%)
-─────────────────────────────────
-Added to Commissions owed on Today`,
-      },
-      {
-        type: 'h3',
-        text: 'A rate for each artist',
-      },
-      {
-        type: 'p',
-        text: "Each artist in Limespun has their own split. A senior artist on a negotiated rate has their own number; there's no global setting that quietly applies the wrong rate to everyone.",
-      },
-      {
-        type: 'p',
-        text: "Artists see their own earnings and what they're owed on their Today screen as the week goes, instead of waiting until Friday to find out. Fewer questions for the owner, fewer surprises for the artist.",
-      },
-      {
-        type: 'h3',
-        text: 'Booth renters too',
-      },
-      {
-        type: 'p',
-        text: "Booth renters pay rent instead of a split. In the Sample studio, Mara took $2,910 this week; her $250 booth rent comes off, and $2,660 is what she's owed.",
-      },
-      {
-        type: 'h3',
-        text: 'What Friday looks like now',
-      },
-      {
-        type: 'p',
-        text: "With splits worked out as sessions are paid, Friday at 4:45pm becomes a glance at who's owed what. The breakdown for any artist is on the Commissions tab in Payments.",
-      },
-      {
-        type: 'callout',
-        tone: 'rust',
-        text: "Payroll and 1099s are on Pro: at year end, each artist's totals are ready for their 1099.",
-      },
-      {
-        type: 'p',
-        text: "Commission and booth-rent splits are on Studio and up; payroll and 1099s are on Pro. If you have more than a couple of resident artists, the time saved is likely to outweigh the plan cost.",
+        type: "p",
+        text: "Try the numbers for your own team in the [payout calculator](/tools/payout-calculator), then create an account when you’re ready.",
       },
     ],
   },
   {
     slug: "the-photo-timeline-as-a-portfolio",
-    title: "The photo timeline as a portfolio: reference, fresh, healed",
-    excerpt:
-      "The photo record that turns ten weeks of one sleeve into the most useful post you've ever made.",
-    publishedAt: "2026-03-11",
-    readTime: "4 min",
-    author: { name: "The Limespun team", role: "Limespun" },
+    title: "The photo timeline: before, fresh, healed",
+    italicWord: "healed",
+    crumb: "Photo timeline",
+    seoTitle: "The tattoo photo timeline: before, fresh, healed",
+    description:
+      "Why the healed photo is the one your portfolio needs, and how a project’s photo timeline files every shot from the stencil to the final healed photo, in order.",
+    summary: "Before, stencil, fresh and healed shots, filed on the project in order.",
+    publishedAt: "2026-09-24",
     category: "craft",
-    gradient: `linear-gradient(135deg, ${BRAND.sage} 0%, ${BRAND.rustGlow} 100%)`,
-    content: [
+    screen: "photo-timeline",
+    screenCaption: "The photo timeline on Asha M.’s koi sleeve in the Sample studio, with session 3’s healed photo past due. Tiles stand in for photos.",
+    feature: {
+      title: "Portfolio & flash",
+      body: "Show the healed work you choose, and sell your flash.",
+      href: "/product/portfolio",
+    },
+    inkBand: {
+      headline: "Get the healed shot, every time.",
+      italicWord: "healed",
+      secondary: { label: "See pricing", href: "/pricing" },
+    },
+    blocks: [
       {
-        type: 'h2',
-        text: 'The healed photo is the only photo that matters. Most studios never get it.',
+        type: "p",
+        text: "You finish a piece and take the fresh photo. The client heals, loves it and never sends you the healed shot. So the portfolio fills with fresh work: shiny, a little swollen, and not what the tattoo will look like in a year. The healed photo is the one that shows your work, and the one most often missing.",
+      },
+      { type: "h2", text: "Five kinds of photo, in order" },
+      {
+        type: "p",
+        text: "Every project in Limespun has a photo timeline, filed by slot instead of left in a camera roll:",
       },
       {
-        type: 'p',
-        text: "Every tattoo artist knows the problem. You do exceptional work. The fresh photo looks good. The client goes home, heals, falls in love with the piece, and never sends you a healed photo. Your portfolio is full of fresh work that doesn't show how your tattoos actually look. The photo timeline on every Limespun project is built to close that gap.",
-      },
-      {
-        type: 'h3',
-        text: 'References',
-      },
-      {
-        type: 'p',
-        text: "References are where the client's inspiration photos, placement sketches and style references live, on the project. They stay private: nothing on a project is public unless you put it in your portfolio. The stencil gets its own slot too, so the agreed design sits next to the references.",
-      },
-      {
-        type: 'h3',
-        text: 'Fresh: right off the machine',
-      },
-      {
-        type: 'p',
-        text: "Fresh photos go on the session they came from, taken at the end of each session before wrapping. Across a six-session sleeve, that's the build-up of a complex piece, in order.",
-      },
-      {
-        type: 'h3',
-        text: 'Healed: the two-week check',
-      },
-      {
-        type: 'p',
-        text: "The healed photo is the most often skipped and the most useful. Photos taken two to three weeks after a session show how the ink is settling: uneven healing, ink loss in one area, or a detail that needs a touch-up. In Limespun, each session's healed photo is due 14 days after the session, so the timeline shows which ones are still missing.",
-      },
-      {
-        type: 'callout',
-        tone: 'sage',
-        text: "Healed photos also help if a client later reports a reaction: they show the tattoo's condition at two weeks, which is useful context for anyone looking into it.",
-      },
-      {
-        type: 'h3',
-        text: 'Final healed: the portfolio shot',
-      },
-      {
-        type: 'p',
-        text: "The final healed photo is the one for your portfolio. In Limespun you choose which healed photos go into your portfolio; nothing is published automatically.",
-      },
-      {
-        type: 'h3',
-        text: 'Finding the photo later',
-      },
-      {
-        type: 'p',
-        text: "Photos on a project are filed by session and slot, so the healed forearm piece from last October is on its project, not somewhere in your camera roll.",
-      },
-      {
-        type: 'ul',
+        type: "ul",
         items: [
-          'Photos filed by project, session and slot',
-          'Healed photos due 14 days after each session',
-          'You choose what goes into your portfolio',
+          "Before: the client’s references, and the skin before you start.",
+          "Stencil: the agreed design, one per project.",
+          "Fresh, for each session: taken before you wrap.",
+          "Healed, for each session: due 14 days after it.",
+          "Final healed: the portfolio shot, once the whole piece has settled.",
         ],
       },
+      { type: "h2", text: "Fresh photos tell the story" },
       {
-        type: 'callout',
-        tone: 'amber',
-        text: "The photo timeline is on every Limespun plan, Solo included, on every project.",
+        type: "p",
+        text: "Fresh photos go on the session they came from. Across a five-session sleeve, that’s the piece building up in order, which is useful to you and to the next client deciding whether to commit to something big.",
+      },
+      { type: "h2", text: "The healed photo at two weeks" },
+      {
+        type: "p",
+        text: "A photo around two weeks after a session shows how the ink is settling: patchy healing, ink loss in one spot, a line that needs a touch-up. In Limespun each session’s healed photo is due 14 days after the session, so the timeline shows which ones are still missing and you know whom to ask. On Asha M.’s koi sleeve in the Sample studio, session 2’s healed photo is in, and it’s the one Dev added to his portfolio. Session 3’s is past due, so the timeline flags it, and her next session is the moment to ask for it.",
       },
       {
-        type: 'p',
-        text: "The best portfolio you can build is your actual healed work. The photo timeline makes that systematic rather than accidental.",
+        type: "callout",
+        tone: "note",
+        text: "Healed photos help later, too. If a client reports a reaction, a dated photo shows how the tattoo looked at two weeks.",
+      },
+      { type: "h2", text: "You choose what goes public" },
+      {
+        type: "p",
+        text: "Photos on a project stay on the project. Nothing goes into your public [portfolio](/product/portfolio) unless you add it, and you choose which healed shots make it.",
+      },
+      {
+        type: "p",
+        text: "Because every photo is filed by project, session and slot, a healed forearm piece from a year ago is still on its project, not somewhere in your phone.",
+      },
+      {
+        type: "callout",
+        label: "Plan",
+        tone: "note",
+        text: "The photo timeline comes with [Projects](/product/projects), on every plan from Solo.",
+      },
+      {
+        type: "p",
+        text: "The best portfolio is your healed work. The timeline turns getting it into a habit instead of luck.",
       },
     ],
   },
 ];
 
-export const categoryLabels: Record<BlogPost["category"], string> = {
-  ops: "Studio operations",
-  compliance: "Compliance",
-  craft: "Craft",
-  product: "Product",
-};
+/* ─── Queries ─────────────────────────────────────────────────────────────── */
+
+/** Every post, newest first; posts from the same day keep their order above (the sort is stable). */
+export const blogPosts: BlogPost[] = [...posts].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+
+export function getPost(slug: string): BlogPost | undefined {
+  return blogPosts.find((p) => p.slug === slug);
+}
+
+/** Up to `n` other posts: the same category first, then the newest. */
+export function relatedPosts(post: BlogPost, n = 3): BlogPost[] {
+  const others = blogPosts.filter((p) => p.slug !== post.slug);
+  const same = others.filter((p) => p.category === post.category);
+  const rest = others.filter((p) => p.category !== post.category);
+  return [...same, ...rest].slice(0, n);
+}
+
+/** Categories that have posts, in label order, with their counts. */
+export function postCategories(): { key: PostCategory; label: string; count: number }[] {
+  return (Object.keys(categoryLabels) as PostCategory[])
+    .map((key) => ({ key, label: categoryLabels[key], count: blogPosts.filter((p) => p.category === key).length }))
+    .filter((c) => c.count > 0);
+}
+
+/* ─── Formatting ──────────────────────────────────────────────────────────── */
+
+const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+
+/** Paragraph text with the link markup reduced to its label. */
+export function plainText(text: string): string {
+  return text.replace(LINK, "$1");
+}
+
+function blockWords(b: PostBlock): number {
+  const count = (s: string) => plainText(s).split(/\s+/).filter(Boolean).length;
+  switch (b.type) {
+    case "ul":
+    case "ol":
+      return b.items.reduce((n, it) => n + count(it), 0);
+    case "table":
+      return [...b.head, ...b.rows.flat(), ...(b.foot ?? [])].reduce((n, c) => n + count(c), 0);
+    default:
+      return count(b.text);
+  }
+}
+
+/** Minutes to read at 220 words a minute, from the post’s own text, rounded up. */
+export function readMinutes(post: BlogPost): number {
+  const words = post.blocks.reduce((n, b) => n + blockWords(b), 0);
+  return Math.max(1, Math.ceil(words / 220));
+}
+
+/** "2026-09-22" → "September 22, 2026" (long) or "Sep 22, 2026" (short). */
+export function formatPostDate(iso: string, style: "long" | "short" = "long"): string {
+  return new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", {
+    month: style,
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+/** A title for display: never breaks at a hyphen ("per-" / "booking"), via a word joiner. */
+export function keepHyphens(text: string): string {
+  return text.replace(/-/g, "-\u2060");
+}
+
+/** Joins the last two words, so a paragraph never ends on a word alone. */
+export function noWidow(text: string): string {
+  return text.replace(/\s+(\S+)\s*$/, "\u00a0$1");
+}

@@ -68,15 +68,21 @@ export function PayoutCalculator() {
         )}
       </div>
 
-      <div className="flex flex-col justify-between gap-6 rounded-[24px] bg-white p-7 ring-1 ring-hair sm:p-9" aria-live="polite">
+      <div className="flex flex-col gap-6 rounded-[24px] bg-white p-7 ring-1 ring-hair sm:p-9 lg:self-start" aria-live="polite">
         <div>
           <p className="text-[14px] font-semibold tracking-[0.06em] text-mute uppercase">This week</p>
-          <dl className="mt-3">
+          {/* The answer first, in the figure style; the working underneath. */}
+          <dl className="mt-4">
+            <dt className="text-[15px] font-semibold text-graphite">
+              {model === "guest" ? "Guest artist is paid" : "Artist is paid"}
+            </dt>
+            <dd className="mt-1 font-serif text-display-3 text-graphite tabular-nums">{money(artistWeek)}</dd>
+          </dl>
+          <dl className="mt-5 border-t border-hair">
             <ResultRow label="Takings" value={money(gross)} />
             <ResultRow label="Studio keeps" value={money(studioWeek)} />
-            <ResultRow label={model === "guest" ? "Guest artist is paid" : "Artist is paid"} value={money(artistWeek)} strong />
           </dl>
-          <p className="mt-4 text-[14px] text-mute">
+          <p className="mt-3 text-[14px] text-mute">
             Per session: artist {money(perSessionArtist)} · studio {money(perSessionStudio)}
           </p>
           {model === "booth" && gross < rent && (

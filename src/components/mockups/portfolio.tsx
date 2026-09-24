@@ -44,41 +44,52 @@ function FeaturedMark() {
 function WorkCard({ piece, className }: { piece: PortfolioPiece; className?: string }) {
   const artist = ARTISTS[piece.artist];
   return (
-    <div className={cn("min-w-0", className)}>
+    <div className={cn("@container min-w-0", className)}>
       <PhotoTile label={piece.label} aspect="portrait">
         {piece.featured && <FeaturedMark />}
         <AppStatus tone={piece.healed ? "success" : "warning"} dot className="absolute bottom-2 left-2">
           {piece.healed ? "Healed" : "Fresh"}
         </AppStatus>
       </PhotoTile>
-      <span className="mt-2 block truncate text-ui-sm font-semibold text-app-text">{piece.title}</span>
-      <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-ui-xs text-app-mute">
+      {/* Two lines before it clips, so "Koi sleeve, session 2" reads whole in a two-up phone grid. */}
+      <span className="mt-2 line-clamp-2 text-ui-sm leading-snug font-semibold text-app-text">{piece.title}</span>
+      <span className="mt-1 flex min-w-0 items-center gap-1.5 text-ui-xs text-app-mute">
         <AppAvatar initials={artist.initials} tone={artist.tone} size="sm" />
+        {/* A narrow card lets the avatar carry the artist, so the style stays whole. */}
         <span className="truncate">
-          {artist.name} · {piece.style}
+          <span className="hidden @min-[10rem]:inline">{artist.name} · </span>
+          {piece.style}
         </span>
       </span>
     </div>
   );
 }
 
+/**
+ * The app's flash card (portfolio/_proto/parts.tsx) keeps the price off the photo.
+ * The tile is a short 3:2 plate with the design's name and style printed large
+ * (never drawn art), its status chip on top and a star when it's featured; the
+ * artist and price close the line under it, so the sheet reads as a priced list.
+ */
 function FlashCard({ piece, className }: { piece: FlashPiece; className?: string }) {
   const artist = ARTISTS[piece.artist];
   return (
-    <div className={cn("min-w-0", className)}>
-      <PhotoTile label={piece.label} aspect="portrait">
-        {FEATURED_FLASH.has(piece.label) && <FeaturedMark />}
-        <AppStatus tone={piece.status === "Available" ? "success" : "warning"} dot className="absolute bottom-2 left-2">
+    <div className={cn("@container min-w-0", className)}>
+      <PhotoTile label={piece.label} title={piece.title} subtitle={piece.style} aspect="wide" className="@max-[10rem]:aspect-[4/3]">
+        <AppStatus tone={piece.status === "Available" ? "success" : "warning"} dot className="absolute top-2 left-2">
           {piece.status}
         </AppStatus>
-        <span className="absolute right-2 bottom-2 rounded-full bg-white/95 px-1.5 text-[11px] leading-5 font-bold text-app-text tabular-nums">
-          {usd(piece.priceCents)}
-        </span>
+        {FEATURED_FLASH.has(piece.label) && (
+          /* The star goes in the narrowest tiles, where it would sit against the status chip. */
+          <span className="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-white/95 text-app-active-fg shadow-[0_1px_2px_rgba(28,25,23,0.08)] @max-[10rem]:hidden">
+            <Star size={10} strokeWidth={2.4} className="fill-current" />
+          </span>
+        )}
       </PhotoTile>
-      <span className="mt-2 block truncate text-ui-sm font-semibold text-app-text">{piece.title}</span>
-      <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-ui-xs text-app-mute">
+      <span className="mt-2 flex min-w-0 items-center gap-1.5 text-ui-xs text-app-mute">
         <AppAvatar initials={artist.initials} tone={artist.tone} size="sm" />
-        <span className="truncate">{artist.name}</span>
+        <span className="min-w-0 truncate">{artist.name}</span>
+        <span className="ml-auto shrink-0 text-ui-sm font-extrabold text-app-text tabular-nums">{usd(piece.priceCents)}</span>
       </span>
     </div>
   );

@@ -18,8 +18,16 @@ import {
   type Plan,
 } from "@/lib/data/plans";
 import { PrimaryButton, SecondaryButton } from "@/components/home/ui";
+// The system cn (keeps the text-* size tokens); by path so this client bundle skips the server-component barrel.
+import { cn } from "@/components/system/cn";
 
-const cn = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(" ");
+/**
+ * home: the homepage section (white surface, cards stack on phones; locked).
+ * page: /pricing, where the cards sit on the canvas intro. Below sm the four cards become a
+ * swipe row with the next card peeking in, and the every-plan strip turns white and packs
+ * its list two across, so the plans cost one card of scroll instead of four.
+ */
+export type PlanCardsVariant = "home" | "page";
 
 /** `wideOnly` chips hide below sm, and below 380px chips stack under the label, so the options fit a phone column. */
 const OPTIONS: { key: BillingOption; label: string; chip?: string; wideOnly?: boolean }[] = [
@@ -30,7 +38,8 @@ const OPTIONS: { key: BillingOption; label: string; chip?: string; wideOnly?: bo
 
 const OPTION_NOTE: Record<BillingOption, string> = {
   lifetime: `Founding offer for the first ${FOUNDING_OFFER_SIZE} studios. Pay once, never a monthly bill.`,
-  monthly: "Switch plans any time. Changes are prorated to your next invoice.",
+  // InkOS lib/dodo/checkout.ts changeSubscriptionPlan: proration mode "difference_immediately".
+  monthly: "Upgrades charge the prorated difference now. Downgrades credit your next renewal.",
   annual: `Pay yearly and save ${ANNUAL_DISCOUNT_PERCENT}% on every plan.`,
 };
 
@@ -91,7 +100,7 @@ function PlanCard({ plan, option }: { plan: Plan; option: BillingOption }) {
   return (
     <article
       className={cn(
-        "relative flex flex-col rounded-[20px] bg-white p-6",
+        "relative flex w-full flex-col rounded-[20px] bg-white p-6",
         plan.recommended ? "shadow-[var(--shadow-warm)] ring-2 ring-ember" : "ring-1 ring-hair",
       )}
     >
@@ -151,7 +160,8 @@ function PlanCard({ plan, option }: { plan: Plan; option: BillingOption }) {
 }
 
 /** Billing toggle, the four plans and the every-plan strip. Used on the homepage and /pricing. */
-export function PlanCards({ compareHref }: { compareHref?: string }) {
+export function PlanCards({ compareHref, variant = "home" }: { compareHref?: string; variant?: PlanCardsVariant }) {
+  const page = variant === "page";
   const [option, setOption] = useState<BillingOption>("monthly");
 
   // "#pricing-lifetime" (the hero's founding-offer pill) opens the Lifetime tab and scrolls to the plans.
@@ -173,25 +183,65 @@ export function PlanCards({ compareHref }: { compareHref?: string }) {
 
       {/* Plan names are h3s; this keeps the outline h1 → h2 → h3 wherever the cards sit */}
       <h2 className="sr-only">Plans</h2>
-      <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-        {PLANS.map((p) => (
-          <PlanCard key={p.tier} plan={p} option={option} />
-        ))}
-      </div>
+      {page ? (
+        <div
+          role="region"
+          aria-label={`${PLANS.length} plans, swipe sideways on a phone`}
+          tabIndex={0}
+          className={cn(
+            // Phones: one card and the edge of the next; the top padding keeps the Recommended tab unclipped.
+            "-mx-5 mt-7 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pt-3 pb-1 text-left [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite [&::-webkit-scrollbar]:hidden",
+            "sm:mx-0 sm:mt-10 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pt-0 sm:pb-0 xl:grid-cols-4",
+          )}
+        >
+          {PLANS.map((p) => (
+            <div key={p.tier} className="flex w-[calc(100%-2.25rem)] shrink-0 snap-start sm:w-auto">
+              <PlanCard plan={p} option={option} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          {PLANS.map((p) => (
+            <PlanCard key={p.tier} plan={p} option={option} />
+          ))}
+        </div>
+      )}
 
-      <div className="mt-6 grid gap-8 rounded-[20px] bg-canvas p-6 sm:p-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-12">
+      <div
+        className={cn(
+          "mt-6 grid gap-8 rounded-[20px] p-6 text-left sm:p-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-12",
+          page ? "bg-white ring-1 ring-hair max-sm:gap-6 max-sm:p-5" : "bg-canvas",
+        )}
+      >
         <div>
           <p className="text-[13px] font-semibold text-graphite">On every plan</p>
-          <ul className="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+          <ul className={cn("mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2", page && "grid-cols-2 max-sm:gap-x-4 max-sm:gap-y-2.5")}>
             {ALWAYS_INCLUDED.map((i) => (
-              <li key={i} className="flex items-center gap-2.5 text-[15px] text-graphite-soft">
-                <Check size={16} strokeWidth={2.6} className="shrink-0 text-ember" aria-hidden="true" />
+              <li
+                key={i}
+                className={cn(
+                  "flex items-center gap-2.5 text-[15px] text-graphite-soft",
+                  page && "max-sm:items-start max-sm:gap-2 max-sm:text-[14px] max-sm:leading-snug",
+                )}
+              >
+                <Check
+                  size={16}
+                  strokeWidth={2.6}
+                  className={cn("shrink-0 text-ember", page && "max-sm:mt-0.5")}
+                  aria-hidden="true"
+                />
                 {i}
               </li>
             ))}
           </ul>
         </div>
-        <div className="flex flex-col gap-4 border-t border-hair pt-6 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-12">
+        <div
+          className={cn(
+            "flex flex-col gap-4 border-t border-hair pt-6 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-12",
+            page && "max-sm:gap-3 max-sm:pt-5",
+          )}
+        >
           <p className="flex gap-3 text-[15px] leading-snug text-pretty text-graphite-soft">
             <ShieldCheck size={20} strokeWidth={1.8} className="shrink-0 text-graphite" aria-hidden="true" />
             <span>
@@ -206,10 +256,14 @@ export function PlanCards({ compareHref }: { compareHref?: string }) {
               the founding team.
             </span>
           </p>
+          {/* On /pricing phones the table is the very next section, so the jump link only shows from sm. */}
           {compareHref && (
             <Link
               href={compareHref}
-              className="group inline-flex items-center gap-1.5 text-[15px] font-semibold text-graphite underline decoration-ember decoration-2 underline-offset-[6px] hover:text-ember-deep"
+              className={cn(
+                "group inline-flex min-h-11 items-center gap-1.5 self-start text-[15px] font-semibold text-graphite underline decoration-ember decoration-2 underline-offset-[6px] hover:text-ember-deep",
+                page && "max-sm:hidden",
+              )}
             >
               Compare every feature
               <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />

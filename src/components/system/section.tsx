@@ -12,11 +12,12 @@ const toneClass: Record<SectionTone, string> = {
   ink: "bg-ink text-ink-text",
 };
 
+/* Inner-page rhythm: 64px on phones (80 for story), 112px from 1280px. The homepage keeps its own. */
 const densityClass: Record<SectionDensity, string> = {
-  dense: "py-section-y",
-  story: "py-[calc(var(--spacing-section-y)*1.15)]",
+  dense: "py-section-y-inner",
+  story: "py-[calc(var(--spacing-section-y-inner)*1.15)]",
   proof: "py-section-y-tight",
-  conversion: "py-section-y",
+  conversion: "py-section-y-inner",
 };
 
 /** A full-width band. Tone sets the surface, density sets the vertical rhythm. */

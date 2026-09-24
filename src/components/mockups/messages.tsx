@@ -5,11 +5,14 @@ import {
   ChevronDown,
   ChevronRight,
   FileSignature,
+  Inbox,
+  ListFilter,
   Lock,
   Mail,
   MessageSquare,
   MoreHorizontal,
   Paperclip,
+  PenLine,
   Search,
   Send,
   Sparkles,
@@ -18,14 +21,17 @@ import {
 import { cn } from "@/components/system/cn";
 import { AppFrame } from "./app-frame";
 import { AppAvatar, AppButton, AppLabel, AppStatus } from "./app-parts";
-import { ASHA_PROJECT, ARTISTS, SUBMISSIONS, THREADS, UNREAD_THREADS, usd, type Channel, type Thread } from "./sample-data";
+import { ASHA_CONTACT, ASHA_PROJECT, ARTISTS, SUBMISSIONS, THREADS, usd, type Channel, type Thread } from "./sample-data";
 
 /**
  * Messages (app route /messages). Mirrors messages/_proto: thread list, the
  * open thread on its faint rust canvas (white inbound bubbles, rust-tinted
  * outbound), the composer (suggested replies the artist
  * taps into the draft, Reply | Note tabs, Send with the channel on it) and the
- * context rail (Next · Deposit · Consent forms · Internal notes).
+ * context rail (name and phone · Next · Deposit · Consent forms · Internal
+ * notes). The list toolbar is the app's: "Search by keyword…" on its own line,
+ * then the channel menu with the New message and Filter buttons (All · Unread ·
+ * Starred · Missed calls · Archived live in that menu, not as pills).
  *
  * The open thread is Asha asking for a Saturday for session 5; Dev sends the
  * booking link and she books Sat, Nov 7, 11:00 with the $240 already on her
@@ -58,8 +64,10 @@ type Entry =
   | { kind: "client" | "studio"; text: string; time: string; by?: string; link?: { title: string; sub: string } }
   | { kind: "event"; text: string; short: string; time: string };
 
+/* The first stamp carries the day ("Wed, 7:52 PM") instead of a separate
+   day chip, so the whole exchange fits the thread in every frame. */
 const TRANSCRIPT: Entry[] = [
-  { kind: "client", text: "Could session 5 be on a Saturday? Weekdays are hard with work.", time: "7:52 PM" },
+  { kind: "client", text: "Could session 5 be on a Saturday? Weekdays are hard with work.", time: "Wed, 7:52 PM" },
   {
     kind: "studio",
     by: DEV.name,
@@ -76,8 +84,11 @@ const TRANSCRIPT: Entry[] = [
   { kind: "client", text: "Booked it, thank you! See you tomorrow at 10.", time: "8:15 PM" },
 ];
 
-/** Dev's staff-only note on Asha's record (shown in the context rail). */
-const NOTE = { by: DEV.name, text: "Weekdays are hard for her. Offer Saturdays first.", when: "Wed" };
+/**
+ * A team-only note on Asha's record. The app's rail prints body and time only:
+ * client_communications has no author column, so no name is shown.
+ */
+const NOTE = { text: "Weekdays are hard for her. Offer Saturdays first.", when: "Wed 8:16 PM" };
 
 /** Tapping a suggestion drops it into the draft; nothing sends on its own. */
 const SUGGESTIONS = ["See you then, Asha!", "Eat before you come in"];
@@ -93,22 +104,22 @@ const CANVAS = "bg-[color-mix(in_oklch,var(--color-app-active-fg)_3%,white)]";
 function ThreadList() {
   return (
     <div className="hidden w-[248px] shrink-0 flex-col border-r border-app-border @2xl:flex">
-      <div className="flex flex-col gap-2.5 border-b border-app-border p-3">
+      <div className="flex flex-col gap-2 border-b border-app-border p-3">
         <div className="flex h-8 items-center gap-2 rounded-app border border-app-border px-2.5 text-ui-sm text-app-mute">
-          <Search size={14} strokeWidth={1.8} />
-          Search messages
+          <Search size={14} strokeWidth={1.8} className="shrink-0" />
+          <span className="truncate">Search by keyword…</span>
         </div>
-        <div className="flex gap-1.5">
-          <span className="inline-flex h-6 items-center rounded-full bg-app-text px-2.5 text-ui-xs font-semibold text-white">All</span>
-          <span className="inline-flex h-6 items-center gap-1 rounded-full bg-graphite/[0.06] px-2.5 text-ui-xs font-semibold text-app-soft">
-            Unread
-            <span className="text-app-active-fg tabular-nums">{UNREAD_THREADS}</span>
+        <div className="flex items-center gap-1">
+          <span className="mr-auto inline-flex h-7 min-w-0 items-center gap-1.5 rounded-app px-1.5 text-ui-sm font-semibold text-app-text">
+            <Inbox size={14} strokeWidth={1.8} className="shrink-0 text-app-mute" />
+            <span className="truncate">All channels</span>
+            <ChevronDown size={13} strokeWidth={1.9} className="shrink-0 text-app-mute" />
           </span>
-          <span className="inline-flex h-6 items-center rounded-full bg-graphite/[0.06] px-2.5 text-ui-xs font-semibold text-app-soft">
-            SMS
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-app bg-graphite/[0.06] text-app-text">
+            <PenLine size={14} strokeWidth={1.8} />
           </span>
-          <span className="inline-flex h-6 items-center rounded-full bg-graphite/[0.06] px-2.5 text-ui-xs font-semibold text-app-soft">
-            Email
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-app text-app-soft">
+            <ListFilter size={14} strokeWidth={1.8} />
           </span>
         </div>
       </div>
@@ -165,14 +176,15 @@ function Bubble({ e }: { e: Entry }) {
     <div className={cn("flex flex-col gap-1", mine ? "items-end" : "items-start")}>
       <div
         className={cn(
-          "max-w-[84%] rounded-[14px] px-3 py-2 text-ui leading-snug text-app-text @xl:max-w-[70%]",
+          "max-w-[84%] rounded-[14px] px-3 py-2 text-ui leading-snug text-app-text",
           e.kind === "client" && "rounded-bl-[4px] bg-app-surface shadow-[0_1px_2px_rgba(28,25,23,0.07)]",
           e.kind === "studio" && cn("rounded-br-[4px]", OUTBOUND),
         )}
       >
         <p>{e.text}</p>
         {"link" in e && e.link && (
-          <span className="mt-2 hidden items-center gap-2 rounded-app bg-app-surface px-2.5 py-2 ring-1 ring-app-border @sm:flex">
+          /* The link card rides along once the thread is 30rem wide, so the whole exchange always fits. */
+          <span className="mt-2 hidden items-center gap-2 rounded-app bg-app-surface px-2.5 py-2 ring-1 ring-app-border @min-[30rem]/thread:flex">
             <CalendarCheck size={14} strokeWidth={1.9} className="shrink-0 text-app-active-fg" />
             <span className="min-w-0">
               <span className="block truncate text-ui-xs font-semibold text-app-text">{e.link.title}</span>
@@ -192,7 +204,7 @@ function Bubble({ e }: { e: Entry }) {
 
 function Composer() {
   return (
-    <div className="shrink-0 border-t border-app-border bg-app-surface px-3 pt-2 pb-3 @lg:px-5">
+    <div className="shrink-0 border-t border-app-border bg-app-surface px-4 pt-2 pb-3 @lg:px-5">
       <div className="mb-1.5 hidden gap-1.5 overflow-hidden @sm:flex">
         {SUGGESTIONS.map((s) => (
           <span key={s} className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-graphite/[0.05] px-2.5 text-ui-xs font-medium whitespace-nowrap text-app-text">
@@ -222,10 +234,11 @@ function Composer() {
           <FileSignature size={12} strokeWidth={1.9} className="text-app-mute" />
           <span className="hidden @sm:inline">Send form</span>
         </span>
-        {/* The Send split: the channel rides on the button, the chevron picks another. */}
-        <AppButton variant="primary" icon={Send} className="ml-auto h-7 gap-1.5 pr-1.5 pl-2.5 text-ui-xs">
+        {/* The Send split: the channel rides on the button, the chevron picks another. The
+            chevron keeps its own padded segment, so it never sits on the button's edge. */}
+        <AppButton variant="primary" icon={Send} className="ml-auto h-7 gap-1.5 pr-0 pl-2.5 text-ui-xs">
           Send<span className="-ml-1 hidden @sm:inline"> · SMS</span>
-          <span className="ml-0.5 flex h-full items-center border-l border-white/25 pl-1.5">
+          <span className="ml-0.5 flex h-full w-7 shrink-0 items-center justify-center border-l border-white/25">
             <ChevronDown size={12} strokeWidth={2} />
           </span>
         </AppButton>
@@ -236,7 +249,7 @@ function Composer() {
 
 function ThreadPane() {
   return (
-    <div className="flex min-w-0 flex-1 flex-col">
+    <div className="@container/thread flex min-w-0 flex-1 flex-col">
       <div className="flex h-14 shrink-0 items-center gap-2.5 border-b border-app-border px-4 @lg:px-5">
         <AppAvatar initials="AM" size="md" />
         <div className="min-w-0 flex-1">
@@ -247,12 +260,14 @@ function ThreadPane() {
         </div>
         <MoreHorizontal size={16} strokeWidth={1.8} className="shrink-0 text-app-mute" />
       </div>
-      <div className={cn("flex min-h-0 flex-1 flex-col justify-end gap-3 overflow-hidden px-4 py-4 @lg:px-6", CANVAS)}>
-        <div className="flex justify-center">
-          <span className="rounded-full bg-app-surface px-2.5 py-0.5 text-[10px] font-semibold text-app-mute ring-1 ring-app-border">
-            Wednesday
-          </span>
-        </div>
+      {/* Scrolled to the latest message. If a short frame ever runs out of room, the
+          oldest line fades under the header like scrolled history, never a hard cut. */}
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col justify-end gap-2.5 overflow-hidden px-4 py-3 [mask-image:linear-gradient(to_bottom,transparent,black_12px)] @sm:gap-3 @sm:py-4 @lg:px-6",
+          CANVAS,
+        )}
+      >
         {TRANSCRIPT.map((e, i) => (
           <Bubble key={i} e={e} />
         ))}
@@ -280,7 +295,7 @@ function ContextRail() {
         <AppAvatar initials="AM" size="lg" />
         <div className="min-w-0">
           <p className="truncate text-ui font-semibold text-app-text">Asha M.</p>
-          <p className="text-ui-xs text-app-mute">Client since June</p>
+          <p className="text-ui-xs text-app-mute tabular-nums">{ASHA_CONTACT.phone}</p>
         </div>
       </div>
       <RailBlock title="Next">
@@ -315,15 +330,13 @@ function ContextRail() {
         </div>
       </RailBlock>
       <RailBlock title="Internal notes">
-        <div className="rounded-app bg-app-warning-bg px-2.5 py-2">
-          <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-app-warning px-1.5 text-[10px] leading-4 font-bold text-white">
-            <Lock size={9} strokeWidth={2.6} />
-            Staff only
-          </span>
-          <p className="text-ui-sm leading-snug text-app-text">{NOTE.text}</p>
-          <p className="mt-1 text-[10px] text-app-warning">
-            {NOTE.by} · {NOTE.when}
+        <div className="rounded-app border border-dashed border-app-warning bg-app-warning-bg px-2.5 py-2">
+          <p className="mb-1 flex items-center gap-1 text-[10px] font-bold tracking-[0.08em] text-app-warning uppercase">
+            <Lock size={11} strokeWidth={2.2} />
+            Team only
+            <span className="ml-auto font-semibold tracking-normal normal-case tabular-nums">{NOTE.when}</span>
           </p>
+          <p className="text-ui-sm leading-snug text-app-text">{NOTE.text}</p>
         </div>
       </RailBlock>
     </div>

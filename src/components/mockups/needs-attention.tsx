@@ -13,7 +13,7 @@ import {
 import { cn } from "@/components/system/cn";
 import { AppFrame } from "./app-frame";
 import { AppButton } from "./app-parts";
-import { DEPOSITS, DEPOSITS_PENDING, DEPOSITS_PENDING_CENTS, INVENTORY, SUBMISSIONS, usd } from "./sample-data";
+import { DEPOSITS_PENDING, DEPOSITS_PENDING_CENTS, NEEDS_ATTENTION, usd, type AttentionItem } from "./sample-data";
 
 /**
  * Needs attention (app route /inbox). Mirrors inbox/_proto/Inbox.tsx: the
@@ -22,60 +22,27 @@ import { DEPOSITS, DEPOSITS_PENDING, DEPOSITS_PENDING_CENTS, INVENTORY, SUBMISSI
  * (Overdue · Today · This week). The first row is drawn hovered, so its quick
  * actions show: pin, snooze, the row's action and resolve.
  *
- * The rows are the ones lib/inbox/queue.ts builds from this studio's data, in
- * its words: "Deposit pending", "Consent form unsigned", one "Low inventory ·
- * <item>" per item under its threshold. Allergies aren't queue items; they sit
- * on Today's banner, the client file and the briefing.
+ * The rows are sample-data NEEDS_ATTENTION (the queue lib/inbox/queue.ts
+ * builds from this studio's data, in its words), the same rows the sidebar
+ * badge counts.
  */
 
-type Lane = "overdue" | "today" | "week";
 type Category = "Deposits" | "Forms" | "Clients" | "Bookings" | "Inventory" | "Inquiries";
 type TileTone = "rust" | "info" | "warn" | "stone";
 
-interface Row {
-  key: string;
-  title: string;
-  sub: string;
-  action: string;
+interface Row extends AttentionItem {
   icon: LucideIcon;
   tone: TileTone;
   cat: Category;
-  lane: Lane;
-  /** The row's relative stamp (inbox adapt.ts relativeTime): "now", "15h", "2d". */
-  time: string;
-  unread?: boolean;
 }
 
-/*
- * Lanes follow lib/inbox/urgency.ts at 10:40 on Thursday. Priya's unsigned
- * consent is for 1:00 today, under 24 hours out, so it is "now", which the
- * screen draws as Overdue. Low stock always lands in Today. Owen's booking is
- * Sat 1:00, 50 hours out, so his pending deposit falls to This week.
- */
-const PRIYA_FORM = SUBMISSIONS.find((s) => s.client === "Priya S." && s.status === "Sent");
-const OWEN_DEPOSIT = DEPOSITS.find((d) => d.client === "Owen P." && d.state === "Pending");
-/** queue.ts skips an item once current_stock >= min_threshold. */
-const LOW_STOCK = INVENTORY.filter((i) => i.onHand < i.reorderAt);
+const KIND: Record<AttentionItem["kind"], { icon: LucideIcon; tone: TileTone; cat: Category }> = {
+  form: { icon: FileSignature, tone: "info", cat: "Forms" },
+  stock: { icon: Package, tone: "warn", cat: "Inventory" },
+  deposit: { icon: DollarSign, tone: "rust", cat: "Deposits" },
+};
 
-const ITEMS: Row[] = [
-  ...(PRIYA_FORM
-    ? [{ key: "form-priya", title: "Consent form unsigned", sub: PRIYA_FORM.client, action: "View booking", icon: FileSignature, tone: "info" as const, cat: "Forms" as const, lane: "overdue" as const, time: "2d", unread: true }]
-    : []),
-  ...LOW_STOCK.map((i) => ({
-    key: `stock-${i.name}`,
-    title: `Low inventory · ${i.name}`,
-    sub: `Stock ${i.onHand} · threshold ${i.reorderAt}`,
-    action: "Reorder",
-    icon: Package,
-    tone: "warn" as const,
-    cat: "Inventory" as const,
-    lane: "today" as const,
-    time: "now",
-  })),
-  ...(OWEN_DEPOSIT
-    ? [{ key: "deposit-owen", title: "Deposit pending", sub: OWEN_DEPOSIT.client, action: "View booking", icon: DollarSign, tone: "rust" as const, cat: "Deposits" as const, lane: "week" as const, time: "15h" }]
-    : []),
-];
+const ITEMS: Row[] = NEEDS_ATTENTION.map((item) => ({ ...item, ...KIND[item.kind] }));
 
 const TILE: Record<TileTone, string> = {
   rust: "bg-app-active text-app-active-fg",
@@ -86,7 +53,7 @@ const TILE: Record<TileTone, string> = {
 
 const FILTERS: ("All" | Category)[] = ["All", "Deposits", "Forms", "Clients", "Bookings", "Inventory", "Inquiries"];
 
-const LANES: { key: Lane; label: string }[] = [
+const LANES: { key: AttentionItem["lane"]; label: string }[] = [
   { key: "overdue", label: "Overdue" },
   { key: "today", label: "Today" },
   { key: "week", label: "This week" },

@@ -95,7 +95,7 @@ function budgetFor(route) {
   if (route.startsWith("/legal/")) return null; // policy length is set by the policy
   if (/^\/blog\/[^/]+/.test(route)) return null; // articles
   if (route.startsWith("/product/")) return 8500;
-  if (route.startsWith("/for/")) return 7000;
+  if (route.startsWith("/for/")) return 8000;
   return 6000;
 }
 

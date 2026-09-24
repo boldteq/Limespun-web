@@ -15,8 +15,27 @@ const linkClass =
   "font-semibold whitespace-nowrap text-graphite underline decoration-ember decoration-2 underline-offset-4 hover:text-ember-deep focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite";
 
 /**
+ * Short hyphenated words ("cut-down", "double-booked?") kept whole, so a balanced question
+ * doesn't break at the hyphen. Long ones ("REACH-registered") may, or a narrow phone would
+ * push the words after them onto a line of their own.
+ */
+function Question({ text }: { text: string }) {
+  return text.split(/(\S+-\S+)/).map((part, i) =>
+    i % 2 === 1 && part.length <= 14 ? (
+      <span key={i} className="whitespace-nowrap">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
+
+/**
  * Questions and answers in native <details>, heading sticky beside them at xl. Renders the
  * FAQPage JSON-LD for its items; pass jsonLd={false} if the page already emits one.
+ * `compact` puts it on the inner-page rhythm (the system Section's): 64px of padding and a
+ * shorter gap on phones. Inner pages pass it; the homepage keeps the default.
  */
 export function FAQ({
   items,
@@ -25,6 +44,7 @@ export function FAQ({
   tone = "canvas",
   id = "faq",
   jsonLd = true,
+  compact = false,
 }: {
   items: FaqItem[];
   title?: string;
@@ -32,13 +52,19 @@ export function FAQ({
   tone?: "canvas" | "white";
   id?: string;
   jsonLd?: boolean;
+  compact?: boolean;
 }) {
   const headingId = `${id}-heading`;
+  if (items.length === 0) return null;
   return (
     <section
       id={id}
       aria-labelledby={headingId}
-      className={cn("scroll-mt-24 py-section-y", tone === "white" ? "bg-white" : "bg-canvas")}
+      className={cn(
+        "scroll-mt-24",
+        compact ? "py-section-y-inner" : "py-section-y",
+        tone === "white" ? "bg-white" : "bg-canvas",
+      )}
     >
       {jsonLd && (
         <JsonLd
@@ -53,7 +79,7 @@ export function FAQ({
           }}
         />
       )}
-      <Container className="grid gap-12 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.4fr)]">
+      <Container className={cn("grid xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.4fr)]", compact ? "gap-8 sm:gap-12" : "gap-12")}>
         <div className="xl:sticky xl:top-32 xl:self-start">
           <Display id={headingId}>{title}</Display>
           <p className="mt-5 max-w-[360px] text-[18px] leading-[1.6] text-pretty text-mute">
@@ -72,7 +98,9 @@ export function FAQ({
           {items.map((f) => (
             <details key={f.q} className="group border-b border-hair-strong">
               <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite [&::-webkit-details-marker]:hidden">
-                <h3 className="text-[18px] font-medium text-graphite">{f.q}</h3>
+                <h3 className="text-[18px] font-medium text-balance text-graphite">
+                  <Question text={f.q} />
+                </h3>
                 <span
                   className={cn(
                     "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-graphite ring-1 ring-hair transition-transform duration-200 group-open:rotate-45",

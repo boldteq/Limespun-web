@@ -1,24 +1,44 @@
+import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, ArrowUpRight, Check, Plus } from "lucide-react";
-import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { PageIntro } from "@/components/marketing/page-intro";
-import { ClosingCta } from "@/components/marketing/closing-cta";
+import { ArrowUpRight, Check, Plus } from "lucide-react";
+import {
+  Button,
+  Container,
+  Display,
+  Eyebrow,
+  FAQ,
+  InkBand,
+  PageIntro,
+  RelatedGrid,
+  Section,
+  Title,
+  buttonClass,
+  cn,
+  type FaqItem,
+  type RelatedItem,
+} from "@/components/system";
+import { PageShell } from "@/components/templates/page-shell";
+import { SectionHeader } from "@/components/templates/parts";
 import { HeadToHead } from "@/components/compare/compare-tables";
-import { JsonLd } from "@/components/seo/json-ld";
+import { AnnouncementKit, Guarantees, SourceNote, SwitchSteps } from "@/components/compare/switching";
+import { FaqMore } from "@/components/compare/faq-more";
+import { ACCOUNT } from "@/lib/brand";
 import {
   CHECKED_ON,
   LIMESPUN_PRICING,
+  categoryPhrase,
   competitors,
   differentiators,
   getCompetitor,
+  possessive,
+  shortName,
   type Competitor,
 } from "@/lib/data/competitors";
-import { SITE_URL } from "@/lib/brand";
+import { featureHref, getFeature } from "@/lib/data/features";
+import { MONEY_BACK_DAYS, PLANS, formatPrice } from "@/lib/data/plans";
 import { pageMetadata } from "@/lib/seo";
-import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 export function generateStaticParams() {
   return competitors.map((c) => ({ slug: c.slug }));
@@ -26,54 +46,110 @@ export function generateStaticParams() {
 
 export const dynamicParams = false;
 
+const SUFFIX = " | Limespun";
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const c = getCompetitor(slug);
   if (!c) return {};
-  // The title already leads with the brand, so it skips the " | Limespun" suffix (keeps
-  // "Limespun vs Square Appointments …" inside 60 characters).
-  const title = `Limespun vs ${c.name} for tattoo studios`;
-  return {
-    ...pageMetadata({
-      title,
-      description: `Limespun and ${c.name} compared for tattoo studios: multi-session projects, deposits, consent forms, payouts and pricing. Sourced and dated.`,
-      path: `/compare/${c.slug}`,
-      type: "article",
-    }),
-    title,
-  };
+  // Every title keeps " | Limespun" inside 60 characters: a long vendor name says "tattoo shops"
+  // ("Limespun vs Square Appointments for tattoo shops | Limespun", 59).
+  const title = [`Limespun vs ${c.name} for tattoo studios`, `Limespun vs ${c.name} for tattoo shops`, `Limespun vs ${c.name}`].find(
+    (t) => `${t}${SUFFIX}`.length <= 60,
+  ) ?? `Limespun vs ${shortName(c)}`;
+  const long = `Limespun vs ${c.name} for tattoo studios: projects, deposits, consent forms, payouts, pricing and switching, sourced from ${possessive(c.name)} own pages.`;
+  const description =
+    long.length <= 160
+      ? long
+      : `Limespun vs ${c.name} for tattoo studios: projects, deposits, consent forms, payouts, pricing and switching. Sourced and dated.`;
+  return pageMetadata({ title, description, path: `/compare/${c.slug}`, type: "article" });
 }
 
-function faqsFor(c: Competitor) {
+const CONTACT_SWITCHING = { label: "Contact us about switching", href: "/contact?topic=switching" };
+
+const inlineLink =
+  "font-semibold whitespace-nowrap text-graphite underline decoration-ember decoration-2 underline-offset-4 hover:text-ember-deep focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite";
+
+/**
+ * Eight honest questions. Phones show the first four (FaqMore), so the order is what a studio
+ * weighing a move asks first; the JSON-LD keeps all eight.
+ */
+function faqsFor(c: Competitor): FaqItem[] {
+  const short = shortName(c);
   const multi = c.features.multiSession.value;
-  const mig = c.migrateSlug;
+  const ask = c.switching.exports.startsWith("Ask ");
   return [
     {
       q: `Is ${c.name} built for tattoo studios?`,
       a:
         c.category === "Tattoo studio software"
-          ? `Yes. ${c.name} is made for tattoo studios. The comparison above shows where the two products differ on the details.`
-          : `${c.name} is ${c.category.toLowerCase()} software that also markets to tattoo studios. Limespun is built only for tattoo, around projects that run across several sessions.`,
+          ? `Yes. ${c.name} is made for tattoo studios. The table above shows where the two differ on the details.`
+          : `${c.name} is ${categoryPhrase(c)} that also markets to tattoo studios. Limespun is built only for tattoo, around projects that run across several sessions.`,
     },
     {
-      q: `Does ${c.name} track a sleeve as one multi-session project?`,
+      q: `Does ${short} track a sleeve as one project?`,
       a:
         multi === "yes"
           ? `Yes, ${c.name} publishes project-based booking. Limespun does too, with the deposit carried across every session.`
           : multi === "partial"
-            ? `Partly. ${c.name} supports multi-session bookings, but doesn't describe tracking them as a single project. In Limespun every session, photo and note sits under one project.`
-            : `${c.name} doesn't describe project tracking on its public pages. In Limespun a sleeve is one project, with the deposit carried across every session.`,
+            ? `Partly. ${c.name} supports multi-session bookings but doesn’t describe tracking them as one project. In Limespun every session, photo and note sits under one project.`
+            : `${c.name} doesn’t describe project tracking on its public pages. In Limespun a sleeve is one project, with the deposit carried across every session.`,
     },
     {
-      q: `Can I move from ${c.name} to Limespun?`,
-      a: mig
-        ? `Yes. On every plan our team moves your clients, upcoming bookings, deposits and signed forms. There's a step-by-step guide for moving from ${c.name}.`
-        : `Yes. On every plan our team moves your clients, upcoming bookings, deposits and signed forms for you.`,
+      q: `How do I get my clients out of ${short}?`,
+      a: ask
+        ? `${c.switching.exports} A spreadsheet or photos of your paper records work too, and our team does the rest.`
+        : [c.switching.exports, ...c.switching.watchouts, "Send us the file and our team does the rest."].join(" "),
     },
     {
-      q: `Where does ${c.name} do better?`,
+      q: `Do the deposits I hold in ${short} come across?`,
+      a: "Yes. We record each deposit you’re holding on the right client and project, so it’s applied at the session it’s for. Clients aren’t charged again.",
+    },
+    {
+      q: "What if Limespun isn’t right for us?",
+      a: `Every plan has a ${MONEY_BACK_DAYS}-day money-back guarantee. There’s no free trial, and ${short} keeps working until you cancel it, so nothing is lost if you stop.`,
+    },
+    {
+      q: `Can I keep ${short} running while you move us?`,
+      a: `Yes. On every plan our team moves your clients, upcoming bookings, deposits held and signed consent forms while ${short} keeps taking bookings. When the counts match, you decide when to switch.`,
+    },
+    {
+      q: "Do my clients have to do anything?",
+      a: "No. Their bookings, deposits and signed forms come across. Saved cards don’t, so clients add a card with their next deposit. The text, email and story above tell them what changed.",
+    },
+    {
+      q: `Where does ${short} do better?`,
       a: `${c.strengths.join(". ")}. If those matter most to your shop, ${c.name} may suit you better.`,
     },
+  ];
+}
+
+/** Ask an assistant the same neutral question about this pair (ASK_AI_LINKS asks about Limespun alone). */
+function askAiLinks(c: Competitor): { label: string; href: string }[] {
+  const q = encodeURIComponent(
+    `Compare Limespun (limespun.com) and ${c.name} for a tattoo studio: multi-session projects, deposits, consent forms, artist payouts, pricing, and moving client data from ${c.name}.`,
+  );
+  return [
+    { label: "ChatGPT", href: `https://chatgpt.com/?q=${q}` },
+    { label: "Claude", href: `https://claude.ai/new?q=${q}` },
+    { label: "Perplexity", href: `https://www.perplexity.ai/search?q=${q}` },
+  ];
+}
+
+/** The switching guide, pricing, and the two features a switch hinges on (the comparisons sit in the footer). */
+function relatedFor(): RelatedItem[] {
+  const projects = getFeature("projects");
+  const deposits = getFeature("appointments");
+  return [
+    { eyebrow: "Switching", title: "Switching guide", body: "How the move works, whichever tool you use now.", href: "/migrate" },
+    {
+      eyebrow: "Plans",
+      title: "Pricing",
+      body: `Flat monthly plans from ${formatPrice(PLANS[0].monthlyCents)}. No cut of bookings.`,
+      href: "/pricing",
+    },
+    { eyebrow: "Feature", title: projects.name, body: projects.card, href: featureHref("projects") },
+    { eyebrow: "Feature", title: deposits.name, body: deposits.card, href: featureHref("appointments") },
   ];
 }
 
@@ -82,70 +158,55 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
   const c = getCompetitor(slug);
   if (!c) notFound();
 
-  const diff = differentiators(c);
+  const short = shortName(c);
+  const diff = differentiators(c).slice(0, 4);
   const faqs = faqsFor(c);
-  const others = competitors.filter((o) => o.slug !== c.slug);
+  const ai = askAiLinks(c);
 
   return (
-    <div className="min-h-screen bg-canvas text-graphite">
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-        }}
+    <PageShell>
+      <PageIntro
+        crumbs={[{ label: "Home", href: "/" }, { label: "Compare", href: "/compare" }, { label: `vs ${short}` }]}
+        eyebrow="Compare"
+        title={`Limespun vs ${c.name} for tattoo studios`}
+        italicWord="tattoo"
+        lead={
+          <>
+            {c.category === "Tattoo studio software"
+              ? `${c.name} is tattoo studio software, like Limespun.`
+              : `${c.name} is ${categoryPhrase(c)}; Limespun is built only for tattoo.`}{" "}
+            Compared from {possessive(short)} own pages, checked {CHECKED_ON}.
+          </>
+        }
+        primary={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+        secondary={{ label: `Switching from ${short}`, href: "#switching" }}
       />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-            { "@type": "ListItem", position: 2, name: "Compare", item: `${SITE_URL}/compare` },
-            { "@type": "ListItem", position: 3, name: `Limespun vs ${c.name}`, item: `${SITE_URL}/compare/${c.slug}` },
-          ],
-        }}
-      />
-      <Nav />
-      <main id="main">
-        <PageIntro
-          crumbs={[{ label: "Home", href: "/" }, { label: "Compare", href: "/compare" }, { label: `vs ${c.name}` }]}
-          title={`Limespun vs ${c.name} for tattoo studios`}
-          lead={
-            <>
-              {c.name} is {c.category === "Tattoo studio software" ? "tattoo studio software" : `${c.category.toLowerCase()} software`}.
-              Limespun is built only for tattoo. Here&apos;s how they compare on the jobs a studio does every day, using {c.name}
-              &apos;s own public pages, checked on {CHECKED_ON}.
-            </>
-          }
-        />
 
-        {/* Quick verdict */}
-        <section className="bg-white py-14 sm:py-16">
-          <div className="mx-auto grid max-w-[1280px] gap-5 px-5 sm:px-8 md:grid-cols-2">
-            <div className="rounded-[20px] bg-canvas p-7">
-              <h2 className="text-[20px] font-semibold text-graphite">Choose Limespun if you want</h2>
-              <ul className="mt-4 flex flex-col gap-3">
-                {(diff.length > 0 ? diff.slice(0, 4) : []).map((d) => (
+      {/* Verdict, then the table it comes from */}
+      <Section tone="white" labelledBy="table-heading">
+        <Container>
+          <div className="grid gap-3 md:grid-cols-2 md:gap-4 lg:gap-5">
+            <div className="rounded-card bg-canvas p-5 sm:p-7">
+              <Title as="h2" size="sm">
+                Choose Limespun if you want
+              </Title>
+              <ul className="mt-3.5 flex flex-col gap-2.5 sm:mt-4 sm:gap-3">
+                {[...diff, { key: "flat", label: "Flat plans, never per booking", why: "No cut of your bookings or deposits." }].map((d) => (
                   <li key={d.key} className="flex gap-2.5 text-[16px] leading-snug text-graphite">
                     <Check size={18} strokeWidth={2.6} className="mt-0.5 shrink-0 text-ember" aria-hidden="true" />
                     <span>
-                      <span className="font-semibold">{d.label}.</span> <span className="text-graphite-soft">{d.why}</span>
+                      <span className="font-semibold">{d.label}.</span>{" "}
+                      <span className="hidden text-graphite-soft sm:inline">{d.why}</span>
                     </span>
                   </li>
                 ))}
-                <li className="flex gap-2.5 text-[16px] leading-snug text-graphite">
-                  <Check size={18} strokeWidth={2.6} className="mt-0.5 shrink-0 text-ember" aria-hidden="true" />
-                  <span>
-                    <span className="font-semibold">Flat plans, never per booking.</span>{" "}
-                    <span className="text-graphite-soft">No cut of your bookings or deposits.</span>
-                  </span>
-                </li>
               </ul>
             </div>
-            <div className="rounded-[20px] bg-white p-7 ring-1 ring-hair">
-              <h2 className="text-[20px] font-semibold text-graphite">Choose {c.name} if you want</h2>
-              <ul className="mt-4 flex flex-col gap-3">
+            <div className="rounded-card p-5 ring-1 ring-hair sm:p-7">
+              <Title as="h2" size="sm">
+                Choose {short} if you want
+              </Title>
+              <ul className="mt-3.5 flex flex-col gap-2.5 sm:mt-4 sm:gap-3">
                 {c.strengths.map((s) => (
                   <li key={s} className="flex gap-2.5 text-[16px] leading-snug text-graphite-soft">
                     <Plus size={18} strokeWidth={2.4} className="mt-0.5 shrink-0 text-graphite" aria-hidden="true" />
@@ -155,143 +216,127 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
               </ul>
             </div>
           </div>
-        </section>
 
-        {/* Feature table */}
-        <section className="bg-white pb-16 sm:pb-20">
-          <div className="mx-auto max-w-[1280px] px-5 sm:px-8">
-            <h2 className="font-serif text-[36px] leading-[1.1] text-graphite sm:text-[44px]">Feature by feature</h2>
-            <p className="mt-3 max-w-[640px] text-[16px] text-mute">
-              &ldquo;Not published&rdquo; means {c.name}&apos;s public pages don&apos;t describe it. It may exist, so check with them.
-            </p>
-            <div className="mt-8">
-              <HeadToHead competitor={c} />
-            </div>
-          </div>
-        </section>
+          <SectionHeader
+            id="table-heading"
+            title="Feature by feature"
+            lead={<>“Not published” means {possessive(c.name)} public pages don’t describe it. Check with them.</>}
+            className="mt-12 sm:mt-block-gap"
+          />
+          <HeadToHead competitor={c} className="mt-6 sm:mt-10" />
+          <SourceNote checkedOn={CHECKED_ON} urls={c.sources} className="mt-2 sm:mt-4" />
 
-        {/* Pricing */}
-        <section className="bg-canvas py-16 sm:py-20">
-          <div className="mx-auto max-w-[1280px] px-5 sm:px-8">
-            <h2 className="font-serif text-[36px] leading-[1.1] text-graphite sm:text-[44px]">Pricing</h2>
-            <dl className="mt-8 grid gap-5 md:grid-cols-2">
-              <div className="rounded-[20px] bg-white p-7 ring-1 ring-hair">
-                <dt className="text-[15px] font-semibold text-graphite">Limespun</dt>
-                <dd className="mt-2 text-[16px] leading-[1.6] text-graphite-soft">{LIMESPUN_PRICING}</dd>
-                <dd className="mt-4">
-                  <Link href="/pricing" className="inline-flex items-center gap-1.5 text-[15px] font-semibold text-graphite underline decoration-ember decoration-2 underline-offset-4">
-                    See Limespun pricing <ArrowRight size={15} aria-hidden="true" />
-                  </Link>
-                </dd>
-              </div>
-              <div className="rounded-[20px] bg-white p-7 ring-1 ring-hair">
-                <dt className="text-[15px] font-semibold text-graphite">{c.name}</dt>
-                <dd className="mt-2 text-[16px] leading-[1.6] text-graphite-soft">{c.pricingSummary}</dd>
-                <dd className="mt-4">
-                  <a
-                    href={c.sources[0]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[15px] font-semibold text-graphite underline decoration-hair-strong underline-offset-4 hover:decoration-ember"
-                  >
-                    Check {c.name} pricing <ArrowUpRight size={15} aria-hidden="true" />
+          {/* Pricing closes the comparison: one panel, the two ladders side by side from md */}
+          <Display id="pricing-heading" className="mt-12 sm:mt-block-gap">
+            Pricing
+          </Display>
+          <dl className="mt-6 grid overflow-hidden rounded-card bg-canvas sm:mt-8 md:grid-cols-2">
+            {[
+              {
+                name: "Limespun",
+                body: LIMESPUN_PRICING,
+                link: (
+                  <Button href="/pricing" variant="ghost" arrow>
+                    See Limespun pricing
+                  </Button>
+                ),
+              },
+              {
+                name: c.name,
+                body: c.pricingSummary,
+                link: (
+                  <a href={c.sources[0]} target="_blank" rel="noopener noreferrer" className={buttonClass("ghost")}>
+                    Check {short} pricing
+                    <ArrowUpRight size={16} strokeWidth={2.4} aria-hidden="true" />
+                    <span className="sr-only"> (opens in a new tab)</span>
                   </a>
-                </dd>
-              </div>
-            </dl>
-          </div>
-        </section>
-
-        {/* Switching */}
-        <section className="bg-white py-16 sm:py-20">
-          <div className="mx-auto grid max-w-[1280px] gap-8 px-5 sm:px-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-center">
-            <div>
-              <h2 className="font-serif text-[36px] leading-[1.1] text-graphite sm:text-[44px]">Switching from {c.name}</h2>
-              <p className="mt-4 max-w-[560px] text-[17px] leading-[1.6] text-graphite-soft">
-                On every plan our team moves your clients, upcoming bookings, deposits and signed consent forms, then
-                checks the counts with you before you switch.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3 lg:justify-end">
-              {c.migrateSlug && (
-                <Link
-                  href={`/migrate/${c.migrateSlug}`}
-                  className="inline-flex min-h-12 items-center gap-2 rounded-full bg-graphite px-6 text-[16px] font-semibold text-white hover:bg-graphite-soft"
-                >
-                  Moving from {c.name} <ArrowRight size={16} aria-hidden="true" />
-                </Link>
-              )}
-              <Link
-                href="/migrate"
-                className="inline-flex min-h-12 items-center gap-2 rounded-full px-6 text-[16px] font-semibold text-graphite ring-1 ring-graphite/70 hover:bg-canvas"
+                ),
+              },
+            ].map((row, i) => (
+              <div
+                key={row.name}
+                className={cn(
+                  "flex flex-col p-5 sm:p-7",
+                  i > 0 && "border-t border-hair-strong/60 md:border-t-0 md:border-l",
+                )}
               >
-                How migration works
+                <dt className="text-title-sm text-graphite">{row.name}</dt>
+                <dd className="mt-2 flex-1 text-[15px] leading-[1.6] text-pretty text-graphite-soft sm:text-[16px]">{row.body}</dd>
+                <dd className="mt-2 sm:mt-4">{row.link}</dd>
+              </div>
+            ))}
+          </dl>
+        </Container>
+      </Section>
+
+      {/* Switching: each step card carries its part (export steps, what comes across, what stays), then the promises */}
+      <Section tone="canvas" id="switching" labelledBy="switching-heading">
+        <Container>
+          <SectionHeader
+            id="switching-heading"
+            title={`Switching from ${short}`}
+            lead={`On every plan, our team moves your clients, bookings, deposits and signed forms while ${short} keeps running.`}
+          />
+          <SwitchSteps vendor={c} surface="canvas" className="mt-8 sm:mt-block-gap" />
+          <div className="mt-10 sm:mt-block-gap">
+            <Eyebrow>On every Limespun plan</Eyebrow>
+            <Guarantees vendor={c} tone="white" className="mt-3 sm:mt-4" />
+          </div>
+        </Container>
+      </Section>
+
+      <Section tone="deep" labelledBy="announce-heading">
+        <Container>
+          <SectionHeader
+            id="announce-heading"
+            title="Tell your clients you’ve moved"
+            lead="A text, an email and a story to paste the day you switch. Swap the words in brackets."
+          />
+          <AnnouncementKit className="mt-8 sm:mt-block-gap" />
+        </Container>
+      </Section>
+
+      <FaqMore total={faqs.length} tone="white">
+        <FAQ
+          items={faqs}
+          title={`Questions about ${short}`}
+          tone="white"
+          compact
+          intro={
+            <>
+              Anything else?{" "}
+              <Link href="/contact" className={inlineLink}>
+                Contact us
               </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section className="bg-canvas py-16 sm:py-20">
-          <div className="mx-auto grid max-w-[1280px] gap-10 px-5 sm:px-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.4fr)]">
-            <h2 className="font-serif text-[36px] leading-[1.1] text-graphite sm:text-[44px]">Questions</h2>
-            <div className="border-t border-hair-strong">
-              {faqs.map((f) => (
-                <details key={f.q} className="group border-b border-hair-strong">
-                  <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 [&::-webkit-details-marker]:hidden">
-                    <h3 className="text-[18px] font-medium text-graphite">{f.q}</h3>
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-graphite ring-1 ring-hair transition-transform group-open:rotate-45">
-                      <Plus size={16} aria-hidden="true" />
-                    </span>
-                  </summary>
-                  <p className="max-w-[640px] pb-6 text-[16px] leading-[1.65] text-graphite-soft">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Sources + other comparisons */}
-        <section className="bg-white py-14">
-          <div className="mx-auto grid max-w-[1280px] gap-10 px-5 sm:px-8 md:grid-cols-2">
-            <div>
-              <h2 className="text-[15px] font-semibold text-graphite">Sources, checked {CHECKED_ON}</h2>
-              <ul className="mt-3 flex flex-col gap-1.5">
-                {c.sources.map((s) => (
-                  <li key={s}>
-                    <a href={s} target="_blank" rel="noopener noreferrer" className="text-[14px] break-all text-mute underline underline-offset-4 hover:text-graphite">
-                      {s}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-4 text-[13px] leading-[1.55] text-mute">
-                Spotted something out of date? Email hello@boldteq.com and we&apos;ll correct it. Product names belong to
-                their owners.
-              </p>
-            </div>
-            <div>
-              <h2 className="text-[15px] font-semibold text-graphite">Other comparisons</h2>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {others.map((o) => (
-                  <li key={o.slug}>
-                    <Link href={`/compare/${o.slug}`} className="inline-flex min-h-11 items-center rounded-full bg-canvas px-4 text-[14px] font-medium text-graphite ring-1 ring-hair hover:bg-canvas-deep">
-                      vs {o.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <ClosingCta
-          title={`Switch from ${c.name}, keep every client.`}
-          italicWord="client"
-          body={`Create your account in minutes. Keep using ${c.name} until the counts check out. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+              , or ask{" "}
+              {ai.map((a, i) => (
+                <React.Fragment key={a.label}>
+                  {i > 0 && (i === ai.length - 1 ? " or " : ", ")}
+                  <a href={a.href} target="_blank" rel="noopener noreferrer" className={inlineLink}>
+                    {a.label}
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </React.Fragment>
+              ))}{" "}
+              to compare the two.
+            </>
+          }
         />
-      </main>
-      <Footer />
-    </div>
+      </FaqMore>
+
+      <RelatedGrid heading="Related" items={relatedFor()} />
+
+      <InkBand
+        headline={`Leave ${short}, keep every client.`}
+        italicWord="client"
+        sub={
+          <>
+            Create your account in minutes. Keep {short} running until the counts match.{" "}
+            <span className="whitespace-nowrap">{MONEY_BACK_DAYS}-day money-back</span> guarantee.
+          </>
+        }
+        secondary={CONTACT_SWITCHING}
+      />
+    </PageShell>
   );
 }

@@ -36,6 +36,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Rendered per request so notFound() below sends a real 404 in production
+// (a prerendered page would serve the not-found UI with a 200).
+export const dynamic = "force-dynamic";
+
 interface GalleryItem {
   name: string;
   /** The JSX that renders it, so a reviewer can copy the exact state. */

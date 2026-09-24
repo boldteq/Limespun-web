@@ -56,7 +56,7 @@ const chairs: { time: string; who: string; what: string; flagged?: boolean }[] =
   { time: "10:00", who: "Asha M. · Dev", what: "Koi sleeve · session 4 of 5" },
   { time: "11:00", who: "Jo K. · Mara", what: "Consult · fine-line florals" },
   { time: "12:00", who: "Walk-in flash · Rio", what: "Guest day · 3 slots" },
-  { time: "1:00", who: "Priya S. · Mara", what: "Fine-line florals" },
+  { time: "1:00", who: "Priya S. · Mara", what: "Fine-line wildflowers" },
   { time: "1:30", who: "Elena R. · Dev", what: "Back piece · session 2 of 3", flagged: true },
   { time: "4:30", who: "Sam T. · Mara", what: "Touch-up · forearm script" },
 ];
@@ -167,11 +167,11 @@ function InboxVisual() {
   return (
     <div className="flex flex-col gap-2.5 px-7 pb-7 sm:px-8 sm:pb-8">
       <div className="max-w-[min(88%,360px)] self-start rounded-[16px] rounded-bl-[4px] bg-white px-4 py-2.5 text-[13px] text-graphite shadow-[0_1px_2px_rgba(29,30,28,0.06)]">
-        Any chance of a Saturday for the rest of my sleeve?
+        Could session 5 be on a Saturday? Weekdays are hard with work.
         <span className="mt-1 block text-[11px] text-mute">SMS · Asha M.</span>
       </div>
       <div className="max-w-[min(88%,360px)] self-end rounded-[16px] rounded-br-[4px] bg-graphite px-4 py-2.5 text-[13px] text-white">
-        Dev has Sat Nov 7 at 11. Your $240 deposit is already on the project.
+        Sat, Nov 7 at 11:00 is open with me. The $240 already on your project covers the deposit.
       </div>
     </div>
   );
@@ -200,7 +200,7 @@ export function Connected() {
           <Tile
             className="md:col-span-3"
             title="No-show protection"
-            body="A booking stays Pending until the client pays the deposit, so the chair is only held for people who have paid."
+            body="A booking stays Pending until the deposit is paid. Unpaid by your deadline, it cancels and the slot opens again."
           >
             <PolicyVisual />
           </Tile>

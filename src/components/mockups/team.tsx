@@ -140,6 +140,19 @@ function Roster() {
 /** Column order of the matrix, mapped to the grants in sample-data PERMISSIONS. */
 const MATRIX_ROLES: TeamRole[] = ["Owner", "Admin", "Artist", "Front desk", "Guest"];
 
+/**
+ * Which role columns a frame shows, so every column is whole and the matrix
+ * never scrolls: on phones Owner beside Front desk (the widest gap: bookings
+ * yes, money no), then Artist, Admin and Guest join as the card widens.
+ */
+const MATRIX_COL: Record<TeamRole, string> = {
+  Owner: "",
+  Admin: "hidden @min-[500px]:table-cell",
+  Artist: "hidden @min-[400px]:table-cell",
+  "Front desk": "",
+  Guest: "hidden @min-[580px]:table-cell",
+};
+
 function Permissions() {
   const groups = [...new Set(PERMISSIONS.map((p) => p.group))];
   return (
@@ -168,16 +181,24 @@ function Permissions() {
         }
       >
         <p className="px-4 pt-3 text-ui-sm text-app-mute">The access each preset role starts with.</p>
-        <div className="relative w-full min-w-0">
+        <div className="@container relative w-full min-w-0">
           <div className="overflow-x-auto overscroll-x-contain">
-            <table className="w-full min-w-[560px] border-collapse text-ui-sm text-app-text">
+            <table className="w-full border-collapse text-ui-sm text-app-text">
               <thead>
                 <tr className="border-b border-app-border">
                   <th scope="col" className="h-10 pr-2 pl-4 text-left text-kpi-label font-bold text-app-mute uppercase">
                     Permission
                   </th>
                   {MATRIX_ROLES.map((r) => (
-                    <th key={r} scope="col" className="h-10 px-2 text-center text-kpi-label font-bold whitespace-nowrap text-app-mute uppercase">
+                    <th
+                      key={r}
+                      scope="col"
+                      className={cn(
+                        /* Narrow: a slim column whose label may wrap ("Front / desk"), so the permission keeps the room. */
+                        "h-10 w-[4.5rem] px-2 text-center text-kpi-label leading-tight font-bold text-app-mute uppercase @min-[400px]:w-auto @min-[400px]:whitespace-nowrap",
+                        MATRIX_COL[r],
+                      )}
+                    >
                       {r}
                     </th>
                   ))}
@@ -207,9 +228,9 @@ function GroupRows({ group }: { group: string }) {
       </tr>
       {rows.map((p) => (
         <tr key={p.label} className="border-b border-app-border last:border-b-0">
-          <td className="h-10 pr-2 pl-4 whitespace-nowrap">{p.label}</td>
+          <td className="h-10 pr-2 pl-4 leading-snug @min-[400px]:whitespace-nowrap">{p.label}</td>
           {p.grants.map((on, i) => (
-            <td key={MATRIX_ROLES[i]} className="px-2 text-center">
+            <td key={MATRIX_ROLES[i]} className={cn("px-2 text-center", MATRIX_COL[MATRIX_ROLES[i] ?? "Owner"])}>
               {on ? (
                 <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-app-success-bg text-app-success">
                   <Check size={11} strokeWidth={3} />

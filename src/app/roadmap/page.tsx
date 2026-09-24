@@ -1,394 +1,205 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
-import { Check } from "lucide-react";
-import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { HeroSection } from "@/components/shared/hero-section";
-import { CTASection } from "@/components/shared/cta-section";
-import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { ACCOUNT, BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
-import { roadmapItems, statusLabels } from "@/lib/data/roadmap";
-import type { RoadmapItem } from "@/lib/data/roadmap";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Button, Chip, CheckRow, Container, Section, Title, cn, type RelatedItem } from "@/components/system";
+import { ContentPage } from "@/components/templates/content-page";
+import { changelogEntries, formatChangelogDate } from "@/lib/data/changelog";
+import { PLANS, formatPrice } from "@/lib/data/plans";
+import { ROADMAP_STAGES, roadmapItems, type RoadmapItem, type RoadmapStage } from "@/lib/data/roadmap";
+import { pageMetadata } from "@/lib/seo";
 
-// ─── Column config ─────────────────────────────────────────────────────────────
+export const metadata = pageMetadata({
+  title: "Roadmap: what we’re building next",
+  description:
+    "What Limespun is building now, what comes next and what we’re weighing up, with no dates. See what already shipped, and tell us what your studio needs.",
+  path: "/roadmap",
+});
 
-interface ColumnConfig {
-  status: RoadmapItem['status'];
-  accentColor: string;
-  accentBg: string;
-  countBg: string;
+const REQUEST_HREF = "/contact?topic=feature-request";
+const SHIPPED_ROWS = 4;
+/** Phones list the newest three; the button covers the rest. */
+const SHIPPED_ROWS_PHONE = 3;
+const fromPrice = formatPrice(Math.min(...PLANS.map((p) => p.monthlyCents)));
+
+/* ─── Board ─────────────────────────────────────────────────────────────────── */
+
+/** The column's node: ember for Now, a dark ring for Next, a hairline ring for Later. */
+function StageNode({ stage }: { stage: RoadmapStage }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "h-3 w-3 shrink-0 rounded-full",
+        stage === "now" && "bg-ember ring-4 ring-ember-soft",
+        stage === "next" && "bg-white ring-2 ring-graphite ring-inset",
+        stage === "later" && "bg-white ring-1 ring-hair-strong ring-inset",
+      )}
+    />
+  );
 }
 
-const COLUMNS: ColumnConfig[] = [
-  { status: 'shipped',     accentColor: BRAND.sage,  accentBg: BRAND.sageSoft,  countBg: BRAND.sageWash },
-  { status: 'building',    accentColor: BRAND.rust,  accentBg: BRAND.rustSoft,  countBg: BRAND.rustWash },
-  { status: 'next',        accentColor: BRAND.amber, accentBg: BRAND.amberSoft, countBg: BRAND.amberWash },
-  { status: 'considering', accentColor: BRAND.stone, accentBg: BRAND.boneDeep,  countBg: BRAND.bone },
-];
-
-const MODULE_ACCENTS = [BRAND.rust, BRAND.amber, BRAND.sage];
-
-// ─── Process cards data ────────────────────────────────────────────────────────
-
-const processCards = [
-  {
-    accent: BRAND.rust,
-    accentBg: BRAND.rustWash,
-    title: "Studios that use it decide",
-    body: "Requests from studios running Limespun every day carry the most weight. Tell us what slows your shop down and we'll give you a straight answer: yes, no or later.",
-  },
-  {
-    accent: BRAND.amber,
-    accentBg: BRAND.amberWash,
-    title: "We finish what we start",
-    body: "A feature ships when a studio can run a real day on it. We'd rather hold something back than ship it half done.",
-  },
-  {
-    accent: BRAND.sage,
-    accentBg: BRAND.sageWash,
-    title: "We say no to most things",
-    body: "If it's not native to tattoo work, we don't build it. Salons can use a salon SaaS. We're for studios that draw on skin.",
-  },
-];
-
-// ─── Item card ────────────────────────────────────────────────────────────────
-
-function ItemCard({
-  item,
-  isShipped,
-}: {
-  item: RoadmapItem;
-  isShipped: boolean;
-}) {
+function Card({ item }: { item: RoadmapItem }) {
   return (
-    <div
-      style={{
-        background: BRAND.white,
-        borderRadius: 12,
-        padding: 16,
-        boxShadow: SHADOW.soft,
-        border: `1px solid ${BRAND.borderSoft}`,
-        marginBottom: 12,
-      } as React.CSSProperties}
-    >
-      {/* Title */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-          marginBottom: 6,
-        } as React.CSSProperties}
-      >
-        {isShipped && (
-          <Check
-            size={12}
-            color={BRAND.sage}
-            strokeWidth={2.5}
-            style={{ flexShrink: 0 } as React.CSSProperties}
-          />
-        )}
-        <span
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 14,
-            fontWeight: 600,
-            color: BRAND.onyx,
-            letterSpacing: "-0.005em",
-          } as React.CSSProperties}
-        >
-          {item.title}
-        </span>
-      </div>
+    <li className="flex min-w-0 flex-col rounded-[16px] bg-white p-4 ring-1 ring-hair sm:p-5">
+      <Chip tone="quiet" className="hidden self-start px-2.5 py-1 text-[12px] sm:inline-flex">
+        {item.area}
+      </Chip>
+      <Title as="h3" size="sm" className="text-[18px] sm:mt-3 sm:text-[19px]">
+        {item.title}
+      </Title>
+      <p className="mt-1.5 text-[15px] leading-[1.55] text-pretty text-mute">{item.description}</p>
+      {item.today && (
+        <p className="mt-3 border-t border-hair pt-3 text-[14px] leading-[1.5] text-pretty text-graphite-soft">
+          <span className="font-semibold text-graphite">Today: </span>
+          {item.today}
+        </p>
+      )}
+    </li>
+  );
+}
 
-      {/* Description */}
-      <p
-        style={{
-          fontFamily: FONT.sans,
-          fontSize: 12.5,
-          lineHeight: 1.5,
-          color: BRAND.stoneDark,
-          marginBottom: 10,
-        } as React.CSSProperties}
-      >
-        {item.description}
-      </p>
+function Board() {
+  return (
+    <Section tone="white" density="proof" className="border-t border-hair">
+      <Container>
+        <div className="grid gap-4 lg:grid-cols-3 lg:items-start lg:gap-5">
+          {ROADMAP_STAGES.map((stage) => {
+            const items = roadmapItems.filter((r) => r.stage === stage.id);
+            const headingId = `stage-${stage.id}`;
+            return (
+              <section
+                key={stage.id}
+                aria-labelledby={headingId}
+                className="flex min-w-0 flex-col rounded-card bg-canvas-deep p-2.5 sm:p-3"
+              >
+                <div className="flex items-center justify-between gap-3 px-2.5 pt-2.5 pb-3.5 sm:px-3 sm:pt-3 sm:pb-4">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <StageNode stage={stage.id} />
+                    <div className="min-w-0">
+                      <Title as="h2" size="md" id={headingId}>
+                        {stage.label}
+                      </Title>
+                      <p className="text-[14px] leading-snug text-mute">{stage.line}</p>
+                    </div>
+                  </div>
+                  <span className="shrink-0 rounded-full bg-white px-2.5 py-0.5 text-[13px] font-medium text-graphite-soft tabular-nums ring-1 ring-hair">
+                    {items.length}
+                    <span className="sr-only"> {items.length === 1 ? "item" : "items"}</span>
+                  </span>
+                </div>
+                <ul className="flex flex-col gap-2.5">
+                  {items.map((item) => (
+                    <Card key={item.title} item={item} />
+                  ))}
+                </ul>
+              </section>
+            );
+          })}
+        </div>
+        <CheckRow
+          className="mt-10 hidden sm:flex"
+          items={["No dates, on purpose", "Nothing here is sold until it ships", "Shipped work moves to the changelog"]}
+        />
+      </Container>
+    </Section>
+  );
+}
 
-      {/* Footer row */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 6,
-        } as React.CSSProperties}
-      >
-        {/* Module pills */}
-        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" } as React.CSSProperties}>
-          {item.modules.map((mod, mi) => (
-            <span
-              key={mod}
-              style={{
-                fontFamily: FONT.sans,
-                fontSize: 10,
-                fontWeight: 600,
-                color: BRAND.white,
-                background: MODULE_ACCENTS[mi % MODULE_ACCENTS.length],
-                padding: "2px 7px",
-                borderRadius: 100,
-                letterSpacing: "0.02em",
-              } as React.CSSProperties}
-            >
-              {mod}
-            </span>
-          ))}
+/* ─── Shipped + requests ────────────────────────────────────────────────────── */
+
+function ShippedAndAsk() {
+  const shipped = changelogEntries.slice(0, SHIPPED_ROWS);
+  return (
+    <Section tone="deep" density="proof" labelledBy="shipped-heading">
+      <Container className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-5">
+        <div className="flex min-w-0 flex-col rounded-card bg-white p-5 ring-1 ring-hair sm:p-8 lg:p-10">
+          <Title as="h2" size="lg" id="shipped-heading">
+            Shipped lately
+          </Title>
+          <p className="mt-3 hidden max-w-[520px] text-[17px] leading-[1.6] text-pretty text-mute sm:block">
+            Once it’s in the app, it leaves the board and gets a dated entry in the changelog.
+          </p>
+          <ul className="mt-5 border-t border-hair sm:mt-6">
+            {shipped.map((e, i) => (
+              <li key={e.id} className={cn("border-b border-hair", i >= SHIPPED_ROWS_PHONE && "hidden sm:block")}>
+                <Link
+                  href={`/changelog#${e.id}`}
+                  className="group flex min-h-11 items-center justify-between gap-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite sm:py-3.5"
+                >
+                  <span className="min-w-0 sm:flex sm:items-baseline sm:gap-5">
+                    <time
+                      dateTime={e.date}
+                      className="block shrink-0 text-[13px] font-medium whitespace-nowrap text-mute tabular-nums sm:w-[96px] sm:text-[14px]"
+                    >
+                      {formatChangelogDate(e.date)}
+                    </time>
+                    <span className="mt-0.5 block text-[15px] leading-snug font-medium text-graphite sm:mt-0 sm:text-[16px]">
+                      {e.title}
+                    </span>
+                  </span>
+                  <ArrowRight
+                    size={16}
+                    strokeWidth={2.2}
+                    aria-hidden="true"
+                    className="shrink-0 text-graphite transition-transform duration-200 group-hover:translate-x-0.5"
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Button href="/changelog" variant="secondary" className="mt-6 self-start sm:mt-8">
+            See the changelog
+          </Button>
         </div>
 
-      </div>
-    </div>
+        <div className="flex min-w-0 flex-col justify-between gap-8 rounded-card bg-canvas p-5 ring-1 ring-hair sm:p-8 lg:p-10">
+          <div>
+            <Title as="h2" size="lg">
+              Tell us what to build
+            </Title>
+            <p className="mt-3 max-w-[440px] text-[16px] leading-[1.6] text-pretty text-graphite-soft sm:text-[17px]">
+              Write to us with what your studio needs and how you handle it today. You’ll get a straight answer: now,
+              next, later, or not for us.
+            </p>
+            <div className="mt-8 hidden border-t border-graphite/10 pt-6 sm:block">
+              <p className="text-label text-mute uppercase">Useful to include</p>
+              <CheckRow
+                className="mt-4 flex-col items-start gap-y-2.5"
+                items={["What you’d like the app to do", "How your studio handles it today", "How often it comes up"]}
+              />
+            </div>
+          </div>
+          <Button href={REQUEST_HREF} arrow className="self-start">
+            Tell us what to build
+          </Button>
+        </div>
+      </Container>
+    </Section>
   );
 }
 
-// ─── Board column ─────────────────────────────────────────────────────────────
-
-function BoardColumn({ col }: { col: ColumnConfig }) {
-  const items = roadmapItems.filter((r) => r.status === col.status);
-  const label = statusLabels[col.status];
-
-  return (
-    <motion.div variants={fadeUp}>
-      {/* Column header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 16,
-        } as React.CSSProperties}
-      >
-        <span
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 11,
-            fontWeight: 700,
-            textTransform: "uppercase" as const,
-            letterSpacing: "0.06em",
-            color: col.accentColor,
-          } as React.CSSProperties}
-        >
-          {label}
-        </span>
-        <span
-          style={{
-            fontFamily: FONT.mono,
-            fontSize: 11,
-            color: BRAND.stoneLight,
-            background: col.countBg,
-            padding: "2px 8px",
-            borderRadius: 100,
-          } as React.CSSProperties}
-        >
-          {items.length} {items.length === 1 ? "item" : "items"}
-        </span>
-      </div>
-
-      {/* Cards */}
-      {items.map((item) => (
-        <ItemCard
-          key={item.title}
-          item={item}
-          isShipped={col.status === "shipped"}
-        />
-      ))}
-    </motion.div>
-  );
-}
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
+const RELATED: RelatedItem[] = [
+  { eyebrow: "Updates", title: "Changelog", body: "Everything that shipped, dated and in plain words.", href: "/changelog" },
+  { eyebrow: "Feature", title: "Design moodboards", body: "References, placement, size and style notes on every project.", href: "/product/ai-design" },
+  { eyebrow: "Feature", title: "Messages", body: "SMS and email in one inbox, beside the client’s record.", href: "/product/messages" },
+  { eyebrow: "Feature", title: "Calendar", body: "Every artist on one calendar, with clash checks on Studio and up.", href: "/product/calendar" },
+  { eyebrow: "Feature", title: "Deposits", body: "Deposits taken before the chair is held, with no cut of any of it.", href: "/product/appointments" },
+  { eyebrow: "Plans", title: "Pricing", body: `Flat monthly plans from ${fromPrice}. No cut of bookings or deposits.`, href: "/pricing" },
+];
 
 export default function RoadmapPage() {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: BRAND.bone,
-        overflow: "hidden",
-      } as React.CSSProperties}
+    <ContentPage
+      layout="sections"
+      crumbs={[{ label: "Home", href: "/" }, { label: "Roadmap" }]}
+      title="What we’re building next."
+      italicWord="next"
+      lead="What’s being built now, what’s queued after it and what we’re weighing up. No dates: we’d rather ship than promise a month."
+      related={{ items: RELATED }}
+      inkBand={{ headline: "Start with what’s shipped.", italicWord: "shipped", secondary: { label: "See the changelog", href: "/changelog" } }}
     >
-      <Nav />
-
-      <main>
-        {/* Hero */}
-        <HeroSection
-          variant="centered"
-          eyebrow="Roadmap"
-          eyebrowAccent="rust"
-          headline="What's shipped. What's building. What's next."
-          italicWord="next"
-          subhead="What's live, what we're building and what comes after. No dates, because dates slip. Tell us what to build."
-          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
-          secondaryCTA={{ label: "Request a feature", href: "/contact" }}
-        />
-
-        {/* Status board */}
-        <section
-          style={{
-            background: BRAND.bone,
-            paddingTop: 100,
-            paddingBottom: 100,
-          } as React.CSSProperties}
-        >
-          <div
-            style={{
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "0 32px",
-            } as React.CSSProperties}
-          >
-            <motion.div
-              className="roadmap-board"
-              variants={stagger}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gap: 24,
-                alignItems: "start",
-              } as React.CSSProperties}
-            >
-              {COLUMNS.map((col) => (
-                <BoardColumn key={col.status} col={col} />
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Process section */}
-        <section
-          style={{
-            background: GRADIENT.sectionWarm,
-            paddingTop: 100,
-            paddingBottom: 100,
-          } as React.CSSProperties}
-        >
-          <div
-            style={{
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "0 32px",
-            } as React.CSSProperties}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <SectionEyebrow label="How we decide" accent="amber" />
-            </motion.div>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.65, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-              style={{
-                fontFamily: FONT.serif,
-                fontSize: "clamp(36px, 5vw, 64px)",
-                lineHeight: 1.0,
-                letterSpacing: "-0.025em",
-                color: BRAND.onyx,
-                fontWeight: 400,
-                marginBottom: 56,
-                maxWidth: 480,
-              } as React.CSSProperties}
-            >
-              Three rules.
-            </motion.h2>
-
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 24,
-              } as React.CSSProperties}
-              className="roadmap-process-grid"
-            >
-              {processCards.map((card) => (
-                <motion.div
-                  key={card.title}
-                  variants={fadeUp}
-                  style={{
-                    background: BRAND.white,
-                    borderRadius: 18,
-                    padding: 28,
-                    boxShadow: SHADOW.soft,
-                    borderTop: `3px solid ${card.accent}`,
-                    position: "relative" as const,
-                    overflow: "hidden",
-                  } as React.CSSProperties}
-                >
-                  <h3
-                    style={{
-                      fontFamily: FONT.sans,
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: BRAND.onyx,
-                      letterSpacing: "-0.01em",
-                      marginBottom: 12,
-                    } as React.CSSProperties}
-                  >
-                    {card.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      fontFamily: FONT.sans,
-                      fontSize: 14,
-                      lineHeight: 1.65,
-                      color: BRAND.stoneDark,
-                    } as React.CSSProperties}
-                  >
-                    {card.body}
-                  </p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* CTA */}
-        <CTASection
-          badge="Vote with your studio"
-          headline="Tell us what to build."
-          italicWord="build"
-          subhead="Every studio on Limespun gets a say. Write to us with what you need and we'll tell you honestly: yes, no, or on the roadmap."
-          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
-          secondaryCTA={{ label: "Request a feature", href: "/contact" }}
-        />
-      </main>
-
-      <Footer />
-
-      <style>{`
-        @media (max-width: 1024px) {
-          .roadmap-board { grid-template-columns: repeat(2, 1fr) !important; }
-          .roadmap-process-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 640px) {
-          .roadmap-board { grid-template-columns: 1fr !important; }
-          .roadmap-process-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
-    </div>
+      <Board />
+      <ShippedAndAsk />
+    </ContentPage>
   );
 }

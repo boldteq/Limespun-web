@@ -1,408 +1,213 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
-import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { HeroSection } from "@/components/shared/hero-section";
-import { CTASection } from "@/components/shared/cta-section";
-import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { BRAND, CONTACT_EMAIL, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
-import { openRoles, teamLabels } from "@/lib/data/careers";
-import type { Role } from "@/lib/data/careers";
+import Link from "next/link";
+import {
+  Button,
+  Container,
+  Display,
+  Lead,
+  Section,
+  StripedFrame,
+  Title,
+  type RelatedItem,
+} from "@/components/system";
+import { ContentPage } from "@/components/templates/content-page";
+import { TodayScreen } from "@/components/mockups/today";
+import { CONTACT_EMAIL, SITE_URL } from "@/lib/brand";
+import { openRoles, roleTypeLabels, teamLabels, type Role } from "@/lib/data/careers";
+import { pageMetadata } from "@/lib/seo";
 
-// ─── Why us cards ──────────────────────────────────────────────────────────────
+export const metadata = pageMetadata({
+  title: "Careers at Boldteq, the team behind Limespun",
+  description:
+    "Boldteq is the small, remote team behind Limespun, studio software built only for tattoo. No open roles right now; if you want to help, write to us.",
+  path: "/careers",
+});
 
-const WHY_CARDS = [
+const mailTo = (subject: string) => `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
+
+const inlineLink =
+  "font-semibold text-graphite underline decoration-ember decoration-2 underline-offset-4 hover:text-ember-deep focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite";
+
+/* How the team works. Facts about the team only: no perks, pay or equity claims. */
+const WAYS: { term: string; body: React.ReactNode }[] = [
   {
-    accent: BRAND.rust,
-    accentBg: BRAND.rustWash,
-    title: "Real product, real studios",
-    body: "Limespun is live. What you build ships to studios that tell us plainly what works and what doesn't, not to a review deck.",
+    term: "Remote, and written down",
+    body: "We work remotely and write decisions down, so the reasoning never lives only in a meeting you missed.",
   },
   {
-    accent: BRAND.amber,
-    accentBg: BRAND.amberWash,
-    title: "Small on purpose",
-    body: "A founder and a small team. You'd know everyone, and everyone's work shows in the product.",
+    term: "A small team",
+    body: "A founder and a small team. You’d know everyone, and your work shows up in the product.",
   },
   {
-    accent: BRAND.sage,
-    accentBg: BRAND.sageWash,
-    title: "Remote, written down",
-    body: "We work remotely and write decisions down, so the reasoning doesn't live in a meeting you missed.",
+    term: "Close to the studios",
+    body: "Limespun is live. What you build reaches studios that tell us plainly what works and what doesn’t.",
+  },
+  {
+    term: "Four rules",
+    body: (
+      <>
+        Built only for tattoo, flat price with no cut, say what’s true, ship with studios. They hold for the work as
+        much as the product.{" "}
+        <Link href="/about#principles" className={inlineLink}>
+          Read them
+        </Link>
+      </>
+    ),
   },
 ];
 
-/** Every careers email goes to the main inbox, marked by its subject line. */
-const careersMail = (subject: string): string => `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
+/* JobPosting only for roles that are really open (careers.ts). None today, so none is emitted. */
+function jobPostingJsonLd(role: Role): Record<string, unknown> {
+  const remote = /^remote/i.test(role.location);
+  return {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: role.title,
+    description: role.description,
+    datePosted: role.postedOn,
+    employmentType: role.type === "full-time" ? "FULL_TIME" : "CONTRACTOR",
+    hiringOrganization: { "@type": "Organization", name: "Boldteq", sameAs: SITE_URL },
+    ...(remote
+      ? {
+          jobLocationType: "TELECOMMUTE",
+          ...(role.countries?.length
+            ? { applicantLocationRequirements: role.countries.map((name) => ({ "@type": "Country", name })) }
+            : {}),
+        }
+      : { jobLocation: { "@type": "Place", address: role.location } }),
+    directApply: false,
+  };
+}
 
-// ─── Team accent map ───────────────────────────────────────────────────────────
+const RELATED: RelatedItem[] = [
+  { eyebrow: "Company", title: "About", body: "Why Limespun is built only for tattoo, and the rules we build by.", href: "/about" },
+  { eyebrow: "Updates", title: "Roadmap", body: "What we’re building now, next and later.", href: "/roadmap" },
+  { eyebrow: "Updates", title: "Changelog", body: "What shipped in Limespun, newest first.", href: "/changelog" },
+  { eyebrow: "Company", title: "Contact", body: "Questions about switching, plans or your account.", href: "/contact" },
+];
 
-const TEAM_ACCENT: Record<Role['team'], { color: string; bg: string }> = {
-  engineering: { color: BRAND.rust,  bg: BRAND.rustWash },
-  design:      { color: BRAND.amber, bg: BRAND.amberWash },
-  support:     { color: BRAND.sage,  bg: BRAND.sageWash },
-  sales:       { color: BRAND.stone, bg: BRAND.boneDeep },
-};
+/* ─── Sections ────────────────────────────────────────────────────────────── */
 
-const TYPE_LABEL: Record<Role['type'], string> = {
-  'full-time':  'Full-time',
-  'contract':   'Contract',
-};
-
-// ─── Role card ────────────────────────────────────────────────────────────────
-
-function RoleCard({ role }: { role: Role }) {
-  const teamAccent = TEAM_ACCENT[role.team];
-
+/* The work itself: Today in the sample studio, the screen a studio opens first. It runs off
+   the frame's foot and fades, so the page stays short. */
+function WhatYouBuild() {
   return (
-    <motion.div
-      variants={fadeUp}
-      whileHover={{ y: -2, boxShadow: SHADOW.card }}
-      style={{
-        background: BRAND.white,
-        borderRadius: 16,
-        padding: 28,
-        boxShadow: SHADOW.soft,
-        border: `1px solid ${BRAND.borderSoft}`,
-        marginBottom: 16,
-        maxWidth: 800,
-        margin: "0 auto 16px",
-      } as React.CSSProperties}
-    >
-      {/* Top row */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          gap: 16,
-          marginBottom: 6,
-        } as React.CSSProperties}
-      >
-        {/* Left */}
-        <div style={{ flex: 1 } as React.CSSProperties}>
-          {/* Team badge */}
-          <span
-            style={{
-              display: "inline-block",
-              fontFamily: FONT.mono,
-              fontSize: 10,
-              fontWeight: 700,
-              textTransform: "uppercase" as const,
-              letterSpacing: "0.06em",
-              color: teamAccent.color,
-              background: teamAccent.bg,
-              padding: "3px 9px",
-              borderRadius: 100,
-              marginBottom: 8,
-            } as React.CSSProperties}
-          >
-            {teamLabels[role.team]}
-          </span>
-
-          {/* Title */}
-          <h3
-            style={{
-              fontFamily: FONT.sans,
-              fontSize: 18,
-              fontWeight: 700,
-              color: BRAND.onyx,
-              letterSpacing: "-0.01em",
-            } as React.CSSProperties}
-          >
-            {role.title}
-          </h3>
+    <figure>
+      <StripedFrame inset="md" className="pb-0 sm:pb-0">
+        <div className="max-h-[450px] overflow-hidden [mask-image:linear-gradient(to_bottom,#000_calc(100%-72px),transparent)] sm:max-h-[460px] lg:max-h-[520px] sm:[mask-image:linear-gradient(to_bottom,#000_calc(100%-110px),transparent)]">
+          <TodayScreen />
         </div>
-
-        {/* Type badge */}
-        <span
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 11,
-            fontWeight: 600,
-            color: BRAND.stoneDark,
-            background: BRAND.boneCream,
-            padding: "4px 10px",
-            borderRadius: 100,
-            whiteSpace: "nowrap" as const,
-            flexShrink: 0,
-          } as React.CSSProperties}
-        >
-          {TYPE_LABEL[role.type]}
-        </span>
-      </div>
-
-      {/* Location */}
-      <p
-        style={{
-          fontFamily: FONT.sans,
-          fontSize: 12,
-          color: BRAND.stoneLight,
-          marginBottom: 12,
-        } as React.CSSProperties}
-      >
-        {role.location}
-      </p>
-
-      {/* Description */}
-      <p
-        style={{
-          fontFamily: FONT.sans,
-          fontSize: 14,
-          lineHeight: 1.6,
-          color: BRAND.stoneDark,
-          marginBottom: 16,
-        } as React.CSSProperties}
-      >
-        {role.description}
-      </p>
-
-      {/* Apply CTA */}
-      <a
-        href={careersMail(`Application: ${role.title}`)}
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          fontFamily: FONT.sans,
-          fontSize: 11,
-          fontWeight: 600,
-          color: BRAND.onyx,
-          background: BRAND.bone,
-          border: `1px solid ${BRAND.border}`,
-          padding: "4px 12px",
-          borderRadius: 100,
-          textDecoration: "none",
-          letterSpacing: "-0.005em",
-        } as React.CSSProperties}
-      >
-        Apply via email &rarr;
-      </a>
-    </motion.div>
+      </StripedFrame>
+      <figcaption className="mt-4 max-w-[560px] text-[14px] leading-[1.5] text-pretty text-mute">
+        Today in the sample studio: the screen a shop opens first, and the kind of work you’d do.
+      </figcaption>
+    </figure>
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+function HowWeWork() {
+  return (
+    <Section tone="white" density="story" labelledBy="work-heading">
+      <Container className="grid gap-8 sm:gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+        <div>
+          <Display id="work-heading" className="max-w-[480px]">
+            How we work
+          </Display>
+          <Lead className="mt-4 max-w-[440px] text-mute sm:mt-5">
+            Small on purpose, and close to the studios we build for.
+          </Lead>
+        </div>
+        <dl className="border-t border-hair-strong">
+          {WAYS.map((w) => (
+            <div
+              key={w.term}
+              className="grid gap-x-10 gap-y-1.5 border-b border-hair-strong py-5 sm:grid-cols-[200px_minmax(0,1fr)] sm:py-7"
+            >
+              <dt className="text-title-sm text-balance text-graphite">{w.term}</dt>
+              <dd className="max-w-[520px] text-[16px] leading-[1.6] text-pretty text-mute sm:text-[17px]">{w.body}</dd>
+            </div>
+          ))}
+        </dl>
+      </Container>
+    </Section>
+  );
+}
+
+function RoleRow({ role }: { role: Role }) {
+  return (
+    <li className="grid gap-4 border-b border-hair-strong py-6 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-10 sm:py-8">
+      <div className="min-w-0">
+        <Title as="h3" size="md">
+          {role.title}
+        </Title>
+        <p className="mt-1.5 text-[14px] font-medium text-graphite-soft">
+          {teamLabels[role.team]} · {roleTypeLabels[role.type]} · {role.location}
+        </p>
+        <p className="mt-3 max-w-[620px] text-[16px] leading-[1.6] text-pretty text-mute">{role.description}</p>
+      </div>
+      <Button href={mailTo(`Application: ${role.title}`)} variant="secondary" arrow className="self-start sm:self-center">
+        Apply by email
+      </Button>
+    </li>
+  );
+}
+
+function OpenRoles() {
+  return (
+    <Section tone="deep" density="proof" id="roles" labelledBy="roles-heading">
+      <Container className="grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start lg:gap-20">
+        <Display id="roles-heading" className="max-w-[480px]">
+          Open roles
+        </Display>
+        {openRoles.length > 0 ? (
+          <ul className="border-t border-hair-strong">
+            {openRoles.map((r) => (
+              <RoleRow key={r.title} role={r} />
+            ))}
+          </ul>
+        ) : (
+          <div className="rounded-card bg-white p-6 ring-1 ring-hair sm:p-9">
+            <Title as="h3" size="md">
+              No open roles right now
+            </Title>
+            <p className="mt-3 max-w-[560px] text-[16px] leading-[1.65] text-pretty text-mute sm:text-[17px]">
+              When a real role opens, it’s listed here with what the work is. If you’d like to help build Limespun before
+              then, write to{" "}
+              <a href={mailTo("Careers")} className={inlineLink}>
+                {CONTACT_EMAIL}
+              </a>{" "}
+              with what you’d want to work on and a link to your work.
+            </p>
+            <Button href={mailTo("Careers")} variant="secondary" arrow className="mt-6 w-full sm:w-auto">
+              Write to us
+            </Button>
+          </div>
+        )}
+      </Container>
+    </Section>
+  );
+}
 
 export default function CareersPage() {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: BRAND.bone,
-        overflow: "hidden",
-      } as React.CSSProperties}
+    <ContentPage
+      layout="sections"
+      crumbs={[{ label: "Home", href: "/" }, { label: "Careers" }]}
+      eyebrow="Careers"
+      title="Build software for people who make art."
+      italicWord="art"
+      lead="Boldteq is the small team behind Limespun, studio software built only for tattoo. We hire when there’s a real role to fill, and we list it here."
+      visual={<WhatYouBuild />}
+      jsonLd={openRoles.map(jobPostingJsonLd)}
+      related={{ items: RELATED }}
+      inkBand={{
+        headline: "See what you’d be building.",
+        italicWord: "building",
+        secondary: { label: "About Limespun", href: "/about" },
+      }}
     >
-      <Nav />
-
-      <main>
-        {/* Hero */}
-        <HeroSection
-          eyebrow="Careers"
-          eyebrowAccent="amber"
-          headline="Build software for tattoo studios."
-          italicWord="tattoo"
-          subhead="Boldteq is the small team behind Limespun, studio software made only for tattoo. We hire when there's a real role to fill, and we list it here."
-          primaryCTA={{ label: "Open roles", href: "#roles" }}
-          secondaryCTA={{ label: "About us", href: "/about" }}
-        />
-
-        {/* Why us */}
-        <section
-          style={{
-            background: GRADIENT.sectionWarm,
-            paddingTop: 100,
-            paddingBottom: 100,
-          } as React.CSSProperties}
-        >
-          <div
-            style={{
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "0 32px",
-            } as React.CSSProperties}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <SectionEyebrow label="The team" accent="rust" />
-            </motion.div>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.65, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-              style={{
-                fontFamily: FONT.serif,
-                fontSize: "clamp(36px, 5vw, 64px)",
-                lineHeight: 1.0,
-                letterSpacing: "-0.025em",
-                color: BRAND.onyx,
-                fontWeight: 400,
-                marginBottom: 56,
-                maxWidth: 480,
-              } as React.CSSProperties}
-            >
-              How we work.
-            </motion.h2>
-
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 24,
-              } as React.CSSProperties}
-              className="careers-why-grid"
-            >
-              {WHY_CARDS.map((card) => (
-                <motion.div
-                  key={card.title}
-                  variants={fadeUp}
-                  style={{
-                    background: BRAND.white,
-                    borderRadius: 18,
-                    padding: 28,
-                    boxShadow: SHADOW.soft,
-                    borderTop: `3px solid ${card.accent}`,
-                  } as React.CSSProperties}
-                >
-                  <h3
-                    style={{
-                      fontFamily: FONT.sans,
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: BRAND.onyx,
-                      letterSpacing: "-0.01em",
-                      marginBottom: 12,
-                    } as React.CSSProperties}
-                  >
-                    {card.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: FONT.sans,
-                      fontSize: 14,
-                      lineHeight: 1.65,
-                      color: BRAND.stoneDark,
-                    } as React.CSSProperties}
-                  >
-                    {card.body}
-                  </p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Open roles */}
-        <section
-          id="roles"
-          style={{
-            background: BRAND.bone,
-            paddingTop: 100,
-            paddingBottom: 100,
-          } as React.CSSProperties}
-        >
-          <div
-            style={{
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "0 32px",
-            } as React.CSSProperties}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <SectionEyebrow label="Open roles" accent="sage" />
-            </motion.div>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.65, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-              style={{
-                fontFamily: FONT.serif,
-                fontSize: "clamp(36px, 5vw, 64px)",
-                lineHeight: 1.0,
-                letterSpacing: "-0.025em",
-                color: BRAND.onyx,
-                fontWeight: 400,
-                marginBottom: 48,
-                maxWidth: 480,
-              } as React.CSSProperties}
-            >
-              {openRoles.length > 0 ? "Currently hiring." : "No open roles right now."}
-            </motion.h2>
-
-            {openRoles.length > 0 ? (
-              <motion.div
-                variants={stagger}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-60px" }}
-              >
-                {openRoles.map((role) => (
-                  <RoleCard key={role.title} role={role} />
-                ))}
-              </motion.div>
-            ) : (
-              <p
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 17,
-                  lineHeight: 1.6,
-                  color: BRAND.stoneDark,
-                  maxWidth: 560,
-                  margin: 0,
-                } as React.CSSProperties}
-              >
-                If you build software or run a studio and want to help, write to{" "}
-                <a
-                  href={careersMail("Careers")}
-                  style={{ color: BRAND.onyx, fontWeight: 600, textDecoration: "underline", textUnderlineOffset: 4 } as React.CSSProperties}
-                >
-                  {CONTACT_EMAIL}
-                </a>
-                .
-              </p>
-            )}
-          </div>
-        </section>
-
-        {/* CTA */}
-        <CTASection
-          badge="Or just say hi"
-          headline="Write to us anyway."
-          italicWord="anyway"
-          subhead={`Tell us what you'd want to work on and send a link to your work. It goes to ${CONTACT_EMAIL}.`}
-          primaryCTA={{ label: `Email ${CONTACT_EMAIL}`, href: careersMail("Careers") }}
-          secondaryCTA={{ label: "About us", href: "/about" }}
-        />
-      </main>
-
-      <Footer />
-
-      <style>{`
-        @media (max-width: 1024px) {
-          .careers-why-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 640px) {
-          .careers-why-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
-    </div>
+      <HowWeWork />
+      <OpenRoles />
+    </ContentPage>
   );
 }

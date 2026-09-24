@@ -145,12 +145,16 @@ export function ToolbarListRow({
 
 /* ─── Project helpers (app: projects/_proto/shared.tsx) ───────────────────── */
 
-/** Style tags on each project card, matching the portfolio's style names. */
+/**
+ * Each project's style, in the app's enum labels (lib/projects/labels.ts
+ * STYLE_LABELS: "Japanese (Irezumi)", "Fine line", "Black & Grey" …). Color is
+ * the separate Color / B&G field, not a style, so it never shows here.
+ */
 const PROJECT_STYLES: Record<ProjectId, string[]> = {
-  "asha-koi": ["Japanese", "Color"],
+  "asha-koi": ["Japanese (Irezumi)"],
   "elena-back": ["Blackwork"],
-  "bea-botanical": ["Botanical"],
-  "jo-florals": ["Fine-line"],
+  "bea-botanical": ["Black & Grey"],
+  "jo-florals": ["Fine line"],
   "tomas-chest": ["Blackwork"],
   "sam-script": ["Lettering"],
   "owen-panther": ["Traditional"],
@@ -235,7 +239,8 @@ function GalleryCard({ p, seed }: { p: Project; seed: number }) {
       <div className="flex min-w-0 flex-1 flex-col gap-2 p-3">
         <div>
           <span className="block font-serif text-[13px] leading-tight text-app-mute italic">{p.client}</span>
-          <span className="block truncate text-ui font-semibold text-app-text">{p.title}</span>
+          {/* Two lines before it clips, so "Botanical half sleeve" reads whole in a phone frame. */}
+          <span className="line-clamp-2 text-ui leading-snug font-semibold text-app-text">{p.title}</span>
         </div>
         <StyleTags styles={PROJECT_STYLES[p.id]} />
         <ProgressBar done={doneCount(p)} total={p.sessions.length} />
@@ -350,11 +355,11 @@ const SESSION_CHIP: Record<ProjectSession["state"], { tone: "success" | "active"
   "not-booked": { tone: "neutral", label: "Not booked" },
 };
 
-/** The pool's ledger: one deposit in, one application out (sample-data: $300 paid Thu, Aug 13). */
+/** The pool's ledger: one deposit in before session 1 (sample-data poolPaidOn), then what's applied. */
 function poolLedger(p: Project): { label: string; when: string; cents: number }[] {
   const applied = p.sessions.filter((s) => s.appliedCents);
   return [
-    { label: "Deposit paid", when: "Thu, Aug 13", cents: p.pool.paidInCents },
+    { label: "Deposit paid", when: p.poolPaidOn ?? "", cents: p.pool.paidInCents },
     ...applied.map((s) => ({ label: `Applied to S${s.n}`, when: s.date, cents: -(s.appliedCents ?? 0) })),
   ];
 }
@@ -471,10 +476,12 @@ function Detail() {
             </div>
             <div className="mt-3.5 flex flex-col border-t border-app-border pt-2.5">
               {poolLedger(p).map((row) => (
-                <div key={row.label} className="flex items-center justify-between gap-2 py-1 text-ui-sm">
+                /* The row is its own container: narrower than 16rem the weekday goes ("Sep 10"), so the date stays whole. */
+                <div key={row.label} className="@container flex items-center justify-between gap-2 py-1 text-ui-sm">
                   <span className="min-w-0 truncate text-app-text">
                     {row.label}
-                    <span className="text-app-mute"> · {row.when}</span>
+                    <span className="hidden text-app-mute @min-[16rem]:inline"> · {row.when}</span>
+                    <span className="text-app-mute @min-[16rem]:hidden"> · {row.when.replace(/^\w{3}, /, "")}</span>
                   </span>
                   <span className={cn("shrink-0 font-semibold tabular-nums", row.cents > 0 ? "text-app-success" : "text-app-text")}>
                     {row.cents > 0 ? "+" : ""}

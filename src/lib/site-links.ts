@@ -45,18 +45,35 @@ export const TOOLS_INDEX = [
   },
 ] as const;
 
+/**
+ * Footer link columns. Labels are the app's own nouns (Messages, Clients, Projects, Payments, Team)
+ * or the nav's where the app has none (Deposits, Design moodboards, Reports). Only live routes:
+ * no /product/today, /product/inbox or /migrate/<vendor> (those redirect), no demo booking.
+ * Keep each column at 8 links or fewer so the desktop grid stays even.
+ */
 export const FOOTER_GROUPS: LinkGroup[] = [
   {
-    heading: "Product",
+    heading: "Features",
     links: [
       { label: "Calendar", href: "/product/calendar" },
-      { label: "Multi-session projects", href: "/product/projects" },
+      { label: "Deposits", href: "/product/appointments" },
+      { label: "Messages", href: "/product/messages" },
       { label: "Clients", href: "/product/clients" },
       { label: "Consent forms", href: "/product/forms" },
+      { label: "Projects", href: "/product/projects" },
+      { label: "Portfolio & flash", href: "/product/portfolio" },
+      { label: "Design moodboards", href: "/product/ai-design" },
+    ],
+  },
+  {
+    heading: "Run the shop",
+    links: [
       { label: "Payments", href: "/product/payments" },
+      { label: "Team", href: "/product/team" },
       { label: "Inventory", href: "/product/inventory" },
-      { label: "Changelog", href: "/changelog" },
-      { label: "Pricing", href: "/pricing" },
+      { label: "Reports", href: "/product/analytics" },
+      { label: "Marketing", href: "/product/marketing" },
+      { label: "All features", href: "/product" },
     ],
   },
   {
@@ -64,10 +81,10 @@ export const FOOTER_GROUPS: LinkGroup[] = [
     links: [
       { label: "Solo artists", href: "/for/solo-artists" },
       { label: "Small studios", href: "/for/small-studios" },
-      { label: "Multi-chair shops", href: "/for/multi-chair" },
-      { label: "Multi-location", href: "/for/multi-location" },
-      { label: "EU REACH", href: "/reach-compliance" },
-      { label: "Switching tools", href: "/migrate" },
+      { label: "Busy shops", href: "/for/multi-chair" },
+      { label: "Multiple locations", href: "/for/multi-location" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Switching guide", href: "/migrate" },
     ],
   },
   {
@@ -78,20 +95,14 @@ export const FOOTER_GROUPS: LinkGroup[] = [
     ],
   },
   {
-    heading: "Free tools",
-    links: [
-      ...TOOLS_INDEX.map((t) => ({ label: t.short, href: `/tools/${t.slug}` })),
-      { label: "All tools", href: "/tools" },
-    ],
-  },
-  {
     heading: "Resources",
     links: [
       { label: "Blog", href: "/blog" },
-      { label: "Migration guide", href: "/migrate" },
-      { label: "REACH hub", href: "/reach-compliance" },
+      ...TOOLS_INDEX.map((t) => ({ label: t.short, href: `/tools/${t.slug}` })),
+      { label: "All free tools", href: "/tools" },
+      { label: "EU REACH hub", href: "/reach-compliance" },
+      { label: "Changelog", href: "/changelog" },
       { label: "Roadmap", href: "/roadmap" },
-      { label: "Contact", href: "/contact" },
     ],
   },
   {
@@ -101,6 +112,7 @@ export const FOOTER_GROUPS: LinkGroup[] = [
       { label: "Careers", href: "/careers" },
       { label: "Press kit", href: "/press" },
       { label: "Security", href: "/legal/security" },
+      { label: "Contact", href: "/contact" },
       { label: ACCOUNT.signInLabel, href: ACCOUNT.signInHref },
     ],
   },
@@ -115,7 +127,7 @@ export const LEGAL_LINKS: SiteLink[] = [
 ];
 
 const AI_PROMPT =
-  "What is Limespun (limespun.com), the software for tattoo studios? Summarise what it does for bookings, deposits, consent forms and artist payouts, and who it suits.";
+  "What is Limespun (limespun.com), the software for tattoo studios? Summarize what it does for bookings, deposits, consent forms and artist payouts, and who it suits.";
 
 /** "Ask AI about Limespun" — opens each assistant with a neutral, prefilled question. */
 export const ASK_AI_LINKS: SiteLink[] = [

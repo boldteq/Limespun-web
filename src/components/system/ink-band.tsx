@@ -20,7 +20,13 @@ export function InkBand({
   eyebrow,
   headline = "Run the shop in one place.",
   italicWord = "place",
-  sub = `Create your account in minutes. We move your data over for you. ${MONEY_BACK_DAYS}-day money-back guarantee.`,
+  sub = (
+    <>
+      Create your account in minutes. We move your data over for you.{" "}
+      {/* Kept whole so a narrow line never breaks at "money-" */}
+      <span className="whitespace-nowrap">{MONEY_BACK_DAYS}-day money-back</span> guarantee.
+    </>
+  ),
   primary = { label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref },
   secondary = { label: "See pricing", href: "/pricing" },
   mark = true,

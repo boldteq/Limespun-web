@@ -10,7 +10,7 @@ export const metadata = pageMetadata({
 });
 
 /*
- * Checked against the code on 23 September 2026. limespun.com: no cookies, no analytics,
+ * Checked against the code on September 23, 2026. limespun.com: no cookies, no analytics,
  * no middleware; forms are server actions rate-limited by IP (src/lib/rate-limit.ts).
  * App (InkOS): first-party sign-in cookies only (Supabase session, lib/auth/mfa.ts step-up,
  * lib/auth/signin-preference.ts, lib/invite/cookie.ts, lib/portal/sessions.ts).

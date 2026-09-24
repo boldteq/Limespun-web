@@ -77,7 +77,7 @@ function CampaignList({ limit }: { limit?: number }) {
               </AppStatus>
             </span>
             <span className="mt-0.5 block text-ui-sm text-app-mute">
-              {c.channel === "SMS" ? "Text" : "Email"} · {c.audience} · {c.recipients.toLocaleString("en-US")} clients
+              {c.channel} · {c.audience} · {c.recipients.toLocaleString("en-US")} clients
               {c.when !== "—" ? ` · ${c.when}` : ""}
             </span>
           </div>
@@ -228,7 +228,8 @@ function Referral() {
  * Marketing (app: /marketing?tab=, marketing/_components/*). Open rate and
  * bookings driven over 30 days with list hygiene, the segment chips with the
  * custom "Healed, not rebooked" segment, campaigns, the waitlist and the
- * referral program. Channels are the live ones: email and text.
+ * referral program. Channels are the live ones: SMS and email. Every count
+ * comes from sample-data (segments, campaigns, waitlist, referrals).
  */
 export function MarketingScreen({ tab = "audience", className }: { tab?: MarketingTab; className?: string }) {
   return (

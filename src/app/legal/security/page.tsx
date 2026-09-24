@@ -15,10 +15,10 @@ export const metadata = pageMetadata({
  * Every statement here is checked against the Limespun app (InkOS repo) and the live
  * app.limespun.com responses. Don't add claims that aren't true today.
  */
+/* Headline values are the outcome a studio gets; the mechanism (HSTS, AES-256, RLS) sits in the label and the body. */
 const highlights: StatItem[] = [
-  { value: "HSTS", label: "HTTPS enforced, never plain HTTP" },
-  /* "AES-256" as a figure sets its hyphen tabular-wide, so the key size moves to the label */
-  { value: "AES", label: "256-bit encryption at rest" },
+  { value: "Encrypted", label: "In transit and at rest, with AES-256" },
+  { value: "Separate", label: "Each studio’s data walled off from every other" },
   { value: "2FA", label: "Two-factor sign-in, available on every account" },
   { value: "72 hours", label: "To tell you about a breach we find" },
 ];

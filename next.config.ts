@@ -67,12 +67,21 @@ const nextConfig: NextConfig = {
     ];
     return [{ source: "/(.*)", headers: securityHeaders(isDev) }, ...cacheRules];
   },
-  // Retired routes. The old call-booking page sends people to contact instead.
+  // Retired routes (permanent = 308). The old call-booking page sends people to contact instead;
+  // Today and the action inbox fold into the product overview and Messages; each vendor's
+  // migration page is now the switching section of its comparison.
   async redirects() {
     return [
       { source: "/book-a-demo", destination: "/contact", permanent: true },
       { source: "/customers", destination: "/", permanent: true },
       { source: "/customers/:slug", destination: "/", permanent: true },
+      { source: "/product/today", destination: "/product", permanent: true },
+      { source: "/product/inbox", destination: "/product/messages", permanent: true },
+      {
+        source: "/migrate/:slug(daysmart|fresha|mangomint|tattoogenda|vagaro)",
+        destination: "/compare/:slug#switching",
+        permanent: true,
+      },
     ];
   },
 };

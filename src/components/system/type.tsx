@@ -53,6 +53,9 @@ const displaySize = {
  * Serif headline. Sizes: 1 = homepage hero (84px), 2 = page title and closing band (64px),
  * 3 = section heading (56px). Without `size`, an h1 is 1 and anything else is 3, which is
  * exactly what the homepage has always rendered.
+ *
+ * `italicWord` sets one word in the ember italic on sizes 1 and 2 only (the page H1 and the
+ * closing band). Section headings (size 3) never carry it, so it is ignored there.
  */
 export function Display({
   as: Tag = "h2",
@@ -72,7 +75,7 @@ export function Display({
   const step = size ?? (Tag === "h1" ? 1 : 3);
   return (
     <Tag id={id} className={cn("font-serif font-normal text-balance text-graphite", displaySize[step], className)}>
-      {withItalic(children, italicWord)}
+      {withItalic(children, step < 3 ? italicWord : undefined)}
     </Tag>
   );
 }

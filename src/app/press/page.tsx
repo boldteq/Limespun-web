@@ -1,661 +1,336 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
-import { Image as ImageIcon, FileText, Download, Mail } from "lucide-react";
-import { BRAND, CONTACT_EMAIL, FONT, HOME, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
-import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { HeroSection } from "@/components/shared/hero-section";
-import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { CTASection } from "@/components/shared/cta-section";
+import { Download } from "lucide-react";
 import { LimespunMark } from "@/components/brand/limespun-mark";
 import {
-  PLANS,
-  formatPrice,
+  Container,
+  Display,
+  Lead,
+  Section,
+  Title,
+  buttonClass,
+  cn,
+  type RelatedItem,
+} from "@/components/system";
+import { ContentPage } from "@/components/templates/content-page";
+import { CONTACT_EMAIL, HOME, SITE_URL } from "@/lib/brand";
+import {
   ANNUAL_DISCOUNT_PERCENT,
   FOUNDING_OFFER_OPEN,
   FOUNDING_OFFER_SIZE,
+  MONEY_BACK_DAYS,
+  PLANS,
+  formatPrice,
 } from "@/lib/data/plans";
+import { pageMetadata } from "@/lib/seo";
+import { CopyButton } from "./copy-button";
+
+export const metadata = pageMetadata({
+  title: "Press kit: facts, logo and brand colors",
+  description:
+    "The Limespun press kit: company facts and plan prices, the mark and wordmark as SVG files, brand colors with hex values, and a 50-word boilerplate to quote.",
+  path: "/press",
+});
 
 /** Press questions go to the main inbox; the subject line marks them as press. */
-const pressMail = (subject: string): string => `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
+const PRESS_MAIL = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Press question")}`;
 
-const [SOLO] = PLANS.filter((p) => p.tier === "solo");
-const [MULTI] = PLANS.filter((p) => p.tier === "enterprise");
+const fromPrice = formatPrice(Math.min(...PLANS.map((p) => p.monthlyCents)));
 
-// ─── Accent tokens ────────────────────────────────────────────────────────────
-type AccentColor = "rust" | "amber" | "sage";
+/* ─── Boilerplate ─────────────────────────────────────────────────────────────
+   Quotable as written. The count is computed, so the label stays true if the copy changes. */
+const BOILERPLATE = `Limespun is studio software built only for tattoo. Bookings, deposits, consent forms, multi-session projects and artist payouts live in one client record. Studios pay a flat monthly price from ${fromPrice}, with no cut of their bookings or deposits. Limespun is made by Boldteq, an independent team founded in 2024. limespun.com`;
+const BOILERPLATE_WORDS = BOILERPLATE.split(/\s+/).filter(Boolean).length;
 
-const accentTokens: Record<AccentColor, { color: string; bg: string; border: string }> = {
-  rust: { color: BRAND.rust, bg: BRAND.rustWash, border: BRAND.rustSoft },
-  amber: { color: BRAND.amber, bg: BRAND.amberWash, border: BRAND.amberSoft },
-  sage: { color: BRAND.sage, bg: BRAND.sageWash, border: BRAND.sageSoft },
-};
+/* ─── Facts ───────────────────────────────────────────────────────────────────
+   Every value is confirmed or read from plans.ts. No customer counts, no coverage. */
+const inlineLink =
+  "font-semibold text-graphite underline decoration-ember decoration-2 underline-offset-4 hover:text-ember-deep focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite";
+/* A link that stands alone in a table cell gets the full 44px target (links inside sentences don't need it) */
+const cellLink = cn(inlineLink, "-my-2.5 inline-flex min-h-11 items-center");
 
-// ─── Factsheet rows ───────────────────────────────────────────────────────────
-const FACTSHEET_ROWS: { label: string; value: string }[] = [
-  { label: "Product:", value: "Limespun — the studio operating system for tattoo" },
-  { label: "Company:", value: "Boldteq Holdings" },
-  { label: "Founded:", value: "2024" },
+const FACTS: { label: string; value: React.ReactNode }[] = [
+  { label: "Product", value: "Limespun, studio software built only for tattoo" },
+  { label: "Company", value: "Boldteq Holdings Ltd" },
+  { label: "Founded", value: "2024" },
+  { label: "Founder", value: "Yash Baldha" },
   {
-    label: "Status:",
-    value: `Live — studios sign up and pay monthly or yearly${
-      FOUNDING_OFFER_OPEN ? `, or once on the founding lifetime offer (first ${FOUNDING_OFFER_SIZE} studios)` : ""
-    }`,
+    label: "Status",
+    value: `Live. Studios pay monthly or yearly${
+      FOUNDING_OFFER_OPEN ? `, or once on the founding offer for the first ${FOUNDING_OFFER_SIZE} studios` : ""
+    }.`,
   },
   {
-    label: "Pricing:",
-    value: `${formatPrice(SOLO.monthlyCents)} / mo (Solo) to ${formatPrice(MULTI.monthlyCents)} / mo flat (${MULTI.name}); ${ANNUAL_DISCOUNT_PERCENT}% off billed yearly`,
-  },
-];
-
-// ─── Colour swatches ──────────────────────────────────────────────────────────
-interface ColourCard {
-  name: string;
-  description: string;
-  hex: string;
-  swatch: string;
-}
-
-const COLOUR_CARDS: ColourCard[] = [
-  {
-    name: "Ember",
-    description: "The one accent. The mark, highlights and the italic word in a headline.",
-    hex: HOME.ember,
-    swatch: HOME.ember,
+    label: "Plans",
+    value: (
+      <>
+        {PLANS.map((p, i) => (
+          <React.Fragment key={p.tier}>
+            {i > 0 && ", "}
+            <span className="whitespace-nowrap">
+              {p.name} <span className="tabular-nums">{formatPrice(p.monthlyCents)}</span>
+            </span>
+          </React.Fragment>
+        ))}{" "}
+        a month, flat. {ANNUAL_DISCOUNT_PERCENT}% off billed yearly.
+      </>
+    ),
   },
   {
-    name: "Graphite",
-    description: "Text and the primary button.",
-    hex: HOME.graphite,
-    swatch: HOME.graphite,
+    label: "Fees",
+    value: "No Limespun fee on bookings or deposits. Card payments carry the provider’s standard fee.",
   },
   {
-    name: "Canvas",
-    description: "The warm off-white behind every page.",
-    hex: HOME.canvas,
-    swatch: HOME.canvas,
-  },
-];
-
-// ─── Download cards ───────────────────────────────────────────────────────────
-interface DownloadCard {
-  accent: AccentColor;
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  href: string;
-  /** Direct file download (true) vs. a request-by-email link (false). */
-  isFile: boolean;
-}
-
-const DOWNLOAD_CARDS: DownloadCard[] = [
-  {
-    accent: "rust",
-    icon: <ImageIcon size={20} strokeWidth={1.8} />,
-    title: "Logo mark (.svg)",
-    description:
-      "The Limespun mark as a full-colour vector on a transparent background. Scales to any size.",
-    href: "/brand/limespun-mark.svg",
-    isFile: true,
+    label: "Guarantee",
+    value: `${MONEY_BACK_DAYS}-day money-back guarantee, no free trial. We move each studio’s data over on every plan.`,
   },
   {
-    accent: "amber",
-    icon: <ImageIcon size={20} strokeWidth={1.8} />,
-    title: "Product screenshots",
-    description:
-      "Today, Calendar, Projects, Inventory, Forms. Sent on request so they match the current build and your layout.",
-    href: pressMail("Press: screenshot request"),
-    isFile: false,
-  },
-  {
-    accent: "sage",
-    icon: <FileText size={20} strokeWidth={1.8} />,
-    title: "Full brand kit",
-    description:
-      "Logo variants (PNG, mono), colour guide, typography spec and founder bio. Emailed so you never work from an outdated file.",
-    href: pressMail("Press: brand kit request"),
-    isFile: false,
-  },
-];
-
-// ─── Download Card Component ──────────────────────────────────────────────────
-function DownloadCardItem({ card }: { card: DownloadCard }) {
-  const tokens = accentTokens[card.accent];
-  return (
-    <motion.div
-      variants={fadeUp}
-      style={{
-        background: BRAND.white,
-        borderRadius: 16,
-        padding: 24,
-        boxShadow: SHADOW.soft,
-        borderTop: `3px solid ${tokens.color}`,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <div
-        style={{
-          width: 44,
-          height: 44,
-          borderRadius: 10,
-          background: tokens.bg,
-          border: `1px solid ${tokens.border}`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: tokens.color,
-          marginBottom: 16,
-        }}
-      >
-        {card.icon}
-      </div>
-      <div
-        style={{
-          fontFamily: FONT.sans,
-          fontSize: 15,
-          fontWeight: 700,
-          color: BRAND.onyx,
-          marginBottom: 8,
-        }}
-      >
-        {card.title}
-      </div>
-      <p
-        style={{
-          fontFamily: FONT.sans,
-          fontSize: 13,
-          color: BRAND.stoneDark,
-          lineHeight: 1.55,
-          flex: 1,
-          marginBottom: 20,
-        }}
-      >
-        {card.description}
-      </p>
-      <a
-        href={card.href}
-        download={card.isFile ? "" : undefined}
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          fontFamily: FONT.sans,
-          fontSize: 13,
-          fontWeight: 600,
-          color: tokens.color,
-          textDecoration: "none",
-        }}
-      >
-        {card.isFile ? (
-          <Download size={12} strokeWidth={2.2} />
-        ) : (
-          <Mail size={12} strokeWidth={2.2} />
-        )}
-        {card.isFile ? "Download" : "Request by email"}
+    label: "Website",
+    value: (
+      <a href={SITE_URL} className={cellLink}>
+        limespun.com
       </a>
-    </motion.div>
+    ),
+  },
+  {
+    label: "Press contact",
+    value: (
+      <a href={PRESS_MAIL} className={cellLink}>
+        {CONTACT_EMAIL}
+      </a>
+    ),
+  },
+];
+
+/* ─── Brand assets ────────────────────────────────────────────────────────── */
+
+/** The token swatches, with the hex values from brand.ts (the same values as globals.css). */
+const COLORS: { name: string; hex: string; swatch: string; role: string }[] = [
+  { name: "Ember", hex: HOME.ember, swatch: "bg-ember", role: "The one accent: the mark, links, one word per headline." },
+  { name: "Graphite", hex: HOME.graphite, swatch: "bg-graphite", role: "Text and the primary button." },
+  { name: "Canvas", hex: HOME.canvas, swatch: "bg-canvas", role: "The warm off-white behind every page." },
+  { name: "Canvas deep", hex: HOME.canvasDeep, swatch: "bg-canvas-deep", role: "Panels, stages and quiet bands." },
+];
+
+const downloadLink = cn(buttonClass("ghost"), "text-[15px]");
+
+function DownloadLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a href={href} download className={downloadLink}>
+      <Download size={16} strokeWidth={2.2} aria-hidden="true" className="shrink-0" />
+      {children}
+    </a>
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+/** The wordmark as the nav sets it: the mark, then Limespun in Inter bold. A live preview of the SVG files. */
+function WordmarkPreview({ tone }: { tone: "dark" | "light" }) {
+  return (
+    <span aria-hidden="true" className="inline-flex items-center gap-2.5">
+      <LimespunMark size={32} />
+      <span
+        className={cn(
+          "text-[26px] leading-none font-bold tracking-[-0.03em]",
+          tone === "dark" ? "text-graphite" : "text-ink-text",
+        )}
+      >
+        Limespun
+      </span>
+    </span>
+  );
+}
+
+const RELATED: RelatedItem[] = [
+  { eyebrow: "Company", title: "About", body: "Why Limespun is built only for tattoo, and the rules we build by.", href: "/about" },
+  {
+    eyebrow: "Plans",
+    title: "Pricing",
+    body: `Flat monthly plans from ${fromPrice}. No cut of bookings or deposits.`,
+    href: "/pricing",
+  },
+  { eyebrow: "Updates", title: "Changelog", body: "What shipped in Limespun, newest first.", href: "/changelog" },
+  { eyebrow: "Company", title: "Contact", body: "Questions about switching, plans or your account.", href: "/contact" },
+];
+
+/* ─── Sections ────────────────────────────────────────────────────────────── */
+
+function Facts() {
+  return (
+    <Section tone="white" labelledBy="facts-heading">
+      {/* Phones read heading → facts → boilerplate; from lg the boilerplate sits under the heading */}
+      <Container className="grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:grid-rows-[auto_1fr] lg:gap-x-20 lg:gap-y-10">
+        <div className="lg:col-start-1 lg:row-start-1">
+          <Display id="facts-heading" className="max-w-[520px]">
+            Limespun at a glance
+          </Display>
+          {/* Phones go straight from the heading to the facts */}
+          <Lead className="mt-5 hidden max-w-[480px] text-mute sm:block">
+            Confirmed facts only. The prices are the plans studios buy today.
+          </Lead>
+        </div>
+
+        <dl className="border-t border-hair-strong lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
+          {FACTS.map((f) => (
+            <div
+              key={f.label}
+              className="grid grid-cols-[104px_minmax(0,1fr)] gap-x-4 border-b border-hair py-3.5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-x-6 sm:py-4"
+            >
+              <dt className="pt-0.5 text-[13px] font-semibold text-mute sm:text-[14px]">{f.label}</dt>
+              <dd className="text-[15px] leading-[1.55] text-pretty text-graphite sm:text-[16px]">{f.value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <figure className="rounded-card bg-canvas p-5 ring-1 ring-hair sm:p-7 lg:col-start-1 lg:row-start-2 lg:self-start">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <figcaption className="text-label text-ember-deep uppercase">Boilerplate · {BOILERPLATE_WORDS} words</figcaption>
+            <CopyButton text={BOILERPLATE} label="Copy text" />
+          </div>
+          <blockquote className="mt-4 text-[16px] leading-[1.65] text-pretty text-graphite sm:text-[17px]">
+            <p>{BOILERPLATE}</p>
+          </blockquote>
+        </figure>
+      </Container>
+    </Section>
+  );
+}
+
+function Assets() {
+  return (
+    <Section tone="canvas" id="assets" labelledBy="assets-heading">
+      <Container>
+        <div className="grid gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-end lg:gap-16">
+          <Display id="assets-heading" className="max-w-[640px]">
+            Logo, wordmark and colors
+          </Display>
+          <Lead className="text-mute lg:justify-self-end lg:pb-1 lg:text-[18px]">
+            Vector files for print and screen. Keep the mark in its ember square, and don’t recolor, stretch or
+            outline it.
+          </Lead>
+        </div>
+
+        {/* Logo files */}
+        <Title as="h3" size="sm" className="mt-10 sm:mt-14">
+          Logo files
+        </Title>
+        <ul className="mt-4 grid gap-4 sm:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] sm:gap-5">
+          {/* Phones set the mark beside its copy; from sm it stands over it like the wordmark */}
+          <li className="flex overflow-hidden rounded-card bg-white ring-1 ring-hair sm:flex-col">
+            <div className="flex w-28 shrink-0 items-center justify-center border-r border-hair sm:h-44 sm:w-auto sm:border-r-0 sm:border-b">
+              <LimespunMark size={56} />
+            </div>
+            <div className="flex flex-1 flex-col p-5 sm:p-6">
+              <p className="text-[16px] font-semibold text-graphite">Mark</p>
+              <p className="mt-1 text-[14px] leading-[1.5] text-mute">Full color, square. For icons and avatars.</p>
+              <div className="mt-auto pt-2">
+                <DownloadLink href="/brand/limespun-mark.svg">Mark SVG</DownloadLink>
+              </div>
+            </div>
+          </li>
+          <li className="flex flex-col overflow-hidden rounded-card bg-white ring-1 ring-hair">
+            <div className="grid h-32 grid-cols-2 border-b border-hair sm:h-44">
+              <div className="flex items-center justify-center bg-canvas px-3">
+                <span className="origin-center scale-[0.72] sm:scale-100">
+                  <WordmarkPreview tone="dark" />
+                </span>
+              </div>
+              <div className="flex items-center justify-center bg-ink px-3">
+                <span className="origin-center scale-[0.72] sm:scale-100">
+                  <WordmarkPreview tone="light" />
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-1 flex-col p-5 sm:p-6">
+              <p className="text-[16px] font-semibold text-graphite">Wordmark</p>
+              <p className="mt-1 text-[14px] leading-[1.5] text-mute">
+                Outlined, so it needs no fonts. Dark text for light backgrounds, light text for dark ones.
+              </p>
+              <div className="mt-auto flex flex-wrap gap-x-6 pt-2">
+                <DownloadLink href="/press/limespun-wordmark.svg">Dark SVG</DownloadLink>
+                <DownloadLink href="/press/limespun-wordmark-light.svg">Light SVG</DownloadLink>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        {/* Colors */}
+        <Title as="h3" size="sm" className="mt-10 sm:mt-14">
+          Colors
+        </Title>
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+          {COLORS.map((c) => (
+            <li key={c.name} className="flex flex-col overflow-hidden rounded-card bg-white ring-1 ring-hair">
+              <span aria-hidden="true" className={cn("h-16 border-b border-hair sm:h-24", c.swatch)} />
+              <div className="p-4 sm:p-5">
+                <p className="text-[15px] font-semibold text-graphite sm:text-[16px]">{c.name}</p>
+                <p className="mt-0.5 text-[14px] text-graphite-soft tabular-nums select-all">{c.hex}</p>
+                <p className="mt-2 hidden text-[14px] leading-[1.5] text-pretty text-mute sm:block">{c.role}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        {/* Type */}
+        <Title as="h3" size="sm" className="mt-10 sm:mt-14">
+          Type
+        </Title>
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:gap-5">
+          <li className="rounded-card bg-white p-4 ring-1 ring-hair sm:p-6">
+            <p aria-hidden="true" className="font-serif text-[48px] leading-none text-graphite sm:text-[64px]">
+              Aa
+            </p>
+            <p className="mt-3 text-[15px] font-semibold text-graphite sm:mt-4 sm:text-[16px]">Instrument Serif</p>
+            <p className="mt-0.5 text-[14px] text-mute">Headlines</p>
+          </li>
+          <li className="rounded-card bg-white p-4 ring-1 ring-hair sm:p-6">
+            <p aria-hidden="true" className="text-[48px] leading-none font-semibold tracking-[-0.03em] text-graphite sm:text-[64px]">
+              Aa
+            </p>
+            <p className="mt-3 text-[15px] font-semibold text-graphite sm:mt-4 sm:text-[16px]">Inter</p>
+            <p className="mt-0.5 text-[14px] text-mute">Text and interface</p>
+          </li>
+        </ul>
+
+        <p className="mt-8 max-w-[640px] text-[15px] leading-[1.6] text-pretty text-graphite-soft sm:mt-10 sm:text-[16px]">
+          Need product screens?{" "}
+          <a href={PRESS_MAIL} className={inlineLink}>
+            Email us
+          </a>{" "}
+          and say where they’ll run.
+        </p>
+      </Container>
+    </Section>
+  );
+}
+
 export default function PressPage() {
   return (
-    <>
-      <Nav />
-      <main>
-        <HeroSection
-          variant="centered"
-          eyebrow="Press kit"
-          eyebrowAccent="rust"
-          headline="Everything you need to write about us."
-          italicWord="us"
-          subhead={`Brand assets, the facts and the founder's contact. Screenshots and the full kit on request. Press questions go to ${CONTACT_EMAIL}, and we reply within one business day.`}
-          primaryCTA={{ label: `Email ${CONTACT_EMAIL}`, href: pressMail("Press") }}
-          secondaryCTA={{ label: "Get brand assets", href: "#download" }}
-        />
-
-        {/* ─── Brand at a glance ────────────────────────────────────────────────── */}
-        <section style={{ background: BRAND.bone, paddingTop: 100, paddingBottom: 100 }}>
-          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-            <SectionEyebrow label="At a glance" accent="amber" />
-            <h2
-              style={{
-                fontFamily: FONT.serif,
-                fontSize: "clamp(28px, 3.5vw, 44px)",
-                fontWeight: 400,
-                color: BRAND.onyx,
-                letterSpacing: "-0.02em",
-                lineHeight: 1.1,
-                marginBottom: 40,
-                marginTop: 0,
-              }}
-            >
-              The short version.
-            </h2>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              style={{
-                background: BRAND.white,
-                maxWidth: 720,
-                borderRadius: 18,
-                padding: 32,
-                boxShadow: SHADOW.soft,
-              }}
-            >
-              {FACTSHEET_ROWS.map((row, i) => (
-                <div
-                  key={row.label}
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    gap: 16,
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                    borderBottom:
-                      i < FACTSHEET_ROWS.length - 1
-                        ? `1px dashed ${BRAND.border}`
-                        : "none",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: FONT.mono,
-                      fontSize: 12,
-                      fontWeight: 600,
-                      color: BRAND.stoneFaint,
-                      minWidth: 90,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {row.label}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: FONT.sans,
-                      fontSize: 14,
-                      color: BRAND.stoneDark,
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {row.value}
-                  </span>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ─── Brand colours ────────────────────────────────────────────────────── */}
-        <section style={{ background: GRADIENT.sectionWarm, paddingTop: 100, paddingBottom: 100 }}>
-          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-            <SectionEyebrow label="The palette" accent="rust" />
-            <h2
-              style={{
-                fontFamily: FONT.serif,
-                fontSize: "clamp(28px, 3.5vw, 44px)",
-                fontWeight: 400,
-                color: BRAND.onyx,
-                letterSpacing: "-0.02em",
-                lineHeight: 1.1,
-                marginBottom: 40,
-                marginTop: 0,
-              }}
-            >
-              Three colours, one accent.
-            </h2>
-
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              className="press-colors"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 24,
-                marginBottom: 32,
-              }}
-            >
-              {COLOUR_CARDS.map((c) => (
-                <motion.div
-                  key={c.hex}
-                  variants={fadeUp}
-                  style={{
-                    background: BRAND.white,
-                    borderRadius: 16,
-                    overflow: "hidden",
-                    boxShadow: SHADOW.soft,
-                  }}
-                >
-                  <div style={{ height: 140, background: c.swatch, borderBottom: `1px solid ${HOME.hair}` }} />
-                  <div style={{ padding: 20 }}>
-                    <div
-                      style={{
-                        fontFamily: FONT.sans,
-                        fontSize: 16,
-                        fontWeight: 700,
-                        color: BRAND.onyx,
-                        marginBottom: 6,
-                      }}
-                    >
-                      {c.name}
-                    </div>
-                    <p
-                      style={{
-                        fontFamily: FONT.sans,
-                        fontSize: 13,
-                        color: BRAND.stoneDark,
-                        lineHeight: 1.55,
-                        margin: "0 0 10px",
-                      }}
-                    >
-                      {c.description}
-                    </p>
-                    <div
-                      style={{
-                        fontFamily: FONT.mono,
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: BRAND.stoneFaint,
-                      }}
-                    >
-                      {c.hex}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Three circles motif card */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              style={{
-                background: BRAND.white,
-                maxWidth: 720,
-                margin: "0 auto",
-                borderRadius: 16,
-                padding: 28,
-                boxShadow: SHADOW.soft,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textAlign: "center",
-                gap: 16,
-              }}
-            >
-              <LimespunMark size={100} />
-              <p
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 14,
-                  color: BRAND.stoneDark,
-                  lineHeight: 1.6,
-                  maxWidth: 440,
-                  margin: 0,
-                }}
-              >
-                The Limespun mark. Download the SVG below, or email us for PNG and
-                mono versions.
-              </p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ─── Download section ─────────────────────────────────────────────────── */}
-        <section
-          id="download"
-          style={{ background: BRAND.bone, paddingTop: 100, paddingBottom: 100 }}
-        >
-          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-            <SectionEyebrow label="Download" accent="sage" />
-            <h2
-              style={{
-                fontFamily: FONT.serif,
-                fontSize: "clamp(28px, 3.5vw, 44px)",
-                fontWeight: 400,
-                color: BRAND.onyx,
-                letterSpacing: "-0.02em",
-                lineHeight: 1.1,
-                marginBottom: 40,
-                marginTop: 0,
-              }}
-            >
-              Brand assets.
-            </h2>
-
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              className="press-downloads"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 24,
-              }}
-            >
-              {DOWNLOAD_CARDS.map((card) => (
-                <DownloadCardItem key={card.title} card={card} />
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ─── Press contact + founder ──────────────────────────────────────────── */}
-        <section style={{ background: GRADIENT.sectionCool, paddingTop: 100, paddingBottom: 100 }}>
-          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              className="press-contact-grid"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 32,
-              }}
-            >
-              {/* Press contact */}
-              <motion.div
-                variants={fadeUp}
-                style={{
-                  background: BRAND.white,
-                  borderRadius: 16,
-                  padding: 32,
-                  boxShadow: SHADOW.soft,
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: FONT.sans,
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: BRAND.stoneFaint,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    marginBottom: 16,
-                  }}
-                >
-                  Press contact
-                </div>
-                <div
-                  style={{
-                    fontFamily: FONT.mono,
-                    fontSize: 14,
-                    color: BRAND.onyx,
-                    fontWeight: 600,
-                    marginBottom: 12,
-                  }}
-                >
-                  {CONTACT_EMAIL}
-                </div>
-                <p
-                  style={{
-                    fontFamily: FONT.sans,
-                    fontSize: 14,
-                    color: BRAND.stoneDark,
-                    lineHeight: 1.65,
-                    margin: 0,
-                  }}
-                >
-                  Press and media questions. Put &ldquo;Press&rdquo; in the subject line and
-                  we reply within one business day. Embargoes respected.
-                </p>
-              </motion.div>
-
-              {/* Founder */}
-              <motion.div
-                variants={fadeUp}
-                style={{
-                  background: BRAND.white,
-                  borderRadius: 16,
-                  padding: 32,
-                  boxShadow: SHADOW.soft,
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: FONT.sans,
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: BRAND.stoneFaint,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    marginBottom: 16,
-                  }}
-                >
-                  Founder available for interview
-                </div>
-                <div
-                  style={{
-                    fontFamily: FONT.sans,
-                    fontSize: 15,
-                    fontWeight: 700,
-                    color: BRAND.onyx,
-                    marginBottom: 12,
-                  }}
-                >
-                  Yash Baldha · Founder · Boldteq
-                </div>
-                <p
-                  style={{
-                    fontFamily: FONT.sans,
-                    fontSize: 14,
-                    color: BRAND.stoneDark,
-                    lineHeight: 1.65,
-                    margin: 0,
-                  }}
-                >
-                  Available for podcast, video, written interview. Speaks English.
-                  Topics: building software for one craft, the EU REACH ink rules for
-                  tattoo studios, and why salon software doesn&rsquo;t fit tattoo.
-                </p>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ─── Coverage ───────────────────────────────────────────────────────── */}
-        <section style={{ background: BRAND.bone, paddingTop: 80, paddingBottom: 100 }}>
-          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-            <SectionEyebrow label="Coverage" accent="amber" />
-            <h2
-              style={{
-                fontFamily: FONT.serif,
-                fontSize: "clamp(28px, 3.5vw, 44px)",
-                fontWeight: 400,
-                color: BRAND.onyx,
-                letterSpacing: "-0.02em",
-                lineHeight: 1.1,
-                marginBottom: 24,
-                marginTop: 0,
-              }}
-            >
-              No headlines yet. That&rsquo;s on purpose.
-            </h2>
-
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5 }}
-              style={{
-                background: BRAND.white,
-                maxWidth: 720,
-                borderRadius: 16,
-                padding: 28,
-                boxShadow: SHADOW.soft,
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 15,
-                  color: BRAND.stoneDark,
-                  lineHeight: 1.65,
-                  margin: "0 0 14px",
-                }}
-              >
-                Limespun is new. We&rsquo;re spending our energy on the product and the studios
-                using it rather than on a press push, so there&rsquo;s no coverage to point you
-                to yet.
-              </p>
-              <p
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 15,
-                  color: BRAND.stoneDark,
-                  lineHeight: 1.65,
-                  margin: 0,
-                }}
-              >
-                If you&rsquo;re writing about tattoo, studio software or independent craft
-                businesses, we&rsquo;d still love to talk, and the founder is happy to answer
-                questions. Email{" "}
-                <a
-                  href={pressMail("Press")}
-                  style={{ color: BRAND.onyx, textDecoration: "underline" }}
-                >
-                  {CONTACT_EMAIL}
-                </a>
-                .
-              </p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ─── CTA ──────────────────────────────────────────────────────────────── */}
-        <CTASection
-          badge="On the record"
-          headline="Get in touch."
-          italicWord="touch"
-          subhead="Founder available for interview. Brand assets are above; screenshots and the full kit come by email."
-          primaryCTA={{ label: `Email ${CONTACT_EMAIL}`, href: pressMail("Press") }}
-          secondaryCTA={{ label: "About Limespun", href: "/about" }}
-        />
-      </main>
-      <Footer />
-
-      <style>{`
-        @media (max-width: 1024px) {
-          .press-colors { grid-template-columns: 1fr !important; }
-          .press-downloads { grid-template-columns: 1fr !important; }
-          .press-contact-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
-    </>
+    <ContentPage
+      layout="sections"
+      crumbs={[{ label: "Home", href: "/" }, { label: "Press kit" }]}
+      eyebrow="Press kit"
+      title="Facts and files for the press."
+      italicWord="press"
+      lead={
+        <>
+          Company facts, the Limespun mark and wordmark, brand colors and a {BOILERPLATE_WORDS}-word description you
+          can quote. Questions go to{" "}
+          <a href={PRESS_MAIL} className={inlineLink}>
+            {CONTACT_EMAIL}
+          </a>
+          .
+        </>
+      }
+      primary={{ label: "Email us", href: PRESS_MAIL }}
+      secondary={{ label: "Brand assets", href: "#assets" }}
+      related={{ items: RELATED }}
+      inkBand={{
+        headline: "See the screens behind the story.",
+        italicWord: "story",
+        secondary: { label: "Product", href: "/product" },
+      }}
+    >
+      <Facts />
+      <Assets />
+    </ContentPage>
   );
 }

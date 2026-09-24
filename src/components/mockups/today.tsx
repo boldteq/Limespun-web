@@ -1,11 +1,13 @@
 import type React from "react";
 import type { LucideIcon } from "lucide-react";
 import {
+  ArrowRight,
   CalendarPlus,
   CreditCard,
   Footprints,
   LogIn,
   MessageSquare,
+  Plane,
   TriangleAlert,
   Zap,
 } from "lucide-react";
@@ -15,18 +17,24 @@ import { AppAvatar, AppButton, AppKpiStrip, AppStatus } from "./app-parts";
 import {
   ARTISTS,
   ARTIST_ORDER,
+  ARTIST_STATS,
   COMMISSIONS,
   COMMISSIONS_OWED_CENTS,
   DEPOSITS_PENDING,
   DEPOSITS_PENDING_CENTS,
   ELENA_ALLERGY,
+  INVENTORY_LOW,
+  INVENTORY_SKU,
   NOW,
   REVENUE_TODAY_CENTS,
   REVENUE_YESTERDAY_CENTS,
   TODAY_BOOKINGS,
+  TODAY_LABEL,
   TODAY_SESSIONS,
+  TRANSACTIONS,
   VIEWER,
   WAITLIST,
+  WAITLIST_OFFER_EXPIRES,
   usd,
   type SampleTone,
   type TodaySession,
@@ -85,6 +93,34 @@ function AllergyBand() {
         <span className="font-semibold underline underline-offset-2">{ELENA_ALLERGY.client}</span>
         {` — ${ELENA_ALLERGY.flag.toLowerCase()} (${clock(ELENA_SESSION.startMin)}) · review profile before the session.`}
       </p>
+    </div>
+  );
+}
+
+/* ─── Guest banner (ScrDashboard: shown while a residency is active) ─────── */
+
+const RIO = ARTISTS.rio;
+/** Rio's spot ends Fri, Oct 9: one day left on Thursday. */
+const GUEST_DAYS_LEFT = 1;
+/** Bookings during the residency: the Oct 2–4 weekend plus Tuesday's four walk-ins (Guest artists shows the same 13). */
+const GUEST_BOOKINGS =
+  (ARTIST_STATS.find((s) => s.artist === "rio")?.sessions ?? 0) + TRANSACTIONS.filter((t) => t.artist === "rio" && t.type === "Walk-in").length;
+
+function GuestBanner() {
+  if (!RIO.guestSpot) return null;
+  return (
+    <div className="flex items-start gap-2.5 rounded-app-lg bg-app-active px-3.5 py-2.5 @lg:items-center">
+      <Plane size={15} strokeWidth={1.9} className="mt-px shrink-0 text-app-active-fg @lg:mt-0" />
+      <p className="min-w-0 flex-1 text-ui-sm leading-snug text-app-text">
+        <span className="font-bold">{RIO.name}</span> is guesting ·{" "}
+        <span className="font-semibold text-app-active-fg">
+          {GUEST_DAYS_LEFT} day{GUEST_DAYS_LEFT === 1 ? "" : "s"} left
+        </span>{" "}
+        · {GUEST_BOOKINGS} bookings
+      </p>
+      <span className="hidden shrink-0 items-center gap-1 text-ui-xs font-semibold whitespace-nowrap text-app-active-fg @md:inline-flex">
+        Market slots <ArrowRight size={13} strokeWidth={2} />
+      </span>
     </div>
   );
 }
@@ -317,52 +353,98 @@ function ScheduleCard() {
   );
 }
 
-/* ─── Watchlist (wide frames only) ──────────────────────────────────────── */
+/* ─── Watchlist (wide frames only): the DashWidgets cards this studio gets ── */
 
-function WatchRow({ title, sub, action }: { title: string; sub: string; action: string }) {
+/** App due label (lib/dashboard/pending-deposits.ts): "Sat · 2 days left" for a booking two days out. */
+function dueLabel(booking: string): string {
+  const m = /(\w{3}), Oct (\d+)/.exec(booking);
+  if (!m) return "";
+  const days = Number(m[2]) - 8;
+  return days <= 0 ? "today" : `${m[1]} · ${days} day${days === 1 ? "" : "s"} left`;
+}
+
+/** The app's serif count ("3 / 4", "2") with its caption. */
+function SerifCount({ value, of, caption }: { value: number; of?: number; caption: string }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-ui-sm font-semibold text-app-text">{title}</p>
-        <p className="truncate text-ui-xs text-app-mute">{sub}</p>
-      </div>
-      <AppButton className="h-7 px-2.5 text-ui-xs">{action}</AppButton>
+    <div className="flex items-baseline gap-2">
+      <span className="font-serif text-[30px] leading-none text-app-text italic">
+        {value}
+        {of !== undefined && <span className="text-[21px] text-app-mute"> / {of}</span>}
+      </span>
+      <span className="text-ui-sm text-app-mute">{caption}</span>
     </div>
   );
 }
 
 const CONSENT_NEEDED = TODAY_BOOKINGS.filter((s) => s.consent !== "not-needed");
 const CONSENT_SIGNED = CONSENT_NEEDED.filter((s) => s.consent === "signed");
-const CONSENT_OPEN = CONSENT_NEEDED.find((s) => s.consent === "not-signed");
-const WAITLIST_OFFERED = WAITLIST.find((w) => w.status === "Offered");
+const CONSENT_UNSIGNED = CONSENT_NEEDED.filter((s) => s.consent === "not-signed");
+const WAITING = WAITLIST.filter((w) => w.status === "Active").length;
+const OFFERED = WAITLIST.filter((w) => w.status === "Offered").length;
+const OFFER_LEFT_MIN = WAITLIST_OFFER_EXPIRES.minutes - NOW.minutes;
 
 function Watchlist() {
-  const owen = DEPOSITS_PENDING[0];
   return (
-    <div className="hidden grid-cols-3 gap-4 @3xl:grid">
-      <WCard label="Pending deposits" right={<span className="text-ui font-extrabold text-app-text tabular-nums">{usd(DEPOSITS_PENDING_CENTS)}</span>}>
-        {owen && <WatchRow title={owen.client} sub={owen.booking} action="Remind" />}
-      </WCard>
-      <WCard
-        label="Consent"
-        right={
-          <span className="text-ui-xs font-semibold text-app-mute tabular-nums">
-            {CONSENT_SIGNED.length} of {CONSENT_NEEDED.length} signed
-          </span>
-        }
-      >
-        <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-graphite/[0.06]">
-          <div
-            className="h-full rounded-full bg-app-success"
-            style={{ width: `${(CONSENT_SIGNED.length / CONSENT_NEEDED.length) * 100}%` }}
-          />
+    <div className="hidden gap-4 @3xl:grid @3xl:grid-cols-4">
+      {/* PendingDepositsWidget: plain rows (client, due label, amount) that open Payments. */}
+      <WCard label="Pending deposits" right={<span className="text-ui font-bold text-app-active-fg tabular-nums">{usd(DEPOSITS_PENDING_CENTS)}</span>}>
+        <div className="flex flex-col gap-1">
+          {DEPOSITS_PENDING.map((d) => (
+            <div key={d.client} className="flex items-start justify-between gap-2.5 py-1">
+              <div className="min-w-0">
+                <p className="truncate text-ui-sm font-semibold text-app-text">{d.client}</p>
+                <p className="text-ui-xs text-app-mute tabular-nums">{dueLabel(d.booking)}</p>
+              </div>
+              <span className="shrink-0 text-ui-sm font-bold text-app-text tabular-nums">{usd(d.cents)}</span>
+            </div>
+          ))}
         </div>
-        {CONSENT_OPEN?.client && (
-          <WatchRow title={CONSENT_OPEN.client} sub={`${CONSENT_OPEN.piece} · ${clock(CONSENT_OPEN.startMin)}`} action="Send form" />
+      </WCard>
+      {/* ConsentStatusWidget: signed of today's total, then the unsigned clients. */}
+      <WCard label="Consent status" right={<span className="text-[11px] text-app-mute">Today</span>}>
+        <SerifCount value={CONSENT_SIGNED.length} of={CONSENT_NEEDED.length} caption="signed today" />
+        {CONSENT_UNSIGNED.length > 0 && (
+          <>
+            <p className="mt-3.5 mb-1.5 text-[10px] font-bold tracking-[0.1em] text-app-active-fg uppercase">Unsigned</p>
+            {CONSENT_UNSIGNED.map((s) => (
+              <div key={s.id} className="flex items-center justify-between gap-2 py-1">
+                <div className="min-w-0">
+                  <p className="truncate text-ui-sm font-semibold text-app-text">{s.client}</p>
+                  <p className="text-ui-xs text-app-mute">{TODAY_LABEL.replace("Thursday", "Thu")}</p>
+                </div>
+                <span className="shrink-0 text-[11px] font-semibold text-app-active-fg">Review →</span>
+              </div>
+            ))}
+          </>
         )}
       </WCard>
-      <WCard label="Waitlist" right={<span className="text-ui-xs font-semibold text-app-mute tabular-nums">{WAITLIST.length} waiting</span>}>
-        {WAITLIST_OFFERED && <WatchRow title={WAITLIST_OFFERED.client} sub={WAITLIST_OFFERED.note} action="Open" />}
+      {/* LowInventoryWidget: shown whenever stock is low; name, SKU and on hand / par. */}
+      <WCard label="Low inventory" right={<ViewLink>REORDER</ViewLink>}>
+        <div className="flex flex-col gap-2.5">
+          {INVENTORY_LOW.map((i) => (
+            <div key={i.name} className="flex items-start justify-between gap-2.5">
+              <div className="min-w-0">
+                <p className="text-ui-sm leading-snug font-semibold text-app-text">{i.name}</p>
+                <p className="text-[10px] text-app-mute">{INVENTORY_SKU[i.name]}</p>
+              </div>
+              <span className="shrink-0 text-[11px] font-semibold text-app-active-fg tabular-nums">
+                {i.onHand} / {i.reorderAt}
+              </span>
+            </div>
+          ))}
+        </div>
+      </WCard>
+      {/* WaitlistWidget: clients waiting and the soonest live offer. */}
+      <WCard label="Waitlist" right={<ViewLink>MANAGE →</ViewLink>}>
+        <SerifCount value={WAITING} caption={WAITING === 1 ? "client waiting" : "clients waiting"} />
+        {OFFERED > 0 && OFFER_LEFT_MIN > 0 && (
+          <p className="mt-1.5 text-ui-xs text-app-mute">
+            {OFFERED} live offer{OFFERED === 1 ? "" : "s"} · soonest expires in{" "}
+            <span className="whitespace-nowrap">
+              {Math.floor(OFFER_LEFT_MIN / 60)}h {OFFER_LEFT_MIN % 60}m
+            </span>
+          </p>
+        )}
       </WCard>
     </div>
   );
@@ -380,6 +462,7 @@ export function TodayScreen({ className }: { className?: string }) {
       <div className="flex flex-col gap-4 px-4 pb-5 @lg:px-6 @lg:pb-6">
         <QuickActions className="-mt-1 @xl/frame:hidden" />
         <AllergyBand />
+        <GuestBanner />
         <AppKpiStrip
           items={[
             { label: "Revenue", value: usd(REVENUE_TODAY_CENTS), note: `vs ${usd(REVENUE_YESTERDAY_CENTS)} yesterday` },
