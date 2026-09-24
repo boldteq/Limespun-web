@@ -1,51 +1,68 @@
-import { LegalPage, type LegalSection } from "@/components/shared/legal-page";
+import { LegalPage, type LegalSection } from "@/components/templates/legal-page";
+import { pageMetadata } from "@/lib/seo";
+import { LEGAL_EFFECTIVE_DATE } from "../legal-facts";
 
+export const metadata = pageMetadata({
+  title: "Cookie Policy",
+  description:
+    "limespun.com sets no cookies and runs no analytics. The Limespun app uses a few first-party cookies, only to keep you signed in.",
+  path: "/legal/cookies",
+});
+
+/*
+ * Checked against the code on 23 September 2026. limespun.com: no cookies, no analytics,
+ * no middleware; forms are server actions rate-limited by IP (src/lib/rate-limit.ts).
+ * App (InkOS): first-party sign-in cookies only (Supabase session, lib/auth/mfa.ts step-up,
+ * lib/auth/signin-preference.ts, lib/invite/cookie.ts, lib/portal/sessions.ts).
+ */
 const sections: LegalSection[] = [
   {
-    heading: "What cookies are",
-    body: "Cookies are small text files that websites place on your device to remember information between visits. They are common, often essential, and (in our case) used minimally.",
-  },
-  {
-    heading: "Cookies we set",
+    heading: "Cookies on this website",
     body: [
-      "Functional cookies (always on): theme preference, dismissed banners, last-visited page (for back-button behaviour). These are first-party cookies set by limespun.com. They contain no personal data.",
-      "Application authentication (only on app.limespun.com, not the marketing site): the Supabase Auth session token. This is essential to keep your studio's users logged in. It is HTTP-only, secure, and SameSite=Lax.",
+      "limespun.com doesn't set any cookies, and it has no analytics, advertising or tracking code. Nothing here needs your consent, which is why there's no cookie banner.",
+      "The contact and newsletter forms don't use cookies. To stop abuse, we limit how often a form can be sent from one IP address.",
     ],
   },
   {
-    heading: "Cookies we do not set",
-    body: "We do not use Google Analytics, Facebook Pixel, advertising networks, or cross-site tracking cookies. We do not 'fingerprint' devices. We do not use heatmap or session-replay tools.",
+    heading: "Cookies in the app",
+    body: "The Limespun app (app.limespun.com) and the client portal set their own first-party cookies. They are used only for signing in:",
+    table: {
+      head: ["Cookie", "Why it's set"],
+      rows: [
+        ["Session", "Keeps you signed in"],
+        ["Two-factor check", "Confirms you passed two-factor sign-in before a sensitive action"],
+        ["Sign-in method", "Opens the sign-in page on the method you used last"],
+        ["Team invite", "Carries an invitation through sign-up"],
+        ["Client portal", "Keeps a studio's client signed in to their portal"],
+      ],
+    },
   },
   {
-    heading: "Sub-processor cookies",
-    body: "Some pages may load content from approved sub-processors (e.g. Stripe checkout iframe on the application). These set their own cookies governed by their privacy policies. None of these load on the marketing site (limespun.com).",
+    heading: "Payment pages",
+    body: "When you or a client pays by card, the payment provider's checkout page may set its own cookies, under its own policy.",
   },
   {
-    heading: "Controlling cookies",
-    body: [
-      "You can disable cookies in your browser settings. Most browsers also offer a 'private browsing' or 'incognito' mode that does not persist cookies.",
-      "Disabling functional cookies on limespun.com will not break the site, but you will see a default theme on every visit. Disabling authentication cookies on app.limespun.com will log you out.",
-    ],
+    heading: "What we don't use",
+    body: "No advertising cookies, no analytics cookies, no cross-site tracking, and no session recording or heatmaps, on the website or in the app.",
   },
   {
-    heading: "Cookie retention",
-    body: "Functional cookies expire after 1 year unless you visit again (in which case they refresh). Authentication cookies expire after 30 days of inactivity.",
+    heading: "Managing cookies",
+    body: "You can block or delete cookies in your browser settings. Blocking them for app.limespun.com signs you out, and you won't be able to sign in again until you allow them.",
   },
   {
-    heading: "Changes to this policy",
-    body: "We will update this policy if we change which cookies are used. The 'effective' date at the top of this page reflects the latest version. We do not anticipate adding tracking or advertising cookies.",
+    heading: "Changes",
+    body: "If we add analytics or any other cookie to this website, this page changes first.",
   },
 ];
 
 export default function CookiesPage() {
   return (
     <LegalPage
-      eyebrow="Legal · Cookies"
+      path="/legal/cookies"
       title="Cookie Policy"
-      effectiveDate="27 April 2026"
-      intro="limespun.com uses a small number of cookies. We do not use advertising cookies. We do not use third-party analytics that track you across the web. This document lists every cookie we set and how you can control them."
+      effectiveDate={LEGAL_EFFECTIVE_DATE}
+      intro="limespun.com sets no cookies. The Limespun app uses a few, only to keep you signed in. None are for analytics or advertising."
       sections={sections}
-      contactEmail="privacy@boldteq.com"
     />
   );
 }

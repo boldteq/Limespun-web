@@ -1,63 +1,86 @@
-import { LegalPage, type LegalSection } from "@/components/shared/legal-page";
+import Link from "next/link";
+import { LegalPage, type LegalSection } from "@/components/templates/legal-page";
+import { CONTACT_EMAIL } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
+import { DATA_LOCATION, LEGAL_EFFECTIVE_DATE, SUB_PROCESSOR_TABLE, TRANSFERS } from "../legal-facts";
+
+export const metadata = pageMetadata({
+  title: "GDPR",
+  description:
+    "How Limespun handles personal data under the UK and EU GDPR: controller and processor roles, US hosting, transfers, sub-processors and rights.",
+  path: "/legal/gdpr",
+});
 
 const sections: LegalSection[] = [
   {
     heading: "Roles",
-    body: "When your studio operates Limespun, your studio is the data controller for client and operational data. Boldteq is the data processor. The relationship is governed by our Data Processing Agreement (DPA), which is auto-applied on all paid plans.",
-  },
-  {
-    heading: "Data Processing Agreement (DPA)",
     body: [
-      "The DPA is incorporated by reference into your subscription Terms. It includes the processing details (Annex I), security measures (Annex II), sub-processors (Annex III), and the EU Standard Contractual Clauses (where data leaves the EU).",
-      "A signed copy is available on request from privacy@boldteq.com. We can countersign within 5 business days for any paying studio.",
+      "Your studio is the controller for the data it keeps in Limespun about its clients and team. Boldteq Holdings Ltd is its processor.",
+      "For data collected on limespun.com, such as contact form messages and newsletter sign-ups, Boldteq is the controller.",
     ],
   },
   {
+    heading: "Our commitments as processor",
+    body: "For the data your studio keeps in Limespun, we:",
+    list: [
+      "process it only to run Limespun for your studio, on your instructions;",
+      "use only the sub-processors listed on this page, and update the list when it changes;",
+      "help your studio answer requests from its clients to use their rights;",
+      "tell you about a personal data breach that affects your studio within 72 hours of finding it;",
+      "let you export your data, and delete it after your account closes, except records the law requires us to keep.",
+    ],
+  },
+  {
+    heading: "Data processing agreement",
+    body: `If your studio needs a signed Data Processing Agreement, email ${CONTACT_EMAIL}.`,
+  },
+  {
     heading: "Lawful basis",
-    body: "Boldteq processes personal data on the lawful basis of contract (your studio's subscription) and legitimate interests (security, fraud prevention, service operation). For website marketing communications, we rely on consent (opt-in).",
+    body: "Boldteq relies on these lawful bases:",
+    list: [
+      "Contract: to run the service your studio subscribes to.",
+      "Legitimate interests: to keep Limespun secure and to prevent fraud and abuse.",
+      "Consent: to send the newsletter to people who signed up for it.",
+    ],
+  },
+  {
+    heading: "Where data is stored",
+    body: [DATA_LOCATION, "We don't offer EU data hosting yet. If your studio needs it, tell us: it's on our list."],
+  },
+  {
+    heading: "International transfers",
+    body: TRANSFERS,
+  },
+  {
+    heading: "Sub-processors",
+    body: "These providers process personal data on our behalf to run Limespun:",
+    table: SUB_PROCESSOR_TABLE,
   },
   {
     heading: "Data subject rights",
     body: [
-      "EU/UK data subjects have the right to: access, rectification, erasure ('right to be forgotten'), restriction of processing, portability, and to object to processing.",
-      "Requests from your studio's clients should be sent to your studio first (your studio is the data controller). We will support your studio in responding within 30 days. For requests directly to Boldteq about our website, email privacy@boldteq.com.",
+      "People in the UK and EU have the right to access, correct and delete their personal data, to restrict or object to how it is used, and to receive it in a portable format.",
+      "If you're a client of a studio that uses Limespun, send your request to the studio: it controls your data. We'll help the studio respond within the one month the law allows.",
+      <>
+        For data on this website, email {CONTACT_EMAIL}. The <Link href="/legal/privacy">Privacy Policy</Link> explains
+        what we collect.
+      </>,
     ],
   },
   {
-    heading: "Data residency",
-    body: "EU/UK studios have their primary database in EU regions (Frankfurt) by default. Backups and disaster recovery copies remain in EU. Sub-processors that may transfer data outside the EU are bound by Standard Contractual Clauses; the list is in Annex III of the DPA.",
-  },
-  {
-    heading: "EU representative",
-    body: "Boldteq's EU representative under GDPR Article 27 is reachable at eu-rep@boldteq.com. The EU representative handles inquiries from EU data subjects and supervisory authorities on our behalf.",
-  },
-  {
-    heading: "International data transfers",
-    body: "Where data is transferred outside the EU (e.g. to a US-based sub-processor for an EU studio), we rely on Standard Contractual Clauses (Module 2: Controller-to-Processor) plus, where applicable, the UK International Data Transfer Addendum (IDTA). We do not transfer data to jurisdictions without adequate safeguards.",
-  },
-  {
-    heading: "Records of processing (Article 30)",
-    body: "Boldteq maintains a Records of Processing Activities (RoPA) for every processing activity. Studios at any plan can request a summary at privacy@boldteq.com.",
-  },
-  {
-    heading: "Data Protection Impact Assessments (DPIA)",
-    body: "When we introduce a new processing activity that requires a DPIA, we complete one before launch. We share the DPIA with affected enterprise customers under NDA.",
-  },
-  {
-    heading: "Complaints and supervisory authorities",
-    body: "If you believe Boldteq has violated GDPR, you have the right to complain to your local supervisory authority. Common contacts: ICO (United Kingdom), CNIL (France), AEPD (Spain), Garante (Italy), Datenschutzbehörde (Austria), DPC (Ireland).",
+    heading: "Complaints",
+    body: "You can complain to a data protection authority: the Information Commissioner's Office (ICO) in the UK, or the supervisory authority in your EU country. We'd like the chance to put things right first, so please write to us too.",
   },
 ];
 
 export default function GdprPage() {
   return (
     <LegalPage
-      eyebrow="Legal · GDPR"
-      title="GDPR & DPA"
-      effectiveDate="27 April 2026"
-      intro="Limespun is built for global studios, including those in the EU/UK. This document summarises our GDPR compliance posture, our Data Processing Agreement (DPA), and the rights of EU/UK data subjects. The full DPA is available on request to any paying studio at any plan."
+      path="/legal/gdpr"
+      title="GDPR"
+      effectiveDate={LEGAL_EFFECTIVE_DATE}
+      intro="How Limespun handles personal data under the UK and EU GDPR: who is responsible for what, where the data is stored, and how to use your rights."
       sections={sections}
-      contactEmail="privacy@boldteq.com"
     />
   );
 }

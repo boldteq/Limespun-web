@@ -1,65 +1,131 @@
-import { LegalPage, type LegalSection } from "@/components/shared/legal-page";
+import Link from "next/link";
+import { LegalPage, type LegalSection } from "@/components/templates/legal-page";
+import { STATUS_PAGE_URL } from "@/lib/brand";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
+import { pageMetadata } from "@/lib/seo";
+import { LEGAL_EFFECTIVE_DATE } from "../legal-facts";
+
+export const metadata = pageMetadata({
+  title: "Terms of Service",
+  description:
+    "The terms for using Limespun: plans and billing, the 30-day money-back guarantee, cancellation, acceptable use and your studio's data.",
+  path: "/legal/terms",
+});
 
 const sections: LegalSection[] = [
   {
-    heading: "What Limespun is",
-    body: "Limespun is a software-as-a-service application for tattoo studios. We provide the software; you operate your studio. We do not employ your artists, set your prices, take a cut of your bookings, or appear in front of your clients except as your branded software.",
+    heading: "The service",
+    body: [
+      "Limespun is software for running a tattoo studio: bookings, deposits, consent forms, client records, messages and artist payouts. We provide the software; you run your studio.",
+      "We don't employ your artists, set your prices or take a cut of your bookings or deposits. Card payments carry the payment provider's standard processing fee.",
+    ],
   },
   {
-    heading: "Subscription and billing",
+    heading: "Accounts",
     body: [
-      "Subscriptions renew monthly on the date you started. Annual plans renew annually. All fees are payable in advance.",
-      "You can cancel any time from inside the app — no phone call required. Cancellation takes effect at the end of the current billing period; we do not pro-rate refunds for partial months.",
-      "If your payment fails, we will retry twice over 7 days. If still unpaid, your account will be suspended (data preserved) until payment resolves. After 60 days of non-payment, the account is closed and data deleted per the Privacy Policy.",
+      "The person who creates a studio's account is its owner and accepts these terms for the studio. The owner decides who joins the team.",
+      "Keep sign-in details private. Your studio is responsible for what happens under its team's accounts.",
+    ],
+  },
+  {
+    heading: "Plans and billing",
+    body: [
+      "Monthly plans renew each month and annual plans each year, on the date you started. Fees are paid in advance.",
+      "A founding lifetime plan is paid once. You keep that plan without a monthly bill.",
+      "If a payment fails, paid features may be paused until it goes through. Your studio's data stays in place in the meantime.",
+    ],
+  },
+  {
+    heading: "Refunds and cancellation",
+    body: [
+      `Every plan comes with a ${MONEY_BACK_DAYS}-day money-back guarantee on your first payment. After that you can cancel any time; access continues until the end of the paid period.`,
+      "The account owner can cancel from Billing in the app's settings. No phone call needed.",
     ],
   },
   {
     heading: "Acceptable use",
-    body: "You may use Limespun for any lawful tattoo studio operation. You may not: (a) use it to operate or facilitate illegal activity, (b) reverse engineer the software, (c) resell access without our written permission, (d) attempt to circumvent security or rate limits, (e) use the application to send unsolicited communications (spam) to clients or third parties.",
+    body: "Use Limespun for the lawful running of your studio. Don't use it to:",
+    list: [
+      "break the law, or help anyone else to;",
+      "send texts or emails your clients haven't agreed to receive;",
+      "get around security measures, rate limits or plan limits;",
+      "copy, resell or reverse engineer the software without our written permission.",
+    ],
+  },
+  {
+    heading: "Your responsibilities",
+    body: "Your studio is responsible for:",
+    list: [
+      "having its clients' permission to contact them by text and email;",
+      "the forms, aftercare notes and messages it sends;",
+      "following the laws that apply to it, including health, licensing and tattoo-ink rules;",
+      "checking anything the AI features draft before it is used. Drafts are suggestions for your team to edit.",
+    ],
   },
   {
     heading: "Your studio's data",
     body: [
-      "You retain all rights, title, and interest in the data your studio enters into Limespun.",
-      "We are a data processor for your studio's customer data. We process it only as instructed by you and as described in the Data Processing Agreement.",
-      "On account closure, you can export all your data via the in-app export tool. We retain backups for 30 days post-closure for technical purposes; after that, all data is permanently deleted.",
+      <>
+        Your studio owns the data it puts into Limespun. We process it only to provide the service, as described in
+        the <Link href="/legal/privacy">Privacy Policy</Link>.
+      </>,
+      "Owners and admins can export the client list as CSV at any time, and every user can download a copy of their own data from settings.",
     ],
   },
   {
     heading: "Intellectual property",
-    body: "Limespun software, its design, brand, and underlying technology are owned by Boldteq Holdings Ltd. You receive a non-exclusive, non-transferable licence to use the software as described in your subscription. You do not receive any rights to the source code, trademarks, or trade secrets.",
+    body: "Boldteq Holdings Ltd owns the Limespun software, design and brand. Your subscription gives your studio a non-exclusive, non-transferable licence to use the software. It gives no rights to the source code or trademarks.",
   },
   {
-    heading: "Service availability",
-    body: "We target 99.9% monthly uptime. Status is published at status.limespun.com. Scheduled maintenance is announced at least 7 days in advance via email and the in-app banner. Unscheduled downtime is communicated as quickly as we can; we issue service credits per our SLA when uptime falls below the target.",
+    heading: "Availability",
+    body: [
+      "We work to keep Limespun available and, where we can, announce planned maintenance in advance. We don't promise the service will be uninterrupted.",
+      ...(STATUS_PAGE_URL
+        ? [
+            <>
+              Current status and incident history are on <a href={STATUS_PAGE_URL}>our status page</a>.
+            </>,
+          ]
+        : []),
+    ],
   },
   {
-    heading: "Warranty disclaimer",
-    body: "Limespun is provided 'as is' and 'as available'. We make no warranty that the service will be uninterrupted, error-free, or fit for any particular purpose beyond what these Terms describe. We use industry-standard security practices but cannot guarantee against every conceivable threat.",
+    heading: "Warranty",
+    body: "Limespun is provided “as is” and “as available”. Beyond what these terms say, we give no warranty that it will be uninterrupted, error-free or fit for a particular purpose.",
   },
   {
     heading: "Limitation of liability",
-    body: "To the maximum extent permitted by law, Boldteq's total liability under these Terms is limited to the amount you paid us in the 12 months preceding the event giving rise to the claim. We are not liable for indirect, incidental, consequential, or punitive damages.",
+    body: "As far as the law allows, Boldteq's total liability under these terms is limited to the amount your studio paid us in the 12 months before the event that led to the claim. We are not liable for indirect, incidental, consequential or punitive damages.",
   },
   {
-    heading: "Indemnification",
-    body: "You agree to indemnify Boldteq against claims arising from your studio's use of Limespun in violation of these Terms, including but not limited to claims by your clients, your artists, or third parties about your studio's operations.",
+    heading: "Indemnity",
+    body: "Your studio agrees to cover Boldteq against claims that arise from using Limespun in breach of these terms, including claims by your clients, your artists or other third parties about how your studio operates.",
   },
   {
-    heading: "Governing law and disputes",
-    body: "These Terms are governed by the laws of England and Wales. Disputes will be resolved in the courts of London, except that Boldteq may seek injunctive relief in any court of competent jurisdiction. We will attempt to resolve disputes informally before litigation.",
+    heading: "Suspension and closure",
+    body: [
+      "Your studio can close its account at any time. Export anything you want to keep first.",
+      "We may suspend or close an account that breaks these terms.",
+    ],
+  },
+  {
+    heading: "Changes",
+    body: "When we change these terms, we update the effective date at the top of this page. For material changes, we'll email the account owner before they take effect.",
+  },
+  {
+    heading: "Governing law",
+    body: "These terms are governed by the laws of England and Wales. Disputes are resolved in the courts of London, except that Boldteq may seek an injunction in any court with jurisdiction. We'll try to settle any disagreement informally first.",
   },
 ];
 
 export default function TermsPage() {
   return (
     <LegalPage
-      eyebrow="Legal · Terms"
+      path="/legal/terms"
       title="Terms of Service"
-      effectiveDate="27 April 2026"
-      intro="These Terms govern your use of Limespun, the studio operating system for tattoo, provided by Boldteq Holdings Ltd. By using Limespun, your studio accepts these Terms. We've kept the legalese minimal; where we use it, we've explained why."
+      effectiveDate={LEGAL_EFFECTIVE_DATE}
+      intro="The agreement between your studio and Boldteq Holdings Ltd for using Limespun. By creating an account, your studio accepts these terms."
       sections={sections}
-      contactEmail="legal@boldteq.com"
     />
   );
 }
