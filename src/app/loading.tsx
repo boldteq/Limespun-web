@@ -1,16 +1,8 @@
-import { BRAND } from "@/lib/brand";
-
 export default function Loading() {
   return (
-    <div style={{
-      minHeight: '100vh', display: 'flex', alignItems: 'center',
-      justifyContent: 'center', background: BRAND.bone,
-    } as React.CSSProperties}>
-      <div style={{
-        width: 6, height: 6, borderRadius: '50%',
-        background: BRAND.rust,
-        animation: 'limespun-pulse 1.5s ease-in-out infinite',
-      } as React.CSSProperties} />
+    <div role="status" className="flex min-h-screen items-center justify-center bg-canvas">
+      <span className="h-2 w-2 animate-[limespun-pulse_1.5s_ease-in-out_infinite] rounded-full bg-ember" aria-hidden="true" />
+      <span className="sr-only">Loading</span>
     </div>
   );
 }
