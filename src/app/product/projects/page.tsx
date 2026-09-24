@@ -7,12 +7,11 @@ import { ProductHero } from "@/components/product/product-hero";
 import { ProductPillars } from "@/components/product/product-pillars";
 import { ProductAnatomy } from "@/components/product/product-anatomy";
 import { ProductItemTypes } from "@/components/product/product-item-types";
-import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
-import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
+import { ProjectsScreen } from "@/components/mockups";
 import { BRAND } from "@/lib/brand";
 import {
   LayoutGrid, DollarSign, ImageIcon, Calendar, FileText,
@@ -28,8 +27,8 @@ export default function ProjectsPage() {
           feature="Projects"
           headline="A sleeve isn't a booking. It's a project."
           italicWord="a project"
-          subhead="Multi-session work has a deposit pool, a photo timeline, a consent history, and an artist's running notes. Limespun treats it that way from the first commit — linking every session, every photo, every dollar to the same sleeve. No other studio software does this."
-          dashboard={<DashboardMockup />}
+          subhead="Multi-session work has a deposit pool, a photo timeline, a consent history, and an artist's running notes. Limespun treats it that way from the first commit, linking every session, every photo and every dollar to the same project."
+          dashboard={<ProjectsScreen />}
         />
 
         <ProductPillars
@@ -43,21 +42,21 @@ export default function ProjectsPage() {
               eyebrow: "Multi-session grouping",
               title: "A sleeve is one project, four visits.",
               desc: "Every session links back to the project. Open any visit and the full history — photos, deposits, artist notes — is right there. Bookings stop being orphans.",
-              bullets: ["Project sessions linked across dates", "Photo timeline (REF → FRESH → HEAL → HEALED)", "Consent history per project", "Artist notes inherit across sessions"],
+              bullets: ["Project sessions linked across dates", "Photo timeline (before → reference → fresh → healed)", "Consent history per project", "Artist notes inherit across sessions"],
             },
             {
               icon: DollarSign, accent: BRAND.amber,
               eyebrow: "Pooled deposits",
-              title: "$200 covers S2. The rest carries.",
-              desc: "A single deposit pool lives on the project. Each session draws from it. Refund session five and the pool re-balances automatically. Stripe Connect routes the artist's cut on every invoice.",
-              bullets: ["Pool balance shown on every session card", "Per-session deposit apply", "Auto-rebalance on refund", "Stripe Connect routing on invoice"],
+              title: "$60 covers session 3. The rest carries.",
+              desc: "A single deposit pool lives on the project and shows Paid in, Applied, Available and Refundable. Each session draws from it, and anything unused can be refunded.",
+              bullets: ["Pool balance shown on every session card", "Applied session by session", "Paid in, Applied, Available, Refundable", "Refund what's left unused"],
             },
             {
               icon: ImageIcon, accent: BRAND.sage,
               eyebrow: "Photo timeline",
-              title: "Reference, fresh, healing, healed.",
-              desc: "Four required stages, logged on the project as the work progresses. The healed photo is required to close. The full record feeds the studio portfolio automatically.",
-              bullets: ["REF / FRESH / HEAL / HEALED stages", "Per-session photo gallery", "Healed photo required to close", "Studio portfolio auto-syncs"],
+              title: "Before, reference, fresh, healed.",
+              desc: "Photos logged on the project as the work goes: before, reference, fresh after each session, then healed. Add the healed photo and mark the project Complete.",
+              bullets: ["Before, reference, fresh, healed", "Per-session photo gallery", "Healing, then Complete", "You pick what goes in the portfolio"],
             },
           ]}
         />
@@ -67,12 +66,12 @@ export default function ProjectsPage() {
           heading="Everything a sleeve needs. In one place."
           italicWord="In one place"
           intro="No more chasing deposits across booking receipts, photos across DMs, and notes across sticky notes. The project record is the single source of truth for the work — from the first reference image to the final healed photo."
-          dashboard={<DashboardMockup />}
+          dashboard={<ProjectsScreen view="detail" />}
           callouts={[
             { n: 1, title: "Project header", desc: "Sleeve name + session counter + active artist anchor.", position: { top: '15%', left: '40%' } },
             { n: 2, title: "Deposit pool", desc: "Live balance against the project, not the appointment.", position: { top: '32%', left: '34%' } },
             { n: 3, title: "Session cards", desc: "Each visit listed with date, duration, photos, deposit applied.", position: { top: '50%', left: '40%' } },
-            { n: 4, title: "Photo timeline strip", desc: "Four-stage record: REF, FRESH, HEAL, HEALED. Studio gallery feeds from here.", position: { top: '60%', left: '60%' } },
+            { n: 4, title: "Photo timeline strip", desc: "Before, reference, fresh and healed photos, in order. Pick any for the portfolio.", position: { top: '60%', left: '60%' } },
             { n: 5, title: "Notes thread", desc: "Artist running notes inherit between sessions. Client never sees them.", position: { top: '72%', left: '38%' } },
           ]}
         />
@@ -84,43 +83,25 @@ export default function ProjectsPage() {
           intro="Every piece of information about a multi-session sleeve lives on the project record. Not in emails. Not in the booking notes. On the project — where it's accessible every time an artist opens a session."
           columns={3}
           items={[
-            { icon: Calendar, accent: BRAND.rust, duration: "per session", title: "Sessions", desc: "Booking sessions tied to the project. Reschedule any visit and the project link stays intact.", example: '"Asha M. · Koi sleeve · S3 of 5 · May 21"' },
-            { icon: DollarSign, accent: BRAND.amber, duration: "ongoing", title: "Deposit pool", desc: "A single pool against the project. Each session draws from it. Refunds re-balance automatically.", example: '"$420 of $600 banked · applied per session"' },
-            { icon: ImageIcon, accent: BRAND.sage, duration: "4 stages", title: "Photo timeline", desc: "Reference, fresh, healing, healed — four required stages logged as the work progresses.", example: '"REF / FRESH / HEAL / HEALED"' },
-            { icon: FileText, accent: BRAND.danger, duration: "per project", title: "Consent history", desc: "Every consent attached and hashed. Full audit trail. Accessible from any session on the project.", example: '"Consent PDF · hashed · attached Day 0"' },
-            { icon: AlertCircle, accent: BRAND.danger, duration: "always on", title: "Allergy + medical", desc: "Pulled from the client record, surfaced on every session card. Artists never have to check twice.", example: '"Latex allergy · flagged on every session"' },
-            { icon: MessageSquare, accent: BRAND.stoneDark, duration: "inherited", title: "Artist notes", desc: "Running notes written after each session carry forward automatically. Client never sees them.", example: '"Reacted well to red · slight wincing on outline"' },
+            { icon: Calendar, accent: BRAND.rust, duration: "per session", title: "Sessions", desc: "Booking sessions tied to the project. Reschedule any visit and the project link stays intact.", example: '"Asha M. · Koi sleeve · session 5 of 5 · Sat Nov 7"' },
+            { icon: DollarSign, accent: BRAND.amber, duration: "ongoing", title: "Deposit pool", desc: "A single pool against the project. Each session draws from it, and anything unused can be refunded.", example: '"$300 paid in · $60 applied · $240 held"' },
+            { icon: ImageIcon, accent: BRAND.sage, duration: "every session", title: "Photo timeline", desc: "Before, reference, fresh and healed photos, logged as the work progresses.", example: '"Before · Reference · Fresh · Healed"' },
+            { icon: FileText, accent: BRAND.danger, duration: "per project", title: "Consent history", desc: "Every signed consent stored as a PDF, reachable from any session on the project.", example: '"Consent PDF · signed before session 1"' },
+            { icon: AlertCircle, accent: BRAND.danger, duration: "always on", title: "Allergy + medical", desc: "Pulled from the client record, surfaced on every session card. Artists never have to check twice.", example: '"Red ink allergy · flagged on every session"' },
+            { icon: MessageSquare, accent: BRAND.stoneDark, duration: "inherited", title: "Artist notes", desc: "Running notes written after each session carry forward automatically. Client never sees them.", example: '"Session 3 · color, upper arm · healed well"' },
           ]}
-        />
-
-        <ProductVsTable
-          eyebrow="vs the rest"
-          heading="Salon software treats every visit as a stranger."
-          italicWord="every visit as a stranger"
-          intro="DaySmart and Mangomint are built for salons — appointment-first, context-last. TattooGenda is tattoo-native but stops at the appointment. Limespun is the only one that carries the full project context across visits."
-          competitors={['Limespun Projects', 'DaySmart', 'Mangomint', 'TattooGenda']}
-          rows={[
-            { feature: 'Multi-session project entity', values: [true, false, false, false] },
-            { feature: 'Deposit pool across visits', values: [true, false, false, false] },
-            { feature: 'Photo timeline (REF → HEALED)', values: [true, false, false, false] },
-            { feature: 'Consent history per project', values: [true, false, false, false] },
-            { feature: 'Artist notes inherit across sessions', values: [true, false, false, false] },
-            { feature: 'Refund logic re-balances pool', values: [true, false, false, false] },
-            { feature: 'Studio portfolio auto-sync', values: [true, false, false, false] },
-          ]}
-          caption="Sources: vendor product pages, public help docs, and pilot studio reports · 2026"
         />
 
         <ProductDayInLife
-          eyebrow="Ten weeks of one sleeve"
-          heading="Day 0 to Day 70. One project, five sessions."
+          eyebrow="One sleeve, start to finish"
+          heading="Session one to healed. One project, five sessions."
           italicWord="five sessions"
-          intro="Asha books a half-sleeve. The next ten weeks of her tattoo are now one project in Limespun."
+          intro="Asha M. books a koi sleeve. Five sessions, weeks apart, become one project in Limespun."
           paragraphs={[
-            <React.Fragment key="p1">Day 0: <strong>The reference photos go in.</strong> Mood board, line study, palette swatches. Consent form auto-attached to the project. Deposit pool created — $600, $420 banked at booking.</React.Fragment>,
-            <React.Fragment key="p2">Session 1 (Day 0): <strong>The first three hours.</strong> Photos: REF and FRESH. The artist&apos;s notes go in: &quot;Reacted well to red, slight wincing on outline&quot; — those notes will surface on session 2 automatically.</React.Fragment>,
-            <React.Fragment key="p3">Day 7: <strong>HEAL photo uploads from the client kiosk.</strong> Session 2 booked for Day 14. Pool re-applied: $120 of the $420 for S2.</React.Fragment>,
-            <React.Fragment key="p4">Day 70: <strong>HEALED photo uploads. Project closes.</strong> The full record — bookings, deposits, consents, photos, notes — archives to her client record. <em>Portfolio auto-updates.</em></React.Fragment>,
+            <React.Fragment key="p1">Before session 1: <strong>the references go in.</strong> Moodboard, line study, placement notes. Consent is signed on her phone, and she pays a $300 deposit into the project&apos;s pool.</React.Fragment>,
+            <React.Fragment key="p2">Session 1: <strong>the first sitting.</strong> Fresh photos go on the project. The artist&apos;s notes go in (sits well, needs breaks on the inner arm) and show up again on session 2.</React.Fragment>,
+            <React.Fragment key="p3">Session 3: <strong>$60 comes out of the pool.</strong> $240 stays held for sessions 4 and 5, and every session card shows the balance.</React.Fragment>,
+            <React.Fragment key="p4">After session 5: <strong>the project moves to Healing.</strong> The healed photo goes on, the project is marked Complete, and the whole record stays on her client file. <em>You choose which photos go in the portfolio.</em></React.Fragment>,
           ]}
           quote="One project record replaces the per-client spreadsheets — every deposit, photo and note for the sleeve in one place."
           takeawayLabel="In short"
@@ -131,10 +112,10 @@ export default function ProjectsPage() {
           heading="Projects links every part of the studio together."
           italicWord="every part"
           modules={[
-            { icon: Calendar, label: "Calendar", desc: "Sessions, residencies, healing blocks", href: "/product/calendar" },
-            { icon: Users, label: "Clients", desc: "Full client records & history", href: "/product" },
-            { icon: FileText, label: "Forms", desc: "Consents, deposits, intake", href: "/product" },
-            { icon: CreditCard, label: "Payments", desc: "Deposit pools & payouts", href: "/product" },
+            { icon: Calendar, label: "Calendar", desc: "Sessions, guest spots, clash checks", href: "/product/calendar" },
+            { icon: Users, label: "Clients", desc: "Full client records & history", href: "/product/clients" },
+            { icon: FileText, label: "Forms", desc: "Consent, medical history, releases", href: "/product/forms" },
+            { icon: CreditCard, label: "Payments", desc: "Deposit pools & payouts", href: "/product/payments" },
           ]}
         />
 

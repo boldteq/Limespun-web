@@ -4,14 +4,13 @@ import { Footer } from "@/components/layout/footer";
 import { PageIntro } from "@/components/marketing/page-intro";
 import { ClosingCta } from "@/components/marketing/closing-cta";
 import { ConsentTemplate } from "@/components/tools/consent-template";
-import { SITE_URL } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Free tattoo consent form template | Limespun",
+export const metadata: Metadata = pageMetadata({
+  title: "Free tattoo consent form template",
   description: "A free, printable tattoo consent and release form template covering client details, health questions, aftercare, deposits and signatures.",
-  alternates: { canonical: `${SITE_URL}/tools/consent-form-template` },
-  openGraph: { title: "Free tattoo consent form template", description: "Printable consent and release form for tattoo studios.", type: "website" },
-};
+  path: "/tools/consent-form-template",
+});
 
 export default function ConsentTemplatePage() {
   return (
@@ -33,7 +32,11 @@ export default function ConsentTemplatePage() {
           </div>
         </section>
         <div className="print:hidden">
-          <ClosingCta title="Consent signed before they sit down" body="In Limespun clients sign on their phone or the front-desk iPad, and allergies carry to every booking after." />
+          <ClosingCta
+            title="Consent signed before they sit down."
+            italicWord="before"
+            body="In Limespun clients sign on their phone or the front-desk iPad, and allergies carry to every booking after."
+          />
         </div>
       </main>
       <div className="print:hidden">

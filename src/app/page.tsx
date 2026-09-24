@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { Hero } from "@/components/home/hero";
@@ -7,11 +8,16 @@ import { Connected } from "@/components/home/connected";
 import { Promises } from "@/components/home/promises";
 import { Reviews } from "@/components/home/reviews";
 import { Pricing } from "@/components/home/pricing";
-import { Faq, faqs } from "@/components/home/faq";
-import { FinalCta } from "@/components/home/final-cta";
+import { Faq } from "@/components/home/faq";
+import { InkBand } from "@/components/system";
 import { JsonLd } from "@/components/seo/json-ld";
 import { CONTACT_EMAIL, SITE_URL } from "@/lib/brand";
-import { PLANS } from "@/lib/data/plans";
+import { FOUNDING_OFFER_OPEN, FOUNDING_OFFER_SIZE, PLANS } from "@/lib/data/plans";
+
+// Title, description and share card come from the root layout; the homepage adds its canonical.
+export const metadata: Metadata = {
+  alternates: { canonical: SITE_URL },
+};
 
 const monthlyDollars = PLANS.map((p) => p.monthlyCents / 100);
 
@@ -57,17 +63,6 @@ export default function HomePage() {
           },
         }}
       />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: faqs.map((f) => ({
-            "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
-          })),
-        }}
-      />
       <Nav />
       <main id="main">
         <Hero />
@@ -78,7 +73,10 @@ export default function HomePage() {
         <Reviews />
         <Pricing />
         <Faq />
-        <FinalCta />
+        <InkBand
+          eyebrow={FOUNDING_OFFER_OPEN ? `Founding offer · first ${FOUNDING_OFFER_SIZE} studios` : undefined}
+          secondary={{ label: "See pricing", href: "#pricing" }}
+        />
       </main>
       <Footer />
     </div>

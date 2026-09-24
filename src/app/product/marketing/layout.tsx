@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Marketing — Campaigns, loyalty, win-back | Limespun",
+  title: "Marketing — Campaigns, waitlist, referrals | Limespun",
   description:
-    "Campaign mechanics tattoo studios actually run. SMS + email touch-ups. Loyalty milestones. Auto win-back sequences. No mass-blast spam.",
+    "Fill quiet weeks from your own client list. Text and email campaigns, segments like healed-not-rebooked on Studio, a waitlist for cancellations and a referral program.",
   openGraph: {
-    title: "Limespun Marketing — Campaigns, loyalty, win-back",
+    title: "Limespun Marketing — Campaigns, waitlist, referrals",
     description:
-      "Campaign mechanics tattoo studios actually run. SMS + email touch-ups. Loyalty milestones. Auto win-back sequences.",
+      "Text and email campaigns to your own client list, a waitlist for cancellations and a referral program.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/product/marketing" },

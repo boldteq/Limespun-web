@@ -7,12 +7,11 @@ import { ProductHero } from "@/components/product/product-hero";
 import { ProductPillars } from "@/components/product/product-pillars";
 import { ProductAnatomy } from "@/components/product/product-anatomy";
 import { ProductItemTypes } from "@/components/product/product-item-types";
-import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
-import { AnalyticsMockup } from "@/components/product/mockups/analytics-mockup";
+import { AnalyticsScreen } from "@/components/mockups";
 import { BRAND } from "@/lib/brand";
 import {
   TrendingUp,
@@ -41,53 +40,53 @@ export default function AnalyticsPage() {
           feature="Analytics"
           headline="Numbers that decide what you'd do tomorrow."
           italicWord="decide"
-          subhead="Studio P&L by artist, by chair, by month. No-show risk for the next 14 days. Retention by client cohort. Ink-color mix and seasonal heat. The numbers most studio software doesn't even calculate."
-          dashboard={<AnalyticsMockup />}
+          subhead="Revenue by artist and by month. No-show rate, cancellations and fill rate. New, returning and lapsed clients. Stock value and low stock. Reports across locations on Pro."
+          dashboard={<AnalyticsScreen />}
         />
 
         <ProductPillars
           eyebrow="How analytics work in Limespun"
           heading="Three reports most studios build in spreadsheets."
           italicWord="most studios build in spreadsheets"
-          intro="Live P&L, predictive no-show scoring, and cohort retention — calculated automatically from the data already in your studio."
+          intro="Revenue, bookings and clients, worked out from the data already in your studio."
           pillars={[
             {
               icon: TrendingUp,
               accent: BRAND.rust,
-              eyebrow: "Live studio P&L",
-              title: "Per-artist + per-chair, in real time.",
-              desc: "Revenue split by every artist and every chair, updated as sessions close. No export, no formula — the margin is just there.",
+              eyebrow: "Revenue",
+              title: "Per artist, per month, as sessions close.",
+              desc: "Revenue split by every artist, with deposits and tips collected alongside. No export, no formula.",
               bullets: [
-                "Revenue split by artist",
-                "Margin per chair",
-                "Cost-of-ink per session",
-                "Trailing 30/60/90 day cohorts",
+                "Revenue by artist",
+                "Deposits and tips collected",
+                "Average sale",
+                "Guest revenue",
               ],
             },
             {
               icon: AlertCircle,
               accent: BRAND.amber,
-              eyebrow: "Predictive no-show risk",
-              title: "Score for the next 14 days.",
-              desc: "Each upcoming appointment gets a risk score based on client behaviour history — deposit posted, reminders replied to, past no-shows.",
+              eyebrow: "Bookings",
+              title: "No-shows, cancellations, fill rate.",
+              desc: "See how full the chairs were and how many bookings didn't happen, per artist, over 7, 30 or 90 days.",
               bullets: [
-                "Per-client behaviour history",
-                "Deposit posted boost",
-                "Reminder reply boost",
-                "Auto-trigger reminders at risk threshold",
+                "No-show rate",
+                "Cancellations",
+                "Fill rate",
+                "Sessions and bookings",
               ],
             },
             {
               icon: BarChart3,
               accent: BRAND.sage,
-              eyebrow: "Retention + cohort",
-              title: "Who comes back, who churns.",
-              desc: "Clients grouped by acquisition month. Retention curve shows who's still booking at 30, 60, and 90 days — and who's gone quiet.",
+              eyebrow: "Clients",
+              title: "Who comes back, who's gone quiet.",
+              desc: "New, returning and lapsed clients, with average lifetime value. Lapsed clients are the ones to win back with a campaign from Marketing.",
               bullets: [
-                "Per-cohort retention curve",
-                "Average sessions per client",
-                "Lifetime value by acquisition source",
-                "Win-back trigger thresholds",
+                "New clients",
+                "Returning clients",
+                "Lapsed clients",
+                "Average lifetime value",
               ],
             },
           ]}
@@ -97,13 +96,13 @@ export default function AnalyticsPage() {
           eyebrow="Inside the dashboard"
           heading="Five panels, one decision surface."
           italicWord="one decision surface"
-          intro="Every number in the analytics dashboard links to a decision. Range selector, KPI cards, daily revenue, artist ranking, and no-show risk — in one view."
-          dashboard={<AnalyticsMockup />}
+          intro="Every number in the analytics dashboard links to a decision. Range selector, KPI cards, daily revenue, artist ranking and no-show rate, in one view."
+          dashboard={<AnalyticsScreen />}
           callouts={[
             {
               n: 1,
               title: "Range selector",
-              desc: "30 / 90 / 365 days. Compare-mode toggles a second range overlay.",
+              desc: "7, 30 or 90 days.",
               position: { top: "14%", left: "76%" },
             },
             {
@@ -115,19 +114,19 @@ export default function AnalyticsPage() {
             {
               n: 3,
               title: "Daily revenue bars",
-              desc: "30 days, hover any bar for tooltip with breakdown by service type.",
+              desc: "Revenue by day across the range you picked.",
               position: { top: "50%", left: "40%" },
             },
             {
               n: 4,
               title: "Top artists",
-              desc: "Revenue ranking with horizontal bars. Click to filter the whole dashboard by that artist.",
+              desc: "Revenue ranking by artist, with horizontal bars.",
               position: { top: "74%", left: "24%" },
             },
             {
               n: 5,
-              title: "No-show risk panel",
-              desc: "Three risk tiers, one tap to send reminder. Auto-fires at high-risk threshold.",
+              title: "No-show rate",
+              desc: "No-shows and cancellations over the range, per artist.",
               position: { top: "74%", left: "76%" },
             },
           ]}
@@ -135,9 +134,9 @@ export default function AnalyticsPage() {
 
         <ProductItemTypes
           eyebrow="What you can measure"
-          heading="Twelve studio numbers, all live."
-          italicWord="all live"
-          intro="Revenue, retention, risk, margin — every metric calculated from the data your studio already generates."
+          heading="Eight studio numbers, kept current."
+          italicWord="kept current"
+          intro="Revenue, bookings and clients, from the data your studio already generates."
           columns={4}
           items={[
             {
@@ -145,140 +144,88 @@ export default function AnalyticsPage() {
               accent: BRAND.rust,
               severity: "Revenue",
               title: "Studio revenue",
-              desc: "Daily, weekly, monthly, YTD.",
-              example: '"April: $84,210 · +18% YoY"',
+              desc: "By artist, over 7, 30 or 90 days.",
+              example: '"Dev · $3,420 this week"',
             },
             {
               icon: Users,
               accent: BRAND.amber,
-              severity: "New clients",
-              title: "Acquisition",
-              desc: "By referral source.",
-              example: '"32 new · 12 from Instagram, 8 walk-in"',
+              severity: "Clients",
+              title: "New clients",
+              desc: "First-time clients over the range.",
+              example: '"New vs returning, per week"',
             },
             {
               icon: Heart,
               accent: BRAND.sage,
-              severity: "Retention",
-              title: "Cohort retention",
-              desc: "Who comes back at 30/60/90.",
-              example: '"Jan cohort · 84% at 60 days"',
+              severity: "Clients",
+              title: "Returning clients",
+              desc: "Clients who booked again.",
+              example: '"Share of bookings from regulars"',
             },
             {
               icon: DollarSign,
               accent: BRAND.rust,
-              severity: "AOV",
-              title: "Average ticket",
-              desc: "Session size in dollars.",
-              example: '"$620 · +$40 vs March"',
+              severity: "Revenue",
+              title: "Average sale",
+              desc: "Average payment per paid session.",
+              example: '"Per artist and overall"',
             },
             {
               icon: AlertCircle,
               accent: BRAND.danger,
-              severity: "Risk",
-              title: "No-show risk",
-              desc: "Per-client, next 14 days.",
-              example: '"3 high · 8 medium · 21 low"',
+              severity: "Bookings",
+              title: "No-show rate",
+              desc: "No-shows as a share of bookings, per artist.",
+              example: '"7, 30 or 90 days"',
             },
             {
               icon: LayoutGrid,
               accent: BRAND.amber,
-              severity: "Mix",
-              title: "Service mix",
-              desc: "Sessions vs touch-ups vs consults.",
-              example: '"68% sessions · 22% touch-ups · 10% consults"',
+              severity: "Bookings",
+              title: "Fill rate",
+              desc: "How much of each chair's time was booked.",
+              example: '"Per artist, per week"',
             },
             {
               icon: BarChart3,
               accent: BRAND.sage,
-              severity: "Margin",
-              title: "Margin per chair",
-              desc: "After ink, supplies, commissions.",
-              example: '"Chair 1 (Miles) · 64% margin"',
+              severity: "Revenue",
+              title: "Deposits collected",
+              desc: "Deposits taken over the range.",
+              example: '"$340 held for today\'s sessions"',
             },
             {
               icon: RefreshCw,
               accent: BRAND.stoneDark,
-              severity: "Churn",
-              title: "Churn rate",
-              desc: "Clients silent 6+ months.",
-              example: '"23 clients silent · 4 already winning back"',
+              severity: "Clients",
+              title: "Lapsed clients",
+              desc: "Clients who haven't booked in a while.",
+              example: '"Ready for a win-back campaign"',
             },
           ]}
-        />
-
-        <ProductVsTable
-          eyebrow="How it compares"
-          heading="The P&L most software won't touch."
-          italicWord="most software won't touch"
-          competitors={["Limespun Analytics", "DaySmart", "Mangomint", "Excel"]}
-          rows={[
-            {
-              feature: "Live per-artist P&L",
-              values: [true, false, true, false],
-            },
-            {
-              feature: "Predictive no-show risk score",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Cost-of-ink per session",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Cohort retention curves",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Margin per chair (after splits)",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Compare-mode (range vs range)",
-              values: [true, false, true, false],
-            },
-            {
-              feature: "Auto-export to CSV / accountant",
-              values: [true, true, true, true],
-            },
-            {
-              feature: "Per-location roll-up",
-              values: [true, true, false, false],
-            },
-          ]}
-          caption="Based on published features as of Q1 2025. Limespun first column."
         />
 
         <ProductDayInLife
           eyebrow="End of month"
-          heading="April 30, 9:14 PM. Twenty minutes for the month."
-          italicWord="Twenty minutes"
-          intro="Picture Elena, running a three-location group in Madrid with 22 artists. End of month used to be a full Sunday with QuickBooks and three spreadsheets. Now it isn't."
+          heading="Sunday, 9:14 PM. The month in twenty minutes."
+          italicWord="twenty minutes"
+          intro="Picture an owner with two shops on Pro. End of month used to be a full Sunday with three spreadsheets. Now it isn't."
           paragraphs={[
             <React.Fragment key="p1">
-              <strong>9:14 PM.</strong> Elena opens Analytics. Studio P&L for
-              April, all three locations: <em>€61,800 net.</em> Down 4% vs
-              March, but up 22% YoY. She drills into March vs April compare
-              mode.
+              <strong>9:14 PM.</strong> Analytics, last 30 days, both locations: revenue by artist, deposits collected and tips.
             </React.Fragment>,
             <React.Fragment key="p2">
-              <strong>9:18 PM.</strong> The ink-cost line spiked 11% in April.
-              Why? She filters by ink color. Crimson Lake jumped — Madrid Centro
-              went through 3 bottles last week.
+              <strong>9:18 PM.</strong>{" "}One shop&apos;s no-show rate is up. The Bookings tab shows it&apos;s one artist&apos;s Saturday slots, booked without a deposit.
             </React.Fragment>,
             <React.Fragment key="p3">
-              <strong>9:24 PM.</strong> One click — she&apos;s looking at Madrid
-              Centro alone. Two artists drove the crimson spike: Pablo and
-              Lucia. She messages the location manager via Inbox:{" "}
-              &ldquo;Reorder window for Crimson — adjust threshold.&rdquo;
+              <strong>9:24 PM.</strong> She checks the lapsed clients on the Clients tab and plans a win-back campaign in Marketing for next week.
             </React.Fragment>,
             <React.Fragment key="p4">
-              Twenty minutes total.{" "}
-              <em>The full studio, three locations, one decision.</em> The old
-              way: three Excel files, two coffee refills, half a Sunday.
+              Twenty minutes. <em>Two shops, one view.</em> The old way: three spreadsheets and half a Sunday.
             </React.Fragment>,
           ]}
-          quote="Per-location P&L in one dashboard shows which shop is healthy and which one needs help."
+          quote="Reports across locations show which shop is healthy and which one needs help."
           takeawayLabel="Why it matters"
         />
 
@@ -290,25 +237,25 @@ export default function AnalyticsPage() {
             {
               icon: DollarSign,
               label: "Payments",
-              desc: "Every transaction feeds the P&L — commission splits, deposits, and refunds included.",
+              desc: "Every payment feeds the revenue numbers, deposits and tips included.",
               href: "/product/payments",
             },
             {
               icon: Calendar,
               label: "Today",
-              desc: "No-show risk scores surface in the daily view so you can act before the appointment.",
+              desc: "Today's numbers: deposits held and commissions owed.",
               href: "/product/today",
             },
             {
               icon: TrendingUp,
               label: "Marketing",
-              desc: "Cohort retention curves feed win-back and loyalty campaign triggers automatically.",
+              desc: "Lapsed clients become a win-back campaign.",
               href: "/product/marketing",
             },
             {
               icon: BarChart3,
               label: "Pricing",
-              desc: "Service mix and average ticket guide pricing decisions without a separate report.",
+              desc: "Reports on every plan; across locations on Pro.",
               href: "/pricing",
             },
           ]}
@@ -317,7 +264,7 @@ export default function AnalyticsPage() {
         <ProductCTA
           headline="Make the call before the spreadsheet does."
           italicWord="before the spreadsheet does"
-          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Live P&L, no-show risk, and cohort retention from day one.`}
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Revenue, no-show rate and client numbers from day one.`}
         />
       </main>
       <Footer />

@@ -18,12 +18,11 @@ import { ProductHero } from "@/components/product/product-hero";
 import { ProductPillars } from "@/components/product/product-pillars";
 import { ProductAnatomy } from "@/components/product/product-anatomy";
 import { ProductItemTypes } from "@/components/product/product-item-types";
-import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
-import { TodayMockup } from "@/components/product/mockups/today-mockup";
+import { TodayScreen } from "@/components/mockups";
 import { BRAND } from "@/lib/brand";
 
 export default function TodayPage() {
@@ -42,7 +41,7 @@ export default function TodayPage() {
           headline="Today, in thirty seconds."
           italicWord="in thirty seconds"
           subhead="Open Limespun. The day's already loaded — what's running, what's at risk, what's next — sized to your role. Owner sees the studio. Artist sees their chair. Front-desk sees the schedule. Same data, three brains."
-          dashboard={<TodayMockup />}
+          dashboard={<TodayScreen />}
         />
 
         <ProductPillars
@@ -60,7 +59,7 @@ export default function TodayPage() {
               bullets: [
                 "Today's revenue, broken by artist",
                 "Deposit pool balances by project",
-                "No-show risk score for the next 14 days",
+                "Deposits held for today's sessions",
                 "Commissions owed, paid, due",
               ],
             },
@@ -69,12 +68,12 @@ export default function TodayPage() {
               accent: BRAND.danger,
               eyebrow: "What's at risk",
               title: "Surfaced before it bites.",
-              desc: "Allergies for clients on today's book. Expired consents. Projects with deposits not collected. Inventory that'll run out before noon. In the order you should fix them.",
+              desc: "Allergies for clients on today's book. Consent not yet signed. Projects with deposits not collected. Stock running low. In the order you should fix them.",
               bullets: [
                 "Allergy & medical alerts on today's book",
-                "Consent forms expiring or unsigned",
+                "Consent forms not yet signed",
                 "Projects with deposits past due",
-                "Ink colors below stock threshold",
+                "Stock below the level you set",
               ],
             },
             {
@@ -82,10 +81,10 @@ export default function TodayPage() {
               accent: BRAND.rust,
               eyebrow: "What's next",
               title: "The next chair-up, in one tap.",
-              desc: "The full day, by chair. The next client up. The current session in progress. The deposits sitting in escrow waiting for a session-complete signature.",
+              desc: "The full day, by chair. The next client up. The session in progress. The deposits held for today's bookings.",
               bullets: [
                 "Today's schedule, multi-chair view",
-                "Live status: in chair · in deposit · in transit",
+                "Who's in the chair, and who's next",
                 "Tomorrow's deposits due",
                 "Sessions with photos pending",
               ],
@@ -98,7 +97,7 @@ export default function TodayPage() {
           heading="Every pixel earns its place."
           italicWord="earns its place"
           intro="Five components on one screen. Nothing decorative. Each one answers a question you'd ask in your first three minutes at the studio."
-          dashboard={<TodayMockup />}
+          dashboard={<TodayScreen />}
           callouts={[
             {
               n: 1,
@@ -115,7 +114,7 @@ export default function TodayPage() {
             {
               n: 3,
               title: "The allergy banner",
-              desc: "Pulses red the moment a client on today's book has a flag. The thing competitors don't have.",
+              desc: "Shows the moment a client on today's book has an allergy on their record.",
               position: { top: "44%", left: "38%" },
             },
             {
@@ -137,7 +136,7 @@ export default function TodayPage() {
           eyebrow="Role-aware"
           heading="Same data. Three brains."
           italicWord="Three brains"
-          intro="Today reads who you are when you sign in. The owner sees the studio. The artist sees their chair. The front desk sees the door. No setup. No view-switching."
+          intro="Today opens on the view that fits your role: Studio for the owner, Artist for an artist's own chair, Desk for the front desk. No setup."
           columns={3}
           items={[
             {
@@ -145,9 +144,9 @@ export default function TodayPage() {
               accent: BRAND.rust,
               severity: "Owner",
               title: "The studio in one glance.",
-              desc: "Studio P&L, all artists, all chairs. The numbers that decide whether to hire.",
+              desc: "Revenue across every artist and chair, deposits held, commissions owed.",
               example:
-                '"Studio revenue · MTD: $84,210 · 6 active artists · $0 disputes 90d"',
+                '"This week: $7,630 gross · $5,622 paid out · $340 deposits held"',
             },
             {
               icon: Heart,
@@ -156,84 +155,41 @@ export default function TodayPage() {
               title: "Just your chair, your day.",
               desc: "Your bookings, your commissions, your projects. Nothing about the artist next to you.",
               example:
-                '"Your revenue · this month: $11,840 · 4 sessions today · $2,300 commission ready"',
+                '"Dev · 2 sessions today · 60% commission · $2,052 this week"',
             },
             {
               icon: Inbox,
               accent: BRAND.sage,
               severity: "Front desk",
               title: "The flow at the door.",
-              desc: "Walk-ins, check-ins, deposits to collect, IDs to scan. Everything that happens at the counter.",
+              desc: "Walk-ins, check-ins, deposits to collect, forms to sign. Everything that happens at the counter.",
               example:
-                '"3 check-ins next hour · $840 deposits to collect · 2 IDs pending scan"',
+                '"6 bookings today · 3 walk-in flash slots · 1 consent to sign"',
             },
           ]}
-        />
-
-        <ProductVsTable
-          eyebrow="vs the rest"
-          heading="What no one else shows you on Monday morning."
-          italicWord="on Monday morning"
-          competitors={["Limespun Today", "DaySmart", "Mangomint", "Spreadsheet"]}
-          rows={[
-            {
-              feature: "Multi-session project context",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Allergy & medical alerts inline",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Live commission preview",
-              values: [true, false, true, false],
-            },
-            {
-              feature: "Deposit pool balance per project",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Role-aware view (owner/artist/desk)",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "REACH compliance check",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Single morning brief view",
-              values: [true, false, false, false],
-            },
-          ]}
-          caption="Sources: vendor product pages, public help docs, and pilot studio reports · 2026"
         />
 
         <ProductDayInLife
           eyebrow="A morning"
-          heading="8:47 AM. A four-chair studio in Brooklyn."
-          italicWord="A four-chair studio in Brooklyn"
-          intro="Miles unlocks the studio, drops his keys, and before the coffee finishes, opens Limespun on his phone."
+          heading="8:47 AM. A three-chair studio."
+          italicWord="A three-chair studio"
+          intro="The owner unlocks the studio, drops the keys and, before the coffee finishes, opens Limespun on their phone."
           paragraphs={[
             <>
               The screen knows what day it is.{" "}
-              <strong>Asha&apos;s allergy banner is already pulsing red</strong>{" "}
-              — she changed her medication last week and updated her form on the
-              kiosk on Tuesday. Her session is at 1 PM. He texts her from the
-              inline message thread, asks her to come in fifteen minutes early so
-              they can patch-test the new ink.
+              <strong>Elena R.&apos;s allergy flag is already on the page.</strong>{" "}She
+              reacted to red ink after session 1 in August. Her back piece, session 2 of 3,
+              is at 1:30 with Dev: no red today, and a patch test before session 3.
             </>,
             <>
-              The four KPIs at the top tell him the studio cleared{" "}
-              <strong>$8,320</strong> on Wednesday — twelve points up over
-              Tuesday — and that there are 26 bookings on the deck for the next
-              two weeks. He scrolls down. <strong>The project pulse</strong>{" "}
-              shows Elena&apos;s back piece is at session two of three, with the
-              deposit fully paid. Tomas&apos;s half-sleeve is booked but no
-              deposit yet — that&apos;s the call he&apos;ll make at 10.
+              The numbers at the top show <strong>$340 in deposits held</strong>{" "}for
+              today&apos;s sessions. <strong>The project pulse</strong>{" "}shows Asha M.&apos;s
+              koi sleeve at session 4 of 5, with $240 of her deposit pool held for the last
+              two sessions.
             </>,
             <>
-              He pours the coffee. Rafael walks in. Miles closes the app.{" "}
-              <em>Total time on the screen: forty-two seconds.</em>
+              Rio&apos;s guest day starts at noon with three walk-in flash slots.{" "}
+              <em>The whole day, read before the coffee&apos;s done.</em>
             </>,
           ]}
           quote="The first half hour stops being detective work. Today has the answers loaded before the coffee is."
@@ -260,7 +216,7 @@ export default function TodayPage() {
             {
               icon: LayoutGrid,
               label: "Projects",
-              desc: "Multi-session sleeves",
+              desc: "Multi-session work",
               href: "/product/projects",
               badge: "NEW",
             },
@@ -276,7 +232,7 @@ export default function TodayPage() {
         <ProductCTA
           headline="Start the morning differently."
           italicWord="differently"
-          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration from any tool you're on.`}
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. We move your data over from the tool you're on, on every plan.`}
         />
       </main>
       <Footer />

@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { BarChart3, Sparkles, Shield, Check, ArrowRight } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp } from "@/lib/brand";
+import { ACCOUNT, BRAND, CTA, FONT, SHADOW, GRADIENT, fadeUp } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -90,23 +90,23 @@ function PainPointsSection() {
           <MoatCardBright
             accent="rust"
             icon={BarChart3}
-            title="P&L math by spreadsheet"
-            body="Per-artist, per-chair, per-month. Margin reports cobbled together at quarter-end. The shop's actual health: unclear."
-            detail={[["Reporting cycle", "quarterly"], ["Margin per artist", "opaque"], ["Decisions", "gut-feel"]]}
+            title="Artist numbers by spreadsheet"
+            body="Revenue per artist, rebook rate, no-shows. Pulled together by hand at month-end, if at all. The shop's actual health: unclear."
+            detail={[["Reporting cycle", "when there's time"], ["Numbers per artist", "by hand"], ["Decisions", "gut feel"]]}
           />
           <MoatCardBright
             accent="amber"
             icon={Sparkles}
-            title="AI tools that generate, never prep"
-            body="Mid-journey for inspiration. ChatGPT for client briefs. Five tabs and zero connection to your booking pipeline."
-            detail={[["Tools used", "4+"], ["Connection to bookings", "0"], ["Brand consistency", "low"]]}
+            title="AI tools that don't know the client"
+            body="One app for moodboards, another for writing replies. None of them sees the booking or the client record."
+            detail={[["Moodboards", "another app"], ["Replies", "copied and pasted"], ["Client record", "not connected"]]}
           />
           <MoatCardBright
             accent="sage"
             icon={Shield}
-            title="REACH compliance: spreadsheet"
-            body="EU 2022 ink registry mandates batch tracking, MSDS attachments, reaction logging. For plenty of studios: a Numbers file."
-            detail={[["Compliance method", "manual"], ["Inspector readiness", "low"], ["Reaction logs", "scattered"]]}
+            title="REACH records: spreadsheet"
+            body="The EU REACH restriction on tattoo inks, in force since January 2022, limits what can be in the bottle. For plenty of studios, the proof lives in a spreadsheet."
+            detail={[["Where records live", "a spreadsheet"], ["Ready when asked", "rarely"], ["Ink per client", "scattered"]]}
           />
         </div>
       </div>
@@ -119,11 +119,11 @@ function PainPointsSection() {
 const proFeatures = [
   "Up to 15 artists, plus unlimited guest-artist seats",
   "AI replies, aftercare and consult summaries — in your studio's voice",
-  "Public guest booking pages — one URL per residency",
+  "Guest artists with their own dates, booking link and split",
   "Payroll and 1099s — every artist's split, ready at year-end",
   "Roles and permissions — owner, artist, front desk",
-  "Per-artist + per-chair P&L — monthly auto-reports",
-  "EU REACH 2022 ink registry — on every plan, Pro included",
+  "Reports by artist: revenue, rebook rate, no-shows",
+  "EU REACH ink tracking — on every plan",
   "Priority support",
   "Up to 5 locations, with reports across them (when you grow)",
 ];
@@ -200,7 +200,7 @@ function CustomerQuoteSection() {
                 margin: 0,
               } as React.CSSProperties}
             >
-              Limespun is new, and open to every shop. You get {ONBOARDING_SUPPORT_DAYS} days of onboarding help from the founding team, a hand-held move off your current tool, and a {MONEY_BACK_DAYS}-day money-back guarantee.
+              Limespun is new, and open to every shop. You get {ONBOARDING_SUPPORT_DAYS} days of onboarding help, a done-for-you move off your current tool, and a {MONEY_BACK_DAYS}-day money-back guarantee.
             </p>
           </div>
         </motion.div>
@@ -236,8 +236,8 @@ function PricingTeaserSection() {
 
 const faqs = [
   {
-    q: "Can I split commissions across more than two parties (e.g., studio + artist + apprentice)?",
-    a: "Yes. Three-way and four-way splits supported. Routing rules per-artist, per-piece, or per-time-period.",
+    q: "Can the front desk take payments without seeing payroll?",
+    a: "Yes. Roles and permissions on Pro decide who sees what: the front desk takes deposits and payments, and payroll stays with the owner.",
   },
   {
     q: "Does the AI sound like my studio?",
@@ -285,9 +285,9 @@ export default function MultiChairPage() {
           eyebrowAccent="rust"
           headline="The shop with a brand. The shop that scales."
           italicWord="scales"
-          subhead="Six artists. Eight chairs. Two floors. Walk-in clinic Tuesdays. AI replies and consult summaries on every booking. Unlimited guest-artist seats. Payroll and 1099s. Priority support. The Pro plan."
-          primaryCTA={{ label: "Choose Pro", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "See pricing", href: "/pricing" }}
+          subhead="For shops with a full floor of chairs: up to 15 artists, unlimited guest-artist seats, AI replies and consult summaries, payroll and 1099s, roles and permissions, and priority support. The Pro plan."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
         <PainPointsSection />
         <WhyLimespunSection />
@@ -298,9 +298,9 @@ export default function MultiChairPage() {
           badge="The shop that scales"
           headline="Run the shop on Pro."
           italicWord="Pro"
-          subhead={`Up to 15 artists, unlimited guest seats, AI replies and aftercare. ${MONEY_BACK_DAYS}-day money-back guarantee and ${ONBOARDING_SUPPORT_DAYS} days of founder-priority onboarding.`}
-          primaryCTA={{ label: "Choose Pro", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
+          subhead={`Up to 15 artists, unlimited guest seats, AI replies and aftercare. ${MONEY_BACK_DAYS}-day money-back guarantee and ${ONBOARDING_SUPPORT_DAYS} days of onboarding help.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
       </main>
       <Footer />

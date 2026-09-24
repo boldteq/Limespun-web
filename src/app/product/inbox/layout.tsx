@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Inbox — Action feed for tattoo studios | Limespun",
   description:
-    "Booking requests, deposit follow-ups, allergy flags, consent expiries, disputes, reviews — sorted by priority, resolved in place. Triage your studio in five minutes.",
+    "Unpaid deposits, unsigned forms, booking clashes, allergy flags, low stock and unread messages, sorted into Overdue, Today and This week, and resolved in place.",
   openGraph: {
-    title: "Limespun Inbox",
-    description: "The action feed. Triage in five minutes.",
+    title: "Limespun Needs attention",
+    description: "Everything that needs doing, in one ordered list.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/product/inbox" },

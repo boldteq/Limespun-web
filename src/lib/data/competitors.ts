@@ -32,7 +32,7 @@ export const FEATURES: { key: FeatureKey; label: string; why: string }[] = [
   { key: "allergyFlags", label: "Allergy flags on bookings", why: "Health notes surface on the day, not buried in a file." },
   { key: "guestArtists", label: "Guest artist spots", why: "Dates, booking and splits for visiting artists." },
   { key: "payoutSplits", label: "Commission & booth-rent payouts", why: "Artist pay worked out per session." },
-  { key: "inkInventory", label: "Ink inventory", why: "Stock tracked by bottle; EU REACH checks on every Limespun plan." },
+  { key: "inkInventory", label: "Ink inventory", why: "Stock tracked by bottle; EU REACH ink records on every Limespun plan." },
   { key: "migrationHelp", label: "Migration help", why: "Someone moves your clients and bookings for you." },
 ];
 
@@ -44,7 +44,7 @@ export const LIMESPUN: Record<FeatureKey, FeatureCell> = {
   allergyFlags: { value: "yes", note: "Shown on every booking after they're noted" },
   guestArtists: { value: "yes", note: "Own dates, booking link and split (Pro and up)" },
   payoutSplits: { value: "yes", note: "Commission and booth-rent splits (Studio and up); guest splits on Pro and up" },
-  inkInventory: { value: "yes", note: "With EU REACH checks on every plan" },
+  inkInventory: { value: "yes", note: "With EU REACH ink records on every plan" },
   migrationHelp: { value: "yes", note: "Done by our team on every plan" },
 };
 

@@ -7,7 +7,7 @@ import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { BRAND, FONT, SHADOW } from "@/lib/brand";
+import { ACCOUNT, BRAND, CTA, FONT, SHADOW } from "@/lib/brand";
 import { categoryLabels, type BlogContentBlock, type BlogPost } from "@/lib/data/blog-posts";
 
 interface Props {
@@ -356,7 +356,7 @@ export function BlogPostDetail({ post, related }: Props) {
             <div
               style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" } as React.CSSProperties}
             >
-              <SectionEyebrow label="More from " accent="amber" />
+              <SectionEyebrow label="More from the blog" accent="amber" />
               <h2
                 style={{
                   fontFamily: FONT.serif,
@@ -442,12 +442,12 @@ export function BlogPostDetail({ post, related }: Props) {
         )}
 
         <CTASection
-          badge="Get the next one"
-          headline="Subscribe for the studio playbook."
-          italicWord="playbook"
-          subhead="One email per month. Studio operations, compliance updates, the maths nobody else writes."
-          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "Talk to us", href: "/book-a-demo", icon: "play" }}
+          badge="Put it to work"
+          headline="Run the shop in one place."
+          italicWord="place"
+          subhead="Create your account in minutes. We move your data over for you. 30-day money-back guarantee."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
       </main>
       <Footer />

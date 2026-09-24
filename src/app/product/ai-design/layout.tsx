@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AI Studio — Brief generator, reference assist, style transfer | Limespun",
+  title: "AI Studio — Moodboards and design briefs | Limespun",
   description:
-    "Generate client briefs from a paragraph. Pull reference grids by style. Translate inspiration to the artist's hand. AI for the prep, not the work.",
+    "Turn a client's idea into a clear brief and a moodboard to talk through. AI for the prep, never the art: it doesn't draw tattoos. On every plan.",
   openGraph: {
     title: "Limespun AI Studio",
     description: "AI for the prep, not the work.",

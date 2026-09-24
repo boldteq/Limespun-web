@@ -110,7 +110,11 @@ export function Reviews() {
           </p>
         </div>
 
-        <div className="-mx-5 mt-14 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0 lg:pb-0">
+        <div
+          tabIndex={0}
+          role="region"
+          aria-label="Reviews"
+          className="-mx-5 mt-14 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0 lg:pb-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite">
           {items.map((t) => (
             <ReviewCard key={t.id} t={t} sample={sample} />
           ))}

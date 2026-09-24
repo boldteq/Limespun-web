@@ -8,7 +8,8 @@ export interface AnatomyCallout {
   n: number;
   title: string;
   desc: string;
-  position: { top: string; left: string };
+  /** No longer drawn (see the grid below); kept so page data stays valid. */
+  position?: { top: string; left: string };
 }
 
 interface ProductAnatomyProps {
@@ -108,53 +109,19 @@ export function ProductAnatomy({
         </div>
 
         {/* Anatomy grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1.6fr 1fr",
-            gap: 56,
-            alignItems: "flex-start",
-          } as React.CSSProperties}
-          className="td-anatomy-grid"
-        >
-          {/* Left: dashboard + callout dots */}
+        {/* Stacks below lg; side by side from lg */}
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-14">
+          {/* Left: the app screen. No numbered dots over it: the screens come from
+              the shared mockup library, so fixed dot positions would land on the
+              wrong rows. The numbered list on the right carries the callouts. */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            style={{ position: "relative" } as React.CSSProperties}
+            className="min-w-0"
           >
             {dashboard}
-
-            {callouts.map((callout) => (
-              <div
-                key={callout.n}
-                style={{
-                  position: "absolute",
-                  top: callout.position.top,
-                  left: callout.position.left,
-                  width: 28,
-                  height: 28,
-                  borderRadius: "50%",
-                  background: BRAND.onyx,
-                  color: BRAND.bone,
-                  fontFamily: FONT.sans,
-                  fontSize: 13,
-                  fontWeight: 700,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow:
-                    "0 4px 14px rgba(15,15,15,0.35), 0 0 0 4px rgba(247,247,245,0.9)",
-                  pointerEvents: "none",
-                  zIndex: 10,
-                  transform: "translate(-50%, -50%)",
-                } as React.CSSProperties}
-              >
-                {callout.n}
-              </div>
-            ))}
           </motion.div>
 
           {/* Right: callout list */}

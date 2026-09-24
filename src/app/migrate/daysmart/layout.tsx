@@ -2,14 +2,12 @@ import type { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title:
-    "Migrate from DaySmart Body Art to Limespun — 9 days, white-glove | Limespun",
+  title: "Switch from DaySmart Body Art to Limespun | Limespun",
   description:
-    "DaySmart users: keep every booking, deposit, client record. 9-day migration with 2 white-glove calls. Limespun is built for tattoo, not adapted for it.",
+    "Switching from DaySmart Body Art: we move your clients, bookings, deposits and signed forms for you, on every plan. Usually a week or two, with DaySmart running alongside.",
   openGraph: {
-    title: "Migrate from DaySmart to Limespun — 9 days",
-    description:
-      "Keep every booking, deposit, client record. Limespun is built for tattoo, not adapted for it.",
+    title: "Switch from DaySmart to Limespun",
+    description: "Migration included on every plan. Multi-session projects, one deposit pool, allergy flags on every booking.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/migrate/daysmart" },

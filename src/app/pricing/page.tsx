@@ -41,7 +41,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Which plan do I need for guest artists?",
-    a: "Pro. Guest-artist seats, payroll and the AI tools start on Pro. Studio covers up to five resident artists, with commission and booth-rent splits.",
+    a: "Pro. Guest-artist seats start there, along with payroll and AI drafts for replies, aftercare and consult summaries. Studio covers up to five resident artists, with commission and booth-rent splits and AI reply suggestions.",
   },
   {
     q: "Can I change plans later?",
@@ -55,7 +55,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Will someone help me set up?",
-    a: `Yes. Every new studio gets ${ONBOARDING_SUPPORT_DAYS} days of onboarding help from the founding team. If you'd like to see Limespun first, book a demo.`,
+    a: `Yes. Every new studio gets ${ONBOARDING_SUPPORT_DAYS} days of onboarding help from the founding team. Our team also moves your clients, bookings, deposits and signed forms over for you.`,
   },
 ];
 
@@ -76,13 +76,6 @@ export default function PricingPage() {
             priceCurrency: "USD",
             url: `${SITE_URL}/pricing`,
           })),
-        }}
-      />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
         }}
       />
       <Nav />
@@ -118,8 +111,10 @@ export default function PricingPage() {
 
         <Faq items={faqs} title="Pricing questions" tone="white" />
         <ClosingCta
-          title="Pick a plan, or see it first"
-          body={`Create your account in a few minutes, or book a demo. Every plan has a ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+          title="Pick a plan, start today."
+          italicWord="today"
+          body={`Create your account in minutes. We move your data over for you. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+          secondary={{ label: "Contact us", href: "/contact" }}
         />
       </main>
       <Footer />

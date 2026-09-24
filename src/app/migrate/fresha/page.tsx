@@ -2,8 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { DollarSign } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { ACCOUNT, BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -11,226 +10,44 @@ import { ComparisonTable } from "@/components/shared/comparison-table";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { PLANS, formatPrice, MONEY_BACK_DAYS, type PlanTier } from "@/lib/data/plans";
+import { PLANS, formatPrice, MONEY_BACK_DAYS } from "@/lib/data/plans";
+import { competitorCaption, competitorPricing, competitorRows } from "@/components/shared/competitor-rows";
 
-type AccentKey = "rust" | "amber" | "sage";
-
-interface FeeCardProps {
-  accent: AccentKey;
-  monthlyRevenue: string;
-  freshaFee: string;
-  limespunPlan: string;
-  limespunCost: string;
-  savingsMonthly: string;
-  savingsAnnual: string;
-}
-
-const accentMap = {
-  rust: { color: BRAND.rust, bg: BRAND.rustWash, glow: GRADIENT.cardRust },
-  amber: {
-    color: BRAND.amber,
-    bg: BRAND.amberWash,
-    glow: GRADIENT.cardAmber,
-  },
-  sage: { color: BRAND.sage, bg: BRAND.sageWash, glow: GRADIENT.cardSage },
-} as const;
-
-function FeeCard({
-  accent,
-  monthlyRevenue,
-  freshaFee,
-  limespunPlan,
-  limespunCost,
-  savingsMonthly,
-  savingsAnnual,
-}: FeeCardProps) {
-  const a = accentMap[accent];
-  return (
-    <motion.div
-      variants={fadeUp}
-      whileHover={{ y: -4, boxShadow: SHADOW.card }}
-      style={{
-        background: a.glow,
-        borderRadius: 18,
-        padding: "28px",
-        border: `1px solid ${BRAND.borderSoft}`,
-        boxShadow: SHADOW.soft,
-        display: "flex",
-        flexDirection: "column",
-        gap: 20,
-        transition: "box-shadow 0.22s ease",
-      } as React.CSSProperties}
-    >
-      <div
-        style={{
-          width: 44,
-          height: 44,
-          borderRadius: 12,
-          background: a.bg,
-          border: `1.5px solid ${a.color}22`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        } as React.CSSProperties}
-      >
-        <DollarSign size={20} color={a.color} strokeWidth={1.8} />
-      </div>
-
-      <div>
-        <div
-          style={{
-            fontFamily: FONT.mono,
-            fontSize: 22,
-            fontWeight: 700,
-            color: BRAND.onyx,
-            letterSpacing: "-0.02em",
-            marginBottom: 4,
-          } as React.CSSProperties}
-        >
-          {monthlyRevenue}
-        </div>
-        <div
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 12,
-            color: BRAND.stoneLight,
-            letterSpacing: "0.04em",
-            textTransform: "uppercase",
-            fontWeight: 500,
-          } as React.CSSProperties}
-        >
-          per month
-        </div>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-        } as React.CSSProperties}
-      >
-        <div
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 13,
-            color: BRAND.stoneDark,
-          } as React.CSSProperties}
-        >
-          Fresha fee:{" "}
-          <span
-            style={{
-              fontWeight: 700,
-              color: BRAND.crimson,
-            } as React.CSSProperties}
-          >
-            {freshaFee}/mo
-          </span>
-        </div>
-        <div
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 13,
-            color: BRAND.stoneDark,
-          } as React.CSSProperties}
-        >
-          Limespun {limespunPlan}:{" "}
-          <span
-            style={{ fontWeight: 700, color: BRAND.sage } as React.CSSProperties}
-          >
-            {limespunCost}/mo
-          </span>
-        </div>
-        <div
-          style={{
-            fontFamily: FONT.sans,
-            fontSize: 14,
-            fontWeight: 700,
-            color: a.color,
-            marginTop: 4,
-          } as React.CSSProperties}
-        >
-          Savings: {savingsMonthly}/mo
-        </div>
-      </div>
-
-      <div
-        style={{
-          padding: "10px 14px",
-          borderRadius: 10,
-          background: BRAND.white,
-          fontFamily: FONT.mono,
-          fontSize: 12,
-          fontWeight: 600,
-          color: BRAND.stoneDark,
-          border: `1px solid ${BRAND.borderSoft}`,
-        } as React.CSSProperties}
-      >
-        Annual savings: {savingsAnnual}
-      </div>
-    </motion.div>
-  );
-}
-
-/** Fresha's payment fee, applied to monthly card revenue. Limespun cost is the plan's monthly price from PLANS. */
-const FRESHA_FEE_RATE = 0.0195;
-
-function feeCard(accent: AccentKey, monthlyRevenueDollars: number, tier: PlanTier): FeeCardProps {
-  const [plan] = PLANS.filter((p) => p.tier === tier);
-  const freshaFeeCents = Math.round(monthlyRevenueDollars * FRESHA_FEE_RATE * 100);
-  const savingsCents = freshaFeeCents - plan.monthlyCents;
-  return {
-    accent,
-    monthlyRevenue: `On $${monthlyRevenueDollars / 1000}K/month`,
-    freshaFee: formatPrice(freshaFeeCents),
-    limespunPlan: plan.name,
-    limespunCost: formatPrice(plan.monthlyCents),
-    savingsMonthly: formatPrice(savingsCents),
-    savingsAnnual: formatPrice(savingsCents * 12),
-  };
-}
-
-// $20K → $390 fee vs Solo $39 ($351/mo, $4,212/yr); $50K → $975 vs Studio $99 ($876, $10,512);
-// $100K → $1,950 vs Pro $179 ($1,771, $21,252).
-const feeCards: FeeCardProps[] = [
-  feeCard("rust", 20_000, "solo"),
-  feeCard("amber", 50_000, "studio"),
-  feeCard("sage", 100_000, "pro"),
-];
+const [SOLO] = PLANS.filter((p) => p.tier === "solo");
 
 const timelineSteps = [
-  { day: "Day 1", title: "Discovery call + Fresha API connection" },
+  { day: "1", title: "You tell us what you use; we work from what Fresha lets you export" },
   {
-    day: "Days 2-3",
-    title: "Export + clean (Fresha CSV-pull, schema map)",
+    day: "2",
+    title: "Export and clean: fields mapped, duplicates removed",
   },
-  { day: "Day 4", title: "Preview run (Limespun staging, you sign off)" },
+  { day: "3", title: "Preview: you check the import before it lands" },
   {
-    day: "Day 5",
-    title: "Cutover (parallel hour, DNS switch, cancel Fresha)",
+    day: "4",
+    title: "Side by side until your last Fresha booking clears, then you switch",
   },
 ];
 
 const faqItems = [
   {
     q: "Will Fresha let me export my data?",
-    a: "Yes. Fresha provides a CSV export of all client and booking data. We've migrated 100+ studios from Fresha — they cooperate.",
+    a: "We work from whatever Fresha lets you export and move your clients, upcoming bookings, deposits held and signed forms. If something won't export cleanly, we tell you before you switch.",
   },
   {
     q: "What about Fresha's marketplace? Will I lose those leads?",
-    a: "You keep your client list. Fresha marketplace leads from before cutover are now in your Limespun CRM. New leads come from your own marketing — not a marketplace that competes with you.",
+    a: "Clients who found you through Fresha come across with the rest of your client list, as far as Fresha's export includes them. New clients come from your own booking page and marketing, not a marketplace that lists other studios next to you.",
   },
   {
     q: "Does Limespun have a marketplace too?",
     a: "No. We don't run a customer-facing marketplace. Our job is to power your studio's brand, not compete for your customers.",
   },
   {
-    q: "What happens to recurring bookings?",
-    a: "Migrated. Recurring rules carry. Clients see no disruption.",
+    q: "How does Limespun's price compare with Fresha's?",
+    a: `Fresha publishes: ${competitorPricing("fresha")} Limespun is a flat monthly plan from ${formatPrice(SOLO.monthlyCents)}/mo, with no Limespun fee on bookings or deposits; card payments carry the provider's standard fee.`,
   },
   {
     q: "Can I keep using my Fresha subscription during migration?",
-    a: `Yes. 14-day overlap recommended. Stop billing on Fresha day-of cutover. Limespun comes with a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
+    a: `Yes, and we recommend it. Keep Fresha running until your last booking there clears, then cancel. Limespun comes with a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   },
 ];
 
@@ -249,90 +66,15 @@ export default function FreshaPage() {
         <HeroSection
           eyebrow="From Fresha"
           eyebrowAccent="amber"
-          headline="Keep your bookings. Leave the platform fee."
-          italicWord="leave"
-          subhead="Fresha takes 1.95% of every payment in addition to the subscription. On a $50K month, that's $975 you don't need to pay. Limespun doesn't take a cut. 5-day migration. Done."
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
+          headline="Keep every booking. Move to software built for tattoo."
+          italicWord="tattoo"
+          subhead="Fresha prices per bookable team member and charges a one-time fee on new clients who find you through its marketplace. Limespun is one flat monthly plan with no Limespun fee on bookings or deposits. We move your data for you: usually a week or two, included on every plan, with Fresha running alongside until you switch."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
           secondaryCTA={{
-            label: "Get started",
-            href: "https://app.limespun.com/signup",
+            label: "Contact us about switching",
+            href: "/contact",
           }}
         />
-
-        {/* Fee math */}
-        <section
-          style={{
-            background: GRADIENT.sectionCool,
-            paddingTop: 100,
-            paddingBottom: 100,
-          } as React.CSSProperties}
-        >
-          <div
-            style={{
-              maxWidth: 1120,
-              margin: "0 auto",
-              padding: "0 32px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            } as React.CSSProperties}
-          >
-            <SectionEyebrow label="The math" accent="rust" />
-            <motion.h2
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              style={{
-                fontFamily: FONT.sans,
-                fontSize: "clamp(26px, 3.5vw, 42px)",
-                fontWeight: 600,
-                color: BRAND.onyx,
-                letterSpacing: "-0.02em",
-                marginBottom: 48,
-                textAlign: "center",
-              } as React.CSSProperties}
-            >
-              What Fresha&apos;s 1.95% costs you.
-            </motion.h2>
-
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-40px" }}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 20,
-                width: "100%",
-              } as React.CSSProperties}
-              className="fresha-fee-grid"
-            >
-              {feeCards.map((card) => (
-                <FeeCard key={card.monthlyRevenue} {...card} />
-              ))}
-            </motion.div>
-
-            <motion.p
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-40px" }}
-              style={{
-                fontFamily: FONT.sans,
-                fontSize: 13,
-                color: BRAND.stoneLight,
-                textAlign: "center",
-                marginTop: 24,
-                fontStyle: "italic",
-              } as React.CSSProperties}
-            >
-              Plus the $19.99–$59.99 monthly Fresha subscription on top of the
-              transaction fee.
-            </motion.p>
-          </div>
-        </section>
 
         {/* Comparison */}
         <section
@@ -382,51 +124,14 @@ export default function FreshaPage() {
                   { key: "fresha", label: "Fresha" },
                   { key: "limespun", label: "Limespun", highlighted: true },
                 ]}
-                rows={[
-                  {
-                    feature: "Per-booking transaction fee",
-                    values: { fresha: "1.95%", limespun: "No" },
-                  },
-                  {
-                    feature: "Multi-session projects",
-                    values: { fresha: false, limespun: true },
-                  },
-                  {
-                    feature: "Deposit pool across visits",
-                    values: { fresha: false, limespun: true },
-                  },
-                  {
-                    feature: "Allergy intelligence",
-                    values: { fresha: false, limespun: true },
-                  },
-                  {
-                    feature: "Photo timeline",
-                    values: { fresha: "Basic", limespun: true },
-                  },
-                  {
-                    feature: "Commission auto-splits (artist payouts)",
-                    values: { fresha: "Team Pay add-on", limespun: "Studio and up" },
-                  },
-                  {
-                    feature: "EU REACH ink registry",
-                    values: { fresha: false, limespun: true },
-                  },
-                  {
-                    feature: "Tattoo-specific by design",
-                    values: { fresha: false, limespun: true },
-                  },
-                  {
-                    feature: "White-glove migration",
-                    values: { fresha: false, limespun: true },
-                  },
-                ]}
-                caption="Fresha pricing source: fresha.com pricing page, April 2026."
+                rows={competitorRows("fresha")}
+                caption={competitorCaption("fresha")}
               />
             </motion.div>
           </div>
         </section>
 
-        {/* 5-day plan */}
+        {/* The move */}
         <section
           style={{
             background: BRAND.bone,
@@ -444,7 +149,7 @@ export default function FreshaPage() {
               alignItems: "center",
             } as React.CSSProperties}
           >
-            <SectionEyebrow label="5-day plan" accent="rust" />
+            <SectionEyebrow label="The move" accent="rust" />
             <motion.h2
               variants={fadeUp}
               initial="hidden"
@@ -460,7 +165,7 @@ export default function FreshaPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              How Fresha studios migrate.
+              How the move works.
             </motion.h2>
             <motion.div
               variants={stagger}
@@ -562,27 +267,19 @@ export default function FreshaPage() {
 
         {/* CTA */}
         <CTASection
-          badge="Stop paying the take"
+          badge="Switching"
           headline="Leave Fresha cleanly."
           italicWord="cleanly"
-          subhead={`5-day move. Free. ${MONEY_BACK_DAYS}-day money-back guarantee if Limespun isn't right for you.`}
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
+          subhead={`Migration is included on every plan: usually a week or two, with Fresha running alongside until you switch. ${MONEY_BACK_DAYS}-day money-back guarantee if Limespun isn't right for you.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
           secondaryCTA={{
-            label: "Or get started",
-            href: "https://app.limespun.com/signup",
-            icon: "play",
+            label: "Contact us about switching",
+            href: "/contact",
           }}
         />
       </main>
       <Footer />
 
-      <style>{`
-        @media (max-width: 768px) {
-          .fresha-fee-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

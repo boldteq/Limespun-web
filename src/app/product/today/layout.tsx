@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Today — Morning launchpad for tattoo studios | Limespun",
   description:
-    "The morning launchpad. Live KPIs, allergy alerts on today's book, multi-chair schedule, project pulse. Triage your studio in 30 seconds, role-aware.",
+    "The morning launchpad. Live numbers, allergy alerts on today's book, the multi-chair schedule and project pulse, in a view that fits your role.",
   openGraph: {
     title: "Limespun Today",
-    description: "The morning launchpad. Triage in 30 seconds.",
+    description: "The morning launchpad for a tattoo studio.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/product/today" },

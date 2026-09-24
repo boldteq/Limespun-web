@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Portfolio — Flash sheets + healed gallery, auto-synced from projects | Limespun",
+  title: "Portfolio — Healed work and flash with deposits | Limespun",
   description:
-    "Studio portfolio that builds itself. Healed photos auto-flow from project sessions. Flash sheets with deposit-tied booking links. The gallery you wish you'd been building all along.",
+    "A studio portfolio you curate. Promote healed photos from projects in one tap, or upload work. Flash pieces with their own price and deposit, from Available to Sold.",
   openGraph: {
-    title: "Limespun Portfolio — The gallery that builds itself",
-    description: "Healed photos auto-flow from project sessions. Flash sheets with deposit-tied booking links.",
+    title: "Limespun Portfolio — Show the work, sell the flash",
+    description: "Promote healed photos from projects in one tap. Flash pieces with their own price and deposit.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/product/portfolio" },

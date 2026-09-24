@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { blogPosts } from "@/lib/data/blog-posts";
 import { BlogPostDetail } from "./blog-post-detail";
 import { JsonLd } from "@/components/seo/json-ld";
+import { SITE_URL } from "@/lib/brand";
 import type { Metadata } from "next";
 
 interface PageProps {
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       publishedTime: post.publishedAt,
       authors: [post.author.name],
     },
-    alternates: { canonical: `https://limespun.com/blog/${slug}` },
+    alternates: { canonical: `${SITE_URL}/blog/${slug}` },
   };
 }
 
@@ -49,16 +50,16 @@ export default async function Page({ params }: PageProps) {
           description: post.excerpt,
           datePublished: post.publishedAt,
           author: {
-            "@type": "Person",
-            name: post.author.name,
-            jobTitle: post.author.role,
+            "@type": "Organization",
+            name: "Limespun",
+            url: SITE_URL,
           },
           publisher: {
             "@type": "Organization",
             name: "Limespun",
             logo: {
               "@type": "ImageObject",
-              url: "https://limespun.com/icon.png",
+              url: `${SITE_URL}/icon.svg`,
             },
           },
         }}

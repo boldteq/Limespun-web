@@ -5,7 +5,7 @@ import { Display } from "./ui";
 const replaced = [
   "Google Calendar",
   "Square",
-  "Instagram DMs",
+  "Text threads",
   "Venmo",
   "Notes app",
   "Spreadsheets",
@@ -23,7 +23,7 @@ const pillars = [
     art: <DepositIllustration />,
     title: "Hold deposits",
     lead: "Deposits follow the piece, not the date",
-    body: "Take the deposit once, apply it across sessions, and enforce your late-cancel policy automatically.",
+    body: "Take the deposit once and apply it across sessions. If a date moves, the deposit stays on the project.",
   },
   {
     art: <ConsentIllustration />,

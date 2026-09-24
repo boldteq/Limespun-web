@@ -7,7 +7,7 @@ import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
 import { CTASection } from "@/components/shared/cta-section";
-import { BRAND, FONT, SHADOW, fadeUp, stagger } from "@/lib/brand";
+import { ACCOUNT, BRAND, FONT, SHADOW, fadeUp, stagger } from "@/lib/brand";
 import { changelogEntries, type ChangelogEntry } from "@/lib/data/changelog";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
@@ -312,10 +312,10 @@ export default function ChangelogPage() {
           eyebrowAccent="amber"
           headline="What's shipped, when, and why."
           italicWord="why"
-          subhead="Public ship log. Every release. Every fix. Every improvement. We update this on the same day we deploy. The opposite of a 'product hunt' marketing page."
+          subhead="What changed in Limespun, most recent first. Releases, improvements and fixes, in plain words."
           primaryCTA={{
-            label: "Get started",
-            href: "https://app.limespun.com/signup",
+            label: ACCOUNT.signUpLabel,
+            href: ACCOUNT.signUpHref,
           }}
           secondaryCTA={{ label: "See roadmap", href: "/roadmap" }}
         />
@@ -401,15 +401,14 @@ export default function ChangelogPage() {
           badge="Always shipping"
           headline="Try the latest."
           italicWord="latest"
-          subhead={`Updates auto-apply on every plan — you'll always be on the latest. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+          subhead={`Every plan gets every update, so you're always on the latest. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
           primaryCTA={{
-            label: "Get started",
-            href: "https://app.limespun.com/signup",
+            label: ACCOUNT.signUpLabel,
+            href: ACCOUNT.signUpHref,
           }}
           secondaryCTA={{
             label: "See roadmap",
             href: "/roadmap",
-            icon: "play",
           }}
         />
       </main>

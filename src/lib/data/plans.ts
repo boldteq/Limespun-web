@@ -58,7 +58,12 @@ export const PLANS: Plan[] = [
     lifetimeCents: 59900,
     recommended: true,
     listIntro: "Everything in Solo, plus",
-    lines: ["Every artist on one calendar", "Clash checks before anything double-books", "Commission and booth-rent splits"],
+    lines: [
+      "Every artist on one calendar",
+      "Clash checks before anything double-books",
+      "Commission and booth-rent splits",
+      "AI reply suggestions in Messages",
+    ],
   },
   {
     tier: "pro",
@@ -71,7 +76,7 @@ export const PLANS: Plan[] = [
     lines: [
       "Unlimited guest-artist seats",
       "Payroll and 1099s",
-      "AI replies, aftercare and consult summaries",
+      "AI reply drafts, aftercare and consult summaries",
       "Roles and permissions",
       "Remove Limespun branding",
       "Priority support",
@@ -85,7 +90,7 @@ export const PLANS: Plan[] = [
     annualCents: 315840,
     lifetimeCents: 179900,
     listIntro: "Everything in Pro, plus",
-    lines: ["Unlimited artists and locations", "A dedicated account manager", "API access with webhooks"],
+    lines: ["Unlimited artists and locations", "A dedicated account manager", "One flat price for every shop"],
   },
 ];
 
@@ -150,7 +155,11 @@ export const PLAN_MATRIX: MatrixGroup[] = [
   {
     label: "AI",
     rows: [
-      { label: "AI replies, aftercare and consult summaries", cells: fromPro() },
+      // Two different gates: `messaging_ai_replies` (suggestion chips in Messages) is the Studio
+      // rung; `ai_assist` (full reply drafts, aftercare, consult summaries) starts at Pro. The app's
+      // comparison-config has no row for the Studio key, so this one cites FEATURE_MIN_PLAN directly.
+      { label: "AI reply suggestions in Messages", cells: { solo: DASH, studio: CHECK, pro: CHECK, enterprise: CHECK } },
+      { label: "AI reply drafts, aftercare and consult summaries", cells: fromPro() },
       { label: "AI voice profiles and high-volume replies", cells: fromPro() },
     ],
   },
@@ -167,7 +176,6 @@ export const PLAN_MATRIX: MatrixGroup[] = [
   {
     label: "Platform",
     rows: [
-      { label: "API access", cells: { solo: DASH, studio: DASH, pro: "Basic", enterprise: "With webhooks" } },
       { label: "Reports across locations", cells: fromPro() },
       { label: "Dedicated account manager", cells: { solo: DASH, studio: DASH, pro: DASH, enterprise: CHECK } },
     ],

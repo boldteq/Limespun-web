@@ -117,14 +117,7 @@ export function ProductPillars({
           </motion.div>
 
           {/* Pillars grid */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 24,
-            } as React.CSSProperties}
-            className="td-pillars-grid"
-          >
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {pillars.map((pillar, i) => (
               <motion.div
                 key={i}

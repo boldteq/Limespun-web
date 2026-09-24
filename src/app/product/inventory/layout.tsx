@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Inventory — Ink registry, REACH compliance, low-stock alerts | Limespun",
+  title: "Inventory — Ink registry, REACH records, low-stock alerts | Limespun",
   description:
-    "Every ink, every needle, every batch. EU REACH 2022 compliance built in. Low-stock alerts. The cabinet, in software.",
+    "Every ink, every needle, every batch. Stock by item, movements, purchase orders and low-stock alerts, with REACH-registered inks marked. The cabinet, in software.",
   openGraph: {
-    title: "Limespun Inventory — REACH-compliant ink registry",
+    title: "Limespun Inventory — Ink stock with REACH records",
     description: "The cabinet, in software.",
     type: "website",
   },

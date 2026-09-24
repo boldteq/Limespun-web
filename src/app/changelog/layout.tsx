@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Changelog — What's new in Limespun",
   description:
-    "Public ship log. Every release, every fix, every improvement. Filterable by module. The opposite of a 'product hunt' marketing page.",
+    "What changed in Limespun, most recent first: releases, improvements and fixes to the studio software built only for tattoo, in plain words.",
   openGraph: {
     title: "Limespun Changelog",
-    description: "Public ship log.",
+    description: "What changed in Limespun, most recent first.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/changelog" },

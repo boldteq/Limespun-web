@@ -2,17 +2,17 @@ import type { Metadata } from "next";
 import React from "react";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
-import { BRAND } from "@/lib/brand";
+import { BRAND, CONTACT_EMAIL, SITE_URL, SOCIAL } from "@/lib/brand";
 import { AboutSections } from "./about-sections";
 import { JsonLd } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
   title: "About — Built for the work, not the spreadsheet | Limespun",
   description:
-    "Boldteq, a small team building global-first software for craft industries. Why we built Limespun, and the principles behind every line of code.",
+    "Boldteq is a small team building Limespun, studio software made only for tattoo. Why we built it, and the four principles behind it.",
   openGraph: {
     title: "About Limespun",
-    description: "Built for tattoo studios. By a team that actually walks into shops.",
+    description: "Studio software built only for tattoo, by a small independent team.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/about" },
@@ -33,15 +33,11 @@ export default function AboutPage() {
           "@type": "Organization",
           name: "Limespun",
           legalName: "Boldteq Holdings Ltd",
-          url: "https://limespun.com",
-          logo: "https://limespun.com/icon.png",
+          url: SITE_URL,
+          logo: `${SITE_URL}/icon.svg`,
           description:
-            "Boldteq builds global-first software for craft industries. Limespun is the studio operating system purpose-built for tattoo.",
+            "Limespun is studio software built only for tattoo: bookings, deposits, consent, multi-session projects and artist payouts in one client record. Made by Boldteq.",
           foundingDate: "2024",
-          foundingLocation: [
-            { "@type": "Place", name: "United Kingdom" },
-            { "@type": "Place", name: "Americas" },
-          ],
           founders: [
             {
               "@type": "Person",
@@ -49,14 +45,11 @@ export default function AboutPage() {
               jobTitle: "Founder & CEO",
             },
           ],
-          sameAs: [
-            "https://twitter.com/limespun",
-            "https://www.instagram.com/limespun",
-          ],
+          sameAs: [SOCIAL.x, SOCIAL.instagram],
           contactPoint: {
             "@type": "ContactPoint",
             contactType: "customer service",
-            email: "hello@boldteq.com",
+            email: CONTACT_EMAIL,
             availableLanguage: ["English"],
           },
         }}

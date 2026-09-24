@@ -47,7 +47,7 @@ export function NewsletterForm() {
     <form action={formAction} noValidate className="flex w-full max-w-[420px] flex-col justify-between gap-5">
       {intro}
       <div>
-        <div className="flex h-11 items-center rounded-full bg-canvas pr-1 pl-5 ring-1 ring-hair transition-shadow focus-within:ring-2 focus-within:ring-graphite/30">
+        <div className="flex h-11 items-center rounded-full bg-canvas pl-5 ring-1 ring-hair transition-shadow focus-within:ring-2 focus-within:ring-graphite/30">
           <input
             id="newsletter-email"
             name="email"
@@ -65,13 +65,16 @@ export function NewsletterForm() {
             type="submit"
             disabled={pending}
             aria-label="Subscribe to Studio notes"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ember-soft text-ember-deep transition-colors hover:bg-ember hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember disabled:opacity-60"
+            className="group flex h-11 w-11 shrink-0 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-ember disabled:opacity-60"
           >
-            {pending ? (
-              <Loader2 size={16} strokeWidth={2.4} className="animate-spin" aria-hidden="true" />
-            ) : (
-              <ArrowRight size={16} strokeWidth={2.4} aria-hidden="true" />
-            )}
+            {/* 44px tap target; the visible circle stays 36px so the pill keeps its shape */}
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ember-soft text-ember-deep transition-colors group-hover:bg-ember group-hover:text-white">
+              {pending ? (
+                <Loader2 size={16} strokeWidth={2.4} className="animate-spin" aria-hidden="true" />
+              ) : (
+                <ArrowRight size={16} strokeWidth={2.4} aria-hidden="true" />
+              )}
+            </span>
           </button>
         </div>
         {/* One line under the field; the error takes the same slot, so nothing shifts */}

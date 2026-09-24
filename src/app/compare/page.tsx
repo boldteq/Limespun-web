@@ -9,14 +9,14 @@ import { CompareMatrix } from "@/components/compare/compare-tables";
 import { JsonLd } from "@/components/seo/json-ld";
 import { CHECKED_ON, competitors, differentiators } from "@/lib/data/competitors";
 import { SITE_URL } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Compare tattoo studio software | Limespun",
+export const metadata: Metadata = pageMetadata({
+  title: "Compare tattoo studio software",
   description:
     "How Limespun compares with Square, Vagaro, Fresha, GlossGenius, TattooGenda, DaySmart and Mangomint for tattoo studios. Sourced from each vendor's own pages.",
-  alternates: { canonical: `${SITE_URL}/compare` },
-  openGraph: { title: "Compare tattoo studio software", description: "Limespun side by side with seven alternatives.", type: "website" },
-};
+  path: "/compare",
+});
 
 export default function ComparePage() {
   return (
@@ -96,7 +96,11 @@ export default function ComparePage() {
           </div>
         </section>
 
-        <ClosingCta title="See it with your own studio's data" body="Create an account, or book a walkthrough and we'll show you how your current setup would move over." />
+        <ClosingCta
+          title="Switch without starting over."
+          italicWord="over"
+          body="On every plan, our team moves your clients, bookings, deposits and signed forms from your current tool."
+        />
       </main>
       <Footer />
     </div>

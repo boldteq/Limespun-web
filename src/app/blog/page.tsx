@@ -7,7 +7,7 @@ import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
 import { CTASection } from "@/components/shared/cta-section";
-import { BRAND, FONT, SHADOW, fadeUp, stagger } from "@/lib/brand";
+import { ACCOUNT, BRAND, CTA, FONT, SHADOW, fadeUp, stagger } from "@/lib/brand";
 import {
   blogPosts,
   categoryLabels,
@@ -267,12 +267,12 @@ export default function BlogPage() {
           eyebrowAccent="rust"
           headline="Practical writing for studio owners."
           italicWord="Practical"
-          subhead="The 90-second morning triage. Deposit pool math. EU REACH compliance. Written by studio owners and the Limespun team — for the people who actually do the work."
+          subhead="The 90-second morning triage. Deposit pool math. EU REACH ink records. Written by the Limespun team, for the people who actually do the work."
           primaryCTA={{
-            label: "Get started",
-            href: "https://app.limespun.com/signup",
+            label: ACCOUNT.signUpLabel,
+            href: ACCOUNT.signUpHref,
           }}
-          secondaryCTA={{ label: "Talk to us", href: "/book-a-demo" }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
 
         {/* Posts section */}
@@ -350,18 +350,17 @@ export default function BlogPage() {
         </section>
 
         <CTASection
-          badge="Get the next one"
-          headline="Subscribe for the studio playbook."
-          italicWord="playbook"
-          subhead="One email per month. Studio operations, compliance updates, the maths nobody else writes. No spam, no upsells."
+          badge="Put it to work"
+          headline="Run the shop in one place."
+          italicWord="place"
+          subhead="Create your account in minutes. We move your data over for you. 30-day money-back guarantee."
           primaryCTA={{
-            label: "Get started",
-            href: "https://app.limespun.com/signup",
+            label: ACCOUNT.signUpLabel,
+            href: ACCOUNT.signUpHref,
           }}
           secondaryCTA={{
-            label: "Talk to us",
-            href: "/book-a-demo",
-            icon: "play",
+            label: CTA.secondaryLabel,
+            href: CTA.secondaryHref,
           }}
         />
       </main>

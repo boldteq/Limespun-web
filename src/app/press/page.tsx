@@ -3,7 +3,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Image as ImageIcon, FileText, Download, Mail } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { BRAND, CONTACT_EMAIL, FONT, HOME, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { Nav } from "@/components/layout/nav";
+import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { CTASection } from "@/components/shared/cta-section";
@@ -15,6 +17,9 @@ import {
   FOUNDING_OFFER_OPEN,
   FOUNDING_OFFER_SIZE,
 } from "@/lib/data/plans";
+
+/** Press questions go to the main inbox; the subject line marks them as press. */
+const pressMail = (subject: string): string => `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
 
 const [SOLO] = PLANS.filter((p) => p.tier === "solo");
 const [MULTI] = PLANS.filter((p) => p.tier === "enterprise");
@@ -31,7 +36,7 @@ const accentTokens: Record<AccentColor, { color: string; bg: string; border: str
 // ─── Factsheet rows ───────────────────────────────────────────────────────────
 const FACTSHEET_ROWS: { label: string; value: string }[] = [
   { label: "Product:", value: "Limespun — the studio operating system for tattoo" },
-  { label: "Company:", value: "Boldteq Holdings (registered United Kingdom)" },
+  { label: "Company:", value: "Boldteq Holdings" },
   { label: "Founded:", value: "2024" },
   {
     label: "Status:",
@@ -55,22 +60,22 @@ interface ColourCard {
 
 const COLOUR_CARDS: ColourCard[] = [
   {
-    name: "Rust / Artist",
-    description: "The maker. Italic emphasis. Primary CTA. Allergy alerts.",
-    hex: "#C8351F",
-    swatch: BRAND.rust,
+    name: "Ember",
+    description: "The one accent. The mark, highlights and the italic word in a headline.",
+    hex: HOME.ember,
+    swatch: HOME.ember,
   },
   {
-    name: "Amber / Ink",
-    description: "The medium. Warmth. Healing stage.",
-    hex: "#D89538",
-    swatch: BRAND.amber,
+    name: "Graphite",
+    description: "Text and the primary button.",
+    hex: HOME.graphite,
+    swatch: HOME.graphite,
   },
   {
-    name: "Sage / Skin",
-    description: "The canvas. Success. Healed stage.",
-    hex: "#5C8A55",
-    swatch: BRAND.sage,
+    name: "Canvas",
+    description: "The warm off-white behind every page.",
+    hex: HOME.canvas,
+    swatch: HOME.canvas,
   },
 ];
 
@@ -101,7 +106,7 @@ const DOWNLOAD_CARDS: DownloadCard[] = [
     title: "Product screenshots",
     description:
       "Today, Calendar, Projects, Inventory, Forms. Sent on request so they match the current build and your layout.",
-    href: "mailto:press@boldteq.com?subject=Limespun%20screenshot%20request",
+    href: pressMail("Press: screenshot request"),
     isFile: false,
   },
   {
@@ -110,7 +115,7 @@ const DOWNLOAD_CARDS: DownloadCard[] = [
     title: "Full brand kit",
     description:
       "Logo variants (PNG, mono), colour guide, typography spec and founder bio. Emailed so you never work from an outdated file.",
-    href: "mailto:press@boldteq.com?subject=Limespun%20brand%20kit%20request",
+    href: pressMail("Press: brand kit request"),
     isFile: false,
   },
 ];
@@ -199,447 +204,450 @@ function DownloadCardItem({ card }: { card: DownloadCard }) {
 export default function PressPage() {
   return (
     <>
-      <HeroSection
-        variant="centered"
-        eyebrow="Press kit"
-        eyebrowAccent="rust"
-        headline="Everything you need to write about us."
-        italicWord="us"
-        subhead="Brand assets, factsheet, founder bio and key dates. Screenshots and the full kit on request. Press inquiries go to press@boldteq.com — we answer within one business day."
-        primaryCTA={{ label: "Email press@boldteq.com", href: "mailto:press@boldteq.com" }}
-        secondaryCTA={{ label: "Get brand assets", href: "#download" }}
-      />
+      <Nav />
+      <main>
+        <HeroSection
+          variant="centered"
+          eyebrow="Press kit"
+          eyebrowAccent="rust"
+          headline="Everything you need to write about us."
+          italicWord="us"
+          subhead={`Brand assets, the facts and the founder's contact. Screenshots and the full kit on request. Press questions go to ${CONTACT_EMAIL}, and we reply within one business day.`}
+          primaryCTA={{ label: `Email ${CONTACT_EMAIL}`, href: pressMail("Press") }}
+          secondaryCTA={{ label: "Get brand assets", href: "#download" }}
+        />
 
-      {/* ─── Brand at a glance ────────────────────────────────────────────────── */}
-      <section style={{ background: BRAND.bone, paddingTop: 100, paddingBottom: 100 }}>
-        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-          <SectionEyebrow label="At a glance" accent="amber" />
-          <h2
-            style={{
-              fontFamily: FONT.serif,
-              fontSize: "clamp(28px, 3.5vw, 44px)",
-              fontWeight: 400,
-              color: BRAND.onyx,
-              letterSpacing: "-0.02em",
-              lineHeight: 1.1,
-              marginBottom: 40,
-              marginTop: 0,
-            }}
-          >
-            The short version.
-          </h2>
+        {/* ─── Brand at a glance ────────────────────────────────────────────────── */}
+        <section style={{ background: BRAND.bone, paddingTop: 100, paddingBottom: 100 }}>
+          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
+            <SectionEyebrow label="At a glance" accent="amber" />
+            <h2
+              style={{
+                fontFamily: FONT.serif,
+                fontSize: "clamp(28px, 3.5vw, 44px)",
+                fontWeight: 400,
+                color: BRAND.onyx,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+                marginBottom: 40,
+                marginTop: 0,
+              }}
+            >
+              The short version.
+            </h2>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            style={{
-              background: BRAND.white,
-              maxWidth: 720,
-              borderRadius: 18,
-              padding: 32,
-              boxShadow: SHADOW.soft,
-            }}
-          >
-            {FACTSHEET_ROWS.map((row, i) => (
-              <div
-                key={row.label}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                background: BRAND.white,
+                maxWidth: 720,
+                borderRadius: 18,
+                padding: 32,
+                boxShadow: SHADOW.soft,
+              }}
+            >
+              {FACTSHEET_ROWS.map((row, i) => (
+                <div
+                  key={row.label}
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: 16,
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    borderBottom:
+                      i < FACTSHEET_ROWS.length - 1
+                        ? `1px dashed ${BRAND.border}`
+                        : "none",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: FONT.mono,
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: BRAND.stoneFaint,
+                      minWidth: 90,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {row.label}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: FONT.sans,
+                      fontSize: 14,
+                      color: BRAND.stoneDark,
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {row.value}
+                  </span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ─── Brand colours ────────────────────────────────────────────────────── */}
+        <section style={{ background: GRADIENT.sectionWarm, paddingTop: 100, paddingBottom: 100 }}>
+          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
+            <SectionEyebrow label="The palette" accent="rust" />
+            <h2
+              style={{
+                fontFamily: FONT.serif,
+                fontSize: "clamp(28px, 3.5vw, 44px)",
+                fontWeight: 400,
+                color: BRAND.onyx,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+                marginBottom: 40,
+                marginTop: 0,
+              }}
+            >
+              Three colours, one accent.
+            </h2>
+
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              className="press-colors"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: 24,
+                marginBottom: 32,
+              }}
+            >
+              {COLOUR_CARDS.map((c) => (
+                <motion.div
+                  key={c.hex}
+                  variants={fadeUp}
+                  style={{
+                    background: BRAND.white,
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    boxShadow: SHADOW.soft,
+                  }}
+                >
+                  <div style={{ height: 140, background: c.swatch, borderBottom: `1px solid ${HOME.hair}` }} />
+                  <div style={{ padding: 20 }}>
+                    <div
+                      style={{
+                        fontFamily: FONT.sans,
+                        fontSize: 16,
+                        fontWeight: 700,
+                        color: BRAND.onyx,
+                        marginBottom: 6,
+                      }}
+                    >
+                      {c.name}
+                    </div>
+                    <p
+                      style={{
+                        fontFamily: FONT.sans,
+                        fontSize: 13,
+                        color: BRAND.stoneDark,
+                        lineHeight: 1.55,
+                        margin: "0 0 10px",
+                      }}
+                    >
+                      {c.description}
+                    </p>
+                    <div
+                      style={{
+                        fontFamily: FONT.mono,
+                        fontSize: 13,
+                        fontWeight: 600,
+                        color: BRAND.stoneFaint,
+                      }}
+                    >
+                      {c.hex}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Three circles motif card */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              style={{
+                background: BRAND.white,
+                maxWidth: 720,
+                margin: "0 auto",
+                borderRadius: 16,
+                padding: 28,
+                boxShadow: SHADOW.soft,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+                gap: 16,
+              }}
+            >
+              <LimespunMark size={100} />
+              <p
                 style={{
-                  display: "flex",
-                  alignItems: "baseline",
-                  gap: 16,
-                  paddingTop: 10,
-                  paddingBottom: 10,
-                  borderBottom:
-                    i < FACTSHEET_ROWS.length - 1
-                      ? `1px dashed ${BRAND.border}`
-                      : "none",
+                  fontFamily: FONT.sans,
+                  fontSize: 14,
+                  color: BRAND.stoneDark,
+                  lineHeight: 1.6,
+                  maxWidth: 440,
+                  margin: 0,
                 }}
               >
-                <span
-                  style={{
-                    fontFamily: FONT.mono,
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: BRAND.stoneFaint,
-                    minWidth: 90,
-                    flexShrink: 0,
-                  }}
-                >
-                  {row.label}
-                </span>
-                <span
-                  style={{
-                    fontFamily: FONT.sans,
-                    fontSize: 14,
-                    color: BRAND.stoneDark,
-                    lineHeight: 1.5,
-                  }}
-                >
-                  {row.value}
-                </span>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+                The Limespun mark. Download the SVG below, or email us for PNG and
+                mono versions.
+              </p>
+            </motion.div>
+          </div>
+        </section>
 
-      {/* ─── Brand colours ────────────────────────────────────────────────────── */}
-      <section style={{ background: GRADIENT.sectionWarm, paddingTop: 100, paddingBottom: 100 }}>
-        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-          <SectionEyebrow label="The palette" accent="rust" />
-          <h2
-            style={{
-              fontFamily: FONT.serif,
-              fontSize: "clamp(28px, 3.5vw, 44px)",
-              fontWeight: 400,
-              color: BRAND.onyx,
-              letterSpacing: "-0.02em",
-              lineHeight: 1.1,
-              marginBottom: 40,
-              marginTop: 0,
-            }}
-          >
-            Three colours, one motif.
-          </h2>
+        {/* ─── Download section ─────────────────────────────────────────────────── */}
+        <section
+          id="download"
+          style={{ background: BRAND.bone, paddingTop: 100, paddingBottom: 100 }}
+        >
+          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
+            <SectionEyebrow label="Download" accent="sage" />
+            <h2
+              style={{
+                fontFamily: FONT.serif,
+                fontSize: "clamp(28px, 3.5vw, 44px)",
+                fontWeight: 400,
+                color: BRAND.onyx,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+                marginBottom: 40,
+                marginTop: 0,
+              }}
+            >
+              Brand assets.
+            </h2>
 
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="press-colors"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 24,
-              marginBottom: 32,
-            }}
-          >
-            {COLOUR_CARDS.map((c) => (
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              className="press-downloads"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: 24,
+              }}
+            >
+              {DOWNLOAD_CARDS.map((card) => (
+                <DownloadCardItem key={card.title} card={card} />
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ─── Press contact + founder ──────────────────────────────────────────── */}
+        <section style={{ background: GRADIENT.sectionCool, paddingTop: 100, paddingBottom: 100 }}>
+          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              className="press-contact-grid"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 32,
+              }}
+            >
+              {/* Press contact */}
               <motion.div
-                key={c.hex}
                 variants={fadeUp}
                 style={{
                   background: BRAND.white,
                   borderRadius: 16,
-                  overflow: "hidden",
+                  padding: 32,
                   boxShadow: SHADOW.soft,
                 }}
               >
-                <div style={{ height: 140, background: c.swatch }} />
-                <div style={{ padding: 20 }}>
-                  <div
-                    style={{
-                      fontFamily: FONT.sans,
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: BRAND.onyx,
-                      marginBottom: 6,
-                    }}
-                  >
-                    {c.name}
-                  </div>
-                  <p
-                    style={{
-                      fontFamily: FONT.sans,
-                      fontSize: 13,
-                      color: BRAND.stoneDark,
-                      lineHeight: 1.55,
-                      margin: "0 0 10px",
-                    }}
-                  >
-                    {c.description}
-                  </p>
-                  <div
-                    style={{
-                      fontFamily: FONT.mono,
-                      fontSize: 13,
-                      fontWeight: 600,
-                      color: BRAND.stoneFaint,
-                    }}
-                  >
-                    {c.hex}
-                  </div>
+                <div
+                  style={{
+                    fontFamily: FONT.sans,
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: BRAND.stoneFaint,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    marginBottom: 16,
+                  }}
+                >
+                  Press contact
                 </div>
+                <div
+                  style={{
+                    fontFamily: FONT.mono,
+                    fontSize: 14,
+                    color: BRAND.onyx,
+                    fontWeight: 600,
+                    marginBottom: 12,
+                  }}
+                >
+                  {CONTACT_EMAIL}
+                </div>
+                <p
+                  style={{
+                    fontFamily: FONT.sans,
+                    fontSize: 14,
+                    color: BRAND.stoneDark,
+                    lineHeight: 1.65,
+                    margin: 0,
+                  }}
+                >
+                  Press and media questions. Put &ldquo;Press&rdquo; in the subject line and
+                  we reply within one business day. Embargoes respected.
+                </p>
               </motion.div>
-            ))}
-          </motion.div>
 
-          {/* Three circles motif card */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            style={{
-              background: BRAND.white,
-              maxWidth: 720,
-              margin: "0 auto",
-              borderRadius: 16,
-              padding: 28,
-              boxShadow: SHADOW.soft,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              gap: 16,
-            }}
-          >
-            <LimespunMark size={100} />
-            <p
-              style={{
-                fontFamily: FONT.sans,
-                fontSize: 14,
-                color: BRAND.stoneDark,
-                lineHeight: 1.6,
-                maxWidth: 440,
-                margin: 0,
-              }}
-            >
-              The Limespun mark. Download the SVG below, or email us for PNG and
-              mono versions.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ─── Download section ─────────────────────────────────────────────────── */}
-      <section
-        id="download"
-        style={{ background: BRAND.bone, paddingTop: 100, paddingBottom: 100 }}
-      >
-        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-          <SectionEyebrow label="Download" accent="sage" />
-          <h2
-            style={{
-              fontFamily: FONT.serif,
-              fontSize: "clamp(28px, 3.5vw, 44px)",
-              fontWeight: 400,
-              color: BRAND.onyx,
-              letterSpacing: "-0.02em",
-              lineHeight: 1.1,
-              marginBottom: 40,
-              marginTop: 0,
-            }}
-          >
-            Brand assets.
-          </h2>
-
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="press-downloads"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 24,
-            }}
-          >
-            {DOWNLOAD_CARDS.map((card) => (
-              <DownloadCardItem key={card.title} card={card} />
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ─── Press contact + founder ──────────────────────────────────────────── */}
-      <section style={{ background: GRADIENT.sectionCool, paddingTop: 100, paddingBottom: 100 }}>
-        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="press-contact-grid"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 32,
-            }}
-          >
-            {/* Press contact */}
-            <motion.div
-              variants={fadeUp}
-              style={{
-                background: BRAND.white,
-                borderRadius: 16,
-                padding: 32,
-                boxShadow: SHADOW.soft,
-              }}
-            >
-              <div
+              {/* Founder */}
+              <motion.div
+                variants={fadeUp}
                 style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: BRAND.stoneFaint,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                  marginBottom: 16,
+                  background: BRAND.white,
+                  borderRadius: 16,
+                  padding: 32,
+                  boxShadow: SHADOW.soft,
                 }}
               >
-                Press contact
-              </div>
-              <div
-                style={{
-                  fontFamily: FONT.mono,
-                  fontSize: 14,
-                  color: BRAND.onyx,
-                  fontWeight: 600,
-                  marginBottom: 12,
-                }}
-              >
-                press@boldteq.com
-              </div>
-              <p
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 14,
-                  color: BRAND.stoneDark,
-                  lineHeight: 1.65,
-                  margin: 0,
-                }}
-              >
-                All press / media inquiries. We answer within one business day.
-                Embargoed announcements honoured.
-              </p>
+                <div
+                  style={{
+                    fontFamily: FONT.sans,
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: BRAND.stoneFaint,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    marginBottom: 16,
+                  }}
+                >
+                  Founder available for interview
+                </div>
+                <div
+                  style={{
+                    fontFamily: FONT.sans,
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: BRAND.onyx,
+                    marginBottom: 12,
+                  }}
+                >
+                  Yash Baldha · Founder · Boldteq
+                </div>
+                <p
+                  style={{
+                    fontFamily: FONT.sans,
+                    fontSize: 14,
+                    color: BRAND.stoneDark,
+                    lineHeight: 1.65,
+                    margin: 0,
+                  }}
+                >
+                  Available for podcast, video, written interview. Speaks English.
+                  Topics: building software for one craft, the EU REACH ink rules for
+                  tattoo studios, and why salon software doesn&rsquo;t fit tattoo.
+                </p>
+              </motion.div>
             </motion.div>
+          </div>
+        </section>
 
-            {/* Founder */}
+        {/* ─── Coverage ───────────────────────────────────────────────────────── */}
+        <section style={{ background: BRAND.bone, paddingTop: 80, paddingBottom: 100 }}>
+          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
+            <SectionEyebrow label="Coverage" accent="amber" />
+            <h2
+              style={{
+                fontFamily: FONT.serif,
+                fontSize: "clamp(28px, 3.5vw, 44px)",
+                fontWeight: 400,
+                color: BRAND.onyx,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+                marginBottom: 24,
+                marginTop: 0,
+              }}
+            >
+              No headlines yet. That&rsquo;s on purpose.
+            </h2>
+
             <motion.div
-              variants={fadeUp}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5 }}
               style={{
                 background: BRAND.white,
+                maxWidth: 720,
                 borderRadius: 16,
-                padding: 32,
+                padding: 28,
                 boxShadow: SHADOW.soft,
               }}
             >
-              <div
-                style={{
-                  fontFamily: FONT.sans,
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: BRAND.stoneFaint,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                  marginBottom: 16,
-                }}
-              >
-                Founder available for interview
-              </div>
-              <div
+              <p
                 style={{
                   fontFamily: FONT.sans,
                   fontSize: 15,
-                  fontWeight: 700,
-                  color: BRAND.onyx,
-                  marginBottom: 12,
+                  color: BRAND.stoneDark,
+                  lineHeight: 1.65,
+                  margin: "0 0 14px",
                 }}
               >
-                Yash Baldha · Founder · Boldteq
-              </div>
+                Limespun is new. We&rsquo;re spending our energy on the product and the studios
+                using it rather than on a press push, so there&rsquo;s no coverage to point you
+                to yet.
+              </p>
               <p
                 style={{
                   fontFamily: FONT.sans,
-                  fontSize: 14,
+                  fontSize: 15,
                   color: BRAND.stoneDark,
                   lineHeight: 1.65,
                   margin: 0,
                 }}
               >
-                Available for podcast, video, written interview. Speaks English.
-                Topics: building software for craft industries, the post-Series-B
-                small team thesis, EU REACH 2022 compliance for tattoo, the
-                salon-vs-tattoo software divide.
+                If you&rsquo;re writing about tattoo, studio software or independent craft
+                businesses, we&rsquo;d still love to talk, and the founder is happy to answer
+                questions. Email{" "}
+                <a
+                  href={pressMail("Press")}
+                  style={{ color: BRAND.onyx, textDecoration: "underline" }}
+                >
+                  {CONTACT_EMAIL}
+                </a>
+                .
               </p>
             </motion.div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* ─── Coverage ───────────────────────────────────────────────────────── */}
-      <section style={{ background: BRAND.bone, paddingTop: 80, paddingBottom: 100 }}>
-        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-          <SectionEyebrow label="Coverage" accent="amber" />
-          <h2
-            style={{
-              fontFamily: FONT.serif,
-              fontSize: "clamp(28px, 3.5vw, 44px)",
-              fontWeight: 400,
-              color: BRAND.onyx,
-              letterSpacing: "-0.02em",
-              lineHeight: 1.1,
-              marginBottom: 24,
-              marginTop: 0,
-            }}
-          >
-            No headlines yet. That&rsquo;s on purpose.
-          </h2>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.5 }}
-            style={{
-              background: BRAND.white,
-              maxWidth: 720,
-              borderRadius: 16,
-              padding: 28,
-              boxShadow: SHADOW.soft,
-            }}
-          >
-            <p
-              style={{
-                fontFamily: FONT.sans,
-                fontSize: 15,
-                color: BRAND.stoneDark,
-                lineHeight: 1.65,
-                margin: "0 0 14px",
-              }}
-            >
-              Limespun is new. We&rsquo;re spending our energy on the product and the studios
-              using it rather than on a press push, so there&rsquo;s no coverage to point you
-              to yet.
-            </p>
-            <p
-              style={{
-                fontFamily: FONT.sans,
-                fontSize: 15,
-                color: BRAND.stoneDark,
-                lineHeight: 1.65,
-                margin: 0,
-              }}
-            >
-              If you&rsquo;re writing about tattoo, studio software or independent craft
-              businesses, we&rsquo;d still love to talk &mdash; a full product walkthrough and time with
-              the founder are both on the table. Email{" "}
-              <a
-                href="mailto:press@boldteq.com"
-                style={{ color: BRAND.onyx, textDecoration: "underline" }}
-              >
-                press@boldteq.com
-              </a>
-              .
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ─── CTA ──────────────────────────────────────────────────────────────── */}
-      <CTASection
-        badge="On the record"
-        headline="Get in touch."
-        italicWord="touch"
-        subhead="press@boldteq.com — embargoes honoured, founder available for interview, brand assets at /press#download."
-        primaryCTA={{ label: "Email press@boldteq.com", href: "mailto:press@boldteq.com" }}
-        secondaryCTA={{ label: "About Limespun", href: "/about", icon: "play" }}
-      />
+        {/* ─── CTA ──────────────────────────────────────────────────────────────── */}
+        <CTASection
+          badge="On the record"
+          headline="Get in touch."
+          italicWord="touch"
+          subhead="Founder available for interview. Brand assets are above; screenshots and the full kit come by email."
+          primaryCTA={{ label: `Email ${CONTACT_EMAIL}`, href: pressMail("Press") }}
+          secondaryCTA={{ label: "About Limespun", href: "/about" }}
+        />
+      </main>
+      <Footer />
 
       <style>{`
         @media (max-width: 1024px) {

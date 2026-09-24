@@ -87,12 +87,12 @@ export const STATUS_PAGE_URL = process.env.NEXT_PUBLIC_STATUS_URL ?? "";
 /** Public contact address used across the site. */
 export const CONTACT_EMAIL = "hello@boldteq.com";
 
-/** One funnel: create an account (primary) or book a walkthrough (secondary). */
+/** One funnel: create an account (primary) or check the plans (secondary). No call booking. */
 export const CTA = {
-  primaryLabel: 'Create account',
-  primaryHref:  ACCOUNT.signUpHref,
-  demoLabel:    'Book a demo',
-  demoHref:     '/book-a-demo',
+  primaryLabel:   'Create account',
+  primaryHref:    ACCOUNT.signUpHref,
+  secondaryLabel: 'See pricing',
+  secondaryHref:  '/pricing',
 } as const;
 
 export const FONT = {

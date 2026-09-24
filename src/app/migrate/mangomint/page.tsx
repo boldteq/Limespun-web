@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { LayoutGrid, AlertCircle, DollarSign } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { ACCOUNT, BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -12,7 +12,8 @@ import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { MONEY_BACK_DAYS } from "@/lib/data/plans";
+import { MONEY_BACK_DAYS, ONBOARDING_SUPPORT_DAYS } from "@/lib/data/plans";
+import { competitorCaption, competitorRows } from "@/components/shared/competitor-rows";
 
 // ── MoatCardBright (local — lifted from work.tsx) ────────────────────────────
 
@@ -171,14 +172,13 @@ function MoatCardBright({ accent, icon: Icon, title, body, detail }: MoatCardBri
 // ── TimelineStep ─────────────────────────────────────────────────────────────
 
 interface TimelineStepProps {
-  day: string;
   label: string;
   desc: string;
   index: number;
   isLast: boolean;
 }
 
-function TimelineStep({ day, label, desc, index, isLast }: TimelineStepProps) {
+function TimelineStep({ label, desc, index, isLast }: TimelineStepProps) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -12 }}
@@ -237,20 +237,6 @@ function TimelineStep({ day, label, desc, index, isLast }: TimelineStepProps) {
       <div style={{ paddingBottom: isLast ? 0 : 28, paddingTop: 4 } as React.CSSProperties}>
         <div
           style={{
-            display: "inline-block",
-            fontFamily: FONT.mono,
-            fontSize: 10,
-            fontWeight: 700,
-            color: BRAND.rust,
-            letterSpacing: "0.07em",
-            textTransform: "uppercase",
-            marginBottom: 4,
-          } as React.CSSProperties}
-        >
-          {day}
-        </div>
-        <div
-          style={{
             fontFamily: FONT.sans,
             fontSize: 16,
             fontWeight: 600,
@@ -280,29 +266,24 @@ function TimelineStep({ day, label, desc, index, isLast }: TimelineStepProps) {
 
 const timelineSteps = [
   {
-    day: "Day 1",
-    label: "Discovery + Mangomint API access",
-    desc: "We audit your account: client count, booking history, deposit balances, custom fields, team structure. You grant read-only API access.",
+    label: "Tell us what you have",
+    desc: "We look at what you're moving: client count, booking history, deposits you're holding, custom fields, your team.",
   },
   {
-    day: "Day 2–3",
-    label: "Export + clean",
-    desc: "Full data export. We de-duplicate clients, normalise phone formats, resolve booking conflicts. Nothing moves dirty.",
+    label: "Export and clean",
+    desc: "We work from what Mangomint lets you export. We remove duplicate clients, tidy phone formats and flag booking clashes before anything moves.",
   },
   {
-    day: "Day 4",
-    label: "Schema mapping",
-    desc: "Salon concepts re-mapped to tattoo schema: tip jar → deposit pool, package → project, hair-colour note → ink allergy flag.",
+    label: "Move it across",
+    desc: "Clients, upcoming bookings, deposits held and signed forms come across, each on the right client. If something won't export cleanly, we tell you first.",
   },
   {
-    day: "Day 5",
-    label: "Preview run + sign-off",
-    desc: "Your data in Limespun, nothing live yet. You review three clients end-to-end, confirm everything looks right. We fix anything on the spot.",
+    label: "Preview and sign-off",
+    desc: "Your data in Limespun, nothing live yet. You check a few clients end to end and tell us what looks wrong. We fix it before you switch.",
   },
   {
-    day: "Day 6",
-    label: "Cutover + cancel Mangomint",
-    desc: "Limespun goes live. Stripe Connect re-attached. We stay on call for the first business day. When you're settled, cancel Mangomint.",
+    label: "Switch, then cancel Mangomint",
+    desc: "Limespun goes live and Mangomint runs alongside until your last booking there clears. When you're settled, cancel it. Usually a week or two from start to finish.",
   },
 ];
 
@@ -311,33 +292,33 @@ const whatWeCarryCards: MoatCardBrightProps[] = [
     accent: "rust",
     icon: LayoutGrid,
     title: "Every client",
-    body: "Names, contacts, notes, custom fields. Mangomint custom fields become Limespun Notes or get promoted to first-class fields.",
+    body: "Names, contact details, notes and custom fields. Custom fields come over as notes on the client record.",
     detail: [
-      ["Custom fields", "Mapped or promoted"],
+      ["Custom fields", "As notes"],
       ["Contacts", "De-duplicated"],
-      ["Notes history", "Carried verbatim"],
+      ["Notes history", "Carried as written"],
     ],
   },
   {
     accent: "amber",
     icon: AlertCircle,
     title: "Every booking",
-    body: "Future appointments, recurring bookings, blocked time. The Mangomint calendar = the Limespun calendar at cutover.",
+    body: "Upcoming appointments come across on the right artist's calendar, so your book matches on the day you switch.",
     detail: [
-      ["Future appts", "All carried"],
-      ["Blocked time", "Preserved"],
-      ["Recurring", "Re-scheduled"],
+      ["Upcoming bookings", "Carried"],
+      ["Signed forms", "Filed on the client"],
+      ["Mangomint", "Runs alongside"],
     ],
   },
   {
     accent: "sage",
     icon: DollarSign,
-    title: "Every transaction",
-    body: "Outstanding deposits, completed payments, refunds. Stripe Connect re-attached. Money state preserved.",
+    title: "Every deposit held",
+    body: "Deposits you're holding come across on the client, and onto the project when the piece runs over several sessions.",
     detail: [
-      ["Deposits", "Re-pooled to projects"],
-      ["Stripe Connect", "Re-attached"],
-      ["Refund history", "Carried"],
+      ["Deposits held", "Carried"],
+      ["Multi-session", "Pooled on the project"],
+      ["Card payments", "Set up in Limespun"],
     ],
   },
 ];
@@ -351,11 +332,11 @@ export default function MangomintMigrationPage() {
         <HeroSection
           eyebrow="From Mangomint"
           eyebrowAccent="amber"
-          headline="Salon software is built for haircuts. Tattoo deserves better."
-          italicWord="tattoo"
-          subhead="Mangomint is the best salon SaaS. We respect them. But a sleeve isn't a haircut. A deposit pool isn't a tip jar. An allergy isn't a hair-colour preference. 6-day migration. White-glove."
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
-          secondaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
+          headline="A sleeve is one project, not a string of visits."
+          italicWord="project"
+          subhead="Mangomint is strong salon and spa software. Limespun is built only for tattoo: one project per piece, one deposit pool across its sessions, and EU REACH ink tracking on every plan. We move your data for you: usually a week or two, included on every plan, with Mangomint running alongside until you switch."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: "Contact us about switching", href: "/contact" }}
         />
 
         {/* ── Architectural difference ──────────────────────────────────── */}
@@ -398,7 +379,7 @@ export default function MangomintMigrationPage() {
             >
               <SectionEyebrow label="Why architecture matters" accent="rust" />
               <SectionHeading size="sm">
-                Tattoo-native, from the first commit.
+                Built only for tattoo.
               </SectionHeading>
             </motion.div>
 
@@ -413,34 +394,34 @@ export default function MangomintMigrationPage() {
               <MoatCardBright
                 accent="rust"
                 icon={LayoutGrid}
-                title="Multi-session projects, native"
-                body="Mangomint treats every booking as a transaction. Limespun groups them: a sleeve is one project, four sessions, one deposit pool. The whole work, in one place."
+                title="One project per piece"
+                body="Mangomint supports multi-session bookings; tracking a piece as one project isn't described. In Limespun a sleeve is one project: every session, photo and note, with one deposit pool."
                 detail={[
-                  ["Mangomint", "Per-booking"],
-                  ["Limespun", "Per-project"],
-                  ["Built for", "Tattoo workflow"],
+                  ["Mangomint", "Multi-session bookings"],
+                  ["Limespun", "One project"],
+                  ["Built for", "Tattoo"],
                 ]}
               />
               <MoatCardBright
                 accent="amber"
                 icon={AlertCircle}
-                title="Allergy intelligence, surfaces"
-                body="Mangomint stores notes. Limespun surfaces the red ink allergy on Today, on the schedule card, in the artist's brief — three places, one source."
+                title="Allergy flags on every booking"
+                body="Mangomint stores health details through forms and has client alerts. In Limespun a red ink allergy noted once shows on every booking and on Today, before the client sits down."
                 detail={[
-                  ["Mangomint", "Notes field"],
-                  ["Limespun", "4-place surface"],
-                  ["Risk", "Managed"],
+                  ["Mangomint", "Forms and alerts"],
+                  ["Limespun", "On every booking"],
+                  ["Noted", "Once"],
                 ]}
               />
               <MoatCardBright
                 accent="sage"
                 icon={DollarSign}
-                title="Deposit pool accounting"
-                body="Mangomint deposits attach to bookings. Reschedule and the deposit floats. Limespun pools deposits to projects — they travel with the client, not the slot."
+                title="One deposit across sessions"
+                body="Mangomint publishes card-on-file collection; deposits across sessions aren't described. Limespun holds the deposit on the project and applies it session by session."
                 detail={[
-                  ["Mangomint", "Per-booking"],
-                  ["Limespun", "Per-project pool"],
-                  ["Refund logic", "Re-balances"],
+                  ["Mangomint", "Not published"],
+                  ["Limespun", "Deposit pool"],
+                  ["Refundable", "Shown on the project"],
                 ]}
               />
             </div>
@@ -473,20 +454,8 @@ export default function MangomintMigrationPage() {
                   { key: "mangomint", label: "Mangomint" },
                   { key: "limespun", label: "Limespun", highlighted: true },
                 ]}
-                rows={[
-                  { feature: "Multi-session projects (sleeves)", values: { mangomint: false, limespun: true } },
-                  { feature: "Deposit pool across visits", values: { mangomint: false, limespun: true } },
-                  { feature: "Allergy intelligence (4-place surface)", values: { mangomint: "Notes only", limespun: true } },
-                  { feature: "Photo timeline (REF → HEALED)", values: { mangomint: "Basic", limespun: true } },
-                  { feature: "EU REACH ink registry", values: { mangomint: false, limespun: true } },
-                  { feature: "AI design assistant", values: { mangomint: false, limespun: "Pro and up" } },
-                  { feature: "Commission auto-splits", values: { mangomint: "Team Pay add-on", limespun: "Studio and up" } },
-                  { feature: "Guest artist residency band", values: { mangomint: false, limespun: "Pro and up" } },
-                  { feature: "Tattoo-specific by design", values: { mangomint: false, limespun: true } },
-                  { feature: "Per-booking transaction fee", values: { mangomint: "No", limespun: "No" } },
-                  { feature: "White-glove migration", values: { mangomint: false, limespun: true } },
-                ]}
-                caption="Mangomint feature set: mangomint.com docs, April 2026. Limespun: shipped product."
+                rows={competitorRows("mangomint")}
+                caption={competitorCaption("mangomint")}
               />
             </motion.div>
           </div>
@@ -549,7 +518,7 @@ export default function MangomintMigrationPage() {
           </div>
         </section>
 
-        {/* ── 6-day plan ────────────────────────────────────────────────── */}
+        {/* ── The move ──────────────────────────────────────────────────── */}
         <section
           style={{
             background: GRADIENT.sectionWarm,
@@ -575,8 +544,8 @@ export default function MangomintMigrationPage() {
               transition={{ duration: 0.6 }}
               style={{ marginBottom: 56, maxWidth: 760 } as React.CSSProperties}
             >
-              <SectionEyebrow label="6-day plan" accent="rust" />
-              <SectionHeading size="sm">How Mangomint studios migrate.</SectionHeading>
+              <SectionEyebrow label="The move" accent="rust" />
+              <SectionHeading size="sm">How the move works.</SectionHeading>
             </motion.div>
 
             <div
@@ -605,7 +574,6 @@ export default function MangomintMigrationPage() {
               {timelineSteps.map((step, i) => (
                 <TimelineStep
                   key={i}
-                  day={step.day}
                   label={step.label}
                   desc={step.desc}
                   index={i}
@@ -720,23 +688,23 @@ export default function MangomintMigrationPage() {
                 items={[
                   {
                     q: "Mangomint's customer support is great. Does Limespun match?",
-                    a: "Different model. Mangomint has a big support org for a wide audience. We have engineers + a small team for tattoo studios specifically. Email response under 24h on every plan, priority support on Pro and Multi-Location.",
+                    a: "Different model. Mangomint serves a wide salon and spa audience. We're a small team building only for tattoo studios. Email support on every plan, priority support on Pro and Multi-Location.",
                   },
                   {
-                    q: "Will my packages convert to Limespun projects?",
-                    a: "Yes. Mangomint packages map to Limespun multi-session projects. Discounts, scheduled sessions, prepaid deposits — all carry.",
+                    q: "What comes across from Mangomint?",
+                    a: "We work from what Mangomint lets you export and move your clients, upcoming bookings, deposits held and signed forms. If something won't export cleanly, we tell you before you switch.",
                   },
                   {
-                    q: "Does Limespun support tip jars?",
-                    a: "Yes — though we treat them as a tip line on the invoice rather than a separate jar. Tips route to artists via Stripe Connect.",
+                    q: "Does Limespun handle tips?",
+                    a: "Yes. A tip is recorded as its own line on the payment and goes to the artist in full.",
                   },
                   {
                     q: "Can I run Limespun alongside Mangomint during migration?",
-                    a: `Yes. Standard parallel run for 14 days. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
+                    a: `Yes, and we recommend it. Keep Mangomint running until your last booking there clears, then cancel. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
                   },
                   {
                     q: "What if my staff is used to Mangomint's UI?",
-                    a: "The core screens are built to be learnable in a day or two. We do a remote training session on day 5 of migration. Includes recording for new hires.",
+                    a: `The screens use studio words (Today, Calendar, Projects, Payments), so most teams find their way quickly. You also get ${ONBOARDING_SUPPORT_DAYS} days of onboarding help.`,
                   },
                 ]}
               />
@@ -749,9 +717,9 @@ export default function MangomintMigrationPage() {
           badge="Tattoo-native"
           headline="Move to software built for the work."
           italicWord="work"
-          subhead={`6-day migration. Free. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
-          secondaryCTA={{ label: "Or get started", href: "https://app.limespun.com/signup", icon: "play" }}
+          subhead={`Migration is included on every plan: usually a week or two, with Mangomint running alongside until you switch. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: "Contact us about switching", href: "/contact" }}
         />
       </main>
       <Footer />

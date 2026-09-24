@@ -8,7 +8,7 @@ import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { ACCOUNT, BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { roadmapItems, statusLabels } from "@/lib/data/roadmap";
 import type { RoadmapItem } from "@/lib/data/roadmap";
 
@@ -34,21 +34,18 @@ const MODULE_ACCENTS = [BRAND.rust, BRAND.amber, BRAND.sage];
 
 const processCards = [
   {
-    num: "01",
     accent: BRAND.rust,
     accentBg: BRAND.rustWash,
-    title: "Studio votes weighed by use",
-    body: "If 200 studios are using a feature regularly, their feature requests carry more weight than a single feature request from someone who hasn't signed up. We track usage telemetry to keep ourselves honest.",
+    title: "Studios that use it decide",
+    body: "Requests from studios running Limespun every day carry the most weight. Tell us what slows your shop down and we'll give you a straight answer: yes, no or later.",
   },
   {
-    num: "02",
     accent: BRAND.amber,
     accentBg: BRAND.amberWash,
-    title: "We ship slowly and on purpose",
-    body: "We average one major release a month. We'd rather skip a quarter than ship something we don't believe in. The graveyard of half-finished features doesn't exist here.",
+    title: "We finish what we start",
+    body: "A feature ships when a studio can run a real day on it. We'd rather hold something back than ship it half done.",
   },
   {
-    num: "03",
     accent: BRAND.sage,
     accentBg: BRAND.sageWash,
     title: "We say no to most things",
@@ -150,17 +147,6 @@ function ItemCard({
           ))}
         </div>
 
-        {/* Quarter */}
-        <span
-          style={{
-            fontFamily: FONT.mono,
-            fontSize: 10,
-            color: BRAND.stoneFaint,
-            letterSpacing: "0.04em",
-          } as React.CSSProperties}
-        >
-          {item.quarter}
-        </span>
       </div>
     </div>
   );
@@ -242,9 +228,9 @@ export default function RoadmapPage() {
           eyebrowAccent="rust"
           headline="What's shipped. What's building. What's next."
           italicWord="next"
-          subhead="The honest version. Updated when the plan changes — not when the marketing team needs a reason to publish a blog post. Vote with your studio: tell us what to build."
-          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "Request a feature", href: "/contact", icon: "play" }}
+          subhead="What's live, what we're building and what comes after. No dates, because dates slip. Tell us what to build."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: "Request a feature", href: "/contact" }}
         />
 
         {/* Status board */}
@@ -339,7 +325,7 @@ export default function RoadmapPage() {
             >
               {processCards.map((card) => (
                 <motion.div
-                  key={card.num}
+                  key={card.title}
                   variants={fadeUp}
                   style={{
                     background: BRAND.white,
@@ -351,20 +337,6 @@ export default function RoadmapPage() {
                     overflow: "hidden",
                   } as React.CSSProperties}
                 >
-                  {/* Number */}
-                  <div
-                    style={{
-                      fontFamily: FONT.mono,
-                      fontSize: 11,
-                      fontWeight: 700,
-                      color: card.accent,
-                      letterSpacing: "0.06em",
-                      marginBottom: 14,
-                    } as React.CSSProperties}
-                  >
-                    {card.num}
-                  </div>
-
                   <h3
                     style={{
                       fontFamily: FONT.sans,
@@ -399,9 +371,9 @@ export default function RoadmapPage() {
           badge="Vote with your studio"
           headline="Tell us what to build."
           italicWord="build"
-          subhead="Every paying studio gets a vote. We answer feature requests within 5 business days. Honest yes, no, or 'on the roadmap.'"
-          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "Request a feature", href: "/contact", icon: "play" }}
+          subhead="Every studio on Limespun gets a say. Write to us with what you need and we'll tell you honestly: yes, no, or on the roadmap."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: "Request a feature", href: "/contact" }}
         />
       </main>
 

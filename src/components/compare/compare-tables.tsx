@@ -32,7 +32,11 @@ export function SupportBadge({ cell, compact = false }: { cell: FeatureCell; com
 /** Head-to-head table for one competitor. */
 export function HeadToHead({ competitor }: { competitor: Competitor }) {
   return (
-    <div className="relative overflow-x-auto rounded-[20px] ring-1 ring-hair">
+    <div
+      className="relative overflow-x-auto rounded-[20px] ring-1 ring-hair focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite"
+      tabIndex={0}
+      aria-label={`Limespun vs ${competitor.name} table, scrolls sideways`}
+    >
       <table className="w-full min-w-[640px] border-collapse bg-white text-left">
         <caption className="sr-only">
           Limespun compared with {competitor.name} on tattoo studio features
@@ -78,7 +82,11 @@ export function HeadToHead({ competitor }: { competitor: Competitor }) {
 /** Every competitor side by side, for the hub page. */
 export function CompareMatrix({ competitors }: { competitors: Competitor[] }) {
   return (
-    <div className="relative overflow-x-auto rounded-[20px] ring-1 ring-hair" tabIndex={0} aria-label="Comparison table, scrolls sideways">
+    <div
+      className="relative overflow-x-auto rounded-[20px] ring-1 ring-hair focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite"
+      tabIndex={0}
+      aria-label="Comparison table, scrolls sideways"
+    >
       <table className="w-full min-w-[980px] border-collapse bg-white text-left">
         <caption className="sr-only">Tattoo studio features across Limespun and seven alternatives</caption>
         <thead>

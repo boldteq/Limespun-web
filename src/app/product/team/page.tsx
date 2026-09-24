@@ -7,12 +7,11 @@ import { ProductHero } from "@/components/product/product-hero";
 import { ProductPillars } from "@/components/product/product-pillars";
 import { ProductAnatomy } from "@/components/product/product-anatomy";
 import { ProductItemTypes } from "@/components/product/product-item-types";
-import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
-import { TeamMockup } from "@/components/product/mockups/team-mockup";
+import { TeamScreen } from "@/components/mockups";
 import { BRAND } from "@/lib/brand";
 import {
   Users,
@@ -35,53 +34,53 @@ export default function TeamPage() {
           feature="Team"
           headline="Your roster, paid right."
           italicWord="paid right"
-          subhead="Eight artists, three guest residencies, one apprentice. Custom splits per artist. Guest residency bands. Stripe Connect routing. 1099-K, P11D, MV at year-end. The roster file that ends commission spreadsheets forever."
-          dashboard={<TeamMockup />}
+          subhead="Residents, guest artists and the front desk on one roster. A split per artist, guest spots with their own dates, and roles that decide who sees what. Up to 5 artists on Studio, 15 on Pro."
+          dashboard={<TeamScreen />}
         />
 
         <ProductPillars
           eyebrow="The premise"
-          heading="Every role. Every split. Every payout — automatic."
-          italicWord="automatic"
-          intro="Residents, guests, apprentices — each with different default rules. Limespun routes every invoice split at checkout via Stripe Connect and builds the year-end payroll record without a spreadsheet in sight."
+          heading="Every role. Every split. One roster."
+          italicWord="One roster"
+          intro="Residents, guests and the front desk, each with their own rules. Limespun works out every artist's split on each paid session and keeps the record for payroll."
           pillars={[
             {
               icon: Users,
               accent: BRAND.rust,
               eyebrow: "Per-artist roster",
               title: "Per-artist roster",
-              desc: "Resident, guest, apprentice — different rules.",
+              desc: "Resident or guest, artist or front desk. Each with its own rules.",
               bullets: [
-                "Custom commission splits",
-                "Stripe Connect per artist",
-                "Auto payroll year-end",
-                "Guest residency bands",
+                "A split per artist",
+                "Resident or guest",
+                "Active, pending, on leave",
+                "Payroll records on Pro",
               ],
             },
             {
               icon: DollarSign,
               accent: BRAND.amber,
-              eyebrow: "Splits route at checkout",
-              title: "Splits route at checkout",
-              desc: "60/40, 70/30, custom — auto on every invoice.",
+              eyebrow: "Splits per session",
+              title: "Splits worked out per session",
+              desc: "60%, 70/30 or booth rent, on every paid session.",
               bullets: [
-                "Routes via Stripe Connect",
-                "Studio retain percentage",
-                "Tip routing per artist",
+                "Commission or booth rent",
+                "Studio share shown per session",
+                "Tips counted in artist pay",
                 "No Friday spreadsheet",
               ],
             },
             {
               icon: Plane,
               accent: BRAND.sage,
-              eyebrow: "Guest residencies",
-              title: "Guest residencies",
-              desc: "Time-boxed, auto-archive.",
+              eyebrow: "Guest artists",
+              title: "Guest artists",
+              desc: "Their own dates, link and split. Pro and up.",
               bullets: [
-                "Per-guest booking page slug",
-                "Time-boxed band on calendar",
-                "Email approval — no account",
-                "Auto-archive on departure",
+                "Own booking link per guest",
+                "Guest-spot dates on the calendar",
+                "Split set per guest",
+                "Deactivates when the spot ends",
               ],
             },
           ]}
@@ -91,13 +90,13 @@ export default function TeamPage() {
           eyebrow="Anatomy"
           heading="One screen. Every artist. Every status."
           italicWord="Every status"
-          intro="Active residents, incoming guests, pending onboarding, archived alumni — all in one roster view. Tap any member to drill into splits, Stripe status, and commission history."
-          dashboard={<TeamMockup />}
+          intro="Active artists, guests, pending invites and people on leave, in one roster. Tap anyone to see their split and commission history."
+          dashboard={<TeamScreen />}
           callouts={[
             {
               n: 1,
-              title: "Tab strip",
-              desc: "Active, Guests, Pending, Archived. Switch with one tap.",
+              title: "Filters",
+              desc: "Active, guests, pending invites and on leave. Switch with one tap.",
               position: { top: "14%", left: "32%" },
             },
             {
@@ -109,7 +108,7 @@ export default function TeamPage() {
             {
               n: 3,
               title: "Role pill",
-              desc: "Resident / Guest / Apprentice — each has different default rules.",
+              desc: "Resident or Guest, plus the role that sets what they can see.",
               position: { top: "34%", left: "40%" },
             },
             {
@@ -120,8 +119,8 @@ export default function TeamPage() {
             },
             {
               n: 5,
-              title: "Stripe Connect status",
-              desc: "Green dot = ready to receive payouts. Red dot = onboarding incomplete.",
+              title: "Status",
+              desc: "Active, pending invite or on leave, at a glance.",
               position: { top: "46%", left: "82%" },
             },
           ]}
@@ -140,7 +139,7 @@ export default function TeamPage() {
               duration: "Resident",
               title: "Resident artists",
               desc: "Full-time, dedicated chair, default split.",
-              example: '"Miles Verena · 70/30 · 7 active projects"',
+              example: '"Dev · resident · 60% commission"',
             },
             {
               icon: Plane,
@@ -148,83 +147,64 @@ export default function TeamPage() {
               duration: "Guest",
               title: "Guest artists",
               desc: "Time-boxed, own booking page, custom split.",
-              example: '"Nina Yates · 22-29 Apr · 60/40 · 1 active"',
+              example: '"Rio · guest spot Oct 2–9 · 70/30"',
             },
             {
               icon: Users,
               accent: BRAND.sage,
-              duration: "Apprentice",
-              title: "Apprentices",
-              desc: "Inverted split, mentorship lock, supervised bookings.",
-              example: '"Zoe Hall · 0/100 · supervised by Miles"',
+              duration: "Booth rent",
+              title: "Booth renters",
+              desc: "Pay weekly booth rent instead of a commission.",
+              example: '"Mara · resident · $250 a week"',
             },
             {
               icon: Heart,
               accent: BRAND.stoneDark,
               duration: "Admin",
               title: "Front desk + admin",
-              desc: "Booking + reception roles. No commission.",
-              example: '"Diana Park · admin · permissions: bookings, reviews"',
+              desc: "Booking and reception roles. No commission. Roles and permissions on Pro.",
+              example: '"Front desk · takes payments, never sees payroll"',
             },
             {
               icon: Briefcase,
               accent: BRAND.rust,
               duration: "Owner",
               title: "Owner / partner",
-              desc: "Studio P&L access. Multi-location overview.",
-              example: '"Miles Verena · Owner · 1 location"',
+              desc: "Sees every artist, payment and report. Reports across locations on Pro.",
+              example: '"Owner · Sample studio · 1 location"',
             },
             {
               icon: DollarSign,
               accent: BRAND.amber,
               duration: "Payroll",
-              title: "Payroll subjects",
-              desc: "W-2 hybrid for some, 1099 for others.",
-              example: '"6 contractors + 1 apprentice on payroll"',
+              title: "Payroll",
+              desc: "Payroll runs and 1099-K forms for your contractors. Pro plan.",
+              example: '"3 artists in this week\'s run"',
             },
           ]}
         />
 
-        <ProductVsTable
-          eyebrow="vs the rest"
-          heading="Other tools handle commissions like a spreadsheet would."
-          italicWord="like a spreadsheet would"
-          intro="DaySmart has routing but no residency bands. Mangomint has splits but no year-end exports. Spreadsheets have nothing. Limespun is the only studio tool that routes at checkout, tracks residency windows, and generates 1099-K at year-end."
-          competitors={["Limespun Team", "DaySmart", "Mangomint", "Spreadsheet"]}
-          rows={[
-            { feature: "Per-artist Stripe Connect routing", values: [true, true, true, false] },
-            { feature: "Custom split per artist + per piece", values: [true, false, true, false] },
-            { feature: "Guest residency band on calendar", values: [true, false, false, false] },
-            { feature: "Apprentice inverted-split mode", values: [true, false, false, false] },
-            { feature: "1099-K / P11D / MV at year-end", values: [true, false, false, false] },
-            { feature: "Permissions per role", values: [true, true, true, false] },
-            { feature: "Stripe onboarding tracked in roster", values: [true, false, true, false] },
-            { feature: "Multi-location roster sync", values: [true, true, false, false] },
-          ]}
-          caption="Sources: vendor product pages, public help docs, and pilot studio reports · 2026"
-        />
-
         <ProductDayInLife
           eyebrow="Friday at 5 PM"
-          heading="Friday, 5 PM. Eight artists paid, weekend started."
-          italicWord="weekend started"
-          intro="Picture Marcus, running eight artists across two floors. Friday at 5 used to mean three hours of commission spreadsheet wrangling. Now it doesn't."
+          heading="Friday, 5 PM. Three artists, one review."
+          italicWord="one review"
+          intro="Dev and Mara are residents, and Rio is in on a guest spot. Friday at 5 used to mean a commission spreadsheet. Now it doesn't."
           paragraphs={[
             <React.Fragment key="p1">
-              <strong>The week&apos;s invoices have been routing all week.</strong> Each session at checkout split 65/35 to the artist via Stripe Connect — automatically.
+              <strong>The splits have been worked out all week.</strong>{" "}Each paid session added to the artist&apos;s commissions: Dev at 60%, Rio at 70/30, and Mara&apos;s $250 booth rent taken off her pay.
             </React.Fragment>,
             <React.Fragment key="p2">
-              <strong>5:02 PM.</strong> Marcus opens Team. Hits &quot;Run weekly payroll.&quot; Limespun surfaces a one-pager:{" "}
-              <em>$24,400 total · $15,860 to artists · $8,540 to studio · 0 disputes · 0 manual adjustments.</em>
+              <strong>5:02 PM.</strong> The owner opens Commissions:{" "}
+              <em>$7,630 gross · $5,622 to the artists.</em>
             </React.Fragment>,
             <React.Fragment key="p3">
-              <strong>5:04 PM.</strong> He confirms. Stripe Connect already paid the artists during the week — payroll just records the books and queues the year-end 1099-K data.
+              <strong>5:04 PM.</strong> Approved. On Pro, the payroll run records it, and the year-end 1099-K data builds up as it goes.
             </React.Fragment>,
             <React.Fragment key="p4">
-              Marcus closes the laptop. Total time: <em>two minutes.</em> The old way: three hours, one mistake every two weeks, one apologetic Slack message a month.
+              Laptop closed. <em>The old way: an evening with a spreadsheet and a mistake to apologise for.</em>
             </React.Fragment>,
           ]}
-          quote="Splits land in Stripe Connect as each invoice is paid, so payday doesn't eat the weekend."
+          quote="Splits are worked out as each session is paid, so payday doesn't eat the weekend."
           takeawayLabel="What this means for your studio"
         />
 
@@ -233,8 +213,8 @@ export default function TeamPage() {
           heading="Team links every part of the studio together."
           italicWord="every part"
           modules={[
-            { icon: DollarSign, label: "Payments", desc: "Stripe Connect, invoices, deposits", href: "/product/payments" },
-            { icon: Calendar, label: "Calendar", desc: "Sessions, residencies, healing blocks", href: "/product/calendar" },
+            { icon: DollarSign, label: "Payments", desc: "Card payments, deposits, splits", href: "/product/payments" },
+            { icon: Calendar, label: "Calendar", desc: "Sessions, guest spots, clash checks", href: "/product/calendar" },
             { icon: LayoutGrid, label: "Pricing", desc: "Plan comparison and upgrade", href: "/pricing" },
             { icon: BarChart3, label: "Analytics", desc: "Revenue, utilisation, artist metrics", href: "/product/analytics" },
           ]}
@@ -243,7 +223,7 @@ export default function TeamPage() {
         <ProductCTA
           headline="Pay the team. Get the weekend."
           italicWord="Get the weekend"
-          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Add your first artist, set the split, and watch the first invoice route automatically.`}
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Add your first artist, set the split, and the first paid session works it out.`}
         />
       </main>
       <Footer />

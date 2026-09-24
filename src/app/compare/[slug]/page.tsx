@@ -17,6 +17,8 @@ import {
   type Competitor,
 } from "@/lib/data/competitors";
 import { SITE_URL } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
+import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 export function generateStaticParams() {
   return competitors.map((c) => ({ slug: c.slug }));
@@ -28,12 +30,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const c = getCompetitor(slug);
   if (!c) return {};
+  // The title already leads with the brand, so it skips the " | Limespun" suffix (keeps
+  // "Limespun vs Square Appointments …" inside 60 characters).
   const title = `Limespun vs ${c.name} for tattoo studios`;
   return {
-    title: `${title} | Limespun`,
-    description: `An honest comparison of Limespun and ${c.name} for tattoo studios: multi-session projects, deposits, consent forms, payouts and pricing. Sourced and dated.`,
-    alternates: { canonical: `${SITE_URL}/compare/${c.slug}` },
-    openGraph: { title, description: `How Limespun and ${c.name} compare for tattoo studios.`, type: "article" },
+    ...pageMetadata({
+      title,
+      description: `Limespun and ${c.name} compared for tattoo studios: multi-session projects, deposits, consent forms, payouts and pricing. Sourced and dated.`,
+      path: `/compare/${c.slug}`,
+      type: "article",
+    }),
+    title,
   };
 }
 
@@ -268,7 +275,7 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
               <ul className="mt-3 flex flex-wrap gap-2">
                 {others.map((o) => (
                   <li key={o.slug}>
-                    <Link href={`/compare/${o.slug}`} className="inline-flex min-h-10 items-center rounded-full bg-canvas px-4 text-[14px] font-medium text-graphite ring-1 ring-hair hover:bg-canvas-deep">
+                    <Link href={`/compare/${o.slug}`} className="inline-flex min-h-11 items-center rounded-full bg-canvas px-4 text-[14px] font-medium text-graphite ring-1 ring-hair hover:bg-canvas-deep">
                       vs {o.name}
                     </Link>
                   </li>
@@ -278,7 +285,11 @@ export default async function CompareDetailPage({ params }: { params: Promise<{ 
           </div>
         </section>
 
-        <ClosingCta />
+        <ClosingCta
+          title={`Switch from ${c.name}, keep every client.`}
+          italicWord="client"
+          body={`Create your account in minutes. Keep using ${c.name} until the counts check out. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+        />
       </main>
       <Footer />
     </div>

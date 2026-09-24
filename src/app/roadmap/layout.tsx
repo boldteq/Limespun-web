@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Roadmap — What we're building, what's next | Limespun",
-  description: "Public roadmap. Shipped this quarter. Building now. Up next. The honest version, not the marketing version.",
+  description: "What's shipped in Limespun, what we're building now and what comes next. No dates, because dates slip. Tell us what to build for your studio.",
   openGraph: { title: "Limespun Roadmap", description: "What we're building, what's next.", type: "website" },
   alternates: { canonical: "https://limespun.com/roadmap" },
 };

@@ -130,106 +130,110 @@ export function ProductVsTable({
             overflow: "hidden",
           } as React.CSSProperties}
         >
-          {/* Header row */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: gridTemplate,
-              background: BRAND.boneCream,
-              borderBottom: `1px solid ${BRAND.border}`,
-            } as React.CSSProperties}
-          >
-            {/* "Capability" label */}
-            <div
-              style={{
-                padding: "16px 24px",
-                fontFamily: FONT.sans,
-                fontSize: 11,
-                fontWeight: 700,
-                color: BRAND.stoneDark,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-              } as React.CSSProperties}
-            >
-              Capability
-            </div>
-
-            {competitors.map((name, ci) => (
-              <div
-                key={ci}
-                style={{
-                  padding: "16px 14px",
-                  textAlign: "center",
-                  fontFamily: FONT.sans,
-                  fontSize: 12,
-                  fontWeight: 700,
-                  letterSpacing: "0.04em",
-                  borderLeft: `1px solid ${BRAND.border}`,
-                  background: ci === 0 ? BRAND.boneDeep : "transparent",
-                  color: ci === 0 ? BRAND.onyx : BRAND.stoneDark,
-                } as React.CSSProperties}
-              >
-                {name}
-              </div>
-            ))}
-          </div>
-
-          {/* Body rows */}
-          {rows.map((row, ri) => (
-            <div
-              key={ri}
-              style={{
-                display: "grid",
-                gridTemplateColumns: gridTemplate,
-                borderTop: ri === 0 ? "none" : `1px solid ${BRAND.borderSoft}`,
-              } as React.CSSProperties}
-            >
-              {/* Feature name */}
+          <div className="overflow-x-auto">
+            <div className="min-w-[620px]">
+              {/* Header row */}
               <div
                 style={{
-                  padding: "16px 24px",
-                  fontFamily: FONT.sans,
-                  fontSize: 13.5,
-                  fontWeight: 500,
-                  color: BRAND.onyx,
+                  display: "grid",
+                  gridTemplateColumns: gridTemplate,
+                  background: BRAND.boneCream,
+                  borderBottom: `1px solid ${BRAND.border}`,
                 } as React.CSSProperties}
               >
-                {row.feature}
-              </div>
-
-              {row.values.map((val, ci) => (
+                {/* "Capability" label */}
                 <div
-                  key={ci}
                   style={{
-                    padding: "16px 14px",
-                    textAlign: "center",
-                    borderLeft: `1px solid ${BRAND.borderSoft}`,
-                    background: ci === 0 ? BRAND.boneDeep : "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    padding: "16px 24px",
+                    fontFamily: FONT.sans,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: BRAND.stoneDark,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
                   } as React.CSSProperties}
                 >
-                  {val ? (
-                    <CheckCircle2
-                      size={18}
-                      color={ci === 0 ? BRAND.rust : BRAND.success}
-                      strokeWidth={2.2}
-                    />
-                  ) : (
-                    <span
+                  Capability
+                </div>
+
+                {competitors.map((name, ci) => (
+                  <div
+                    key={ci}
+                    style={{
+                      padding: "16px 14px",
+                      textAlign: "center",
+                      fontFamily: FONT.sans,
+                      fontSize: 12,
+                      fontWeight: 700,
+                      letterSpacing: "0.04em",
+                      borderLeft: `1px solid ${BRAND.border}`,
+                      background: ci === 0 ? BRAND.boneDeep : "transparent",
+                      color: ci === 0 ? BRAND.onyx : BRAND.stoneDark,
+                    } as React.CSSProperties}
+                  >
+                    {name}
+                  </div>
+                ))}
+              </div>
+
+              {/* Body rows */}
+              {rows.map((row, ri) => (
+                <div
+                  key={ri}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: gridTemplate,
+                    borderTop: ri === 0 ? "none" : `1px solid ${BRAND.borderSoft}`,
+                  } as React.CSSProperties}
+                >
+                  {/* Feature name */}
+                  <div
+                    style={{
+                      padding: "16px 24px",
+                      fontFamily: FONT.sans,
+                      fontSize: 13.5,
+                      fontWeight: 500,
+                      color: BRAND.onyx,
+                    } as React.CSSProperties}
+                  >
+                    {row.feature}
+                  </div>
+
+                  {row.values.map((val, ci) => (
+                    <div
+                      key={ci}
                       style={{
-                        color: BRAND.stoneLight,
-                        fontSize: 18,
+                        padding: "16px 14px",
+                        textAlign: "center",
+                        borderLeft: `1px solid ${BRAND.borderSoft}`,
+                        background: ci === 0 ? BRAND.boneDeep : "transparent",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                       } as React.CSSProperties}
                     >
-                      &mdash;
-                    </span>
-                  )}
+                      {val ? (
+                        <CheckCircle2
+                          size={18}
+                          color={ci === 0 ? BRAND.rust : BRAND.success}
+                          strokeWidth={2.2}
+                        />
+                      ) : (
+                        <span
+                          style={{
+                            color: BRAND.stoneLight,
+                            fontSize: 18,
+                          } as React.CSSProperties}
+                        >
+                          &mdash;
+                        </span>
+                      )}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
-          ))}
+          </div>
         </motion.div>
 
         {caption && (

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Analytics — Studio P&L, retention, no-show risk | Limespun",
+  title: "Analytics — Revenue, no-shows, fill rate | Limespun",
   description:
-    "The numbers that actually matter for tattoo studios. Per-artist revenue, retention, no-show risk, ink-color mix. Real-time, exportable, audit-ready.",
+    "The numbers that matter for tattoo studios. Revenue by artist, no-show rate, fill rate, new, returning and lapsed clients. Reports across locations on Pro.",
   openGraph: {
-    title: "Limespun Analytics — Studio P&L, retention, no-show risk",
+    title: "Limespun Analytics — Revenue, no-shows, fill rate",
     description:
-      "The numbers that actually matter for tattoo studios. Per-artist revenue, retention, no-show risk, ink-color mix.",
+      "Revenue by artist, no-show rate, fill rate and client numbers for tattoo studios.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/product/analytics" },

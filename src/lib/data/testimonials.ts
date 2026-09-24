@@ -26,7 +26,8 @@ export const testimonials: Testimonial[] = [];
 
 /**
  * Layout placeholders for local preview only (NEXT_PUBLIC_SHOW_SAMPLE_REVIEWS=true).
- * Never shown in production and always stamped "Sample" on the card.
+ * Never shown in production and always stamped "Sample" on the card. No durations: there is no
+ * video behind a sample, so a runtime would describe a clip that doesn't exist.
  */
 export const sampleTestimonials: Testimonial[] = [
   {
@@ -36,7 +37,6 @@ export const sampleTestimonials: Testimonial[] = [
     studio: "Sample studio",
     city: "Austin, TX",
     quote: "Deposits used to live in three places. Now they sit on the project, and nobody asks me where the money went.",
-    duration: "1:12",
   },
   {
     id: "sample-resident",
@@ -45,7 +45,6 @@ export const sampleTestimonials: Testimonial[] = [
     studio: "Sample studio",
     city: "Leeds, UK",
     quote: "My clients sign consent on their phone before they arrive. I start on time, every time.",
-    duration: "0:48",
   },
   {
     id: "sample-guest",
@@ -54,7 +53,6 @@ export const sampleTestimonials: Testimonial[] = [
     studio: "Sample studio",
     city: "Berlin, DE",
     quote: "Every shop I guest at has my dates, my link and my split before I land. Payday is just there.",
-    duration: "1:05",
   },
 ];
 

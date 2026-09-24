@@ -9,7 +9,7 @@ const linkClass =
 const policies = [
   { value: "$0", label: "Limespun fee on bookings or deposits" },
   { value: "Free", label: "migration on every plan" },
-  { value: "100%", label: "of your data exportable, any time" },
+  { value: "CSV", label: "export of your client list, any time" },
   { value: "Flat", label: "price for your whole team, no per-seat fees" },
 ];
 

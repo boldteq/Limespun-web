@@ -2,8 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Globe, Users, Shield, Check, ArrowRight } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp } from "@/lib/brand";
+import { Globe, Users, Receipt, Check, ArrowRight } from "lucide-react";
+import { ACCOUNT, BRAND, CTA, FONT, SHADOW, GRADIENT, fadeUp } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -91,21 +91,21 @@ function PainPointsSection() {
             icon={Globe}
             title="Three reports, three logins, three formats"
             body="Each location runs its own version of admin. Comparing performance is a manual data merge."
-            detail={[["Comparison cycle", "monthly"], ["Format", "inconsistent"], ["Source-of-truth", "nowhere"]]}
+            detail={[["Comparing shops", "by hand"], ["Format", "different each time"], ["One view", "none"]]}
           />
           <MoatCardBright
             accent="amber"
             icon={Users}
             title="Onboarding artists across locations"
-            body="New hire at Brooklyn shop has to be added separately at Manhattan. No shared roster. Permission management: by hand."
-            detail={[["Onboarding time", "hours"], ["Shared roster", "no"], ["Permission audit", "never"]]}
+            body="A new artist at one shop has to be added again at the next. No shared roster. Permissions managed by hand."
+            detail={[["New artist", "added per shop"], ["Shared roster", "no"], ["Permissions", "by hand"]]}
           />
           <MoatCardBright
             accent="sage"
-            icon={Shield}
-            title="Audit logs that don't span locations"
-            body="Compliance audit asks 'who deleted that consent form?' Answer: depends on which location's audit log you check."
-            detail={[["Cross-location audit", "no"], ["One answer", "never"], ["Investigation time", "high"]]}
+            icon={Receipt}
+            title="A bill that grows with every shop"
+            body="Many booking tools price per location, so each new shop raises the monthly bill before it books a single client."
+            detail={[["Pricing", "per location"], ["Shop four", "costs more"], ["Budget", "keeps moving"]]}
           />
         </div>
       </div>
@@ -119,11 +119,9 @@ const multiLocationFeatures = [
   "Unlimited artists and locations — one flat price, not per shop",
   "Reports across locations — every shop, one view",
   "Roles and permissions across every location",
-  "Cross-location audit log — every action, one stream",
-  "API access with webhooks",
   "5,000 texts a month",
-  "Dedicated migration team — one location first, then the rest",
-  "Dedicated account manager — direct line, not a ticket queue",
+  "Done-for-you migration — one location first, then the rest",
+  "A dedicated account manager",
 ];
 
 function WhyLimespunSection() {
@@ -161,9 +159,9 @@ function CustomerQuoteSection() {
     <section style={{ background: BRAND.bone, paddingTop: 80, paddingBottom: 80 } as React.CSSProperties}>
       <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" } as React.CSSProperties}>
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.6 }} style={{ marginBottom: 32 } as React.CSSProperties}>
-          <SectionEyebrow label="Pilot programme" accent="amber" />
+          <SectionEyebrow label="One shop first" accent="amber" />
           <h2 style={{ fontFamily: FONT.serif, fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 400, color: BRAND.onyx, letterSpacing: "-0.025em", lineHeight: 1.1 } as React.CSSProperties}>
-            Groups get a pilot, not a pitch.
+            Groups start with one shop.
           </h2>
         </motion.div>
 
@@ -198,7 +196,7 @@ function CustomerQuoteSection() {
                 margin: 0,
               } as React.CSSProperties}
             >
-              Limespun is new. For groups, that means starting at one location with our migration lead, proving it on your own numbers, and rolling out the rest only if it earns it.
+              Limespun is new. For groups, that means starting at one location, proving it on your own numbers, and rolling out the rest only if it earns it.
             </p>
           </div>
         </motion.div>
@@ -239,11 +237,11 @@ const faqs = [
   },
   {
     q: "Do you offer custom contracts and procurement?",
-    a: "Yes. We can sign an NDA and a data processing agreement, and we'll answer your security questionnaire honestly. We don't hold a SOC 2 report yet; our security page lists exactly what we do today.",
+    a: "Write to us with what your group needs, and we'll answer your security questionnaire honestly. We don't hold a SOC 2 report yet; our security page lists exactly what we do today.",
   },
   {
     q: "How long does a multi-location migration take?",
-    a: "We move one location first, then roll out the rest in sequence. For a 3-location group we plan for roughly 90 days end-to-end.",
+    a: "We move one location first, then the rest in sequence, at the pace your team is comfortable with. Each location usually takes a week or two, and its old tool runs alongside until you switch.",
   },
   {
     q: "Does the price go up as we add locations?",
@@ -279,9 +277,9 @@ export default function MultiLocationPage() {
           eyebrowAccent="amber"
           headline="Three locations. One operating system."
           italicWord="One"
-          subhead="Reports across every location in one dashboard. Roles and permissions across the team. Dedicated migration team and a real account manager. The infrastructure for studios that grow into chains."
-          primaryCTA={{ label: "Talk to us", href: "/book-a-demo" }}
-          secondaryCTA={{ label: "See pricing", href: "/pricing" }}
+          subhead="Reports across every location in one view. Roles and permissions across the team. Done-for-you migration and a dedicated account manager. One flat price, not per shop."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
         <PainPointsSection />
         <WhyLimespunSection />
@@ -289,12 +287,12 @@ export default function MultiLocationPage() {
         <PricingTeaserSection />
         <FAQSection />
         <CTASection
-          badge="The infrastructure for scale"
-          headline="Talk to the team."
-          italicWord="team"
-          subhead={`Demos run live with our migration lead. One flat ${MULTI_PRICE}/mo, a ${MONEY_BACK_DAYS}-day money-back guarantee, and ${ONBOARDING_SUPPORT_DAYS} days of founder-priority onboarding.`}
-          primaryCTA={{ label: "Book a demo", href: "/book-a-demo" }}
-          secondaryCTA={{ label: "See pricing", href: "/pricing", icon: "play" }}
+          badge="Every shop, one account"
+          headline="Run every shop from one place."
+          italicWord="place"
+          subhead={`One flat ${MULTI_PRICE}/mo for every location. Migration included, a ${MONEY_BACK_DAYS}-day money-back guarantee, and ${ONBOARDING_SUPPORT_DAYS} days of onboarding help.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: "Contact us", href: "/contact" }}
         />
       </main>
       <Footer />

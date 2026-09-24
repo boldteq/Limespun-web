@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Payments — Commission auto-splits, deposit pools, payroll-ready | Limespun",
+  title: "Payments — Deposits, artist splits, payroll | Limespun",
   description:
-    "Stripe Connect on every invoice. Artist commission splits at booking time. Deposits pool to projects. 1099-K and EU equivalents at year end.",
+    "Take deposits and card payments with no Limespun fee. Commission and booth-rent splits worked out per session on Studio, payroll and 1099-K forms on Pro.",
   openGraph: {
-    title: "Limespun Payments — Auto-split commissions, payroll-ready",
-    description: "Stripe Connect on every invoice. Zero math.",
+    title: "Limespun Payments — Card payments in, artist splits out",
+    description: "Deposits, commission and booth-rent splits, payroll and 1099s.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/product/payments" },

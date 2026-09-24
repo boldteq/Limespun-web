@@ -119,12 +119,8 @@ export function ProductItemTypes({
 
         {/* Cards grid */}
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${columns}, 1fr)`,
-            gap: 14,
-          } as React.CSSProperties}
-          className="td-roles-grid"
+          style={{ "--cols": columns } as React.CSSProperties}
+          className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-[repeat(var(--cols),minmax(0,1fr))]"
         >
           {items.map((item, i) => {
             const iconColor =

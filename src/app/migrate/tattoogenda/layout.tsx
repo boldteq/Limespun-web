@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Migrate from TattooGenda to Limespun — 4-day move, every feature included | Limespun",
+  title: "Switch from TattooGenda to Limespun | Limespun",
   description:
-    "TattooGenda users: keep guest residencies, deposit pools, REACH ink registry — all carried. 4-day migration. Every feature included on every plan, no 'Bigger Plan' upsell.",
+    "Switching from TattooGenda: we move your clients, bookings, deposits and signed forms for you, on every plan. Ink inventory with EU REACH tracking, artist splits and payroll.",
   openGraph: {
-    title: "Migrate from TattooGenda to Limespun",
-    description:
-      "Tattoo-native vs tattoo-native. We win on multi-session + every feature on every plan.",
+    title: "Switch from TattooGenda to Limespun",
+    description: "Migration included on every plan. Ink inventory with EU REACH tracking.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/migrate/tattoogenda" },

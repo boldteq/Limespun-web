@@ -7,12 +7,11 @@ import { ProductHero } from "@/components/product/product-hero";
 import { ProductPillars } from "@/components/product/product-pillars";
 import { ProductAnatomy } from "@/components/product/product-anatomy";
 import { ProductItemTypes } from "@/components/product/product-item-types";
-import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
-import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
+import { FormsScreen } from "@/components/mockups";
 import { BRAND } from "@/lib/brand";
 import {
   FileText,
@@ -20,7 +19,6 @@ import {
   CheckCircle2,
   Users,
   AlertCircle,
-  MapPin,
   Heart,
   ImageIcon,
   RefreshCw,
@@ -43,53 +41,53 @@ export default function FormsPage() {
           feature="Forms"
           headline="The paperwork, finally not paperwork."
           italicWord="finally not paperwork"
-          subhead="Hand a client the iPad and walk away. Kiosk consent flows, REACH 2022 EU ink waivers, and a SHA-256 hashed PDF audit trail that holds up in any room."
-          dashboard={<DashboardMockup />}
+          subhead="Send the form to their phone before they arrive, or hand them the studio tablet in kiosk mode. EU REACH ink disclosure is built in. Signed copies can't be edited and are stored as PDFs."
+          dashboard={<FormsScreen />}
         />
 
         <ProductPillars
           eyebrow="How forms work in Limespun"
           heading="Three layers that replace the clipboard."
           italicWord="replace the clipboard"
-          intro="Tablet kiosk, legal compliance, and tamper-proof audit trail — baked into one form system. Nothing to bolt on."
+          intro="Tablet kiosk, EU REACH ink disclosure and a signed record, in one form system. Nothing to bolt on."
           pillars={[
             {
               icon: FileText,
               accent: BRAND.rust,
               eyebrow: "Tablet kiosk mode",
-              title: "Hand them the iPad. Forget the clipboard.",
-              desc: "Lock the screen to consent mode. Client fills, signs, and hands it back. No app download, no login, no friction.",
+              title: "Hand them the tablet. Forget the clipboard.",
+              desc: "Open kiosk mode from Forms. The client fills it in, signs and hands it back. No app to download, no login for them.",
               bullets: [
-                "Single-screen kiosk — nothing else accessible",
-                "Pre-filled from booking: name, date, artist",
-                "Signature capture with touch or Apple Pencil",
-                "Auto-exits kiosk on submission",
+                "Kiosk mode for the front-desk tablet",
+                "Pre-filled from the booking",
+                "Sign with a finger or a stylus",
+                "Opened by the owner or front desk",
               ],
             },
             {
               icon: Shield,
               accent: BRAND.amber,
-              eyebrow: "REACH-compliant waivers",
-              title: "EU 2022 ink registry baked in.",
-              desc: "REACH Annex XVII EU ink regulation fields built into the waiver template. Colour index numbers, CI references, supplier batch data — all captured.",
+              eyebrow: "EU REACH ink disclosure",
+              title: "The inks, listed on the form.",
+              desc: "Add a REACH disclosure block to any consent form. It pulls from the Ink registry in Settings, where you keep each ink's brand and batch.",
               bullets: [
-                "REACH Annex XVII compliant fields",
-                "CI number field per ink used",
-                "Supplier batch reference captured",
-                "Inspector-ready export in one click",
+                "REACH disclosure block in the form builder",
+                "Brands and batches from your Ink registry",
+                "REACH-registered inks marked in Inventory",
+                "On every plan, Solo included",
               ],
             },
             {
               icon: CheckCircle2,
               accent: BRAND.sage,
-              eyebrow: "Hashed PDF audit trail",
-              title: "SHA-256 signed, court-admissible.",
-              desc: "Every submitted form is hashed, timestamped, and sealed. The PDF cannot be altered post-signature. eIDAS and ESIGN compliant.",
+              eyebrow: "Signed PDF record",
+              title: "Signed copies can't be edited.",
+              desc: "Signed copies can't be edited and are stored as PDFs, filed against the client and the session they were signed for.",
               bullets: [
-                "SHA-256 hash on every PDF",
-                "eIDAS and ESIGN Act compliant",
-                "Timestamp locked at submission",
-                "Hash watermark visible on all PDF exports",
+                "Locked the moment it's signed",
+                "Stored as a PDF on the client record",
+                "Signing time saved with the form",
+                "Resend the signed PDF to the client",
               ],
             },
           ]}
@@ -99,8 +97,8 @@ export default function FormsPage() {
           eyebrow="Inside the form flow"
           heading="Five moments between arrival and chair."
           italicWord="Five moments"
-          intro="From kiosk launch to audit PDF — the form flow handles every step. The artist sees the result before the client sits."
-          dashboard={<DashboardMockup />}
+          intro="From kiosk launch to signed PDF, the form flow handles every step. The artist sees the result before the client sits."
+          dashboard={<FormsScreen tab="submissions" />}
           callouts={[
             {
               n: 1,
@@ -122,14 +120,14 @@ export default function FormsPage() {
             },
             {
               n: 4,
-              title: "Ink batch CI ref",
-              desc: "REACH-required CI number and supplier batch captured per ink. Populates the waiver and the inventory record simultaneously.",
+              title: "REACH ink disclosure",
+              desc: "The inks you plan to use, with brand and batch from your Ink registry, listed for the client before they sign.",
               position: { top: "66%", left: "64%" },
             },
             {
               n: 5,
-              title: "Audit hash watermark",
-              desc: "SHA-256 hash printed on the PDF footer at submission. Verifiable externally — proof the document hasn't changed.",
+              title: "Signed PDF",
+              desc: "Once signed, the form locks. A PDF copy is stored with the client and the session.",
               position: { top: "82%", left: "44%" },
             },
           ]}
@@ -137,111 +135,57 @@ export default function FormsPage() {
 
         <ProductItemTypes
           eyebrow="Form library"
-          heading="Eight templates, all yours to brand."
-          italicWord="Eight templates"
-          intro="Every form a tattoo studio needs — pre-built, legally structured, and fully branded to your studio. Edit the copy, keep the compliance."
-          columns={4}
+          heading="Six templates to start from."
+          italicWord="Six templates"
+          intro="Start from a template, change the wording, add your own fields. The forms a tattoo studio needs, ready on day one."
+          columns={3}
           items={[
             {
               icon: FileText,
               accent: BRAND.rust,
-              severity: "Standard",
-              title: "General consent",
-              desc: "The baseline waiver every client signs. Covers procedure, aftercare acknowledgement, and liability.",
-              example: "Pre-filled with client name and session date",
-            },
-            {
-              icon: Users,
-              accent: BRAND.amber,
-              severity: "Under 18",
-              title: "Minor consent",
-              desc: "Guardian signature required. Age verification flow built in. Separate from adult consent records.",
-              example: "Guardian co-sign + ID upload required",
+              severity: "Required",
+              title: "Tattoo consent — general",
+              desc: "The standard signed consent: name, date of birth, over-18 confirmation, placement and design agreed, aftercare understood.",
+              example: "Pre-filled with the client's name and session date",
             },
             {
               icon: AlertCircle,
               accent: BRAND.rust,
-              severity: "Medical",
-              title: "Allergy questionnaire",
-              desc: "Structured allergen and medical history capture. Feeds directly into the client allergy record.",
-              example: "Results surface on booking card and Today view",
+              severity: "Required",
+              title: "Medical history",
+              desc: "Allergies (latex, pigment, past ink reactions), medication, skin conditions. Allergies show on the client's bookings.",
+              example: "Allergy notes surface on the booking and on Today",
             },
             {
-              icon: MapPin,
+              icon: ImageIcon,
               accent: BRAND.sage,
-              severity: "Location",
-              title: "Body location waiver",
-              desc: "Covers sensitive placement areas — neck, face, hands. Risk acknowledgement per zone.",
-              example: "Zone-specific risk language pre-populated",
-            },
-            {
-              icon: Shield,
-              accent: BRAND.amber,
-              severity: "EU required",
-              title: "REACH ink waiver",
-              desc: "EU 2022 Annex XVII compliant. CI numbers, batch references, and supplier data captured at session.",
-              example: "Inspector-ready PDF generated automatically",
+              title: "Photo & social release",
+              desc: "Permission to photograph the work, and a separate yes or no for posting it on social.",
+              example: "Two checkboxes, signed with the consent",
             },
             {
               icon: Heart,
               accent: BRAND.sage,
               title: "Aftercare acknowledgement",
-              desc: "Client confirms they've received and understood aftercare instructions. Timestamped.",
-              example: "Auto-sent with post-session summary email",
+              desc: "The client confirms they've received and understood the healing instructions.",
+              example: "Signed at the end of the session",
             },
             {
-              icon: ImageIcon,
-              accent: BRAND.rust,
-              title: "Photo release",
-              desc: "Explicit consent for studio photography and social media use. Scoped by platform and use case.",
-              example: "Instagram, portfolio, press — per-channel checkboxes",
+              icon: Users,
+              accent: BRAND.amber,
+              severity: "Under 18",
+              title: "Minor / guardian consent",
+              desc: "A guardian co-signs for a client under 18.",
+              example: "Guardian signature required",
             },
             {
               icon: RefreshCw,
               accent: BRAND.amber,
-              title: "Cancellation policy",
-              desc: "Client signs the deposit forfeiture and rescheduling terms before booking is confirmed.",
-              example: "48-hour policy enforced at booking, signed at intake",
+              title: "Touch-up waiver",
+              desc: "Your touch-up policy and window, agreed before the touch-up session.",
+              example: "Attached to the touch-up booking",
             },
           ]}
-        />
-
-        <ProductVsTable
-          eyebrow="How it compares"
-          heading="The form system built for the studio."
-          italicWord="built for the studio"
-          competitors={["Limespun Forms", "DaySmart", "Mangomint", "Paper"]}
-          rows={[
-            {
-              feature: "iPad kiosk mode (locked screen)",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "eIDAS / ESIGN compliant signatures",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "SHA-256 hashed PDF at submission",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "REACH 2022 Annex XVII aware fields",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Studio-branded form templates",
-              values: [true, true, true, true],
-            },
-            {
-              feature: "Auto-attached to client record",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Pre-filled from appointment booking",
-              values: [true, false, false, false],
-            },
-          ]}
-          caption="Based on published features as of Q1 2025. Limespun first column."
         />
 
         <ProductDayInLife
@@ -254,7 +198,7 @@ export default function FormsPage() {
             <React.Fragment key="p2">
               The client works through consent, allergy questionnaire, and photo release in under two minutes. <strong>They sign with a finger.</strong> They hand back the iPad.
             </React.Fragment>,
-            "The SHA-256 hash generates. The PDF seals. The form auto-attaches to the client record and the project card. The artist sees a green tick on the session card — ready to go.",
+            "The form locks. A signed PDF is stored on the client record and against the session. The artist sees consent marked as signed on the booking, ready to go.",
             "No clipboard. No filing. No scanning at end of day. The form is done before the artist finishes setting up their station.",
           ]}
           quote="Consent is signed, stored and filed against the booking before the client sits down. No end-of-day scanning."
@@ -269,7 +213,7 @@ export default function FormsPage() {
             {
               icon: Users,
               label: "Clients",
-              desc: "Every signed form auto-attaches to the client record. Consent history in one place.",
+              desc: "Every signed form is stored on the client record. Consent history in one place.",
               href: "/product/clients",
             },
             {
@@ -281,13 +225,13 @@ export default function FormsPage() {
             {
               icon: Clipboard,
               label: "Inventory",
-              desc: "REACH waiver CI numbers sync to the ink batch record in inventory.",
+              desc: "REACH-registered inks are marked in Inventory, and the disclosure uses the same Ink registry.",
               href: "/product/inventory",
             },
             {
               icon: Shield,
-              label: "Compliance hub",
-              desc: "All REACH and consent data rolls into the compliance dashboard for inspections.",
+              label: "EU REACH hub",
+              desc: "What the EU ink rules ask of a studio, and how Limespun records it.",
               href: "/reach-compliance",
             },
           ]}
@@ -296,7 +240,7 @@ export default function FormsPage() {
         <ProductCTA
           headline="Consent in 90 seconds."
           italicWord="90 seconds"
-          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Kiosk mode, hashed PDFs, and REACH waivers from day one.`}
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Kiosk mode, signed PDFs and REACH ink disclosure from day one.`}
         />
       </main>
       <Footer />

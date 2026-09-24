@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Messages — Omnichannel inbox: SMS, email, IG, WhatsApp | Limespun",
+  title: "Messages — SMS and email in one inbox | Limespun",
   description:
-    "Every conversation, every channel, one inbox. SMS, email, Instagram, WhatsApp, in-app — all routed to one thread per client. Auto-replies. Templates. Internal notes.",
+    "Every client conversation in one inbox. SMS and email in one thread per client, with Instagram and WhatsApp coming next. Saved replies, auto-replies and internal notes.",
   openGraph: {
-    title: "Limespun Messages — Omnichannel inbox built for studios",
-    description: "Every conversation, every channel, one inbox.",
+    title: "Limespun Messages — One inbox for client texts and email",
+    description: "SMS and email, one thread per client.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/product/messages" },

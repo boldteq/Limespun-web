@@ -24,7 +24,7 @@ import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { ACCOUNT, BRAND, CTA, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -46,18 +46,18 @@ const modules: Module[] = [
   { name: "Today",            desc: "Morning launchpad",       icon: Sparkles,      href: "/product/today" },
   { name: "Inbox",            desc: "Action items in one feed", icon: Inbox,         href: "/product/inbox" },
   { name: "Calendar",         desc: "Multi-chair scheduling",   icon: Calendar,      href: "/product/calendar" },
-  { name: "Messages",         desc: "Unified client chat",      icon: MessageSquare, href: "/product/messages" },
+  { name: "Messages",         desc: "Texts and email per client", icon: MessageSquare, href: "/product/messages" },
   { name: "Appointments",     desc: "Booking & deposits",       icon: Clock,         href: "/product/appointments" },
   { name: "Clients",          desc: "CRM with allergy alerts",  icon: Users,         href: "/product/clients" },
-  { name: "Projects",         desc: "Multi-session sleeves",    icon: LayoutGrid,    href: "/product/projects", tag: "NEW" },
+  { name: "Projects",         desc: "Multi-session work",       icon: LayoutGrid,    href: "/product/projects", tag: "NEW" },
   { name: "Flash & Portfolio",desc: "Design library",           icon: ImageIcon,     href: "/product/portfolio" },
   { name: "Forms",            desc: "Consent & waivers",        icon: FileText,      href: "/product/forms" },
   { name: "Team",             desc: "Artists, guests, payroll", icon: Heart,         href: "/product/team" },
-  { name: "Payments",         desc: "Commission auto-splits",   icon: CreditCard,    href: "/product/payments" },
+  { name: "Payments",         desc: "Deposits, payments, splits", icon: CreditCard,  href: "/product/payments" },
   { name: "Inventory",        desc: "Ink, needles, REACH",      icon: Package,       href: "/product/inventory" },
-  { name: "Analytics",        desc: "Revenue, retention, mix",  icon: BarChart3,     href: "/product/analytics" },
-  { name: "Marketing",        desc: "Campaigns & loyalty",      icon: Megaphone,     href: "/product/marketing" },
-  { name: "AI Studio",        desc: "Design assist & briefs",   icon: Sparkles,      href: "/product/ai-design", tag: "NEW" },
+  { name: "Analytics",        desc: "Revenue, artists, clients", icon: BarChart3,    href: "/product/analytics" },
+  { name: "Marketing",        desc: "Campaigns & referrals",    icon: Megaphone,     href: "/product/marketing" },
+  { name: "AI Studio",        desc: "Moodboards & briefs",      icon: Sparkles,      href: "/product/ai-design", tag: "NEW" },
 ];
 
 // ── ModuleCard ─────────────────────────────────────────────────────────────────
@@ -295,8 +295,8 @@ export default function ProductPage() {
           headline="Fifteen rooms, one floor."
           italicWord="rooms"
           subhead="Every operation in your studio — bookings, deposits, projects, payments, inventory — designed as one connected system. No exports. No syncing. The shop, held in one place."
-          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
 
         {/* 2. Module categories */}
@@ -360,21 +360,21 @@ export default function ProductPage() {
                 accent="rust"
                 title="Run the day"
                 modules="Today · Inbox · Calendar · Messages · Appointments"
-                body="Open the app, see the day. The 90-second triage. Multi-chair scheduling. Unified client chat. Bookings with deposit logic baked in."
+                body="Open the app, see the day. Every chair on one calendar. Texts and email in one inbox, per client. Bookings that wait on the deposit."
                 link={{ label: "See Calendar", href: "/product/calendar" }}
               />
               <CategoryCard
                 accent="amber"
                 title="Hold the work"
                 modules="Clients · Projects · Forms · Flash & Portfolio · Team"
-                body="Multi-session sleeves as projects. Allergy intelligence. Kiosk consent. Photo timelines. Guest residencies. The studio as a body of work."
+                body="A sleeve is one project across its sessions. Allergy notes on every booking. Consent signed on a phone or the studio tablet. Guest artists with their own dates."
                 link={{ label: "See Projects", href: "/product/projects" }}
               />
               <CategoryCard
                 accent="sage"
                 title="Grow the studio"
                 modules="Payments · Inventory · Analytics · Marketing · AI Studio"
-                body="Commission auto-splits. EU REACH inventory. Per-location P&L. Loyalty mechanics. AI design briefs. Every signal you need to scale."
+                body="Commission and booth-rent splits. Ink stock with EU REACH records. Reports across locations. Campaigns, a waitlist and referrals. AI moodboards and briefs."
                 link={{ label: "See Payments", href: "/product/payments" }}
               />
             </div>
@@ -544,9 +544,9 @@ export default function ProductPage() {
           badge="Open every room"
           headline="See the whole studio."
           italicWord="whole"
-          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration on every plan. Free walkthrough if you'd rather see it live.`}
-          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. We move your data over for you, on every plan.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
       </main>
       <Footer />

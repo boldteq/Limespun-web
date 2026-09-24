@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { BRAND, FONT } from "@/lib/brand";
+import { BRAND, CTA, FONT } from "@/lib/brand";
 
 interface ProductCTAProps {
   headline: string;
@@ -14,13 +14,13 @@ interface ProductCTAProps {
 }
 
 const defaultPrimary = {
-  label: "Get started",
-  href: "https://app.limespun.com/signup",
+  label: CTA.primaryLabel,
+  href: CTA.primaryHref,
 };
 
 const defaultSecondary = {
-  label: "Book a demo",
-  href: "/book-a-demo",
+  label: CTA.secondaryLabel,
+  href: CTA.secondaryHref,
 };
 
 function buildHeadlineParts(headline: string, italicWord?: string) {

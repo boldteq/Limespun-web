@@ -67,6 +67,14 @@ const nextConfig: NextConfig = {
     ];
     return [{ source: "/(.*)", headers: securityHeaders(isDev) }, ...cacheRules];
   },
+  // Retired routes. The old call-booking page sends people to contact instead.
+  async redirects() {
+    return [
+      { source: "/book-a-demo", destination: "/contact", permanent: true },
+      { source: "/customers", destination: "/", permanent: true },
+      { source: "/customers/:slug", destination: "/", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

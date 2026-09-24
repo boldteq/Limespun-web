@@ -50,8 +50,8 @@ export function DepositCalculator() {
           </dl>
         </div>
         <p className="rounded-[14px] bg-canvas px-4 py-3 text-[14px] leading-[1.55] text-graphite-soft">
-          That&apos;s a {money(depositPerBooking)} deposit on each booking, or {money(kept * 12)} a year kept when clients
-          don&apos;t show. Limespun takes the deposit at booking and applies your cancellation policy automatically.
+          That&apos;s a {money(depositPerBooking)} deposit on each booking, or {money(kept * 12)}{" "}
+          a year kept when clients don&apos;t show. Limespun takes the deposit when the client books, so a no-show doesn&apos;t cost you the whole session.
         </p>
       </div>
     </div>

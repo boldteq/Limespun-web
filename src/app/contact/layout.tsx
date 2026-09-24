@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact — Sales, support, press, partnerships | Limespun",
+  title: "Contact — Sales, support and press | Limespun",
   description:
-    "Get in touch with the Limespun team. Sales inquiries, product support, press requests, partnership discussions, feature requests. We answer every email within one business day.",
+    "Get in touch with the Limespun team about plans, switching tools, support or press. Every question goes to one inbox, and we reply within one business day.",
   openGraph: {
     title: "Contact Limespun",
-    description: "Sales, support, press, partnerships.",
+    description: "Sales, support and press. One inbox, a reply within one business day.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/contact" },

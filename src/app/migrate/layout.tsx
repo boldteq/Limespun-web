@@ -3,13 +3,13 @@ import React from "react";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 export const metadata: Metadata = {
-  title: "Migrate to Limespun — White-glove migration in 14 days, free | Limespun",
+  title: "Switch to Limespun: migration included on every plan | Limespun",
   description:
-    `Migrate from DaySmart, Mangomint, Fresha, TattooGenda, Vagaro, or a Google spreadsheet. White-glove migration included on every plan. ${MONEY_BACK_DAYS}-day money-back guarantee.`,
+    `Switching from DaySmart, Mangomint, Fresha, TattooGenda, Vagaro or a spreadsheet: we move your clients, bookings, deposits and signed forms for you, on every plan. ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   openGraph: {
-    title: "Migrate to Limespun — 14 days, white-glove",
+    title: "Switch to Limespun",
     description:
-      `White-glove migration included on every plan. ${MONEY_BACK_DAYS}-day money-back guarantee.`,
+      `Migration included on every plan. Usually a week or two, with your old tool running alongside. ${MONEY_BACK_DAYS}-day money-back guarantee.`,
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/migrate" },

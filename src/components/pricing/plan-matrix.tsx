@@ -25,7 +25,12 @@ function Cell({ value }: { value: MatrixCell }) {
 /** Every plan, every feature — mirrors the app's own comparison. Scrolls sideways on a phone. */
 export function PlanMatrix() {
   return (
-    <div className="relative overflow-x-auto rounded-[20px] bg-white ring-1 ring-hair">
+    <div
+      className="relative overflow-x-auto rounded-[20px] bg-white ring-1 ring-hair focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+      tabIndex={0}
+      role="region"
+      aria-label="Plan comparison table, scrolls sideways"
+    >
       <table className="w-full min-w-[760px] border-collapse text-left">
         <caption className="sr-only">Limespun plans compared</caption>
         <thead>

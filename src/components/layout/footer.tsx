@@ -48,11 +48,11 @@ const SOCIAL_LINKS = [
   { label: "YouTube", href: SOCIAL.youtube, icon: <YouTubeIcon /> },
 ];
 
-/** Verified against the app: HTTPS+HSTS and provider encryption, per-studio row-level security, TOTP 2FA, CSV/data/PDF export. */
+/** Verified against the app: HTTPS+HSTS and provider encryption, per-studio row-level security, TOTP 2FA (offered, not enforced), CSV/data/PDF export. */
 const SECURITY_FACTS = [
   { icon: Lock, text: "Encrypted in transit and at rest" },
   { icon: ShieldCheck, text: "Each studio's data kept separate" },
-  { icon: KeyRound, text: "Two-factor sign-in on every account" },
+  { icon: KeyRound, text: "Two-factor sign-in available on every account" },
   { icon: Download, text: "Export your clients and signed forms any time" },
 ];
 

@@ -7,12 +7,11 @@ import { ProductHero } from "@/components/product/product-hero";
 import { ProductPillars } from "@/components/product/product-pillars";
 import { ProductAnatomy } from "@/components/product/product-anatomy";
 import { ProductItemTypes } from "@/components/product/product-item-types";
-import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
-import { DashboardMockup } from "@/components/dashboard/dashboard-mockup";
+import { ClientFileScreen } from "@/components/mockups";
 import { BRAND } from "@/lib/brand";
 import {
   AlertCircle,
@@ -20,7 +19,6 @@ import {
   MessageSquare,
   Users,
   FileText,
-  Star,
   Calendar,
   Clock,
   DollarSign,
@@ -42,8 +40,8 @@ export default function ClientsPage() {
           feature="Clients"
           headline="Every client. Every session. One quiet record."
           italicWord="One quiet record"
-          subhead="Photo timelines, allergy intelligence, consent history, and a full communications thread — all on the client card. The CRM that knows the difference between a touch-up and a sleeve."
-          dashboard={<DashboardMockup />}
+          subhead="Photo timelines, allergy notes, consent history and the full text and email thread, all on the client card. The client record that knows the difference between a touch-up and a sleeve."
+          dashboard={<ClientFileScreen />}
         />
 
         <ProductPillars
@@ -62,32 +60,32 @@ export default function ClientsPage() {
                 "Surfaces in Today — daily artist brief",
                 "Surfaces on schedule card before appointment",
                 "Surfaces in artist briefing modal",
-                "Patch test log per ink batch attached",
+                "Noted once, shown on every booking",
               ],
             },
             {
               icon: ImageIcon,
               accent: BRAND.amber,
               eyebrow: "Photo timeline",
-              title: "Reference, fresh, healing, healed.",
-              desc: "Every stage of the tattoo process is documented and auto-organised. The portfolio builds itself.",
+              title: "Before, reference, fresh, healed.",
+              desc: "Every stage of the work, filed by project and session. You choose which healed photos go in the portfolio.",
               bullets: [
-                "REF / FRESH / HEAL / HEALED stages tracked",
-                "Auto-organised by project",
-                "Studio portfolio synced automatically",
-                "Healed photo close-out required before archive",
+                "Before, reference, fresh and healed photos",
+                "Organised by project and session",
+                "You pick what goes in the portfolio",
+                "Healed photo added before the project closes",
               ],
             },
             {
               icon: MessageSquare,
               accent: BRAND.sage,
               eyebrow: "Communications thread",
-              title: "Every channel, one record.",
-              desc: "SMS, email, Instagram DMs — all threaded into a single client timeline. Internal notes kept separate from client-visible comms.",
+              title: "Texts and email, one record.",
+              desc: "SMS and email in a single client timeline. Internal notes kept separate from what the client sees. Instagram and WhatsApp are coming next.",
               bullets: [
-                "SMS via Twilio — inbound and outbound",
-                "Email via Resend — templated and ad-hoc",
-                "Instagram DMs synced to the thread",
+                "Texts, sent and received",
+                "Email, from a saved reply or written fresh",
+                "Instagram and WhatsApp: coming next",
                 "Internal-only notes separated from client view",
               ],
             },
@@ -99,7 +97,7 @@ export default function ClientsPage() {
           heading="Five signals on one card."
           italicWord="Five signals"
           intro="The client card surfaces the most important intel above the fold. No digging, no tab-switching."
-          dashboard={<DashboardMockup />}
+          dashboard={<ClientFileScreen />}
           callouts={[
             {
               n: 1,
@@ -109,26 +107,26 @@ export default function ClientsPage() {
             },
             {
               n: 2,
-              title: "Allergy banner pulse",
-              desc: "Amber pulse when allergens are on record. Red when a patch test is overdue. Impossible to miss.",
+              title: "Allergy banner",
+              desc: "Shows whenever an allergy is on record. Impossible to miss.",
               position: { top: "28%", left: "55%" },
             },
             {
               n: 3,
-              title: "Photo timeline stripe",
-              desc: "Thumbnail rail of every stage — REF, FRESH, HEAL, HEALED — in chronological order across all projects.",
+              title: "Photo timeline",
+              desc: "Thumbnails of every stage (before, reference, fresh, healed) in order across all projects.",
               position: { top: "48%", left: "35%" },
             },
             {
               n: 4,
               title: "Communications thread",
-              desc: "Every SMS, email, and DM logged in sequence. Internal notes visually separated with a different treatment.",
+              desc: "Every text and email logged in sequence. Internal notes shown apart, with a different treatment.",
               position: { top: "64%", left: "62%" },
             },
             {
               n: 5,
               title: "Consent history dropdown",
-              desc: "Every signed form, timestamped and SHA-256 sealed. One click opens the PDF. Audit-ready in seconds.",
+              desc: "Every signed form with its signing time. One click opens the signed PDF.",
               position: { top: "80%", left: "42%" },
             },
           ]}
@@ -144,123 +142,81 @@ export default function ClientsPage() {
             {
               icon: AlertCircle,
               accent: BRAND.rust,
-              severity: "Surfaces 4x",
+              severity: "Shown on the day",
               title: "Allergy field",
-              desc: "Active allergens flagged across Today, schedule card, artist brief, and patch test log.",
-              example: "Nickel, sulphates, Eternal Ink series — all recorded",
+              desc: "Allergies flagged on Today, the booking card and the artist brief.",
+              example: "Red ink reaction after session 1 — no red, patch test first",
             },
             {
               icon: Shield,
               accent: BRAND.amber,
-              severity: "GDPR-ready",
+              severity: "Private",
               title: "Medical history",
-              desc: "Conditions, medications, and contraindications. Exported on client data request in one click.",
+              desc: "Conditions, medications and anything the artist should know, from the medical history form.",
               example: "Blood thinners updated Tuesday — surfaces Wednesday",
             },
             {
               icon: FileText,
               accent: BRAND.sage,
-              severity: "Signed & sealed",
+              severity: "Signed",
               title: "Consent log",
-              desc: "Every waiver hashed and attached. eIDAS-compliant digital signatures. PDF on demand.",
-              example: "General consent, REACH waiver, photo release",
+              desc: "Every signed form stored as a PDF. Signed copies can't be edited.",
+              example: "General consent, medical history, photo release",
             },
             {
               icon: ImageIcon,
               accent: BRAND.amber,
-              severity: "Auto-organised",
+              severity: "By project",
               title: "Photo gallery",
-              desc: "REF, FRESH, HEAL, HEALED stages per project. Studio portfolio syncs from here.",
+              desc: "Before, reference, fresh and healed photos per project. You pick what goes in the portfolio.",
               example: "48 photos across 6 projects, sorted by stage",
             },
             {
               icon: MessageSquare,
               accent: BRAND.sage,
-              severity: "Per-channel",
+              severity: "SMS + email",
               title: "Communications",
-              desc: "SMS, email, Instagram DMs — threaded chronologically. Internal notes separated.",
-              example: "DM about touch-up → internal note → SMS confirmation",
+              desc: "Texts and email, threaded in order. Internal notes kept separate.",
+              example: "Text about a touch-up → internal note → confirmation",
             },
             {
               icon: Calendar,
               accent: BRAND.rust,
               title: "Project list",
               desc: "Every session, every artist, every piece — linked to the calendar card and invoice.",
-              example: "Sleeve (ongoing), Cover-up Jan 2025, Flash drop",
+              example: "Koi sleeve (session 4 of 5), flash piece, touch-up",
             },
             {
               icon: DollarSign,
               accent: BRAND.amber,
               title: "Payment ledger",
               desc: "Deposits, balances, tips, and invoice history per client. Reconciled to the penny.",
-              example: "£200 deposit on sleeve — £800 balance remaining",
+              example: "$300 deposit pool — $60 applied, $240 held",
             },
             {
-              icon: Star,
+              icon: Clock,
               accent: BRAND.sage,
-              title: "Loyalty status",
-              desc: "Visit count, total spend, referrals, and custom loyalty tier. Rewards surface at checkout.",
-              example: "Gold tier — 12 visits — 3 referrals",
+              title: "Upcoming bookings",
+              desc: "Next session, deposit status and consent status, straight from the calendar.",
+              example: "Sat Nov 7 · 11:00 · Confirmed",
             },
           ]}
-        />
-
-        <ProductVsTable
-          eyebrow="How it compares"
-          heading="The client record others forgot to build."
-          italicWord="others forgot to build"
-          competitors={["Limespun Clients", "DaySmart", "Mangomint", "Spreadsheet"]}
-          rows={[
-            {
-              feature: "Per-client allergy fields surfaced in 4 places",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Photo timeline with REF/FRESH/HEAL/HEALED stages",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Consent history attached to client record",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Communications thread (SMS + email + DMs)",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "GDPR data export on request",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Per-artist client scoping",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Patch test log per ink batch",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Healed photo close-out required",
-              values: [true, false, false, false],
-            },
-          ]}
-          caption="Based on published features as of Q1 2025. Limespun first column."
         />
 
         <ProductDayInLife
           eyebrow="A day in the studio"
           heading="The update that could have been missed."
           italicWord="could have been missed"
-          intro="Asha changes her medication on Tuesday. The allergy banner pulses Wednesday morning."
+          intro="A client updates her medical form on Tuesday. The flag is on her booking by Wednesday morning."
           paragraphs={[
-            "Asha books a touch-up for Thursday. Between Tuesday and Thursday she updates her GP record — new blood thinner, started post-surgery.",
+            "She's booked for a touch-up on Thursday. Between Tuesday and Thursday she updates her medical history form: a new blood thinner, started after surgery.",
             <React.Fragment key="p2">
-              <strong>Wednesday morning</strong>, the artist opens Limespun to review their day. The allergy banner on Asha&apos;s card is amber — pulsing. Not a static label. A live signal.
+              <strong>Wednesday morning</strong>, the artist opens Limespun to review the day. The medical note is flagged on her card and on the booking. Not buried in a file.
             </React.Fragment>,
-            "The artist taps through to the medical history. Blood thinner flagged. They move the appointment by two weeks, per studio protocol, and send Asha an SMS from the comms thread — logged automatically.",
-            "Thursday comes and goes without incident. The near-miss is logged, the session is rescheduled, and the patch test note is updated. No clipboard. No phone call to check.",
+            "The artist taps through to the medical history, moves the appointment by two weeks per studio policy, and texts her from the client thread. The message is logged on her record.",
+            "Thursday comes and goes without incident. The session is rescheduled and the note is on her record for next time. No clipboard. No phone call to check.",
           ]}
-          quote="An allergy change made between bookings reaches the artist before the needle does — not after."
+          quote="A medical change made between bookings reaches the artist before the needle does, not after."
           takeawayLabel="What this means for your studio"
         />
 
@@ -278,7 +234,7 @@ export default function ClientsPage() {
             {
               icon: FileText,
               label: "Forms",
-              desc: "Consent and waivers auto-attach to the client record on signature.",
+              desc: "Signed consent and waivers are stored on the client record.",
               href: "/product/forms",
             },
             {

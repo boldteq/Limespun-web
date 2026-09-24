@@ -53,7 +53,7 @@ const tabs: Tab[] = [
   },
   {
     id: "sleeves",
-    label: "Sleeves",
+    label: "Projects",
     icon: Layers,
     title: "Multi-session work, tracked as one piece",
     points: [

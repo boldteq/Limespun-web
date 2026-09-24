@@ -6,14 +6,13 @@ import { Footer } from "@/components/layout/footer";
 import { PageIntro } from "@/components/marketing/page-intro";
 import { ClosingCta } from "@/components/marketing/closing-cta";
 import { TOOLS_INDEX } from "@/lib/site-links";
-import { SITE_URL } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Free tools for tattoo studios | Limespun",
+export const metadata: Metadata = pageMetadata({
+  title: "Free tools for tattoo studios",
   description: "Free calculators and templates for tattoo studios: deposit and no-show calculator, artist payout calculator and a printable tattoo consent form.",
-  alternates: { canonical: `${SITE_URL}/tools` },
-  openGraph: { title: "Free tools for tattoo studios", description: "Calculators and templates, free to use. No sign-up.", type: "website" },
-};
+  path: "/tools",
+});
 
 const ICONS = {
   "deposit-calculator": HandCoins,

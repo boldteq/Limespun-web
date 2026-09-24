@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { LayoutGrid, AlertCircle, Shield } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { ACCOUNT, BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -12,8 +12,10 @@ import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { StatStrip } from "@/components/shared/stat-strip";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
+import { competitorCaption, competitorPricing, competitorRows } from "@/components/shared/competitor-rows";
 import { PLANS, formatPrice, MONEY_BACK_DAYS } from "@/lib/data/plans";
 
+const [SOLO] = PLANS.filter((p) => p.tier === "solo");
 const [MULTI] = PLANS.filter((p) => p.tier === "enterprise");
 
 // ── MoatCardBright (local — lifted from work.tsx) ────────────────────────────
@@ -183,57 +185,56 @@ const moatCards: MoatCardBrightProps[] = [
     accent: "rust",
     icon: LayoutGrid,
     title: "Multi-session projects",
-    body: "Vagaro books a service. A sleeve is five visits, one deposit pool. The mismatch is total.",
+    body: "Vagaro's pages describe booking services; project tracking isn't described. In Limespun a sleeve is one project: every session, photo and note, with one deposit pool.",
     detail: [
-      ["Vagaro", "Per-service"],
-      ["Limespun", "Per-project"],
-      ["Migration", "Schema re-map"],
+      ["Vagaro", "Not published"],
+      ["Limespun", "One project"],
+      ["Migration", "Done for you"],
     ],
   },
   {
     accent: "amber",
     icon: AlertCircle,
-    title: "Allergy intelligence",
-    body: "Vagaro stores 'notes.' Limespun surfaces allergies on Today, schedule cards, kiosk forms — three places, one source.",
+    title: "Allergy flags",
+    body: "Vagaro keeps forms and notes; its pages don't describe allergies showing on bookings. In Limespun, an allergy noted once shows on every booking and on Today.",
     detail: [
-      ["Vagaro", "Notes field"],
-      ["Limespun", "4-place surface"],
-      ["Risk", "Managed"],
+      ["Vagaro", "Not published"],
+      ["Limespun", "On every booking"],
+      ["Noted", "Once"],
     ],
   },
   {
     accent: "sage",
     icon: Shield,
-    title: "EU REACH compliance",
-    body: "Vagaro has no concept of an ink registry. CI numbers, MSDS, batch tracking — none of it.",
+    title: "EU REACH ink tracking",
+    body: "Vagaro's inventory doesn't mention ink or REACH. Limespun has an Ink registry in Settings, a REACH-registered count on Inventory and a REACH ink disclosure on the consent form.",
     detail: [
-      ["Vagaro", "Not supported"],
+      ["Vagaro", "No REACH mention"],
       ["Limespun", "Every plan"],
-      ["Inspector", "<30s report"],
+      ["Consent form", "REACH disclosure"],
     ],
   },
 ];
 
 const timelineSteps = [
-  { day: "Day 1", title: "Discovery + Vagaro export request" },
-  { day: "Days 2–3", title: "Export + clean (Vagaro CSV pull, dedup)" },
+  { day: "1", title: "You tell us what you use; we work from what Vagaro lets you export" },
+  { day: "2", title: "Export and clean: fields mapped, duplicates removed" },
   {
-    day: "Day 4",
-    title:
-      "Schema re-mapping (services → sessions, packages → projects, notes → allergy/medical fields)",
+    day: "3",
+    title: "Clients, upcoming bookings, deposits held and signed forms moved across",
   },
-  { day: "Day 5", title: "Preview run + sign-off" },
-  { day: "Days 6–7", title: "Parallel run + cutover" },
+  { day: "4", title: "Preview: you check the import before it lands" },
+  { day: "5", title: "Side by side until your last Vagaro booking clears, then you switch" },
 ];
 
 const faqItems = [
   {
-    q: "Vagaro charges 1.99% per booking. What does Limespun charge?",
-    a: "Nothing. You pay the monthly software fee. Stripe takes its standard processing fee. We add zero on top.",
+    q: "How does Limespun's price compare with Vagaro's?",
+    a: `Vagaro publishes: ${competitorPricing("vagaro")} Limespun is a flat monthly plan from ${formatPrice(SOLO.monthlyCents)}/mo, with no Limespun fee on bookings or deposits; card payments carry the provider's standard fee.`,
   },
   {
-    q: "Will my Vagaro packages convert?",
-    a: "Yes. Packages map to Limespun multi-session projects. The discount logic, scheduled visits, and prepaid deposits all carry.",
+    q: "What comes across from Vagaro?",
+    a: "We work from what Vagaro lets you export and move your clients, upcoming bookings, deposits held and signed forms. If something won't export cleanly, we tell you before you switch.",
   },
   {
     q: "I run a multi-location chain on Vagaro. Will that work?",
@@ -241,11 +242,11 @@ const faqItems = [
   },
   {
     q: "What about Vagaro's marketplace? Does Limespun have one?",
-    a: "We don't run a customer-facing marketplace. Our job is to power your studio's brand. Marketplace traffic ends with Vagaro on day-of cutover; build your own funnel through Marketing module.",
+    a: "No. We don't run a customer-facing marketplace; your booking page carries your studio's brand. Marketplace traffic stays with Vagaro, and Marketing helps you fill the book from your own client list.",
   },
   {
     q: "Can I keep using Vagaro during migration?",
-    a: `Yes. Standard 14-day parallel run. Cancel Vagaro day-of cutover. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
+    a: `Yes, and we recommend it. Keep Vagaro running until your last booking there clears, then cancel. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   },
 ];
 
@@ -266,13 +267,13 @@ export default function VagaroPage() {
         <HeroSection
           eyebrow="From Vagaro"
           eyebrowAccent="amber"
-          headline="Vagaro is built for nail salons. You're a tattoo studio."
-          italicWord="tattoo studio"
-          subhead="Vagaro is excellent salon software — for haircuts, manicures, and waxing. None of that translates to a 5-session sleeve, a deposit pool across visits, or a REACH-compliant ink registry. We re-map your data to a tattoo schema. 7 days. White-glove."
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
+          headline="Salon software books a service. Tattoo runs on projects."
+          italicWord="projects"
+          subhead="Vagaro is salon and spa booking software. Limespun is built only for tattoo: a sleeve is one project with one deposit pool, and allergy flags show on every booking. We move your data for you: usually a week or two, included on every plan, with Vagaro running alongside until you switch."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
           secondaryCTA={{
-            label: "Get started",
-            href: "https://app.limespun.com/signup",
+            label: "Contact us about switching",
+            href: "/contact",
           }}
         />
 
@@ -310,7 +311,7 @@ export default function VagaroPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              Five concepts Vagaro doesn&apos;t have.
+              What changes when you switch.
             </motion.h2>
 
             <motion.div
@@ -381,63 +382,14 @@ export default function VagaroPage() {
                   { key: "vagaro", label: "Vagaro" },
                   { key: "limespun", label: "Limespun", highlighted: true },
                 ]}
-                rows={[
-                  {
-                    feature: "Multi-session projects",
-                    values: { vagaro: false, limespun: true },
-                  },
-                  {
-                    feature: "Deposit pool across visits",
-                    values: { vagaro: false, limespun: true },
-                  },
-                  {
-                    feature: "Allergy intelligence (4-place surface)",
-                    values: { vagaro: "Notes only", limespun: true },
-                  },
-                  {
-                    feature: "EU REACH ink registry",
-                    values: { vagaro: false, limespun: true },
-                  },
-                  {
-                    feature: "Photo timeline (REF→HEALED)",
-                    values: { vagaro: "Basic", limespun: true },
-                  },
-                  {
-                    feature: "Commission auto-splits",
-                    values: { vagaro: "Salon-style only", limespun: "Studio and up" },
-                  },
-                  {
-                    feature: "AI design assistant",
-                    values: { vagaro: false, limespun: "Pro and up" },
-                  },
-                  {
-                    feature: "Guest artist residency band",
-                    values: { vagaro: false, limespun: "Pro and up" },
-                  },
-                  {
-                    feature: "Tattoo-specific by design",
-                    values: { vagaro: false, limespun: true },
-                  },
-                  {
-                    feature: "Per-booking transaction fee",
-                    values: { vagaro: "Yes", limespun: "No" },
-                  },
-                  {
-                    feature: "Multi-location support",
-                    values: { vagaro: true, limespun: "Pro and up" },
-                  },
-                  {
-                    feature: "White-glove migration",
-                    values: { vagaro: false, limespun: true },
-                  },
-                ]}
-                caption="Vagaro feature set: vagaro.com docs + pricing, April 2026."
+                rows={competitorRows("vagaro")}
+                caption={competitorCaption("vagaro")}
               />
             </motion.div>
           </div>
         </section>
 
-        {/* 7-day plan */}
+        {/* The move */}
         <section
           style={{
             background: BRAND.bone,
@@ -455,7 +407,7 @@ export default function VagaroPage() {
               alignItems: "center",
             } as React.CSSProperties}
           >
-            <SectionEyebrow label="7-day plan" accent="amber" />
+            <SectionEyebrow label="The move" accent="amber" />
             <motion.h2
               variants={fadeUp}
               initial="hidden"
@@ -471,7 +423,7 @@ export default function VagaroPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              How Vagaro studios migrate.
+              How the move works.
             </motion.h2>
 
             <motion.div
@@ -550,9 +502,9 @@ export default function VagaroPage() {
           >
             <StatStrip
               items={[
-                { stat: "Re-mapped", label: "salon records to a tattoo schema" },
+                { stat: "Previewed", label: "you check the import before it lands" },
                 { stat: "Side by side", label: "Vagaro runs until cutover" },
-                { stat: "0%", label: "transaction fees on Limespun" },
+                { stat: "$0", label: "Limespun fee on bookings or deposits" },
                 { stat: `${MONEY_BACK_DAYS} days`, label: "money-back guarantee" },
               ]}
             />
@@ -668,12 +620,11 @@ export default function VagaroPage() {
           badge="Stop bending salon software"
           headline="Move to software built for tattoo."
           italicWord="for tattoo"
-          subhead={`7-day migration. Free on every plan. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
+          subhead={`Migration is included on every plan: usually a week or two, with Vagaro running alongside until you switch. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
           secondaryCTA={{
-            label: "Or get started",
-            href: "https://app.limespun.com/signup",
-            icon: "play",
+            label: "Contact us about switching",
+            href: "/contact",
           }}
         />
       </main>

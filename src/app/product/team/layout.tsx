@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Team — Artists, guests, payroll, commissions | Limespun",
   description:
-    "The roster file for tattoo studios. Per-artist Stripe Connect, custom commission splits, guest residency bands, payroll-ready year-end exports.",
+    "The roster for tattoo studios. Residents, guest artists and the front desk, a commission or booth-rent split per artist, guest spots with their own dates, payroll on Pro.",
   openGraph: {
     title: "Limespun Team — Your roster, paid right",
-    description: "Per-artist Stripe Connect, custom commission splits, guest residency bands, payroll-ready year-end exports.",
+    description: "Residents, guests and front desk on one roster, with a split per artist.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/product/team" },

@@ -2,8 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Shield, FileText, AlertCircle, BarChart3 } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { Shield, FileText, Droplet, BarChart3 } from "lucide-react";
+import { ACCOUNT, BRAND, CTA, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -176,13 +176,13 @@ export default function ReachCompliancePage() {
       <main>
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <HeroSection
-          eyebrow="REACH compliance hub"
+          eyebrow="EU REACH ink tracking"
           eyebrowAccent="amber"
-          headline="EU REACH 2022, built into the studio."
+          headline="Your REACH ink records, built into the studio."
           italicWord="built"
-          subhead="The European ink registry. MSDS attachments. Batch tracking. Reaction logging. Inspector reports in one click. The compliance layer most studios run on a spreadsheet."
-          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "Talk to compliance", href: "/book-a-demo" }}
+          subhead="The EU REACH restriction on tattoo inks, in force since January 2022, limits what can be in the bottle. Limespun keeps your records in three places: the Ink registry in Settings, a REACH-registered count on Inventory and a REACH ink disclosure on the consent form. On every plan, Solo included."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
 
         {/* ── What is REACH ─────────────────────────────────────────────── */}
@@ -225,7 +225,7 @@ export default function ReachCompliancePage() {
             >
               <SectionEyebrow label="Background" accent="rust" />
               <SectionHeading size="sm">
-                What REACH 2022 means for your studio.
+                What the REACH restriction means for your studio.
               </SectionHeading>
             </motion.div>
 
@@ -265,10 +265,10 @@ export default function ReachCompliancePage() {
                   marginBottom: 20,
                 } as React.CSSProperties}
               >
-                REACH (Registration, Evaluation, Authorisation and Restriction of
-                Chemicals) is the EU regulation governing chemical substances. The 2022
-                amendment (Annex XVII, entry 75) restricts specific pigments and additives
-                in tattoo and permanent makeup inks.
+                REACH is the EU regulation on chemical substances. The EU REACH
+                restriction on tattoo inks (Annex XVII, entry 75), in force since January
+                2022, restricts specific pigments and additives in tattoo and permanent
+                makeup inks.
               </p>
               <p
                 style={{
@@ -279,10 +279,10 @@ export default function ReachCompliancePage() {
                   marginBottom: 20,
                 } as React.CSSProperties}
               >
-                If you operate in any EU member state, your inks must comply. Bottles must
-                list CI numbers. MSDS sheets must be on file. Reactions must be logged.
-                Inspectors can ask, and &ldquo;we have it on a spreadsheet&rdquo; is no
-                longer a defensible answer.
+                In plain terms, three things fall on a studio in the EU: use inks that meet
+                the restriction, know which ink and batch went into each client, and share
+                the label information with the client. Your supplier formulates the ink;
+                the record of what you used is yours.
               </p>
               <p
                 style={{
@@ -293,10 +293,11 @@ export default function ReachCompliancePage() {
                   marginBottom: 0,
                 } as React.CSSProperties}
               >
-                Limespun treats compliance as a feature, not a checkbox. Every bottle in your
-                inventory has a CI number, batch ID, MSDS attachment, and shelf-life
-                tracking. Reactions are logged on both the client AND the bottle batch.
-                Reports export in one click for inspectors.
+                Limespun keeps that record in one place. The Ink registry in Settings holds
+                each ink&apos;s brand, color, product code and batch number, and whether
+                you&apos;ve confirmed it&apos;s REACH compliant. Inventory shows how many of
+                your inks are REACH-registered. The consent form carries a REACH ink
+                disclosure, so the client signs with the ink details in front of them.
               </p>
             </motion.div>
           </div>
@@ -340,8 +341,8 @@ export default function ReachCompliancePage() {
               transition={{ duration: 0.6 }}
               style={{ marginBottom: 48, maxWidth: 760 } as React.CSSProperties}
             >
-              <SectionEyebrow label="Four compliance pillars" accent="amber" />
-              <SectionHeading size="sm">What Limespun automates.</SectionHeading>
+              <SectionEyebrow label="How Limespun does it" accent="amber" />
+              <SectionHeading size="sm">Three screens, one ink record.</SectionHeading>
             </motion.div>
 
             <style>{`
@@ -360,46 +361,46 @@ export default function ReachCompliancePage() {
             >
               <MoatCardBright
                 accent="rust"
-                icon={Shield}
-                title="CI number registry"
-                body="Every ink in your cabinet linked to its CI number. Validated against the EU REACH 2022 ink registry. Prohibited substances flagged red."
+                icon={Droplet}
+                title="Ink registry"
+                body="Register each ink in Settings: brand, color, product code and batch number, with a switch for whether its REACH compliance is confirmed."
                 detail={[
-                  ["Validation", "Against REACH registry"],
-                  ["Flagging", "Prohibited subs"],
-                  ["Update cycle", "Quarterly"],
+                  ["Where", "Settings"],
+                  ["Per ink", "Brand, color, batch"],
+                  ["REACH compliant", "Confirmed by you"],
                 ]}
               />
               <MoatCardBright
                 accent="amber"
-                icon={FileText}
-                title="MSDS attachments"
-                body="Material Safety Data Sheets attached to every bottle. PDF, expirable, version-tracked. Inspector pulls the report, the MSDS comes with it."
+                icon={BarChart3}
+                title="REACH-registered on Inventory"
+                body="Inventory counts the inks linked to a registry record and lets you filter to them, so a gap shows up before a client asks."
                 detail={[
-                  ["Format", "PDF"],
-                  ["Storage", "Supabase"],
-                  ["Audit", "Version history"],
+                  ["Where", "Inventory"],
+                  ["Shows", "REACH-registered"],
+                  ["Filter", "Yes"],
                 ]}
               />
               <MoatCardBright
                 accent="sage"
-                icon={AlertCircle}
-                title="Reaction logging"
-                body="Client reacts to red ink? Logged on the client AND the bottle batch. Future studios using the same batch see the warning. Network-wide intelligence."
+                icon={FileText}
+                title="REACH ink disclosure"
+                body="Add the REACH ink disclosure section to your consent form. The client reads the ink details and signs, and the signed form is stored with the session."
                 detail={[
-                  ["Per-client", "Yes"],
-                  ["Per-batch", "Yes"],
-                  ["Cross-studio", "Opt-in"],
+                  ["Where", "Consent form"],
+                  ["Section", "REACH ink disclosure"],
+                  ["Signed", "With the form"],
                 ]}
               />
               <MoatCardBright
                 accent="rust"
-                icon={BarChart3}
-                title="Inspector reports"
-                body="One click exports a PDF: every bottle, every CI, every MSDS, every reaction. Quarterly or on-demand. Submitted to the inspector before they leave."
+                icon={Shield}
+                title="On every plan"
+                body="EU REACH ink tracking is on Solo, Studio, Pro and Multi-Location. It isn't an add-on, and your ink list moves over with the rest of your data."
                 detail={[
-                  ["Export format", "PDF"],
-                  ["Generation time", "<30s"],
-                  ["Retention", "7 years"],
+                  ["Solo", "Included"],
+                  ["Add-on", "None"],
+                  ["Your ink list", "Moved for you"],
                 ]}
               />
             </div>
@@ -423,10 +424,10 @@ export default function ReachCompliancePage() {
           >
             <StatStrip
               items={[
-                { stat: "Every bottle", label: "logged to the ink registry" },
-                { stat: "EU REACH 2022", label: "compliant out of the box" },
-                { stat: "< 30s", label: "inspector report generation" },
-                { stat: "7 years", label: "default retention" },
+                { stat: "Settings", label: "Ink registry for every ink" },
+                { stat: "Inventory", label: "REACH-registered count" },
+                { stat: "Consent form", label: "REACH ink disclosure" },
+                { stat: "Every plan", label: "Solo included" },
               ]}
             />
           </div>
@@ -487,9 +488,9 @@ export default function ReachCompliancePage() {
                     margin: 0,
                   } as React.CSSProperties}
                 >
-                  Limespun is new, so there are no compliance case studies yet. Book a
-                  walkthrough and we&apos;ll log a bottle, attach its SDS and pull an inspector
-                  report in front of you &mdash; then you can judge it on the work.
+                  Limespun is new, so there are no compliance case studies yet. Create an
+                  account and register your first ink in Settings, or send us your ink list
+                  and we&apos;ll move it over &mdash; then judge it on the work.
                 </p>
               </div>
             </motion.div>
@@ -536,27 +537,23 @@ export default function ReachCompliancePage() {
                 items={[
                   {
                     q: "Do I need REACH compliance if I'm not in the EU?",
-                    a: "Legally, no. Practically — many EU clients book studios in the UK, US, Australia. If you accept EU clients, the inks they receive must comply. Limespun handles it either way.",
+                    a: "The restriction applies to studios in the EU. Outside it, these records aren't a legal requirement, but knowing which ink and batch went into each client is still good practice. Limespun works the same either way.",
                   },
                   {
-                    q: "What happens if an inspector visits unannounced?",
-                    a: "You log into Limespun, generate the inspector report, hand them the PDF. <30s start to finish. The report includes every bottle's CI, MSDS, batch, expiry, and reaction history.",
+                    q: "What do I show an inspector?",
+                    a: "Open the Ink registry in Settings: every registered ink with its brand, color, product code, batch number and REACH status. Each client's signed consent form carries the REACH ink disclosure.",
                   },
                   {
                     q: "Can I import my existing ink list?",
-                    a: "Yes. CSV import or copy-paste. The migration team maps existing bottles to REACH records for you, on every plan.",
-                  },
-                  {
-                    q: "Are there fines for non-compliance?",
-                    a: "Yes. EU fines for non-compliance start at €5,000 and scale with studio size. Repeat offences risk operating-licence suspension. The math on Limespun compliance vs a fine: obvious.",
+                    a: "Yes. Send us your list and we move it over for you as part of migration, on every plan.",
                   },
                   {
                     q: "Is the REACH module on every plan?",
                     a: "Yes. EU REACH ink tracking is on every plan, Solo included. It isn't an add-on or a Pro-only feature.",
                   },
                   {
-                    q: "Do you update when REACH regulations change?",
-                    a: "Yes. Quarterly. The 2022 list isn't the final word — the EU is reviewing additional substances. We track changes and update the registry; your studio stays compliant without lifting a finger.",
+                    q: "Does Limespun check my inks against the restricted substances list?",
+                    a: "No. The Ink registry records what you use and whether you've confirmed it's REACH compliant; your supplier's documentation is what confirms it. Limespun keeps that record in one place and puts it on the consent form.",
                   },
                 ]}
               />
@@ -566,12 +563,12 @@ export default function ReachCompliancePage() {
 
         {/* ── CTA ───────────────────────────────────────────────────────── */}
         <CTASection
-          badge="Compliance, automated"
-          headline="Stop running compliance on a spreadsheet."
+          badge="On every plan"
+          headline="Stop keeping ink records on a spreadsheet."
           italicWord="spreadsheet"
-          subhead="On every plan. Drop your ink list in. Watch REACH compliance light up."
-          primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "Talk to compliance", href: "/book-a-demo", icon: "play" }}
+          subhead="EU REACH ink tracking is on every plan, Solo included. Register your inks in Settings, or send us your list and we'll move it over."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
       </main>
       <Footer />

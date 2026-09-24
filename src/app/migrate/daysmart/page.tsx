@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Users, DollarSign, Calendar } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { ACCOUNT, BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -12,6 +12,7 @@ import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
+import { competitorCaption, competitorRows } from "@/components/shared/competitor-rows";
 
 type AccentKey = "rust" | "amber" | "sage";
 
@@ -103,57 +104,57 @@ const carryCards: CarryCardProps[] = [
     accent: "rust",
     icon: Users,
     title: "Every client record",
-    body: "Names, contacts, allergy fields, custom fields. Mapped to Limespun schema. Photo libraries migrated and re-organised by project.",
+    body: "Names, contact details, notes and the signed forms you already have. Custom fields come over as notes on the client record.",
   },
   {
     accent: "amber",
     icon: DollarSign,
-    title: "Every deposit + balance",
-    body: "Outstanding deposits ported intact. Stripe Connect re-attached. Day-1 in Limespun shows the same money state as day-zero in DaySmart.",
+    title: "Every deposit held",
+    body: "Deposits you're holding come across on the client, so day one in Limespun shows the same money you had in DaySmart.",
   },
   {
     accent: "sage",
     icon: Calendar,
-    title: "Every booking on the deck",
-    body: "Future appointments, recurring bookings, blocked time, residencies — all carried. The calendar in Limespun is identical to DaySmart's the moment we cut over.",
+    title: "Every upcoming booking",
+    body: "Upcoming appointments come across on the right artist's calendar, so your book matches on the day you switch.",
   },
 ];
 
 const timelineSteps = [
   {
-    day: "Day 1",
-    title: "Discovery call · API access · data shape mapping",
+    day: "1",
+    title: "You tell us what you use; we work from what DaySmart lets you export",
   },
   {
-    day: "Days 2-4",
-    title: "Export + clean (DaySmart API-pull, schema map, dedup)",
+    day: "2",
+    title: "Export and clean: fields mapped, duplicates removed",
   },
   {
-    day: "Days 5-7",
-    title: "Preview run (Limespun staging, you review, sign off)",
+    day: "3",
+    title: "Preview: you check the import before it lands",
   },
   {
-    day: "Days 8-9",
-    title: "Cutover (parallel hour, switch DNS, cancel DaySmart)",
+    day: "4",
+    title: "Side by side until your last DaySmart booking clears, then you switch",
   },
 ];
 
 const faqItems = [
   {
     q: "Will my DaySmart custom fields come across?",
-    a: "Yes. Standard fields map automatically. Custom fields become 'Notes' or get promoted to first-class fields if the migration team thinks they earn it.",
+    a: "Standard fields map across. Custom fields come over as notes on the client record.",
   },
   {
-    q: "What about my DaySmart inventory data?",
-    a: "Migrated to Limespun Inventory module. Bottle records re-mapped to EU REACH-compliant schema. Vendor cost data preserved.",
+    q: "What comes across from DaySmart?",
+    a: "We work from what DaySmart lets you export and move your clients, upcoming bookings, deposits held and signed forms. If something won't export cleanly, we tell you before you switch.",
   },
   {
     q: "Can I keep my old subscription overlapping?",
-    a: `Yes — and it's our recommendation. Run both for up to 14 days, then cancel DaySmart at cutover. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
+    a: `Yes, and we recommend it. Keep DaySmart running until your last booking there clears, then cancel. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   },
   {
     q: "Will my booking links break?",
-    a: "No. We set up redirect rules from old DaySmart booking URLs to Limespun booking URLs. Clients clicking old links land on the new flow.",
+    a: "Your Limespun booking page has its own link, or your own domain on any plan. On the day you switch, update the link in your bio and on your website.",
   },
 ];
 
@@ -172,13 +173,13 @@ export default function DaysmartPage() {
         <HeroSection
           eyebrow="From DaySmart"
           eyebrowAccent="rust"
-          headline="DaySmart was built for spas. You're a tattoo studio."
-          italicWord="tattoo"
-          subhead="Multi-session sleeves don't exist in DaySmart. Allergy intelligence is a custom field. Deposit pools are a Notes app. We plan your move over 9 days. White-glove. Every record checked with you."
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
+          headline="Move from DaySmart without losing a booking."
+          italicWord="booking"
+          subhead="DaySmart Body Art handles tattoo bookings, release forms and commissions. Limespun tracks a sleeve as one project with one deposit pool, and shows allergy flags on every booking. We move your data for you: usually a week or two, included on every plan, with DaySmart running alongside until you switch."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
           secondaryCTA={{
-            label: "Get started",
-            href: "https://app.limespun.com/signup",
+            label: "Contact us about switching",
+            href: "/contact",
           }}
         />
 
@@ -216,7 +217,7 @@ export default function DaysmartPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              What Limespun does that DaySmart can&apos;t.
+              DaySmart and Limespun, side by side.
             </motion.h2>
             <motion.div
               variants={fadeUp}
@@ -230,49 +231,8 @@ export default function DaysmartPage() {
                   { key: "daysmart", label: "DaySmart" },
                   { key: "limespun", label: "Limespun", highlighted: true },
                 ]}
-                rows={[
-                  {
-                    feature: "Multi-session projects (sleeves)",
-                    values: { daysmart: false, limespun: true },
-                  },
-                  {
-                    feature: "Deposit pool across visits",
-                    values: { daysmart: false, limespun: true },
-                  },
-                  {
-                    feature: "Allergy intelligence (surfaces 4 places)",
-                    values: { daysmart: "Custom field", limespun: true },
-                  },
-                  {
-                    feature: "Photo timeline (REF → HEALED)",
-                    values: { daysmart: "Just attachments", limespun: true },
-                  },
-                  {
-                    feature: "EU REACH ink registry",
-                    values: { daysmart: false, limespun: true },
-                  },
-                  {
-                    feature: "AI design assistant",
-                    values: { daysmart: false, limespun: "Pro and up" },
-                  },
-                  {
-                    feature: "Commission auto-splits",
-                    values: { daysmart: false, limespun: "Studio and up" },
-                  },
-                  {
-                    feature: "Guest residency band",
-                    values: { daysmart: false, limespun: "Pro and up" },
-                  },
-                  {
-                    feature: "Per-booking transaction fee",
-                    values: { daysmart: "No", limespun: "No" },
-                  },
-                  {
-                    feature: "White-glove migration in 9 days",
-                    values: { daysmart: false, limespun: true },
-                  },
-                ]}
-                caption="Source: DaySmart public docs + Limespun feature set, April 2026."
+                rows={competitorRows("daysmart")}
+                caption={competitorCaption("daysmart")}
               />
             </motion.div>
           </div>
@@ -312,7 +272,7 @@ export default function DaysmartPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              Every record. Every photo. Every dollar.
+              What comes across.
             </motion.h2>
             <motion.div
               variants={stagger}
@@ -334,7 +294,7 @@ export default function DaysmartPage() {
           </div>
         </section>
 
-        {/* 9-day process */}
+        {/* The move */}
         <section
           style={{
             background: BRAND.bone,
@@ -352,7 +312,7 @@ export default function DaysmartPage() {
               alignItems: "center",
             } as React.CSSProperties}
           >
-            <SectionEyebrow label="9-day plan" accent="rust" />
+            <SectionEyebrow label="The move" accent="rust" />
             <motion.h2
               variants={fadeUp}
               initial="hidden"
@@ -368,7 +328,7 @@ export default function DaysmartPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              How DaySmart studios migrate.
+              How the move works.
             </motion.h2>
             <motion.div
               variants={stagger}
@@ -534,15 +494,14 @@ export default function DaysmartPage() {
 
         {/* CTA */}
         <CTASection
-          badge="The 9-day move"
+          badge="Switching"
           headline="Leave DaySmart cleanly."
           italicWord="cleanly"
-          subhead="30-min discovery call. We map your studio's data shape and give you an honest 9-day plan. Free."
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
+          subhead={`Migration is included on every plan: usually a week or two, with DaySmart running alongside until you switch. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
           secondaryCTA={{
-            label: "Or get started",
-            href: "https://app.limespun.com/signup",
-            icon: "play",
+            label: "Contact us about switching",
+            href: "/contact",
           }}
         />
       </main>

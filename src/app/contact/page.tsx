@@ -2,8 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Mail, LifeBuoy, Newspaper, Heart, Lightbulb } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { Mail, LifeBuoy, Newspaper } from "lucide-react";
+import { ACCOUNT, BRAND, CONTACT_EMAIL, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { Nav } from "@/components/layout/nav";
+import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { StatStrip } from "@/components/shared/stat-strip";
@@ -29,69 +31,52 @@ const accentTokens: Record<AccentColor, { color: string; bg: string; border: str
   sage: { color: BRAND.sage, bg: BRAND.sageWash, border: BRAND.sageSoft },
 };
 
+/** Every topic goes to the one inbox; the subject line tells us what it's about. */
+const mailto = (subject: string): string => `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
+
 const CHANNELS: ChannelCard[] = [
   {
     accent: "rust",
     icon: <Mail size={18} strokeWidth={1.8} />,
     title: "Sales",
-    email: "sales@boldteq.com",
-    description: "For pricing, multi-location, custom plans",
-    href: "mailto:sales@boldteq.com",
+    email: CONTACT_EMAIL,
+    description: "Plans, Multi-Location, or switching from another tool",
+    href: mailto("Sales"),
   },
   {
     accent: "amber",
     icon: <LifeBuoy size={18} strokeWidth={1.8} />,
     title: "Support",
-    email: "support@boldteq.com",
-    description: "Logged-in studios use in-app chat for fastest response",
-    href: "mailto:support@boldteq.com",
+    email: CONTACT_EMAIL,
+    description: "Help with your account or anything in the app",
+    href: mailto("Support"),
   },
   {
     accent: "sage",
     icon: <Newspaper size={18} strokeWidth={1.8} />,
     title: "Press",
-    email: "press@boldteq.com",
-    description: "Brand kit and product screenshots at /press",
-    href: "mailto:press@boldteq.com",
-  },
-  {
-    accent: "rust",
-    icon: <Heart size={18} strokeWidth={1.8} />,
-    title: "Partnerships",
-    email: "partners@boldteq.com",
-    description: "Integrations, agencies, education programmes",
-    href: "mailto:partners@boldteq.com",
-  },
-  {
-    accent: "amber",
-    icon: <Lightbulb size={18} strokeWidth={1.8} />,
-    title: "Feature requests",
-    email: "feedback@boldteq.com",
-    description: "We answer within 5 business days. Honest yes/no/on-roadmap.",
-    href: "mailto:feedback@boldteq.com",
+    email: CONTACT_EMAIL,
+    description: "Facts and brand assets are on the press page",
+    href: mailto("Press"),
   },
 ];
 
 const FAQ_ITEMS = [
   {
     q: "Do you have a phone number?",
-    a: "Not a public one. Phones don't scale, and the founder picks up his own emails. If you need a call, we'll set one up after the first email exchange.",
+    a: "No. Email is the way to reach us, and you'll hear back within one business day.",
   },
   {
-    q: "Where are you based?",
-    a: "Boldteq has a registered office in the UK. The team is distributed across Europe and the Americas. Working hours roughly span UTC-5 to UTC+5.",
+    q: "I'm switching from another tool. Who do I write to?",
+    a: `Pick Sales in the form or email ${CONTACT_EMAIL}. We move your clients, bookings and signed forms over for you, on every plan.`,
   },
   {
-    q: "What about data subject requests (GDPR, CCPA)?",
-    a: "Email privacy@boldteq.com. We respond within 30 days as required, usually within 5.",
+    q: "How do I make a data request (GDPR, CCPA)?",
+    a: `Email ${CONTACT_EMAIL} with "Data request" in the subject line. We complete it within the legal deadline, which is one month under GDPR.`,
   },
   {
-    q: "Is there an EU representative?",
-    a: "Yes. EU data subjects can contact our EU representative at eu-rep@boldteq.com.",
-  },
-  {
-    q: "Do you support different languages?",
-    a: "We answer in English and Spanish today. French and German planned for Q3 2026.",
+    q: "Which languages do you reply in?",
+    a: "English.",
   },
 ];
 
@@ -170,104 +155,157 @@ function ChannelCardItem({ card }: { card: ChannelCard }) {
 export default function ContactPage() {
   return (
     <>
-      <HeroSection
-        eyebrow="Get in touch"
-        eyebrowAccent="rust"
-        headline="One inbox. We answer every email."
-        italicWord="every"
-        subhead="No support tier maze. No 'select your urgency level' form. One human reads every message and routes it to the right person — usually within four hours, always within one business day."
-        primaryCTA={{ label: "Email hello@boldteq.com", href: "mailto:hello@boldteq.com" }}
-        secondaryCTA={{ label: "Or use the form", href: "#contact-form" }}
-      />
-
-      {/* ─── Channel grid ─────────────────────────────────────────────────────── */}
-      <section
-        style={{
-          background: GRADIENT.sectionWarm,
-          paddingTop: 100,
-          paddingBottom: 100,
-        }}
-      >
-        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-          <SectionEyebrow label="Pick a channel" accent="amber" />
-          <h2
-            style={{
-              fontFamily: FONT.serif,
-              fontSize: "clamp(32px, 4vw, 52px)",
-              fontWeight: 400,
-              color: BRAND.onyx,
-              letterSpacing: "-0.02em",
-              lineHeight: 1.1,
-              marginBottom: 48,
-              marginTop: 0,
-            }}
-          >
-            Five direct lines.
-          </h2>
-
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: 16,
-            }}
-          >
-            {CHANNELS.map((card) => (
-              <ChannelCardItem key={card.email} card={card} />
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ─── Stat strip ───────────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-        <StatStrip
-          items={[
-            { stat: "< 4 hr", label: "average response time" },
-            { stat: "< 1 day", label: "absolute SLA on every email" },
-            { stat: "No tiers", label: "one inbox for everything" },
-            { stat: "Real humans", label: "never an LLM auto-reply" },
-          ]}
+      <Nav />
+      <main>
+        <HeroSection
+          eyebrow="Get in touch"
+          eyebrowAccent="rust"
+          headline="One inbox. We answer every email."
+          italicWord="every"
+          subhead="Sales, support and press questions all go to the same inbox. We reply within one business day, with priority handling on Pro and Multi-Location."
+          primaryCTA={{ label: `Email ${CONTACT_EMAIL}`, href: `mailto:${CONTACT_EMAIL}` }}
+          secondaryCTA={{ label: "Or use the form", href: "#contact-form" }}
         />
-      </div>
 
-      {/* ─── Form section ─────────────────────────────────────────────────────── */}
-      <section
-        id="contact-form"
-        style={{
-          background: BRAND.bone,
-          paddingTop: 100,
-          paddingBottom: 100,
-        }}
-      >
-        <div
-          className="contact-form-grid"
+        {/* ─── Channel grid ─────────────────────────────────────────────────────── */}
+        <section
           style={{
-            maxWidth: 1120,
-            margin: "0 auto",
-            padding: "0 32px",
-            display: "grid",
-            gridTemplateColumns: "1fr 480px",
-            gap: 64,
-            alignItems: "start",
+            background: GRADIENT.sectionWarm,
+            paddingTop: 100,
+            paddingBottom: 100,
           }}
         >
-          {/* Left */}
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-          >
-            <motion.div variants={fadeUp}>
-              <SectionEyebrow label="Or send a single message" accent="rust" />
+          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
+            <SectionEyebrow label="Pick a topic" accent="amber" />
+            <h2
+              style={{
+                fontFamily: FONT.serif,
+                fontSize: "clamp(32px, 4vw, 52px)",
+                fontWeight: 400,
+                color: BRAND.onyx,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+                marginBottom: 48,
+                marginTop: 0,
+              }}
+            >
+              Three topics, one inbox.
+            </h2>
+
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: 16,
+              }}
+            >
+              {CHANNELS.map((card) => (
+                <ChannelCardItem key={card.title} card={card} />
+              ))}
             </motion.div>
-            <motion.h2
-              variants={fadeUp}
+          </div>
+        </section>
+
+        {/* ─── Stat strip ───────────────────────────────────────────────────────── */}
+        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
+          <StatStrip
+            items={[
+              { stat: "1 business day", label: "to hear back from us" },
+              { stat: "One inbox", label: "for sales, support and press" },
+              { stat: "Email only", label: "no phone line to chase" },
+            ]}
+          />
+        </div>
+
+        {/* ─── Form section ─────────────────────────────────────────────────────── */}
+        <section
+          id="contact-form"
+          style={{
+            background: BRAND.bone,
+            paddingTop: 100,
+            paddingBottom: 100,
+          }}
+        >
+          <div
+            className="contact-form-grid"
+            style={{
+              maxWidth: 1120,
+              margin: "0 auto",
+              padding: "0 32px",
+              display: "grid",
+              gridTemplateColumns: "1fr 480px",
+              gap: 64,
+              alignItems: "start",
+            }}
+          >
+            {/* Left */}
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+            >
+              <motion.div variants={fadeUp}>
+                <SectionEyebrow label="Or use the form" accent="rust" />
+              </motion.div>
+              <motion.h2
+                variants={fadeUp}
+                style={{
+                  fontFamily: FONT.serif,
+                  fontSize: "clamp(28px, 3.5vw, 44px)",
+                  fontWeight: 400,
+                  color: BRAND.onyx,
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.1,
+                  marginBottom: 20,
+                  marginTop: 0,
+                }}
+              >
+                Write it once, here.
+              </motion.h2>
+              <motion.p
+                variants={fadeUp}
+                style={{
+                  fontFamily: FONT.sans,
+                  fontSize: 17,
+                  color: BRAND.stoneDark,
+                  lineHeight: 1.6,
+                  maxWidth: 480,
+                  marginBottom: 0,
+                }}
+              >
+                Pick a topic and write a line or two. The form lands in the same inbox as
+                email, and we reply within one business day.
+              </motion.p>
+            </motion.div>
+
+            {/* Right */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ContactForm />
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ─── FAQ ──────────────────────────────────────────────────────────────── */}
+        <section
+          style={{
+            background: GRADIENT.sectionWarm,
+            paddingTop: 100,
+            paddingBottom: 100,
+          }}
+        >
+          <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
+            <SectionEyebrow label="FAQ" accent="rust" />
+            <h2
               style={{
                 fontFamily: FONT.serif,
                 fontSize: "clamp(28px, 3.5vw, 44px)",
@@ -275,82 +313,27 @@ export default function ContactPage() {
                 color: BRAND.onyx,
                 letterSpacing: "-0.02em",
                 lineHeight: 1.1,
-                marginBottom: 20,
+                marginBottom: 40,
                 marginTop: 0,
               }}
             >
-              Tell us once. We route it.
-            </motion.h2>
-            <motion.p
-              variants={fadeUp}
-              style={{
-                fontFamily: FONT.sans,
-                fontSize: 17,
-                color: BRAND.stoneDark,
-                lineHeight: 1.6,
-                maxWidth: 480,
-                marginBottom: 0,
-              }}
-            >
-              Not sure which email address to use? Use the form. Select a topic and
-              we&apos;ll route your message to the right person. Sales, support, press,
-              partnerships, feature requests — one form serves every topic.
-            </motion.p>
-          </motion.div>
+              Common questions.
+            </h2>
+            <FAQAccordion items={FAQ_ITEMS} accent="rust" />
+          </div>
+        </section>
 
-          {/* Right */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <ContactForm />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ─── FAQ ──────────────────────────────────────────────────────────────── */}
-      <section
-        style={{
-          background: GRADIENT.sectionWarm,
-          paddingTop: 100,
-          paddingBottom: 100,
-        }}
-      >
-        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px" }}>
-          <SectionEyebrow label="FAQ" accent="rust" />
-          <h2
-            style={{
-              fontFamily: FONT.serif,
-              fontSize: "clamp(28px, 3.5vw, 44px)",
-              fontWeight: 400,
-              color: BRAND.onyx,
-              letterSpacing: "-0.02em",
-              lineHeight: 1.1,
-              marginBottom: 40,
-              marginTop: 0,
-            }}
-          >
-            Common questions.
-          </h2>
-          <FAQAccordion items={FAQ_ITEMS} accent="rust" />
-        </div>
-      </section>
-
-      {/* ─── CTA ──────────────────────────────────────────────────────────────── */}
-      <CTASection
-        badge="Talk to a real human"
-        headline="No tier mazes."
-        italicWord="no"
-        subhead="One inbox. One human. Every message read."
-        primaryCTA={{ label: "Email hello@boldteq.com", href: "mailto:hello@boldteq.com" }}
-        secondaryCTA={{
-          label: "Get started",
-          href: "https://app.limespun.com/signup",
-          icon: "play",
-        }}
-      />
+        {/* ─── CTA ──────────────────────────────────────────────────────────────── */}
+        <CTASection
+          badge="Get in touch"
+          headline="One address for everything."
+          italicWord="everything"
+          subhead="One inbox for every question. We reply within one business day."
+          primaryCTA={{ label: `Email ${CONTACT_EMAIL}`, href: `mailto:${CONTACT_EMAIL}` }}
+          secondaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+        />
+      </main>
+      <Footer />
 
       <style>{`
         @media (max-width: 1024px) {

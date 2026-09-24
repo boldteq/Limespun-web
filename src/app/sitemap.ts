@@ -7,7 +7,6 @@ import { TOOLS_INDEX } from "@/lib/site-links";
 const STATIC_ROUTES: ReadonlyArray<{ path: string; priority: number }> = [
   { path: "", priority: 1 },
   { path: "/pricing", priority: 0.9 },
-  { path: "/book-a-demo", priority: 0.9 },
   { path: "/product", priority: 0.8 },
   { path: "/product/ai-design", priority: 0.7 },
   { path: "/product/analytics", priority: 0.7 },

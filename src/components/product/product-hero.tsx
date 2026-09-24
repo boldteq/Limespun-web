@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { BRAND, FONT, SHADOW } from "@/lib/brand";
+import { BRAND, CTA, FONT, SHADOW } from "@/lib/brand";
 import { ProductBreadcrumb } from "@/components/product/product-breadcrumb";
 
 interface ProductHeroProps {
@@ -17,13 +17,13 @@ interface ProductHeroProps {
 }
 
 const defaultPrimary = {
-  label: "Get started",
-  href: "https://app.limespun.com/signup",
+  label: CTA.primaryLabel,
+  href: CTA.primaryHref,
 };
 
 const defaultSecondary = {
-  label: "See it in motion",
-  href: "/book-a-demo",
+  label: CTA.secondaryLabel,
+  href: CTA.secondaryHref,
 };
 
 function buildHeadlineParts(headline: string, italicWord: string) {

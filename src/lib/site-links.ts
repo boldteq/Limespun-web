@@ -1,4 +1,4 @@
-import { ACCOUNT, CTA } from "@/lib/brand";
+import { ACCOUNT } from "@/lib/brand";
 
 export interface SiteLink {
   label: string;
@@ -50,7 +50,7 @@ export const FOOTER_GROUPS: LinkGroup[] = [
     heading: "Product",
     links: [
       { label: "Calendar", href: "/product/calendar" },
-      { label: "Sleeves & projects", href: "/product/projects" },
+      { label: "Multi-session projects", href: "/product/projects" },
       { label: "Clients", href: "/product/clients" },
       { label: "Consent forms", href: "/product/forms" },
       { label: "Payments", href: "/product/payments" },
@@ -91,7 +91,6 @@ export const FOOTER_GROUPS: LinkGroup[] = [
       { label: "Migration guide", href: "/migrate" },
       { label: "REACH hub", href: "/reach-compliance" },
       { label: "Roadmap", href: "/roadmap" },
-      { label: CTA.demoLabel, href: CTA.demoHref },
       { label: "Contact", href: "/contact" },
     ],
   },

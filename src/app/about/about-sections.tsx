@@ -7,13 +7,12 @@ import { CTASection } from "@/components/shared/cta-section";
 import { StatStrip } from "@/components/shared/stat-strip";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { LimespunMark } from "@/components/brand/limespun-mark";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
-import { MONEY_BACK_DAYS } from "@/lib/data/plans";
+import { ACCOUNT, BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { FOUNDING_OFFER_OPEN, FOUNDING_OFFER_SIZE, MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 interface PrincipleCard {
-  num: string;
   title: string;
   body: string;
   accent: "rust" | "amber" | "sage";
@@ -32,34 +31,24 @@ interface TeamMember {
 
 const principles: PrincipleCard[] = [
   {
-    num: "01",
-    title: "Brand-First",
-    body: "Premium, intentional, current. No filler. If a button doesn't earn its pixels, it doesn't ship.",
+    title: "Built only for tattoo",
+    body: "Sessions, deposits, consent and artist splits are the foundation, not add-ons to salon software. If it doesn't fit a tattoo studio, we don't build it.",
     accent: "rust",
   },
   {
-    num: "02",
-    title: "Competitive Intelligence",
-    body: "Study the winners. Extract the playbook. Execute it better. Add what no one else has.",
+    title: "Flat price, no cut",
+    body: "One monthly price per plan. No Limespun fee on your bookings or deposits; card payments carry only the provider's standard fee.",
     accent: "amber",
   },
   {
-    num: "03",
-    title: "Iterative Quality",
-    body: "v1 = functional, branded, deployable. v2 = enhanced. v3 = polished. Never ship a 'maybe.'",
+    title: "Say what's true",
+    body: "No invented reviews, studios or numbers. If something isn't in the app yet, we say so.",
     accent: "sage",
   },
   {
-    num: "04",
-    title: "Fearless Execution",
-    body: "Someone built it? Build it better. Default to action, not analysis paralysis.",
+    title: "Ship with studios",
+    body: "What we build next comes from the studios using it. The changelog shows what shipped, and the roadmap shows what's next.",
     accent: "rust",
-  },
-  {
-    num: "05",
-    title: "Complexity as Moat",
-    body: "We choose hard problems. The harder the problem, the smaller the field of competitors who can ship it.",
-    accent: "amber",
   },
 ];
 
@@ -73,7 +62,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Yash Baldha",
     role: "Founder · Boldteq",
-    bio: "Builds with the team. Studies the work. Treats every Limespun user like the only one.",
+    bio: "Runs Boldteq and builds Limespun with the team.",
     initials: "YB",
     gradientFrom: BRAND.rust,
     gradientTo: BRAND.amber,
@@ -81,7 +70,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Engineering",
     role: "The build team",
-    bio: "The hands behind 644 files, 18 migrations, 140 routes. Ship-or-die work ethic.",
+    bio: "Builds and runs the Limespun app.",
     initials: "EN",
     gradientFrom: BRAND.amber,
     gradientTo: BRAND.sage,
@@ -89,7 +78,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Design",
     role: "The taste team",
-    bio: "Every screen, every animation, every word. The reason it doesn't feel like SaaS.",
+    bio: "Every screen and every word in the app and on this site.",
     initials: "DS",
     gradientFrom: BRAND.sage,
     gradientTo: BRAND.rust,
@@ -156,8 +145,8 @@ function ThesisSection() {
 
             {[
               "We started Boldteq in 2024 because we kept watching craft businesses try to run on software written for spas and barbershops. The 'multi-session project' didn't exist. The 'allergy field' was buried three menus deep. The 'deposit pool' was a Notes app on a second phone.",
-              "Limespun is what happens when you stop adapting salon software for tattoo and start designing for tattoo from the first commit. Sleeves are projects. Deposits pool. Allergies surface. Residencies have their own band on the calendar. None of these are configurable add-ons. They're the foundation.",
-              "We are not a Series B venture-backed company chasing a billion-dollar TAM. We are a small, independent team writing software for an industry we admire — and we'd rather have 200 studios that love us than 20,000 that tolerate us.",
+              "Limespun is what happens when you stop adapting salon software for tattoo and start designing for tattoo from the first commit. A sleeve is one project. Deposits follow the project. Allergies show on the day. Guest artists get their own dates and splits. None of these are add-ons. They're the foundation.",
+              "We are a small, independent team writing software for one industry, and we'd rather have 200 studios that love it than 20,000 that put up with it.",
               "Every decision we make starts with the same question: would a great studio owner pay us, by choice, every month, to keep this running? If the answer is no, we cut it.",
             ].map((para, i) => (
               <motion.p
@@ -248,7 +237,7 @@ function PrinciplesGrid() {
               marginBottom: 18,
             } as React.CSSProperties}
           >
-            Five principles, every line.
+            Four principles, every release.
           </h2>
           <p
             style={{
@@ -259,7 +248,7 @@ function PrinciplesGrid() {
               maxWidth: 600,
             } as React.CSSProperties}
           >
-            Not a manifesto. Not a posters-on-the-wall thing. These are the actual decision rules we apply when we sit down to build.
+            Not posters on a wall. These are the rules we use to decide what to build, and what to say about it.
           </p>
         </motion.div>
 
@@ -267,7 +256,7 @@ function PrinciplesGrid() {
           className="about-principles-grid"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(5, 1fr)",
+            gridTemplateColumns: "repeat(4, 1fr)",
             gap: 18,
           } as React.CSSProperties}
         >
@@ -275,7 +264,7 @@ function PrinciplesGrid() {
             const a = accentColorMap[p.accent];
             return (
               <motion.div
-                key={p.num}
+                key={p.title}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -313,19 +302,6 @@ function PrinciplesGrid() {
                     pointerEvents: "none",
                   } as React.CSSProperties}
                 />
-                <div
-                  style={{
-                    fontFamily: FONT.mono,
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: a.color,
-                    letterSpacing: "0.06em",
-                    marginBottom: 14,
-                    marginTop: 8,
-                  } as React.CSSProperties}
-                >
-                  {p.num}
-                </div>
                 <h3
                   style={{
                     fontFamily: FONT.sans,
@@ -333,6 +309,7 @@ function PrinciplesGrid() {
                     fontWeight: 600,
                     color: BRAND.onyx,
                     letterSpacing: "-0.01em",
+                    marginTop: 8,
                     marginBottom: 10,
                     lineHeight: 1.3,
                   } as React.CSSProperties}
@@ -410,7 +387,7 @@ function TimelineSection() {
               margin: "0 auto",
             } as React.CSSProperties}
           >
-            Two years from concept to launch. Here&apos;s what&apos;s true today.
+            Here&apos;s what&apos;s true today.
           </p>
         </motion.div>
 
@@ -423,10 +400,11 @@ function TimelineSection() {
           <StatStrip
             items={[
               { stat: "2024",   label: "Boldteq founded" },
-              { stat: "13",     label: "sprints to v1" },
               { stat: "Live",   label: "any studio can create an account today" },
-              { stat: "Tattoo-only",  label: "no salon templates underneath" },
-              { stat: "$0",     label: "in transaction fees taken" },
+              ...(FOUNDING_OFFER_OPEN
+                ? [{ stat: String(FOUNDING_OFFER_SIZE), label: "founding lifetime spots, first come" }]
+                : []),
+              { stat: "$0",     label: "Limespun fee on bookings or deposits" },
             ]}
           />
         </motion.div>
@@ -472,7 +450,7 @@ function TeamGrid() {
               marginBottom: 18,
             } as React.CSSProperties}
           >
-            A small team. Three time zones.
+            A small team.
           </h2>
           <p
             style={{
@@ -483,7 +461,7 @@ function TeamGrid() {
               maxWidth: 600,
             } as React.CSSProperties}
           >
-            We don&apos;t have a 50-person &apos;customer success&apos; org. We have engineers, designers, and one founder — all of whom have walked into actual studios with actual clients.
+            No 50-person customer success org. A founder and a small team who build the product and answer the email.
           </p>
         </motion.div>
 
@@ -587,9 +565,9 @@ export function AboutSections() {
         eyebrowAccent="rust"
         headline="Built for the work, not the spreadsheet."
         italicWord="work"
-        subhead="Boldteq is a small team in three time zones, building software for studios in many. We don't make 'platforms.' We make tools. The kind that show up at 9am, do the job, and stay out of the way."
-        primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
-        secondaryCTA={{ label: "Talk to the team", href: "/book-a-demo" }}
+        subhead="Boldteq is a small team building software for tattoo studios. We don't make platforms. We make tools that show up at 9am, do the job and stay out of the way."
+        primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+        secondaryCTA={{ label: "Contact us", href: "/contact" }}
       />
 
       <ThesisSection />
@@ -599,11 +577,11 @@ export function AboutSections() {
 
       <CTASection
         badge="Run on Limespun"
-        headline="Studios that care, building with us."
-        italicWord="care"
-        subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration on every plan. Or talk to us — we answer every email.`}
-        primaryCTA={{ label: "Get started", href: "https://app.limespun.com/signup" }}
-        secondaryCTA={{ label: "Talk to the team", href: "/book-a-demo", icon: "play" }}
+        headline="Run the shop in one place."
+        italicWord="place"
+        subhead={`Create your account in minutes. We move your data over for you on every plan. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+        primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+        secondaryCTA={{ label: "See pricing", href: "/pricing" }}
       />
     </>
   );

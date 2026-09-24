@@ -98,18 +98,18 @@ function AllergyVisual() {
 function PolicyVisual() {
   return (
     <Panel>
-      <p className="text-[12px] font-medium text-mute">Cancellation policy</p>
+      <p className="text-[12px] font-medium text-mute">Owen P. · New piece, calf</p>
       <div className="mt-3 flex items-center justify-between border-t border-hair pt-3 text-[14px]">
-        <span className="text-graphite">Cancel within</span>
-        <span className="rounded-[8px] border border-hair-strong px-2 py-1 font-semibold text-graphite tabular-nums">48 hours</span>
+        <span className="text-graphite">Deposit</span>
+        <span className="rounded-[8px] border border-hair-strong px-2 py-1 font-semibold text-graphite tabular-nums">$150</span>
       </div>
       <div className="mt-2 flex items-center justify-between text-[14px]">
-        <span className="text-graphite">Deposit</span>
-        <span className="font-semibold text-graphite">Kept by studio</span>
+        <span className="text-graphite">Booking</span>
+        <span className="font-semibold text-graphite">Pending until paid</span>
       </div>
       <Toast
         icon={<Check size={15} strokeWidth={2.6} />}
-        title="Applied to 38 upcoming bookings"
+        title="Deposit paid · Sat, Oct 10 confirmed"
         className={`mt-5 ${panelToast}`}
       />
     </Panel>
@@ -168,7 +168,7 @@ function InboxVisual() {
     <div className="flex flex-col gap-2.5 px-7 pb-7 sm:px-8 sm:pb-8">
       <div className="max-w-[min(88%,360px)] self-start rounded-[16px] rounded-bl-[4px] bg-white px-4 py-2.5 text-[13px] text-graphite shadow-[0_1px_2px_rgba(29,30,28,0.06)]">
         Any chance of a Saturday for the rest of my sleeve?
-        <span className="mt-1 block text-[11px] text-mute">Instagram · Asha M.</span>
+        <span className="mt-1 block text-[11px] text-mute">SMS · Asha M.</span>
       </div>
       <div className="max-w-[min(88%,360px)] self-end rounded-[16px] rounded-br-[4px] bg-graphite px-4 py-2.5 text-[13px] text-white">
         Dev has Sat Nov 7 at 11. Your $240 deposit is already on the project.
@@ -200,7 +200,7 @@ export function Connected() {
           <Tile
             className="md:col-span-3"
             title="No-show protection"
-            body="Set your deposit and cancellation rules once. Limespun applies them to every booking."
+            body="A booking stays Pending until the client pays the deposit, so the chair is only held for people who have paid."
           >
             <PolicyVisual />
           </Tile>
@@ -223,7 +223,7 @@ export function Connected() {
           <Tile
             className="md:col-span-6 lg:col-span-2"
             title="One inbox"
-            body="DMs, texts and email next to the booking they're about."
+            body="Texts and email next to the booking they're about."
           >
             <InboxVisual />
           </Tile>

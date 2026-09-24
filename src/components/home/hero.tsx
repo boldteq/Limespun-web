@@ -160,7 +160,7 @@ export function Hero() {
             <PrimaryButton>
               {CTA.primaryLabel} <ArrowRight size={17} strokeWidth={2.4} aria-hidden="true" />
             </PrimaryButton>
-            <SecondaryButton href={CTA.demoHref}>{CTA.demoLabel}</SecondaryButton>
+            <SecondaryButton href="#pricing">{CTA.secondaryLabel}</SecondaryButton>
           </div>
 
           <CheckRow

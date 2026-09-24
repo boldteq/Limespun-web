@@ -4,14 +4,13 @@ import { Footer } from "@/components/layout/footer";
 import { PageIntro } from "@/components/marketing/page-intro";
 import { ClosingCta } from "@/components/marketing/closing-cta";
 import { DepositCalculator } from "@/components/tools/deposit-calculator";
-import { SITE_URL } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Tattoo deposit & no-show calculator | Limespun",
-  description: "Work out how much no-shows cost your tattoo studio each month, and how much a deposit policy keeps. Free, no sign-up.",
-  alternates: { canonical: `${SITE_URL}/tools/deposit-calculator` },
-  openGraph: { title: "Tattoo deposit & no-show calculator", description: "How much does a deposit policy protect each month?", type: "website" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Tattoo deposit & no-show calculator",
+  description: "Work out how much no-shows and late cancels cost your tattoo studio each month, and how much a deposit policy keeps. Free, no sign-up.",
+  path: "/tools/deposit-calculator",
+});
 
 export default function DepositCalculatorPage() {
   return (
@@ -28,7 +27,11 @@ export default function DepositCalculatorPage() {
             <DepositCalculator />
           </div>
         </section>
-        <ClosingCta title="Take the deposit when they book" body="Limespun collects deposits at booking, carries them across a project's sessions and applies your cancellation policy for you." />
+        <ClosingCta
+          title="Take the deposit when they book."
+          italicWord="deposit"
+          body="Limespun collects deposits at booking, carries them across a project's sessions and applies your cancellation policy."
+        />
       </main>
       <Footer />
     </div>

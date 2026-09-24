@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Projects — Multi-session sleeves, deposit pools, photo timelines | Limespun",
+  title: "Projects — Multi-session work, deposit pools, photo timelines | Limespun",
   description:
-    "A sleeve isn't a booking. It's a project. Five sessions, one deposit pool, one healing timeline. The thing salon software doesn't have.",
+    "A sleeve isn't a booking. It's a project. Five sessions, one deposit pool, one photo timeline from reference to healed, and the artist's notes carried forward.",
   openGraph: {
-    title: "Limespun Projects — Multi-session sleeves done right",
-    description: "Five sessions, one deposit pool, one healing timeline.",
+    title: "Limespun Projects — Multi-session work, one record",
+    description: "Five sessions, one deposit pool, one photo timeline.",
     type: "website",
   },
   alternates: { canonical: "https://limespun.com/product/projects" },

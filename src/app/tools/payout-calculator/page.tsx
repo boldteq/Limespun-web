@@ -4,14 +4,13 @@ import { Footer } from "@/components/layout/footer";
 import { PageIntro } from "@/components/marketing/page-intro";
 import { ClosingCta } from "@/components/marketing/closing-cta";
 import { PayoutCalculator } from "@/components/tools/payout-calculator";
-import { SITE_URL } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Tattoo artist payout calculator | Limespun",
+export const metadata: Metadata = pageMetadata({
+  title: "Tattoo artist payout calculator",
   description: "Work out artist and studio pay under commission, booth rent or a guest-artist split. Free tattoo studio payout calculator.",
-  alternates: { canonical: `${SITE_URL}/tools/payout-calculator` },
-  openGraph: { title: "Tattoo artist payout calculator", description: "Commission, booth rent or guest split, worked out.", type: "website" },
-};
+  path: "/tools/payout-calculator",
+});
 
 export default function PayoutCalculatorPage() {
   return (
@@ -28,7 +27,11 @@ export default function PayoutCalculatorPage() {
             <PayoutCalculator />
           </div>
         </section>
-        <ClosingCta title="Payday without the spreadsheet" body="Limespun counts every closed session toward the right artist under their own split, so payouts take one approval." />
+        <ClosingCta
+          title="Payday without the spreadsheet."
+          italicWord="Payday"
+          body="Limespun counts every closed session toward the right artist under their own split, so payouts take one approval."
+        />
       </main>
       <Footer />
     </div>

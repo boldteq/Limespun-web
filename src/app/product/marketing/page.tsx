@@ -7,12 +7,11 @@ import { ProductHero } from "@/components/product/product-hero";
 import { ProductPillars } from "@/components/product/product-pillars";
 import { ProductAnatomy } from "@/components/product/product-anatomy";
 import { ProductItemTypes } from "@/components/product/product-item-types";
-import { ProductVsTable } from "@/components/product/product-vs-table";
 import { ProductDayInLife } from "@/components/product/product-day-in-life";
 import { ProductRelated } from "@/components/product/product-related";
 import { ProductCTA } from "@/components/product/product-cta";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
-import { MarketingMockup } from "@/components/product/mockups/marketing-mockup";
+import { MarketingScreen } from "@/components/mockups";
 import { BRAND } from "@/lib/brand";
 import {
   Megaphone,
@@ -39,53 +38,52 @@ export default function MarketingPage() {
           feature="Marketing"
           headline="Campaigns that book, not blast."
           italicWord="not blast"
-          subhead="Targeted touch-up windows. Loyalty milestones routed via Stripe Connect. Auto win-back for clients silent six months. Studio marketing that sounds like the artist, not the spam folder."
-          dashboard={<MarketingMockup />}
+          subhead="Campaigns to your own client list by text and email. Segments like 'healed, not rebooked' on Studio. A waitlist that fills cancellations, and referrals you can track. Studio marketing that sounds like the artist, not the spam folder."
+          dashboard={<MarketingScreen />}
         />
 
         <ProductPillars
           eyebrow="How marketing works in Limespun"
-          heading="Three mechanics worth automating."
-          italicWord="worth automating"
-          intro="Campaigns, loyalty, and win-back — running in the background while the studio focuses on the work."
+          heading="Three ways to fill quiet weeks."
+          italicWord="quiet weeks"
+          intro="Campaigns to your own list, a waitlist for cancellations, and referrals, all from the client records you already have."
           pillars={[
             {
               icon: Megaphone,
               accent: BRAND.rust,
-              eyebrow: "Targeted campaigns",
-              title: "Slice your client list by behaviour.",
-              desc: "Filter by last session date, project completed, artist, or service type. Send to exactly the right clients — not everyone.",
+              eyebrow: "Campaigns",
+              title: "Send to the right clients, not everyone.",
+              desc: "Pick a segment of your client list and send a campaign by text or email. Build your own segments on Studio and up.",
               bullets: [
-                "Last session date filter",
-                "Project completed cohort",
-                "By artist",
-                "By service type",
-              ],
-            },
-            {
-              icon: Star,
-              accent: BRAND.amber,
-              eyebrow: "Loyalty + milestones",
-              title: "Auto-trigger on session counts.",
-              desc: "3rd, 5th, and 10th session milestones fire automatically. Rewards route via Stripe Connect. No manual tracking.",
-              bullets: [
-                "3rd / 5th / 10th session rewards",
-                "Stripe Connect routing",
-                "Aftercare bundle gift",
-                "Per-client tracking",
+                "Text or email",
+                "Ready-made segments",
+                "Custom segments on Studio and up",
+                "Your own list, no rented audience",
               ],
             },
             {
               icon: RefreshCw,
-              accent: BRAND.sage,
-              eyebrow: "Win-back sequences",
-              title: "14-day SMS + email for the silent.",
-              desc: "Clients silent six months get a three-step sequence. Pauses automatically the moment they book.",
+              accent: BRAND.amber,
+              eyebrow: "Waitlist",
+              title: "A cancellation, filled from the waitlist.",
+              desc: "Clients waiting for a gap sit on the waitlist. When a slot opens, offer it to the next person, or set rules to promote them for you.",
               bullets: [
-                "Auto-trigger at 6mo silent",
-                "3-step sequence",
-                "Reply detection",
-                "Pause if booked",
+                "Filter the waitlist",
+                "Offer an opened slot",
+                "Auto-promote rules",
+                "Waitlist numbers at a glance",
+              ],
+            },
+            {
+              icon: Heart,
+              accent: BRAND.sage,
+              eyebrow: "Referral program",
+              title: "Know who sent who.",
+              desc: "Clients refer friends, and you can see which bookings came from a referral. No points or tiers to manage.",
+              bullets: [
+                "On every plan, Solo included",
+                "Referred bookings tracked",
+                "No points to manage",
               ],
             },
           ]}
@@ -93,39 +91,39 @@ export default function MarketingPage() {
 
         <ProductAnatomy
           eyebrow="Inside the campaign view"
-          heading="Five signals per campaign, live."
-          italicWord="live"
-          intro="Tab strip, campaign cards, conversion funnel, loyalty progress, and attribution — everything needed to know if a campaign is working."
-          dashboard={<MarketingMockup />}
+          heading="Everything a campaign needs, one screen."
+          italicWord="one screen"
+          intro="Tabs, the campaign list, the headline numbers and the waitlist, without leaving Marketing."
+          dashboard={<MarketingScreen tab="campaigns" />}
           callouts={[
             {
               n: 1,
               title: "Tab strip",
-              desc: "Live · Scheduled · Drafts · Completed. Each campaign owns its tab.",
+              desc: "Audience, Campaigns, Waitlist and Referral.",
               position: { top: "14%", left: "32%" },
             },
             {
               n: 2,
               title: "Campaign card",
-              desc: "Title, channel, sent, conversions — at a glance per row.",
+              desc: "Title, channel and who it went to, at a glance per row.",
               position: { top: "34%", left: "36%" },
             },
             {
               n: 3,
-              title: "Stat row",
-              desc: "Sent / Open / Click / Booked — the conversion funnel for every campaign.",
+              title: "Headline numbers",
+              desc: "The marketing KPIs at the top of the screen.",
               position: { top: "50%", left: "36%" },
             },
             {
               n: 4,
-              title: "Loyalty progress",
-              desc: "Member tiers tracked across the studio. Auto-rewards via Stripe.",
+              title: "Waitlist",
+              desc: "Clients waiting for a slot, ready to be offered a gap.",
               position: { top: "74%", left: "40%" },
             },
             {
               n: 5,
-              title: "Attribution footer",
-              desc: "Real revenue tied to campaigns. Not vanity metrics.",
+              title: "Segments",
+              desc: "Ready-made segments, plus your own on Studio and up.",
               position: { top: "90%", left: "42%" },
             },
           ]}
@@ -135,139 +133,81 @@ export default function MarketingPage() {
           eyebrow="Campaign types"
           heading="Six mechanics worth running."
           italicWord="worth running"
-          intro="Automated campaigns that fit how tattoo studios actually work — not generic email blasts."
+          intro="Campaigns that fit how tattoo studios actually work, not generic email blasts."
           columns={3}
           items={[
             {
               icon: RefreshCw,
               accent: BRAND.rust,
-              severity: "Auto",
-              title: "Touch-up window",
-              desc: "Targeted at clients with 1+ year since last session.",
-              example: '"47 sent · 12 booked"',
+              severity: "Studio +",
+              title: "Healed, not rebooked",
+              desc: "Clients whose work has healed but who haven't booked again.",
+              example: '"Segment · text + email"',
             },
             {
               icon: Star,
               accent: BRAND.amber,
-              severity: "Auto",
-              title: "Loyalty milestone",
-              desc: "Auto-trigger on 5th session, free aftercare.",
-              example: '"8 triggered · 6 redeemed"',
+              severity: "Waitlist",
+              title: "Waitlist fill",
+              desc: "A cancellation offered to the next client waiting.",
+              example: '"Saturday 1:00 opened · offered to the waitlist"',
             },
             {
               icon: Heart,
               accent: BRAND.sage,
-              severity: "Auto",
-              title: "Win-back · 6mo silent",
-              desc: "14-day SMS + email sequence.",
-              example: '"23 triggered · 4 re-booked · $1,860"',
+              severity: "Segment",
+              title: "Lapsed clients",
+              desc: "Clients who haven't booked in a while, sent one campaign.",
+              example: '"One text · one email"',
             },
             {
               icon: Megaphone,
               accent: BRAND.rust,
-              severity: "Manual",
+              severity: "Everyone",
               title: "Studio announcement",
-              desc: "New artist, new flash sheet, holiday hours.",
-              example: '"Spring flash drop · 1,240 sent"',
+              desc: "New artist, new flash, holiday hours.",
+              example: '"Walk-in flash day · Rio\'s guest spot"',
             },
             {
               icon: Users,
               accent: BRAND.amber,
-              severity: "Targeted",
-              title: "By artist · cohort",
-              desc: "Just Miles' clients, just sleeve projects.",
-              example: '"Miles · sleeve cohort · 84 clients"',
+              severity: "Studio +",
+              title: "By artist",
+              desc: "Just one artist's clients, or just multi-session projects.",
+              example: '"Mara\'s clients · fine-line"',
             },
             {
               icon: DollarSign,
               accent: BRAND.sage,
-              severity: "Auto",
-              title: "Deposit reminder",
-              desc: "Slot held but deposit not posted.",
-              example: '"4 sent · 4 deposits posted"',
+              severity: "Referral",
+              title: "Referrals",
+              desc: "Track the bookings that came from a client's referral.",
+              example: '"Referred by Asha M."',
             },
           ]}
-        />
-
-        <ProductVsTable
-          eyebrow="How it compares"
-          heading="The win-back no one else automates."
-          italicWord="no one else automates"
-          competitors={[
-            "Limespun Marketing",
-            "Mailchimp",
-            "Klaviyo",
-            "Booksy",
-          ]}
-          rows={[
-            {
-              feature: "Targeted by client behaviour",
-              values: [true, true, true, false],
-            },
-            {
-              feature: "Loyalty milestone auto-rewards",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Win-back sequences",
-              values: [true, true, true, false],
-            },
-            {
-              feature: "Stripe Connect routing on rewards",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Per-artist cohort filter",
-              values: [true, false, false, false],
-            },
-            {
-              feature: "Reply detection auto-pause",
-              values: [true, true, true, false],
-            },
-            {
-              feature: "Attribution to actual bookings",
-              values: [true, false, true, false],
-            },
-            {
-              feature: "SMS + email + IG unified",
-              values: [true, false, false, false],
-            },
-          ]}
-          caption="Based on published features as of Q1 2025. Limespun first column."
         />
 
         <ProductDayInLife
-          eyebrow="The win-back"
-          heading="Tuesday, 11:42 AM. Tomas comes back."
-          italicWord="Tomas comes back"
-          intro="Tomas booked a half-sleeve in October 2025. Did session 1, paid the deposit, and went silent for seven months."
+          eyebrow="A cancellation"
+          heading="Tuesday, 11:42 AM. A quiet Saturday, filled."
+          italicWord="filled"
+          intro="Leo B. cancels Saturday's session late. His $150 deposit is kept under the studio's policy, and the chair is empty."
           paragraphs={[
             <React.Fragment key="p1">
-              <strong>Day 180 of silence.</strong> Limespun auto-triggers the
-              win-back sequence. Day 1 SMS:{" "}
-              <em>
-                &ldquo;Hey Tomas, the half-sleeve is waiting. We saved your
-                deposit. — Miles&rdquo;
-              </em>
+              <strong>11:42 AM.</strong> The slot opens on the calendar. Two clients are on the waitlist for a Saturday.
             </React.Fragment>,
             <React.Fragment key="p2">
-              <strong>Day 5 email.</strong> Healed photo of his session 1, the
-              agreed continuation plan, a single CTA: pick a day. No deals, no
-              urgency. Just the work.
+              <strong>11:45 AM.</strong> The owner offers the slot to the first one on the waitlist, by text.
             </React.Fragment>,
             <React.Fragment key="p3">
-              <strong>Day 9 final SMS.</strong> &ldquo;If life&apos;s just busy,
-              no rush — we&apos;ll keep your deposit on file. Reply when
-              you&apos;re ready.&rdquo;
+              <strong>12:10 PM.</strong> She takes it and pays the deposit. The booking is Confirmed.
             </React.Fragment>,
             <React.Fragment key="p4">
-              <strong>Day 11.</strong> Tomas replies. Books May 3 from his
-              phone.{" "}
-              <em>$200 booked from a $0.04 SMS.</em> The win-back closes itself
-              the moment he books.
+              Then one campaign for the rest of the week: the &ldquo;healed, not rebooked&rdquo; segment gets a text about Thursday&apos;s walk-in flash day with Rio.{" "}
+              <em>No mass blast, just the clients it fits.</em>
             </React.Fragment>,
           ]}
-          quote="Win-back, rebook and aftercare campaigns run quietly in the background — no twice-a-year mass blast."
+          quote="Campaigns go to the clients they fit, from your own list. No twice-a-year mass blast."
           takeawayLabel="The upshot"
         />
 
@@ -279,19 +219,19 @@ export default function MarketingPage() {
             {
               icon: BarChart3,
               label: "Today",
-              desc: "Deposit reminders fire from appointment data — no manual list building.",
+              desc: "Where a cancellation shows up first.",
               href: "/product/today",
             },
             {
               icon: Users,
               label: "Clients",
-              desc: "Behavioural filters pull from the full client history — session count, project type, silence period.",
+              desc: "Segments pull from the client record: projects, artists, last visit.",
               href: "/product/clients",
             },
             {
               icon: RefreshCw,
               label: "Analytics",
-              desc: "Cohort retention data feeds win-back triggers. Campaign revenue feeds the P&L.",
+              desc: "Lapsed and returning clients, counted.",
               href: "/product/analytics",
             },
           ]}
@@ -300,7 +240,7 @@ export default function MarketingPage() {
         <ProductCTA
           headline="Speak like the artist, not the algorithm."
           italicWord="the algorithm"
-          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Targeted campaigns, loyalty milestones, and win-back sequences from day one.`}
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Campaigns, a waitlist and referrals from day one; custom segments on Studio.`}
         />
       </main>
       <Footer />

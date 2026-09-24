@@ -171,6 +171,8 @@ export function PlanCards({ compareHref }: { compareHref?: string }) {
     <div>
       <BillingToggle value={option} onChange={setOption} />
 
+      {/* Plan names are h3s; this keeps the outline h1 → h2 → h3 wherever the cards sit */}
+      <h2 className="sr-only">Plans</h2>
       <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {PLANS.map((p) => (
           <PlanCard key={p.tier} plan={p} option={option} />

@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Users, Calendar, FileText, Check, ArrowRight } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp } from "@/lib/brand";
+import { ACCOUNT, BRAND, CTA, FONT, SHADOW, GRADIENT, fadeUp } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -96,7 +96,7 @@ function PainPointsSection() {
         >
           <SectionEyebrow label="What you're tired of" accent="rust" />
           <h2 style={{ fontFamily: FONT.serif, fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 400, color: BRAND.onyx, letterSpacing: "-0.025em", lineHeight: 1.1, maxWidth: 600 } as React.CSSProperties}>
-            Three hours of admin every Friday.
+            Spreadsheets, group chats and paper.
           </h2>
         </motion.div>
 
@@ -105,8 +105,8 @@ function PainPointsSection() {
             accent="rust"
             icon={Users}
             title="Commission math by hand"
-            body="60/40 for resident, 70/30 for the guest, custom for the apprentice. Friday afternoon spreadsheet. Errors get caught months later."
-            detail={[["Friday admin", "2–3 hr"], ["Errors", "monthly"], ["Disputes", "occasional"]]}
+            body="60/40 for one resident, 70/30 for another, weekly rent from the booth renter. Worked out by hand at the end of the week, then checked again when someone asks."
+            detail={[["Splits", "by hand"], ["Booth rent", "a separate list"], ["Payout day", "a spreadsheet"]]}
           />
           <MoatCardBright
             accent="amber"
@@ -119,8 +119,8 @@ function PainPointsSection() {
             accent="sage"
             icon={FileText}
             title="Consent on paper"
-            body="Every appointment. Every client. Stack of paper that no one wants to file. Audit trail = filing cabinet."
-            detail={[["Forms", "paper"], ["Storage", "filing cabinet"], ["Compliance risk", "real"]]}
+            body="A clipboard for every client, then a stack no one wants to file. Finding last year's form means the filing cabinet."
+            detail={[["Forms", "paper"], ["Storage", "filing cabinet"], ["Finding one", "by hand"]]}
           />
         </div>
       </div>
@@ -131,13 +131,13 @@ function PainPointsSection() {
 // ── Why Limespun ─────────────────────────────────────────────────────────────────
 
 const studioFeatures = [
-  "Up to 5 artists — residents, booth renters, apprentices",
-  "Commission and booth-rent splits — route on Stripe at booking time",
+  "Up to 5 artists — residents and booth renters",
+  "Commission and booth-rent splits — worked out on every session",
   "One calendar for every artist — clash checks before anything double-books",
   "Kiosk consent — iPad in the studio, signed before the chair",
   "Unlimited bookings and 500 texts a month",
-  "Free white-glove migration — included on every plan",
-  "Email support — 24h response",
+  "Done-for-you migration — included on every plan",
+  "Email support",
 ];
 
 function WhyLimespunSection() {
@@ -230,7 +230,7 @@ function CustomerQuoteSection() {
                 margin: 0,
               } as React.CSSProperties}
             >
-              Limespun is new, and open to every studio. Two to five chairs, a booth renter or two, an apprentice learning the ropes &mdash; if that&apos;s you, book a walkthrough and we&apos;ll show you commission splits live.
+              Limespun is new, and open to every studio. Two to five chairs, a booth renter or two &mdash; if that&apos;s you, create an account and we&apos;ll move your clients and bookings over for you.
             </p>
           </div>
         </motion.div>
@@ -267,19 +267,19 @@ function PricingTeaserSection() {
 const faqs = [
   {
     q: "Can I host guest artists on Studio?",
-    a: `Guest-artist seats start on Pro (${formatPrice(PRO.monthlyCents)}/mo). There, each guest gets a time-boxed band on the calendar with their own colour and a public booking page (portfolio.limespun.com/[handle]) for the residency window. Auto-archives when their tour ends.`,
+    a: `Guest-artist seats start on Pro (${formatPrice(PRO.monthlyCents)}/mo). There, each guest gets their own dates, booking link and split, and their access ends when the guest spot does.`,
   },
   {
-    q: "Can artists get paid directly through Stripe Connect?",
-    a: "Yes. Each artist links their own Stripe account once. Splits route automatically on every invoice.",
+    q: "Can I mix commission and booth rent in one shop?",
+    a: "Yes. On Studio, each artist gets their own arrangement: a commission split for residents, weekly rent for booth renters. What each artist is owed is worked out as sessions are paid.",
   },
   {
     q: "What if I have 6 artists?",
     a: `Move to Pro (${formatPrice(PRO.monthlyCents)}/mo): up to 15 artists, unlimited guest-artist seats, payroll and 1099s, and AI replies and aftercare. EU REACH ink tracking is already on every plan, Studio included.`,
   },
   {
-    q: "Do you support apprentices that don't take a commission cut?",
-    a: "Yes. Set their split to 0% and the studio retains the full revenue. Or any custom split.",
+    q: "Is migration really included on Studio?",
+    a: "Yes, on every plan. We move your clients, upcoming bookings, deposits and signed forms for you. It usually takes a week or two, and your old tool runs alongside until you switch.",
   },
 ];
 
@@ -311,9 +311,9 @@ export default function SmallStudiosPage() {
           eyebrowAccent="amber"
           headline="2-5 chairs. Mixed roster. One quiet system."
           italicWord="quiet"
-          subhead="Resident artists, a booth renter, the new apprentice. Commission and booth-rent splits route on the invoice. Every artist on one calendar, with clash checks. The small shop, finally not held together by group chat."
-          primaryCTA={{ label: "Choose Studio", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "See pricing", href: "/pricing" }}
+          subhead="Resident artists and a booth renter or two. Commission and booth-rent splits worked out on every session. Every artist on one calendar, with clash checks. The small shop, finally not held together by group chat."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
         <PainPointsSection />
         <WhyLimespunSection />
@@ -324,9 +324,9 @@ export default function SmallStudiosPage() {
           badge="Small studio, big rails"
           headline="Get the team running."
           italicWord="running"
-          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. White-glove migration included. Up to 5 artists, ${STUDIO_PRICE}/mo.`}
-          primaryCTA={{ label: "Choose Studio", href: "https://app.limespun.com/signup" }}
-          secondaryCTA={{ label: "Book a walkthrough", href: "/book-a-demo", icon: "play" }}
+          subhead={`${MONEY_BACK_DAYS}-day money-back guarantee. Migration included. Up to 5 artists, ${STUDIO_PRICE}/mo.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
+          secondaryCTA={{ label: CTA.secondaryLabel, href: CTA.secondaryHref }}
         />
       </main>
       <Footer />

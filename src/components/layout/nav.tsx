@@ -9,7 +9,7 @@ import {
   Banknote, UsersRound, Droplet, ChartColumn,
   User, Store, Building2, ArrowLeftRight,
   BookOpen, Calculator, Map, ShieldCheck,
-  LifeBuoy, Mail, Sparkles, Heart,
+  Mail, Sparkles, Heart,
   ArrowRight, Menu, X, ChevronDown,
 } from "lucide-react";
 import { ACCOUNT, CTA } from "@/lib/brand";
@@ -33,7 +33,7 @@ const navItems: NavItem[] = [
         items: [
           { icon: CalendarDays,   name: "Calendar",        desc: "Every artist's chair on one calendar", href: "/product/calendar" },
           { icon: HandCoins,      name: "Deposits",        desc: "Take deposits, cut no-shows",          href: "/product/appointments" },
-          { icon: MessagesSquare, name: "Client messages", desc: "Every DM and text in one inbox",       href: "/product/messages" },
+          { icon: MessagesSquare, name: "Client messages", desc: "Texts and email in one inbox",         href: "/product/messages" },
           { icon: UserRound,      name: "Client records",  desc: "History, photos and allergy alerts",   href: "/product/clients" },
         ],
       },
@@ -43,7 +43,7 @@ const navItems: NavItem[] = [
           { icon: FileSignature, name: "Consent forms",          desc: "Signed on a phone, stored safely",           href: "/product/forms" },
           { icon: Layers,        name: "Multi-session projects", desc: "Sleeves and back pieces, session by session", href: "/product/projects" },
           { icon: Images,        name: "Portfolio & flash",      desc: "Show your work, sell your flash",            href: "/product/portfolio" },
-          { icon: Wand2,         name: "AI design briefs",       desc: "Turn a client's idea into a clear brief",    href: "/product/ai-design" },
+          { icon: Wand2,         name: "Design moodboards",      desc: "References and notes for every piece",       href: "/product/ai-design" },
         ],
       },
       {
@@ -104,7 +104,6 @@ const navItems: NavItem[] = [
         items: [
           { icon: BookOpen,   name: "Blog",            desc: "Guides for running a studio",                  href: "/blog" },
           { icon: Calculator, name: "Free tools",      desc: "Deposit and payout calculators, consent template", href: "/tools" },
-          { icon: ArrowLeftRight, name: "Switching guide", desc: "Move over without losing a booking",       href: "/migrate" },
           { icon: Droplet,     name: "EU REACH hub",   desc: "What the ink rules mean for you",              href: "/reach-compliance" },
         ],
       },
@@ -120,8 +119,8 @@ const navItems: NavItem[] = [
       {
         title: "Get help",
         items: [
-          { icon: LifeBuoy, name: "Book a demo", desc: "A 30-minute walkthrough", href: CTA.demoHref },
-          { icon: Mail,     name: "Contact",     desc: "Talk to a real person",   href: "/contact" },
+          { icon: ArrowLeftRight, name: "Switching guide", desc: "Move over without losing a booking", href: "/migrate" },
+          { icon: Mail,           name: "Contact",         desc: "We reply within one business day",   href: "/contact" },
         ],
       },
     ] satisfies NavColumn[],
@@ -566,13 +565,13 @@ export function Nav() {
                 <ArrowRight size={16} strokeWidth={2.2} aria-hidden="true" />
               </a>
               <a
-                href={CTA.demoHref}
+                href={CTA.secondaryHref}
                 className={cn(
                   "inline-flex min-h-12 items-center justify-center rounded-full border border-graphite/80 px-6 text-[15px] font-semibold text-graphite transition-colors duration-200 hover:bg-canvas",
                   FOCUS,
                 )}
               >
-                {CTA.demoLabel}
+                {CTA.secondaryLabel}
               </a>
             </div>
             <p className="mt-2 flex flex-wrap items-center justify-center gap-x-1.5 text-[14px] text-mute">

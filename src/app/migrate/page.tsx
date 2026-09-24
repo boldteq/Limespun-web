@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Shield, ArrowRight } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { ACCOUNT, BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -14,41 +14,32 @@ import { SectionEyebrow } from "@/components/shared/section-eyebrow";
 import { MONEY_BACK_DAYS } from "@/lib/data/plans";
 
 interface MigrationRow {
-  from: string;
-  time: string;
-  carries: string;
+  item: string;
+  detail: string;
 }
 
+// What moves is the same whichever tool you're on. Keep this generic until the
+// per-vendor export facts are confirmed.
 const migrationRows: MigrationRow[] = [
   {
-    from: "DaySmart Body Art",
-    time: "9 days",
-    carries: "2 white-glove calls · bookings, clients and projects carried",
+    item: "Clients",
+    detail: "Names, contact details and notes, with duplicates removed. Custom fields come over as notes.",
   },
   {
-    from: "Mangomint",
-    time: "6 days",
-    carries: "Bookings, deposits, client notes — all carried",
+    item: "Upcoming bookings",
+    detail: "Every future appointment, on the right artist's calendar",
   },
   {
-    from: "Fresha",
-    time: "5 days",
-    carries: "Keep your bookings, leave the platform fee",
+    item: "Deposits held",
+    detail: "Money you're holding for sessions still to come, on the right client",
   },
   {
-    from: "TattooGenda",
-    time: "4 days",
-    carries: "Guest residencies and deposit pools migrate intact",
+    item: "Signed forms",
+    detail: "Consent and release forms you already have, filed on the client",
   },
   {
-    from: "Vagaro",
-    time: "7 days",
-    carries: "Salon-coded data re-mapped to tattoo schema",
-  },
-  {
-    from: "A Google spreadsheet",
-    time: "1 day",
-    carries: "CSV import in minutes · we clean the rest",
+    item: "A spreadsheet or paper",
+    detail: "Send us the file, or photos of the book; we clean it up",
   },
 ];
 
@@ -63,46 +54,46 @@ const deepLinkCards = [
 const processSteps = [
   {
     number: "01",
-    title: "Day 0 — Discovery call",
-    body: "30 minutes with our migration lead. We map your studio's data shape: bookings, clients, projects, deposits. Honest answer on whether 14 days is realistic.",
+    title: "Tell us what you use",
+    body: "Create your account and tell us which tool you're on. We look at what you're moving: clients, bookings, projects, deposits.",
   },
   {
     number: "02",
-    title: "Days 1-3 — Export + clean",
-    body: "We pull from your current tool's API or CSV export. Map fields. Clean duplicates. Hand you a preview of what comes across.",
+    title: "Export and clean",
+    body: "We work from your current tool's export or spreadsheet. We map the fields, remove duplicates and show you a preview before anything lands.",
   },
   {
     number: "03",
-    title: "Days 4-12 — Parallel run",
-    body: "Limespun goes live alongside your current tool. New bookings flow to Limespun. Old bookings finish in your old system. You keep taking bookings the whole way through.",
+    title: "Run side by side",
+    body: "Limespun goes live next to your current tool. New bookings come to Limespun; existing ones finish where they are. You keep taking bookings the whole way through.",
   },
   {
     number: "04",
-    title: "Day 13-14 — Cutover",
-    body: "Last appointment in your old tool clears. We flip the switch, and you cancel your old subscription. Nothing is left behind.",
+    title: "Switch when you're ready",
+    body: "When the last booking in your old tool clears, you cancel it. Usually a week or two from start to finish.",
   },
 ];
 
 const faqItems = [
   {
     q: "What if I have a custom field in my current tool that Limespun doesn't have?",
-    a: "We carry it across. Simple custom fields come over as 'Notes' on the client record; if a field matters to how your studio works, we'll talk through making it a first-class field.",
+    a: "We carry it across. Custom fields come over as notes on the client record, so nothing you wrote down is lost.",
   },
   {
-    q: "What about historical client photos in my current tool?",
-    a: "We migrate photo libraries. Re-organised by project where possible. Original timestamps preserved.",
+    q: "What about client photos in my current tool?",
+    a: "If your current tool lets you export them, we bring them across and file them on the client and project.",
   },
   {
     q: "Do I lose any features during the parallel run?",
-    a: "No. Your current tool stays fully functional. New bookings get auto-routed to Limespun via a redirect rule we configure.",
+    a: "No. Your current tool keeps working until you cancel it. When you're ready, point your booking link at Limespun.",
   },
   {
-    q: "What if migration takes longer than 14 days?",
+    q: "What if the move takes longer than expected?",
     a: `We keep going until you're moved. Migration costs nothing extra, however long it takes, and every plan has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   },
   {
     q: "Is migration included on the Solo plan?",
-    a: "Yes. Done-for-you migration is included on every plan, Solo too: our team moves your clients, bookings, deposits and signed forms, with calls along the way.",
+    a: "Yes. Done-for-you migration is included on every plan, Solo too: our team moves your clients, bookings, deposits and signed forms for you.",
   },
 ];
 
@@ -142,11 +133,11 @@ export default function MigratePage() {
           eyebrowAccent="amber"
           headline="Whatever you're on, we move it for you."
           italicWord="whatever"
-          subhead={`14-day white-glove move. Bookings, deposits, client notes, consent forms, photo libraries — all carried. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
+          subhead={`We move your clients, bookings, deposits and signed forms for you. Usually a week or two, included on every plan, and your old tool runs alongside until you switch. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
           secondaryCTA={{
-            label: "Get started",
-            href: "https://app.limespun.com/signup",
+            label: "Contact us about switching",
+            href: "/contact",
           }}
         />
 
@@ -224,7 +215,7 @@ export default function MigratePage() {
                 borderRadius: 18,
                 boxShadow: SHADOW.card,
                 overflow: "hidden",
-                marginBottom: 32,
+                marginBottom: 16,
               } as React.CSSProperties}
             >
               {/* Top gradient strip */}
@@ -240,13 +231,14 @@ export default function MigratePage() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 140px 1fr",
+                  gridTemplateColumns: "1fr 1.4fr",
+                  columnGap: 16,
                   padding: "14px 24px",
                   borderBottom: `1px solid ${BRAND.border}`,
                   background: BRAND.boneDeep,
                 } as React.CSSProperties}
               >
-                {["Coming from", "Time to live", "What we carry"].map((h) => (
+                {["What we move", "What that covers"].map((h) => (
                   <div
                     key={h}
                     style={{
@@ -276,7 +268,8 @@ export default function MigratePage() {
                     variants={fadeUp}
                     style={{
                       display: "grid",
-                      gridTemplateColumns: "1fr 140px 1fr",
+                      gridTemplateColumns: "1fr 1.4fr",
+                      columnGap: 16,
                       padding: "16px 24px",
                       borderBottom:
                         i < migrationRows.length - 1
@@ -294,25 +287,7 @@ export default function MigratePage() {
                         letterSpacing: "-0.005em",
                       } as React.CSSProperties}
                     >
-                      {row.from}
-                    </div>
-
-                    <div>
-                      <span
-                        style={{
-                          display: "inline-block",
-                          padding: "4px 12px",
-                          borderRadius: 100,
-                          background: BRAND.rustSoft,
-                          fontFamily: FONT.mono,
-                          fontSize: 12,
-                          fontWeight: 600,
-                          color: BRAND.rust,
-                          letterSpacing: "0.01em",
-                        } as React.CSSProperties}
-                      >
-                        {row.time}
-                      </span>
+                      {row.item}
                     </div>
 
                     <div
@@ -323,12 +298,28 @@ export default function MigratePage() {
                         lineHeight: 1.4,
                       } as React.CSSProperties}
                     >
-                      {row.carries}
+                      {row.detail}
                     </div>
                   </motion.div>
                 ))}
               </motion.div>
             </motion.div>
+
+            <p
+              style={{
+                width: "100%",
+                maxWidth: 860,
+                margin: "0 0 32px",
+                fontFamily: FONT.sans,
+                fontSize: 13,
+                lineHeight: 1.5,
+                color: BRAND.stoneDark,
+                textAlign: "center",
+              } as React.CSSProperties}
+            >
+              We work from whatever your current tool lets you export. If something won&apos;t come out
+              cleanly, we tell you before you switch.
+            </p>
 
             {/* Deep-dive link grid */}
             <div
@@ -397,6 +388,7 @@ export default function MigratePage() {
                 borderRadius: 18,
                 padding: "32px 36px",
                 display: "flex",
+                flexWrap: "wrap",
                 alignItems: "center",
                 justifyContent: "space-between",
                 gap: 24,
@@ -425,7 +417,7 @@ export default function MigratePage() {
                   alignItems: "flex-start",
                   gap: 16,
                   position: "relative",
-                  flex: 1,
+                  flex: "1 1 280px",
                 } as React.CSSProperties}
               >
                 <div
@@ -468,8 +460,8 @@ export default function MigratePage() {
                       letterSpacing: "-0.01em",
                     } as React.CSSProperties}
                   >
-                    If we can&apos;t move you cleanly in 14 days, you don&apos;t
-                    pay.
+                    Migration is included on every plan, and every plan has a{" "}
+                    {MONEY_BACK_DAYS}-day money-back guarantee.
                   </div>
                 </div>
               </div>
@@ -478,7 +470,7 @@ export default function MigratePage() {
                 style={{ position: "relative", flexShrink: 0 } as React.CSSProperties}
               >
                 <a
-                  href="/book-a-demo"
+                  href="/contact"
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
@@ -495,7 +487,7 @@ export default function MigratePage() {
                     whiteSpace: "nowrap",
                   } as React.CSSProperties}
                 >
-                  Talk to migrations
+                  Contact us about switching
                   <ArrowRight size={14} strokeWidth={2} />
                 </a>
               </div>
@@ -537,7 +529,7 @@ export default function MigratePage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              Four steps. Fourteen days.
+              Four steps. Usually a week or two.
             </motion.h2>
 
             <motion.div
@@ -648,15 +640,14 @@ export default function MigratePage() {
 
         {/* CTA */}
         <CTASection
-          badge="Move with us"
-          headline="Talk to migrations."
-          italicWord="migrations"
-          subhead="30-minute discovery call. Honest answer on fit. Zero pressure."
-          primaryCTA={{ label: "Book the call", href: "/book-a-demo" }}
+          badge="Switching"
+          headline="Bring your studio over."
+          italicWord="over"
+          subhead={`Migration is included on every plan: usually a week or two, with your old tool running alongside until you switch. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
           secondaryCTA={{
-            label: "Or get started",
-            href: "https://app.limespun.com/signup",
-            icon: "play",
+            label: "Contact us about switching",
+            href: "/contact",
           }}
         />
       </main>

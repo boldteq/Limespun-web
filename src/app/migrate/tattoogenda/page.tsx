@@ -2,8 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { LayoutGrid, Shield, Plane } from "lucide-react";
-import { BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
+import { Droplet, Wallet, ArrowRightLeft } from "lucide-react";
+import { ACCOUNT, BRAND, FONT, SHADOW, GRADIENT, fadeUp, stagger } from "@/lib/brand";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/shared/hero-section";
@@ -11,7 +11,12 @@ import { ComparisonTable } from "@/components/shared/comparison-table";
 import { FAQAccordion } from "@/components/shared/faq-accordion";
 import { CTASection } from "@/components/shared/cta-section";
 import { SectionEyebrow } from "@/components/shared/section-eyebrow";
-import { MONEY_BACK_DAYS } from "@/lib/data/plans";
+import { PLANS, formatPrice, MONEY_BACK_DAYS } from "@/lib/data/plans";
+import { competitorCaption, competitorPricing, competitorRows } from "@/components/shared/competitor-rows";
+
+const [SOLO] = PLANS.filter((p) => p.tier === "solo");
+const [STUDIO] = PLANS.filter((p) => p.tier === "studio");
+const [PRO] = PLANS.filter((p) => p.tier === "pro");
 
 // ── MoatCardBright (local — lifted from work.tsx) ────────────────────────────
 
@@ -178,66 +183,66 @@ function MoatCardBright({ accent, icon: Icon, title, body, detail }: MoatCardBri
 const moatCards: MoatCardBrightProps[] = [
   {
     accent: "rust",
-    icon: LayoutGrid,
-    title: "Multi-session as the foundation",
-    body: "Sleeves are projects from day one, not an upgrade.",
+    icon: Droplet,
+    title: "Ink inventory with REACH tracking",
+    body: "TattooGenda lists inventory as not offered; its ink passport records the inks used. Limespun tracks stock by bottle, with an Ink registry and a REACH ink disclosure on the consent form.",
     detail: [
-      ["Sessions", "Native to schema"],
-      ["Deposit pool", "Per-project always"],
-      ["Photo timeline", "REF→HEALED auto-tag"],
+      ["TattooGenda", "No inventory"],
+      ["Limespun", "Every plan"],
+      ["Consent form", "REACH disclosure"],
     ],
   },
   {
     accent: "amber",
-    icon: Shield,
-    title: "REACH compliance, every plan",
-    body: "EU 2022 ink registry on every tier. No 'Bigger Plan' upsell.",
+    icon: Wallet,
+    title: "Artist pay, worked out",
+    body: "TattooGenda shows the artist's share in reports; payroll isn't published. Limespun works out commission and booth-rent splits, and runs payroll and 1099s.",
     detail: [
-      ["REACH", "Every plan"],
-      ["MSDS", "Attached per bottle"],
-      ["Inspector report", "1-click"],
+      ["TattooGenda", "Share in reports"],
+      ["Limespun splits", "Studio and up"],
+      ["Payroll and 1099s", "Pro and up"],
     ],
   },
   {
     accent: "sage",
-    icon: Plane,
-    title: "Guest residencies as a band",
-    body: "Time-boxed guest mode on the calendar, auto-archive on departure.",
+    icon: ArrowRightLeft,
+    title: "The move, done for you",
+    body: "TattooGenda doesn't publish migration help. On Limespun our team moves your clients, bookings, deposits and signed forms, on every plan.",
     detail: [
-      ["Booking page slug", "Per-guest"],
-      ["Time-box", "Auto-expire"],
-      ["Email approval", "No account"],
+      ["TattooGenda", "Not published"],
+      ["Limespun", "Every plan"],
+      ["Usually takes", "A week or two"],
     ],
   },
 ];
 
 const timelineSteps = [
-  { day: "Day 1", title: "Discovery + TattooGenda CSV export" },
-  { day: "Day 2", title: "Schema mapping (Bigger Plan features map to Limespun defaults)" },
-  { day: "Day 3", title: "Preview run + sign-off" },
-  { day: "Day 4", title: "Cutover + cancel TattooGenda" },
+  { day: "1", title: "You tell us what you use; we work from what TattooGenda lets you export" },
+  { day: "2", title: "Clients, upcoming bookings, deposits held and signed forms moved across" },
+  { day: "3", title: "Preview: you check the import before it lands" },
+  { day: "4", title: "Side by side until your last TattooGenda booking clears, then you switch" },
 ];
 
 const faqItems = [
   {
-    q: "What about TattooGenda's tattoo-specific custom fields?",
-    a: "Migrated. Every TattooGenda field — body part, ink type, session count, healing notes — maps to first-class Limespun fields. Custom fields you've added become Limespun Notes.",
+    q: "What happens to custom fields?",
+    a: "Standard fields map across. Custom fields you've added come over as notes on the client record.",
   },
   {
-    q: "Does TattooGenda's API export everything?",
-    a: "Yes. They cooperate well with migrations. We pull bookings + clients + deposit ledger + photo references + consent files via their API.",
+    q: "What can we bring over from TattooGenda?",
+    a: "We work from what TattooGenda lets you export and move your clients, upcoming bookings, deposits held and signed forms. If something won't export cleanly, we tell you before you switch.",
   },
   {
-    q: "I'm on TattooGenda's 'Bigger Plan' for $79/mo. Why switch?",
-    a: "Two reasons: (1) every Limespun plan includes the Bigger Plan features (multi-session, deposit pools, REACH); (2) AI Studio + commission auto-splits + omnichannel inbox don't exist in TattooGenda at any tier.",
+    q: "How does Limespun's price compare with TattooGenda's?",
+    a: `TattooGenda publishes: ${competitorPricing("tattoogenda")} Limespun plans go by team size: ${formatPrice(SOLO.monthlyCents)}/mo for one artist, ${formatPrice(STUDIO.monthlyCents)}/mo for up to 5, ${formatPrice(PRO.monthlyCents)}/mo for up to 15, with no Limespun fee on bookings or deposits.`,
   },
   {
     q: "Will my guest residency setup carry over?",
-    a: "Fully, on Pro and up (guest-artist seats start on Pro). Time-boxed bands, per-guest booking pages, email-approval flow — all 1:1 between platforms.",
+    a: "Guest-artist seats start on Pro. Upcoming bookings come across with the rest of your calendar; you then give each guest their own dates, booking link and split.",
   },
   {
     q: "Can I keep both running during migration?",
-    a: `Yes. 14-day overlap recommended. Cancel TattooGenda day-of cutover. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
+    a: `Yes, and we recommend it. Keep TattooGenda running until your last booking there clears, then cancel. Limespun has a ${MONEY_BACK_DAYS}-day money-back guarantee.`,
   },
 ];
 
@@ -258,13 +263,13 @@ export default function TattoogendaPage() {
         <HeroSection
           eyebrow="From TattooGenda"
           eyebrowAccent="rust"
-          headline="Tattoo-native vs tattoo-native. We win on the small stuff."
-          italicWord="the small stuff"
-          subhead="TattooGenda was the original tattoo-only booking SaaS. We respect that. But the things they put behind 'Bigger Plan' — REACH compliance and deposit pools — Limespun includes on every plan. 4-day migration. White-glove. Free on every plan."
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
+          headline="Both built for tattoo. Here's what's different."
+          italicWord="different"
+          subhead="TattooGenda is tattoo software too: projects, deposits and guest spots are first-class there. Limespun adds ink inventory with EU REACH tracking, artist splits and payroll, and a done-for-you move: usually a week or two, included on every plan, with TattooGenda running alongside until you switch."
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
           secondaryCTA={{
-            label: "Get started",
-            href: "https://app.limespun.com/signup",
+            label: "Contact us about switching",
+            href: "/contact",
           }}
         />
 
@@ -302,7 +307,7 @@ export default function TattoogendaPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              Tattoo-native, but every feature on every plan.
+              Where Limespun is different.
             </motion.h2>
 
             <motion.div
@@ -373,63 +378,14 @@ export default function TattoogendaPage() {
                   { key: "tattoogenda", label: "TattooGenda" },
                   { key: "limespun", label: "Limespun", highlighted: true },
                 ]}
-                rows={[
-                  {
-                    feature: "Multi-session projects (sleeves)",
-                    values: { tattoogenda: "Bigger plan", limespun: true },
-                  },
-                  {
-                    feature: "Deposit pool across visits",
-                    values: { tattoogenda: "Bigger plan", limespun: true },
-                  },
-                  {
-                    feature: "EU REACH ink registry",
-                    values: { tattoogenda: true, limespun: true },
-                  },
-                  {
-                    feature: "Allergy intelligence (4-place surface)",
-                    values: { tattoogenda: "Limited", limespun: true },
-                  },
-                  {
-                    feature: "AI design assistant",
-                    values: { tattoogenda: false, limespun: "Pro and up" },
-                  },
-                  {
-                    feature: "Photo timeline (REF→HEALED)",
-                    values: { tattoogenda: "Limited", limespun: true },
-                  },
-                  {
-                    feature: "Commission auto-splits (Stripe Connect)",
-                    values: { tattoogenda: false, limespun: "Studio and up" },
-                  },
-                  {
-                    feature: "Guest residency band",
-                    values: { tattoogenda: true, limespun: "Pro and up" },
-                  },
-                  {
-                    feature: "API access",
-                    values: { tattoogenda: "Enterprise", limespun: "Pro and up" },
-                  },
-                  {
-                    feature: "Tattoo-specific by design",
-                    values: { tattoogenda: true, limespun: true },
-                  },
-                  {
-                    feature: "Per-booking transaction fee",
-                    values: { tattoogenda: "No", limespun: "No" },
-                  },
-                  {
-                    feature: "White-glove migration",
-                    values: { tattoogenda: false, limespun: true },
-                  },
-                ]}
-                caption="TattooGenda feature set: tattoogenda.com pricing + docs, April 2026."
+                rows={competitorRows("tattoogenda")}
+                caption={competitorCaption("tattoogenda")}
               />
             </motion.div>
           </div>
         </section>
 
-        {/* 4-day plan */}
+        {/* The move */}
         <section
           style={{
             background: BRAND.bone,
@@ -447,7 +403,7 @@ export default function TattoogendaPage() {
               alignItems: "center",
             } as React.CSSProperties}
           >
-            <SectionEyebrow label="4-day plan" accent="rust" />
+            <SectionEyebrow label="The move" accent="rust" />
             <motion.h2
               variants={fadeUp}
               initial="hidden"
@@ -463,7 +419,7 @@ export default function TattoogendaPage() {
                 textAlign: "center",
               } as React.CSSProperties}
             >
-              How TattooGenda studios migrate.
+              How the move works.
             </motion.h2>
 
             <motion.div
@@ -631,15 +587,14 @@ export default function TattoogendaPage() {
 
         {/* CTA */}
         <CTASection
-          badge="Tattoo-native, no upsells"
-          headline="Move where every feature is on every plan."
-          italicWord="every feature"
-          subhead={`4-day migration. Free on every plan. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
-          primaryCTA={{ label: "Talk to migrations", href: "/book-a-demo" }}
+          badge="Switching"
+          headline="Bring your studio over."
+          italicWord="over"
+          subhead={`Migration is included on every plan: usually a week or two, with TattooGenda running alongside until you switch. ${MONEY_BACK_DAYS}-day money-back guarantee.`}
+          primaryCTA={{ label: ACCOUNT.signUpLabel, href: ACCOUNT.signUpHref }}
           secondaryCTA={{
-            label: "Or get started",
-            href: "https://app.limespun.com/signup",
-            icon: "play",
+            label: "Contact us about switching",
+            href: "/contact",
           }}
         />
       </main>
